@@ -11,7 +11,10 @@
   <link rel="stylesheet" href="css/dark-mode.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-  <!-- Convex Import Map -->
+  <!-- Convex Browser Bundle (loaded before modules) -->
+  <script src="./node_modules/convex/dist/browser.bundle.js"></script>
+
+  <!-- Convex Import Map (for ESM module fallback) -->
   <script type="importmap">
   {
     "imports": {

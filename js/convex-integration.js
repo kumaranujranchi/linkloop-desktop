@@ -10,8 +10,20 @@ const CONVEX_URL = "__CONVEX_URL__";
 let client;
 
 async function initClient() {
-  const { ConvexClient } = await import("convex");
-  client = new ConvexClient(CONVEX_URL === "__CONVEX_URL__" || !CONVEX_URL ? DEFAULT_CONVEX_URL : CONVEX_URL);
+  // Use the global convex from browser bundle (IIFE), with ESM import as fallback
+  let ConvexClientClass = (typeof convex !== "undefined" && convex.ConvexClient) ? convex.ConvexClient : null;
+  
+  if (!ConvexClientClass) {
+    try {
+      const mod = await import("convex");
+      ConvexClientClass = mod.ConvexClient;
+    } catch (e) {
+      console.error("Convex: Failed to load client", e);
+      return;
+    }
+  }
+  
+  client = new ConvexClientClass(CONVEX_URL === "__CONVEX_URL__" || !CONVEX_URL ? DEFAULT_CONVEX_URL : CONVEX_URL);
   init();
 }
 

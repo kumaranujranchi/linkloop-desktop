@@ -40,14 +40,21 @@ if (!existsSync(convexDestDir)) mkdirSync(convexDestDir, { recursive: true });
 cpSync(convexSrc, resolve(convexDestDir, "convex.js"));
 
 // Update the import map in index.html to use the bundled Convex
-console.log("  🔧 Updating import map for production...");
+console.log("  🔧 Updating production Convex references...");
 let html = readFileSync(resolve(DIST, "index.html"), "utf-8");
 
-// Replace the Convex import map path
+// Replace dev bundle path with production path
 html = html.replace(
-  /"convex":\s*"\.\/node_modules\/convex\/dist\/esm\/browser\/index\.js"/,
-  '"convex": "./js/vendor/convex.js"'
+  /\.\/node_modules\/convex\/dist\/browser\.bundle\.js/g,
+  "./js/vendor/convex.js"
 );
+
+// Remove import map entirely (browser bundle uses global, not ESM)
+html = html.replace(
+  /<script type="importmap">[\s\S]*?<\/script>/g,
+  ""
+);
+
 writeFileSync(resolve(DIST, "index.html"), html);
 
 // Inject Convex URL from Vercel environment if provided
