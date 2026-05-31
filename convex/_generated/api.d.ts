@@ -9,6 +9,7 @@
  */
 
 import type * as analytics from "../analytics.js";
+import type * as auth_helpers from "../auth_helpers.js";
 import type * as backlinks from "../backlinks.js";
 import type * as exchanges from "../exchanges.js";
 import type * as messages from "../messages.js";
@@ -25,6 +26,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   analytics: typeof analytics;
+  auth_helpers: typeof auth_helpers;
   backlinks: typeof backlinks;
   exchanges: typeof exchanges;
   messages: typeof messages;

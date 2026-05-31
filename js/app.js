@@ -568,15 +568,17 @@ window.initAnalyticsCharts = initAnalyticsCharts;
 window.handleLogin = async function(e) {
   e.preventDefault();
   const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
   const msgEl = document.getElementById("authMessage");
-  if (!email) { msgEl.innerHTML = '<span style="color:var(--danger)">Please enter your email</span>'; return; }
+  if (!email || !password) { msgEl.innerHTML = '<span style="color:var(--danger)">Please enter your email and password</span>'; return; }
 
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Logging in...</span>';
-  const result = await window.LinkLoop.login(email);
+  const result = await window.LinkLoop.login(email, password);
   if (result.success) {
     window.LinkLoop.hideAuthScreen();
     window.LinkLoop.loadDashboardData().catch(() => {});
     msgEl.innerHTML = '';
+    document.getElementById("loginForm").reset();
   } else {
     msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Login failed") + '</span>';
   }
@@ -586,15 +588,17 @@ window.handleSignup = async function(e) {
   e.preventDefault();
   const name = document.getElementById("signupName").value.trim();
   const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value;
   const msgEl = document.getElementById("authMessage");
-  if (!name || !email) { msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in all fields</span>'; return; }
+  if (!name || !email || !password) { msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in all fields</span>'; return; }
 
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Creating account...</span>';
-  const result = await window.LinkLoop.signup(name, email);
+  const result = await window.LinkLoop.signup(name, email, password);
   if (result.success) {
     window.LinkLoop.hideAuthScreen();
     window.LinkLoop.loadDashboardData().catch(() => {});
     msgEl.innerHTML = '';
+    document.getElementById("signupForm").reset();
   } else {
     msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Signup failed") + '</span>';
   }

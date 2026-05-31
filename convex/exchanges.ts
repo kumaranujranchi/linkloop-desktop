@@ -1,6 +1,8 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
+import { getUserIdFromToken } from "./auth_helpers";
+
 
 // ========== QUERIES ==========
 
@@ -186,6 +188,7 @@ export const updateStatus = mutation({
       v.literal("completed"),
       v.literal("rejected")
     ),
+    token: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const exchange = await ctx.db.get(args.exchangeId);
@@ -198,18 +201,28 @@ export const updateStatus = mutation({
     });
 
     // Notify the other party
-    const identity = await ctx.auth.getUserIdentity();
-    const currentUser = identity
-      ? await ctx.db
-          .query("users")
-          .withIndex("by_email", (q) => q.eq("email", identity.email!))
-          .first()
-      : null;
+    let currentUser = null;
+    if (args.token) {
+      const userId = await getUserIdFromToken(ctx.db, args.token);
+      if (userId) {
+        currentUser = await ctx.db.get(userId);
+      }
+    }
+    if (!currentUser) {
+      const identity = await ctx.auth.getUserIdentity();
+      currentUser = identity
+        ? await ctx.db
+            .query("users")
+            .withIndex("by_email", (q) => q.eq("email", identity.email!))
+            .first()
+        : null;
+    }
 
     const notifyUserId =
       currentUser?._id === exchange.fromUserId
         ? exchange.toUserId
         : exchange.fromUserId;
+
 
     const statusLabels: Record<string, string> = {
       accepted: "Exchange Accepted",

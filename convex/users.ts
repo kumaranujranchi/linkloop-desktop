@@ -1,20 +1,31 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { getUserIdFromToken, generateSalt, hashPassword, createSession } from "./auth_helpers";
 
 // ========== QUERIES ==========
 
-// Get current user (by auth identity)
+// Get current user (by auth identity or token)
 export const me = query({
-  args: {},
-  handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
+  args: { token: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let userId = null;
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    if (args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
 
+    if (!userId) return null;
+
+    const user = await ctx.db.get(userId);
     if (!user) return null;
 
     const subscription = await ctx.db
@@ -92,7 +103,117 @@ export const adminStats = query({
 
 // ========== MUTATIONS ==========
 
+// ========== PASSWORD AUTH ==========
+
+// Sign up with email + name + password
+export const signupWithPassword = mutation({
+  args: {
+    name: v.string(),
+    email: v.string(),
+    password: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const emailNormalized = args.email.trim().toLowerCase();
+    const existing = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", emailNormalized))
+      .first();
+
+    if (existing) {
+      throw new Error("Email already registered");
+    }
+
+    const salt = generateSalt();
+    const passwordHash = await hashPassword(args.password, salt);
+
+    const now = Date.now();
+    const userId = await ctx.db.insert("users", {
+      name: args.name,
+      email: emailNormalized,
+      role: "free",
+      reputationScore: 50,
+      completedExchanges: 0,
+      responseRate: 100,
+      trustBadges: [],
+      createdAt: now,
+      passwordHash,
+      passwordSalt: salt,
+    });
+
+    // Create free subscription
+    await ctx.db.insert("subscriptions", {
+      userId,
+      plan: "free",
+      status: "active",
+      websitesLimit: 3,
+      exchangesLimit: 10,
+      currentPeriodStart: now,
+      currentPeriodEnd: now + 30 * 24 * 60 * 60 * 1000,
+      createdAt: now,
+    });
+
+    await ctx.db.insert("analyticsEvents", {
+      type: "user_signup",
+      userId,
+      createdAt: now,
+    });
+
+    const session = await createSession(ctx.db, userId);
+
+    return {
+      token: session.token,
+      user: {
+        userId,
+        name: args.name,
+        email: emailNormalized,
+        role: "free",
+      }
+    };
+  },
+});
+
+// Login with email + password
+export const loginWithPassword = mutation({
+  args: {
+    email: v.string(),
+    password: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const emailNormalized = args.email.trim().toLowerCase();
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", emailNormalized))
+      .first();
+
+    if (!user) {
+      throw new Error("Invalid email or password");
+    }
+
+    if (!user.passwordHash || !user.passwordSalt) {
+      throw new Error("This account does not have password credentials. Please register again.");
+    }
+
+    const computedHash = await hashPassword(args.password, user.passwordSalt);
+    if (computedHash !== user.passwordHash) {
+      throw new Error("Invalid email or password");
+    }
+
+    const session = await createSession(ctx.db, user._id);
+
+    return {
+      token: session.token,
+      user: {
+        userId: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
+    };
+  },
+});
+
 // ========== EMAIL AUTH (no Convex Auth required) ==========
+
 
 // Sign up with email + name
 export const signupWithEmail = mutation({
@@ -177,7 +298,7 @@ export const upsert = mutation({
     company: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    return (await signupWithEmail.handler(ctx, args)).userId;
+    return (await (signupWithEmail as any).handler(ctx, args)).userId;
   },
 });
 
@@ -186,16 +307,26 @@ export const updateProfile = mutation({
   args: {
     name: v.optional(v.string()),
     company: v.optional(v.string()),
+    token: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    let userId = null;
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    if (args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
 
+    if (!userId) throw new Error("Not authenticated");
+    const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
     const updates: any = {};
@@ -211,16 +342,26 @@ export const updateProfile = mutation({
 export const upgradePlan = mutation({
   args: {
     plan: v.union(v.literal("free"), v.literal("pro"), v.literal("agency")),
+    token: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    let userId = null;
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    if (args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
 
+    if (!userId) throw new Error("Not authenticated");
+    const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
     await ctx.db.patch(user._id, { role: args.plan });

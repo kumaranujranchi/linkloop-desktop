@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { getUserIdFromToken } from "./auth_helpers";
 
 // ========== QUERIES ==========
 
@@ -211,17 +212,30 @@ export const getOrCreateConversation = mutation({
 
 // Mark messages as read
 export const markRead = mutation({
-  args: { conversationId: v.id("conversations") },
+  args: {
+    conversationId: v.id("conversations"),
+    token: v.optional(v.string()),
+  },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    let userId = null;
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    if (args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
 
+    if (!userId) throw new Error("Not authenticated");
+    const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
+
 
     const conversation = await ctx.db.get(args.conversationId);
     if (!conversation) return;

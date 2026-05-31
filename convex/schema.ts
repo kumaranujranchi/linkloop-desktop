@@ -14,6 +14,8 @@ export default defineSchema({
     responseRate: v.number(),          // percentage
     trustBadges: v.array(v.string()),
     createdAt: v.number(),             // timestamp
+    passwordHash: v.optional(v.string()),
+    passwordSalt: v.optional(v.string()),
   })
     .index("by_email", ["email"])
     .index("by_role", ["role"]),
@@ -176,4 +178,13 @@ export default defineSchema({
   })
     .index("by_type", ["type"])
     .index("by_type_date", ["type", "createdAt"]),
+
+  // ========== SESSIONS ==========
+  sessions: defineTable({
+    userId: v.id("users"),
+    token: v.string(),
+    expiresAt: v.number(),
+  })
+    .index("by_token", ["token"])
+    .index("by_user", ["userId"]),
 });

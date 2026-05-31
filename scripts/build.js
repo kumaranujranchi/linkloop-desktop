@@ -55,7 +55,7 @@ writeFileSync(resolve(DIST, "index.html"), html);
 const convexUrl = process.env.CONVEX_URL;
 if (convexUrl) {
   console.log("  🌐 Injecting Convex URL from Vercel environment...");
-  const convexIntegrationPath = resolve(DIST, "js/convex-integration.js");
+  const convexIntegrationPath = resolve(DIST, "js/convex-integration-v2.js");
   let convexIntegration = readFileSync(convexIntegrationPath, "utf-8");
   convexIntegration = convexIntegration.replace(
     'const CONVEX_URL = "__CONVEX_URL__";',

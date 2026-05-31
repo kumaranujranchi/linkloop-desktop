@@ -24,6 +24,7 @@ async function initClient() {
 // AUTH STATE
 // =============================================
 let currentUser = null;
+let currentToken = null;
 
 function getUserId() {
   if (currentUser && currentUser.userId) return currentUser.userId;
@@ -35,27 +36,37 @@ function getUserId() {
   return null;
 }
 
-function saveUser(user) {
+function getSessionToken() {
+  if (currentToken) return currentToken;
+  return localStorage.getItem("linkloop-token");
+}
+
+function saveUser(user, token) {
   currentUser = user;
+  currentToken = token;
   localStorage.setItem("linkloop-user", JSON.stringify(user));
+  if (token) {
+    localStorage.setItem("linkloop-token", token);
+  }
 }
 
 function clearUser() {
   currentUser = null;
+  currentToken = null;
   localStorage.removeItem("linkloop-user");
+  localStorage.removeItem("linkloop-token");
 }
 
 // =============================================
 // AUTH FUNCTIONS
 // =============================================
-async function signup(name, email) {
+async function signup(name, email, password) {
   try {
-    const result = await client.mutation("users:signupWithEmail", { name, email });
-    if (result.userId) {
-      const user = { userId: result.userId, name, email, role: "free", isNew: result.isNew };
-      saveUser(user);
-      updateAuthUI(user);
-      return { success: true, user };
+    const result = await client.mutation("users:signupWithPassword", { name, email, password });
+    if (result.token) {
+      saveUser(result.user, result.token);
+      updateAuthUI(result.user);
+      return { success: true, user: result.user };
     }
     return { success: false, error: "Signup failed" };
   } catch (e) {
@@ -63,15 +74,13 @@ async function signup(name, email) {
   }
 }
 
-async function login(email) {
+async function login(email, password) {
   try {
-    const result = await client.mutation("users:loginWithEmail", { email });
-    if (result.error) return { success: false, error: result.error };
-    if (result.userId) {
-      const user = { userId: result.userId, name: result.name, email: result.email, role: result.role };
-      saveUser(user);
-      updateAuthUI(user);
-      return { success: true, user };
+    const result = await client.mutation("users:loginWithPassword", { email, password });
+    if (result.token) {
+      saveUser(result.user, result.token);
+      updateAuthUI(result.user);
+      return { success: true, user: result.user };
     }
     return { success: false, error: "Login failed" };
   } catch (e) {
@@ -324,13 +333,53 @@ function updateWebsitesTable(mySites) {
 // =============================================
 // INIT
 // =============================================
-function init() {
+async function init() {
   console.log("🔌 LinkLoop: Initializing...");
-  const stored = localStorage.getItem("linkloop-user");
-  if (stored) {
-    try { currentUser = JSON.parse(stored); updateAuthUI(currentUser); hideAuthScreen(); console.log("🔌 Session restored:", currentUser.name); }
-    catch (e) { clearUser(); showAuthScreen(); }
-  } else { showAuthScreen(); }
+  const token = getSessionToken();
+  const storedUser = localStorage.getItem("linkloop-user");
+  
+  if (token) {
+    try {
+      // Query the me endpoint with our session token to verify validity
+      const userProfile = await client.query("users:me", { token });
+      if (userProfile) {
+        const user = {
+          userId: userProfile._id,
+          name: userProfile.name,
+          email: userProfile.email,
+          role: userProfile.role,
+        };
+        saveUser(user, token);
+        updateAuthUI(user);
+        hideAuthScreen();
+        console.log("🔌 Session restored securely from token:", user.name);
+      } else {
+        console.log("🔌 Session token expired or invalid.");
+        clearUser();
+        showAuthScreen();
+      }
+    } catch (e) {
+      console.error("🔌 Session verification failed:", e.message);
+      // Fallback to offline stored user if server is unreachable
+      if (storedUser) {
+        try {
+          currentUser = JSON.parse(storedUser);
+          updateAuthUI(currentUser);
+          hideAuthScreen();
+          console.log("🔌 Session restored offline:", currentUser.name);
+        } catch (err) {
+          clearUser();
+          showAuthScreen();
+        }
+      } else {
+        clearUser();
+        showAuthScreen();
+      }
+    }
+  } else {
+    clearUser();
+    showAuthScreen();
+  }
 
   loadDashboardData().catch(() => {});
   console.log("🔌 LinkLoop: Ready!");
