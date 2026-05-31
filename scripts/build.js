@@ -1,5 +1,5 @@
 /**
- * LinkLoop — Vercel Build Script
+ * LinkBuild — Vercel Build Script
  * Copies all static assets and the Convex client bundle
  * to the dist/ directory for Vercel deployment.
  */
@@ -10,7 +10,7 @@ import { resolve, dirname } from "path";
 const ROOT = resolve(import.meta.dirname, "..");
 const DIST = resolve(ROOT, "dist");
 
-console.log("🔨 Building LinkLoop for Vercel...");
+console.log("🔨 Building LinkBuild for Vercel...");
 
 // Create dist directory
 if (!existsSync(DIST)) mkdirSync(DIST, { recursive: true });

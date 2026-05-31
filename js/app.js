@@ -1,12 +1,12 @@
 /* =============================================
-   LinkLoop — Application Logic
+   LinkBuild — Application Logic
    ============================================= */
 
 // ---------- NAVIGATION ----------
 function navigateTo(pageName, navItem) {
   // Guard admin page navigation
   if (pageName === 'admin') {
-    const user = window.LinkLoop ? window.LinkLoop.getCurrentUser() : null;
+    const user = window.LinkBuild ? window.LinkBuild.getCurrentUser() : null;
     if (!user || user.role !== 'admin') {
       console.warn("🔒 Unauthorized attempt to access Admin page.");
       // Redirect to dashboard
@@ -190,7 +190,7 @@ function toggleTheme() {
   }
 
   // Save preference
-  localStorage.setItem('linkloop-theme', next);
+  localStorage.setItem('linkbuild-theme', next);
 
   // Update charts if visible
   updateChartColors(next);
@@ -480,7 +480,7 @@ function initAnalyticsCharts() {
 // ---------- INITIALIZATION ----------
 document.addEventListener('DOMContentLoaded', function() {
   // Load saved theme
-  const savedTheme = localStorage.getItem('linkloop-theme') || 'light';
+  const savedTheme = localStorage.getItem('linkbuild-theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
 
   // Update theme icons
@@ -517,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initial resize check
   handleResize();
 
-  console.log('🚀 LinkLoop — SEO Link Exchange Marketplace');
+  console.log('🚀 LinkBuild — SEO Link Exchange Marketplace');
   console.log('   Dashboard ready. Press ⌘K to search, ⌘/ to toggle theme.');
 });
 
@@ -589,17 +589,17 @@ window.handleLogin = async function(e) {
   if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Logging in...'; }
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Logging in...</span>';
   
-  const result = await window.LinkLoop.login(email, password);
+  const result = await window.LinkBuild.login(email, password);
   if (result.success) {
     msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
     document.getElementById("loginForm").reset();
-    // redirect is handled inside window.LinkLoop.login() based on page context:
+    // redirect is handled inside window.LinkBuild.login() based on page context:
     // - on landing page → redirects to dashboard.html
     // - on dashboard page → just closes overlay
     const onDashboard = window.location.pathname.includes("dashboard");
     if (onDashboard) {
-      window.LinkLoop.hideAuthScreen();
-      window.LinkLoop.loadDashboardData().catch(() => {});
+      window.LinkBuild.hideAuthScreen();
+      window.LinkBuild.loadDashboardData().catch(() => {});
     }
   } else {
     if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
@@ -619,17 +619,17 @@ window.handleSignup = async function(e) {
   if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Creating...'; }
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Creating account...</span>';
   
-  const result = await window.LinkLoop.signup(name, email, password);
+  const result = await window.LinkBuild.signup(name, email, password);
   if (result.success) {
     msgEl.innerHTML = '<span style="color:var(--success)">✓ Account created! Redirecting...</span>';
     document.getElementById("signupForm").reset();
-    // redirect is handled inside window.LinkLoop.signup() based on page context:
+    // redirect is handled inside window.LinkBuild.signup() based on page context:
     // - on landing page → redirects to dashboard.html
     // - on dashboard page → just closes overlay
     const onDashboard = window.location.pathname.includes("dashboard");
     if (onDashboard) {
-      window.LinkLoop.hideAuthScreen();
-      window.LinkLoop.loadDashboardData().catch(() => {});
+      window.LinkBuild.hideAuthScreen();
+      window.LinkBuild.loadDashboardData().catch(() => {});
     }
   } else {
     if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Create Account'; }
@@ -650,7 +650,7 @@ window.switchAuthTab = function(tab) {
   } else {
     loginForm.style.display = "flex";
     signupForm.style.display = "none";
-    if (title) title.textContent = "Welcome to LinkLoop";
+    if (title) title.textContent = "Welcome to LinkBuild";
   }
 };
 
@@ -688,14 +688,14 @@ window.toggleProfileDropdown = function() {
   }
 
   // If not logged in, show auth screen instead
-  if (window.LinkLoop && !window.LinkLoop.isLoggedIn()) {
-    window.LinkLoop.showAuthScreen();
+  if (window.LinkBuild && !window.LinkBuild.isLoggedIn()) {
+    window.LinkBuild.showAuthScreen();
     return;
   }
 
   // Populate with fresh user data
-  if (window.LinkLoop) {
-    updateProfileDropdown(window.LinkLoop.getCurrentUser());
+  if (window.LinkBuild) {
+    updateProfileDropdown(window.LinkBuild.getCurrentUser());
   }
 
   dd.classList.add("open");
@@ -719,7 +719,7 @@ document.addEventListener("click", function(e) {
 window.showLogoutMenu = window.toggleProfileDropdown;
 
 window.saveSettingsProfile = function() {
-  const user = window.LinkLoop.getCurrentUser();
+  const user = window.LinkBuild.getCurrentUser();
   if (!user) { alert("You must be logged in to save settings."); return; }
   const nameEl = document.getElementById("settingsDisplayName");
   // For now, just show a success toast (full save requires backend endpoint)
@@ -732,9 +732,9 @@ window.saveSettingsProfile = function() {
 // ADD WEBSITE MODAL
 // =============================================
 window.openAddWebsiteModal = function() {
-  if (!window.LinkLoop.isLoggedIn()) {
+  if (!window.LinkBuild.isLoggedIn()) {
     alert("Please login first to add a website.");
-    window.LinkLoop.showAuthScreen();
+    window.LinkBuild.showAuthScreen();
     return;
   }
   document.getElementById("addWebsiteModal").classList.add("active");
@@ -769,10 +769,10 @@ window.handleAddWebsite = async function(e) {
     return;
   }
 
-  const result = await window.LinkLoop.addWebsite(data);
+  const result = await window.LinkBuild.addWebsite(data);
   if (result.success) {
     msgEl.innerHTML = '<span style="color:var(--success)">✅ Website added successfully!</span>';
-    setTimeout(() => { closeAddWebsiteModal(); window.LinkLoop.loadMyWebsites(); }, 800);
+    setTimeout(() => { closeAddWebsiteModal(); window.LinkBuild.loadMyWebsites(); }, 800);
   } else {
     msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Failed to add website") + '</span>';
   }
@@ -787,24 +787,24 @@ navigateTo = function(pageName, navItem) {
 
   // Load data for specific pages after navigation
   setTimeout(() => {
-    if (window.LinkLoop && window.LinkLoop.isLoggedIn()) {
+    if (window.LinkBuild && window.LinkBuild.isLoggedIn()) {
       if (pageName === "websites") {
-        window.LinkLoop.loadMyWebsites();
+        window.LinkBuild.loadMyWebsites();
       } else if (pageName === "marketplace") {
-        window.LinkLoop.loadMarketplace();
+        window.LinkBuild.loadMarketplace();
       } else if (pageName === "exchange-requests") {
-        window.LinkLoop.loadExchangeRequests();
+        window.LinkBuild.loadExchangeRequests();
       } else if (pageName === "messages") {
-        window.LinkLoop.loadConversations();
+        window.LinkBuild.loadConversations();
       } else if (pageName === "notifications") {
-        window.LinkLoop.loadNotifications();
+        window.LinkBuild.loadNotifications();
       } else if (pageName === "dashboard") {
-        window.LinkLoop.loadDashboardData();
+        window.LinkBuild.loadDashboardData();
       } else if (pageName === "settings") {
         // Repopulate settings with live user data every time settings is opened
-        const user = window.LinkLoop.getCurrentUser();
-        if (user && window.LinkLoop.populateSettingsPage) {
-          window.LinkLoop.populateSettingsPage(user);
+        const user = window.LinkBuild.getCurrentUser();
+        if (user && window.LinkBuild.populateSettingsPage) {
+          window.LinkBuild.populateSettingsPage(user);
         }
       }
     }

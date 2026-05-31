@@ -1,5 +1,5 @@
 /* =============================================
-   LinkLoop — Convex Backend Client
+   LinkBuild — Convex Backend Client
    ============================================= */
 
 // Convex deployment URL — replace with your actual deployment after `npx convex deploy`
@@ -21,13 +21,13 @@ async function authenticate(userData) {
     company: userData.company || "",
   });
   currentUser = { ...userData, _id: userId };
-  localStorage.setItem("linkloop-user", JSON.stringify(currentUser));
+  localStorage.setItem("linkbuild-user", JSON.stringify(currentUser));
   return currentUser;
 }
 
 function getCurrentUser() {
   if (currentUser) return currentUser;
-  const stored = localStorage.getItem("linkloop-user");
+  const stored = localStorage.getItem("linkbuild-user");
   if (stored) {
     currentUser = JSON.parse(stored);
     return currentUser;
@@ -304,7 +304,7 @@ export {
 };
 
 // Global window access for non-module scripts
-window.LinkLoop = {
+window.LinkBuild = {
   client,
   authenticate,
   getCurrentUser,

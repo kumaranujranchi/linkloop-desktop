@@ -38,7 +38,7 @@ export default defineSchema({
     verified: v.boolean(),
     status: v.union(v.literal("active"), v.literal("pending"), v.literal("rejected"), v.literal("suspended")),
     metricsUpdatedAt: v.number(),      // timestamp: when Moz/Ahrefs API refreshed
-    lastCheckedAt: v.number(),         // timestamp: when LinkLoop verified backlinks
+    lastCheckedAt: v.number(),         // timestamp: when LinkBuild verified backlinks
     createdAt: v.number(),
   })
     .index("by_owner", ["ownerId"])

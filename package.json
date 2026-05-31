@@ -1,7 +1,7 @@
 {
-  "name": "linkloop",
+  "name": "linkbuild",
   "version": "1.0.0",
-  "description": "LinkLoop — SEO Link Exchange Marketplace & Backlink Collaboration Platform",
+  "description": "LinkBuild — SEO Link Exchange Marketplace & Backlink Collaboration Platform",
   "private": true,
   "type": "module",
   "scripts": {

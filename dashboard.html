@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkLoop — SEO Link Exchange Marketplace</title>
+  <title>LinkBuild — SEO Link Exchange Marketplace</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,8 +14,8 @@
   <!-- CRITICAL: Immediate auth guard — if no token, redirect before any rendering -->
   <script>
     (function() {
-      const token = localStorage.getItem('linkloop-token');
-      const user = localStorage.getItem('linkloop-user');
+      const token = localStorage.getItem('linkbuild-token');
+      const user = localStorage.getItem('linkbuild-user');
       if (!token || !user) {
         // No session at all — redirect immediately to landing page with login prompt
         const isCleanUrl = !window.location.pathname.includes('.html');
@@ -116,7 +116,7 @@
 
       <div class="sidebar-footer" id="sidebarFooter">
         <div style="width:100%">
-          <button class="btn btn-primary" onclick="window.LinkLoop.showAuthScreen()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">
+          <button class="btn btn-primary" onclick="window.LinkBuild.showAuthScreen()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
               <polyline points="10 17 15 12 10 7"/>
@@ -209,7 +209,7 @@
 
               <!-- Logout -->
               <div class="profile-dropdown-menu">
-                <button class="profile-dropdown-item profile-dropdown-logout" onclick="closeProfileDropdown(); window.LinkLoop.logout()">
+                <button class="profile-dropdown-item profile-dropdown-logout" onclick="closeProfileDropdown(); window.LinkBuild.logout()">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                   Logout
                 </button>
@@ -747,7 +747,7 @@
                       <div>
                         <div style="font-weight:600;font-size:0.9rem">🔍 Last Checked</div>
                         <div style="font-size:1.2rem;font-weight:700">Today</div>
-                        <div style="font-size:0.75rem;color:var(--text-tertiary)">LinkLoop verification</div>
+                        <div style="font-size:0.75rem;color:var(--text-tertiary)">LinkBuild verification</div>
                       </div>
                       <span class="badge badge-success">Checked</span>
                     </div>
@@ -1013,7 +1013,7 @@
                   Something like "best SEO tools for beginners" or "SEO software review" — whatever fits naturally in your content.
                 </div>
                 <div class="chat-bubble sent">
-                  "best SEO tools for beginners" works great. Let me set up the exchange request on LinkLoop.
+                  "best SEO tools for beginners" works great. Let me set up the exchange request on LinkBuild.
                 </div>
                 <div class="chat-bubble received">
                   Perfect! I've already created one on my end. You should see it in your Exchange Requests. 😊
@@ -1506,8 +1506,8 @@
   <div class="modal-overlay active" id="authOverlay">
     <div class="modal-box auth-modal">
       <div class="modal-header">
-        <h2 id="authTitle">Welcome to LinkLoop</h2>
-        <button class="modal-close" onclick="window.LinkLoop.hideAuthScreen()">✕</button>
+        <h2 id="authTitle">Welcome to LinkBuild</h2>
+        <button class="modal-close" onclick="window.LinkBuild.hideAuthScreen()">✕</button>
       </div>
       <div class="modal-body" id="authBody">
         <!-- Login Form -->

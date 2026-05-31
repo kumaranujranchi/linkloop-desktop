@@ -1,5 +1,5 @@
 /* =============================================
-   LinkLoop — Seed Demo Data
+   LinkBuild — Seed Demo Data
    Run with: node convex/seed.js
    
    Populates your Convex database with realistic
@@ -14,7 +14,7 @@ async function seed() {
   );
   const client = new ConvexHttpClient(CONVEX_URL);
 
-  console.log("🌱 Seeding LinkLoop demo data to:", CONVEX_URL);
+  console.log("🌱 Seeding LinkBuild demo data to:", CONVEX_URL);
 
   const websiteData = [
     { domain: "seomastery.com", niche: "SEO Tools", country: "US", language: "English", domainAuthority: 65, spamScore: 2, trafficEstimate: 120000, referringDomains: 3240 },

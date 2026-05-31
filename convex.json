@@ -1,8 +1,8 @@
 {
   "project": "vibrant-marmot-366",
-  "team": "linkloop",
+  "team": "linkbuild",
   "functions": "convex/",
   "authInfo": {
-    "domain": "https://linkloop.vercel.app"
+    "domain": "https://linkbuild.vercel.app"
   }
 }

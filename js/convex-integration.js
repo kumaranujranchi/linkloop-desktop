@@ -1,5 +1,5 @@
 /* =============================================
-   LinkLoop — Convex Integration Layer
+   LinkBuild — Convex Integration Layer
    Email Auth + All Backend Functions
    ============================================= */
 
@@ -27,7 +27,7 @@ let currentUser = null;
 
 function getUserId() {
   if (currentUser && currentUser.userId) return currentUser.userId;
-  const stored = localStorage.getItem("linkloop-user");
+  const stored = localStorage.getItem("linkbuild-user");
   if (stored) {
     try { currentUser = JSON.parse(stored); return currentUser.userId; }
     catch (e) { /* ignore */ }
@@ -37,12 +37,12 @@ function getUserId() {
 
 function saveUser(user) {
   currentUser = user;
-  localStorage.setItem("linkloop-user", JSON.stringify(user));
+  localStorage.setItem("linkbuild-user", JSON.stringify(user));
 }
 
 function clearUser() {
   currentUser = null;
-  localStorage.removeItem("linkloop-user");
+  localStorage.removeItem("linkbuild-user");
 }
 
 // =============================================
@@ -114,7 +114,7 @@ function isLoggedIn() {
 }
 
 function getCurrentUser() {
-  return currentUser || JSON.parse(localStorage.getItem("linkloop-user") || "null");
+  return currentUser || JSON.parse(localStorage.getItem("linkbuild-user") || "null");
 }
 
 // =============================================
@@ -297,7 +297,7 @@ function updateMarketplaceTable(websites) {
       <td>${w.country}</td>
       <td><div class="health-score"><div class="health-bar"><div class="health-bar-fill good" style="width:${w.exchangeSuccessRate || 85}%"></div></div>${w.exchangeSuccessRate || 85}%</div></td>
       <td>Just now</td>
-      <td><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm">Profile</button><button class="btn btn-primary btn-sm" onclick="window.LinkLoop.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'})">Send Request</button></div></td>
+      <td><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm">Profile</button><button class="btn btn-primary btn-sm" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'})">Send Request</button></div></td>
     </tr>`).join("");
 }
 
@@ -325,21 +325,21 @@ function updateWebsitesTable(mySites) {
 // INIT
 // =============================================
 function init() {
-  console.log("🔌 LinkLoop: Initializing...");
-  const stored = localStorage.getItem("linkloop-user");
+  console.log("🔌 LinkBuild: Initializing...");
+  const stored = localStorage.getItem("linkbuild-user");
   if (stored) {
     try { currentUser = JSON.parse(stored); updateAuthUI(currentUser); hideAuthScreen(); console.log("🔌 Session restored:", currentUser.name); }
     catch (e) { clearUser(); showAuthScreen(); }
   } else { showAuthScreen(); }
 
   loadDashboardData().catch(() => {});
-  console.log("🔌 LinkLoop: Ready!");
+  console.log("🔌 LinkBuild: Ready!");
 }
 
 // =============================================
 // GLOBAL API
 // =============================================
-window.LinkLoop = {
+window.LinkBuild = {
   client: null,
   getClient: () => client,
   signup, login, logout, isLoggedIn, getCurrentUser, getUserId,

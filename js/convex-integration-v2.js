@@ -1,5 +1,5 @@
 /* =============================================
-   LinkLoop — Convex Integration Layer
+   LinkBuild — Convex Integration Layer
    Email Auth + All Backend Functions
    ============================================= */
 
@@ -28,7 +28,7 @@ let currentToken = null;
 
 function getUserId() {
   if (currentUser && currentUser.userId) return currentUser.userId;
-  const stored = localStorage.getItem("linkloop-user");
+  const stored = localStorage.getItem("linkbuild-user");
   if (stored) {
     try { currentUser = JSON.parse(stored); return currentUser.userId; }
     catch (e) { /* ignore */ }
@@ -38,23 +38,23 @@ function getUserId() {
 
 function getSessionToken() {
   if (currentToken) return currentToken;
-  return localStorage.getItem("linkloop-token");
+  return localStorage.getItem("linkbuild-token");
 }
 
 function saveUser(user, token) {
   currentUser = user;
   currentToken = token;
-  localStorage.setItem("linkloop-user", JSON.stringify(user));
+  localStorage.setItem("linkbuild-user", JSON.stringify(user));
   if (token) {
-    localStorage.setItem("linkloop-token", token);
+    localStorage.setItem("linkbuild-token", token);
   }
 }
 
 function clearUser() {
   currentUser = null;
   currentToken = null;
-  localStorage.removeItem("linkloop-user");
-  localStorage.removeItem("linkloop-token");
+  localStorage.removeItem("linkbuild-user");
+  localStorage.removeItem("linkbuild-token");
 }
 
 // =============================================
@@ -178,7 +178,7 @@ function updateAuthUI(user) {
               <div class="sidebar-user-role" id="sidebarUserRole">${roleLabel}</div>
             </div>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="window.LinkLoop.logout()" title="Logout" style="padding:4px;min-width:auto;color:var(--text-tertiary);margin-left:auto;display:flex;align-items:center;justify-content:center">
+          <button class="btn btn-ghost btn-sm" onclick="window.LinkBuild.logout()" title="Logout" style="padding:4px;min-width:auto;color:var(--text-tertiary);margin-left:auto;display:flex;align-items:center;justify-content:center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
               <polyline points="16 17 21 12 16 7"/>
@@ -239,7 +239,7 @@ function updateAuthUI(user) {
     if (footer) {
       footer.innerHTML = `
         <div style="width:100%">
-          <button class="btn btn-primary" onclick="window.LinkLoop.showAuthScreen()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">
+          <button class="btn btn-primary" onclick="window.LinkBuild.showAuthScreen()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
               <polyline points="10 17 15 12 10 7"/>
@@ -267,7 +267,7 @@ function updateAuthUI(user) {
     }
 
     if (dashboardSubtitle) {
-      dashboardSubtitle.innerHTML = "Welcome to LinkLoop. Please log in to see your overview.";
+      dashboardSubtitle.innerHTML = "Welcome to LinkBuild. Please log in to see your overview.";
     }
 
     if (authModalClose) {
@@ -330,7 +330,7 @@ function isLoggedIn() {
 }
 
 function getCurrentUser() {
-  return currentUser || JSON.parse(localStorage.getItem("linkloop-user") || "null");
+  return currentUser || JSON.parse(localStorage.getItem("linkbuild-user") || "null");
 }
 
 // =============================================
@@ -513,7 +513,7 @@ function updateMarketplaceTable(websites) {
       <td>${w.country}</td>
       <td><div class="health-score"><div class="health-bar"><div class="health-bar-fill good" style="width:${w.exchangeSuccessRate || 85}%"></div></div>${w.exchangeSuccessRate || 85}%</div></td>
       <td>Just now</td>
-      <td><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm">Profile</button><button class="btn btn-primary btn-sm" onclick="window.LinkLoop.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'})">Send Request</button></div></td>
+      <td><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm">Profile</button><button class="btn btn-primary btn-sm" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'})">Send Request</button></div></td>
     </tr>`).join("");
 }
 
@@ -556,9 +556,9 @@ function populateSettingsPage(user) {
 // INIT
 // =============================================
 async function init() {
-  console.log("🔌 LinkLoop: Initializing...");
+  console.log("🔌 LinkBuild: Initializing...");
   const token = getSessionToken();
-  const storedUser = localStorage.getItem("linkloop-user");
+  const storedUser = localStorage.getItem("linkbuild-user");
   const onDashboard = window.location.pathname.includes("dashboard");
 
   // On dashboard: auth overlay is shown by default and non-closeable.
@@ -616,13 +616,13 @@ async function init() {
     handleLoggedOutRedirect();
   }
 
-  console.log("🔌 LinkLoop: Ready!");
+  console.log("🔌 LinkBuild: Ready!");
 }
 
 // =============================================
 // GLOBAL API
 // =============================================
-window.LinkLoop = {
+window.LinkBuild = {
   client: null,
   getClient: () => client,
   signup, login, logout, isLoggedIn, getCurrentUser, getUserId,
