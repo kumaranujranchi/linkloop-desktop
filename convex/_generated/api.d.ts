@@ -14,7 +14,6 @@ import type * as backlinks from "../backlinks.js";
 import type * as exchanges from "../exchanges.js";
 import type * as messages from "../messages.js";
 import type * as notifications from "../notifications.js";
-import type * as seed from "../seed.js";
 import type * as users from "../users.js";
 import type * as websites from "../websites.js";
 
@@ -31,7 +30,6 @@ declare const fullApi: ApiFromModules<{
   exchanges: typeof exchanges;
   messages: typeof messages;
   notifications: typeof notifications;
-  seed: typeof seed;
   users: typeof users;
   websites: typeof websites;
 }>;

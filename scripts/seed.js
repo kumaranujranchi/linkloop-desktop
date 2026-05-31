@@ -1,6 +1,6 @@
 /* =============================================
    LinkBuild — Seed Demo Data
-   Run with: node convex/seed.js
+   Run with: node scripts/seed.js
    
    Populates your Convex database with realistic
    demo data. Uses ConvexHttpClient for Node.js.
@@ -42,5 +42,5 @@ async function seed() {
 seed().catch((e) => {
   console.error("\n❌ Seed failed:", e.message);
   console.log("\n💡 Tip: Deploy Convex first with 'npx convex deploy'");
-  console.log("   Then try: node convex/seed.js");
+  console.log("   Then try: node scripts/seed.js");
 });
