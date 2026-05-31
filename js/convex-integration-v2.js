@@ -285,12 +285,37 @@ function updateAuthUI(user) {
 
 function showAuthScreen() {
   const el = document.getElementById("authOverlay");
-  if (el) { el.classList.add("active"); el.classList.remove("hidden"); }
+  if (!el) return;
+  el.classList.add("active");
+  el.classList.remove("hidden");
+
+  const onDashboard = window.location.pathname.includes("dashboard");
+
+  // Close button: always show on landing page, hide on dashboard (until logged in)
+  const closeBtn = el.querySelector(".modal-close");
+  if (closeBtn) {
+    closeBtn.style.display = onDashboard ? "none" : "flex";
+  }
+
+  // Backdrop click: close on landing page, not on dashboard
+  el._backdropHandler = function(e) {
+    if (e.target === el && !onDashboard) {
+      hideAuthScreen();
+    }
+  };
+  el.removeEventListener("click", el._backdropHandler);
+  el.addEventListener("click", el._backdropHandler);
 }
 
 function hideAuthScreen() {
   const el = document.getElementById("authOverlay");
-  if (el) { el.classList.remove("active"); el.classList.add("hidden"); }
+  if (el) {
+    el.classList.remove("active");
+    el.classList.add("hidden");
+    if (el._backdropHandler) {
+      el.removeEventListener("click", el._backdropHandler);
+    }
+  }
 }
 
 function isLoggedIn() {
@@ -529,11 +554,8 @@ async function init() {
   const storedUser = localStorage.getItem("linkloop-user");
   const onDashboard = window.location.pathname.includes("dashboard");
 
-  // Make auth overlay non-closeable on dashboard until auth is verified
-  if (onDashboard) {
-    const authClose = document.querySelector("#authOverlay .modal-close");
-    if (authClose) authClose.style.display = "none";
-  }
+  // On dashboard: auth overlay is shown by default and non-closeable.
+  // showAuthScreen() will handle close button visibility based on page context.
 
   if (token) {
     try {

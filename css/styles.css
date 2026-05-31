@@ -913,10 +913,27 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
   color: #475569 !important;
 }
 
-/* Close button */
+/* Close button — clearly visible on auth modal */
 .auth-modal .modal-close {
-  background: #F1F5F9 !important;
-  color: #475569 !important;
+  background: #E2E8F0 !important;
+  color: #1E293B !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: background 0.15s ease !important;
+  flex-shrink: 0;
+}
+
+.auth-modal .modal-close:hover {
+  background: #CBD5E1 !important;
+  color: #0F172A !important;
 }
 
 .modal-header {
