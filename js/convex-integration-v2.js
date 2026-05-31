@@ -95,16 +95,83 @@ function logout() {
 }
 
 function updateAuthUI(user) {
-  const sidebarName = document.getElementById("sidebarUserName");
-  const sidebarRole = document.getElementById("sidebarUserRole");
-  const sidebarAvatar = document.getElementById("sidebarUserAvatar");
+  const footer = document.getElementById("sidebarFooter");
   const topbarAvatar = document.getElementById("topbarUserAvatar");
+  const dashboardSubtitle = document.getElementById("dashboardSubtitle");
+  const authModalClose = document.querySelector("#authOverlay .modal-close");
+
   if (user) {
     const initials = user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
-    if (sidebarName) sidebarName.textContent = user.name;
-    if (sidebarRole) sidebarRole.textContent = user.role === "free" ? "Free Plan" : user.role === "pro" ? "Pro Plan" : "Agency Plan";
-    if (sidebarAvatar) sidebarAvatar.textContent = initials;
-    if (topbarAvatar) topbarAvatar.textContent = initials;
+    const roleLabel = user.role === "free" ? "Free Plan" : user.role === "pro" ? "Pro Plan" : user.role === "admin" ? "Admin Plan" : "Agency Plan";
+
+    if (footer) {
+      footer.innerHTML = `
+        <div class="sidebar-user" style="display:flex;align-items:center;justify-content:space-between;width:100%">
+          <div style="display:flex;align-items:center;gap:12px;overflow:hidden">
+            <div class="sidebar-user-avatar" id="sidebarUserAvatar" style="flex-shrink:0">${initials}</div>
+            <div class="sidebar-user-info" style="overflow:hidden">
+              <div class="sidebar-user-name" id="sidebarUserName" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${user.name}</div>
+              <div class="sidebar-user-role" id="sidebarUserRole">${roleLabel}</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="window.LinkLoop.logout()" title="Logout" style="padding:4px;min-width:auto;color:var(--text-tertiary);margin-left:auto;display:flex;align-items:center;justify-content:center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </button>
+        </div>
+      `;
+    }
+
+    if (topbarAvatar) {
+      topbarAvatar.textContent = initials;
+      topbarAvatar.innerHTML = initials; // Ensure text only
+      topbarAvatar.title = "Logged in as " + user.name + " (Click to Logout)";
+    }
+
+    if (dashboardSubtitle) {
+      dashboardSubtitle.innerHTML = "Welcome back, " + user.name.split(" ")[0] + ". Here's your link exchange overview.";
+    }
+
+    if (authModalClose) {
+      authModalClose.style.display = ""; // Show close button
+    }
+  } else {
+    // Logged out / Not logged in
+    if (footer) {
+      footer.innerHTML = `
+        <div style="width:100%">
+          <button class="btn btn-primary" onclick="window.LinkLoop.showAuthScreen()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+              <polyline points="10 17 15 12 10 7"/>
+              <line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+            Login / Sign Up
+          </button>
+        </div>
+      `;
+    }
+
+    if (topbarAvatar) {
+      topbarAvatar.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      `;
+      topbarAvatar.title = "Click to Login";
+    }
+
+    if (dashboardSubtitle) {
+      dashboardSubtitle.innerHTML = "Welcome to LinkLoop. Please log in to see your overview.";
+    }
+
+    if (authModalClose) {
+      authModalClose.style.display = "none"; // Hide close button
+    }
   }
 }
 

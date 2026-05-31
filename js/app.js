@@ -622,9 +622,12 @@ window.switchAuthTab = function(tab) {
 };
 
 window.showLogoutMenu = function() {
-  if (!window.LinkLoop.isLoggedIn()) return;
-  if (confirm("Logout from LinkLoop?")) {
-    window.LinkLoop.logout();
+  if (window.LinkLoop.isLoggedIn()) {
+    if (confirm("Logout from LinkLoop?")) {
+      window.LinkLoop.logout();
+    }
+  } else {
+    window.LinkLoop.showAuthScreen();
   }
 };
 
