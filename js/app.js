@@ -4,6 +4,17 @@
 
 // ---------- NAVIGATION ----------
 function navigateTo(pageName, navItem) {
+  // Guard admin page navigation
+  if (pageName === 'admin') {
+    const user = window.LinkLoop ? window.LinkLoop.getCurrentUser() : null;
+    if (!user || user.role !== 'admin') {
+      console.warn("🔒 Unauthorized attempt to access Admin page.");
+      // Redirect to dashboard
+      navigateTo('dashboard');
+      return;
+    }
+  }
+
   // Hide all page sections
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
 

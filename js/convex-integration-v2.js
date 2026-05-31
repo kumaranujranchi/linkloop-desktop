@@ -99,6 +99,7 @@ function updateAuthUI(user) {
   const topbarAvatar = document.getElementById("topbarUserAvatar");
   const dashboardSubtitle = document.getElementById("dashboardSubtitle");
   const authModalClose = document.querySelector("#authOverlay .modal-close");
+  const adminLink = document.getElementById("sidebarAdminLink");
 
   if (user) {
     const initials = user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
@@ -126,8 +127,15 @@ function updateAuthUI(user) {
     }
 
     if (topbarAvatar) {
+      topbarAvatar.style.borderRadius = "50%";
+      topbarAvatar.style.width = "34px";
+      topbarAvatar.style.height = "34px";
+      topbarAvatar.style.padding = "";
+      topbarAvatar.style.background = "";
+      topbarAvatar.style.color = "";
+      topbarAvatar.style.fontWeight = "";
+      topbarAvatar.style.display = "";
       topbarAvatar.textContent = initials;
-      topbarAvatar.innerHTML = initials; // Ensure text only
       topbarAvatar.title = "Logged in as " + user.name + " (Click to Logout)";
     }
 
@@ -137,6 +145,14 @@ function updateAuthUI(user) {
 
     if (authModalClose) {
       authModalClose.style.display = ""; // Show close button
+    }
+
+    if (adminLink) {
+      if (user.role === "admin") {
+        adminLink.style.display = ""; // Show admin link
+      } else {
+        adminLink.style.display = "none"; // Hide admin link
+      }
     }
   } else {
     // Logged out / Not logged in
@@ -156,13 +172,18 @@ function updateAuthUI(user) {
     }
 
     if (topbarAvatar) {
-      topbarAvatar.innerHTML = `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-      `;
-      topbarAvatar.title = "Click to Login";
+      topbarAvatar.style.borderRadius = "6px";
+      topbarAvatar.style.width = "auto";
+      topbarAvatar.style.height = "34px";
+      topbarAvatar.style.padding = "0 16px";
+      topbarAvatar.style.background = "var(--primary-gradient)";
+      topbarAvatar.style.color = "white";
+      topbarAvatar.style.fontWeight = "600";
+      topbarAvatar.style.display = "flex";
+      topbarAvatar.style.alignItems = "center";
+      topbarAvatar.style.justifyContent = "center";
+      topbarAvatar.innerHTML = `Login`;
+      topbarAvatar.title = "Click to Login / Sign Up";
     }
 
     if (dashboardSubtitle) {
@@ -171,6 +192,10 @@ function updateAuthUI(user) {
 
     if (authModalClose) {
       authModalClose.style.display = "none"; // Hide close button
+    }
+
+    if (adminLink) {
+      adminLink.style.display = "none"; // Hide admin link when logged out
     }
   }
 }
@@ -423,6 +448,7 @@ async function init() {
       } else {
         console.log("🔌 Session token expired or invalid.");
         clearUser();
+        updateAuthUI(null);
         showAuthScreen();
       }
     } catch (e) {
@@ -436,15 +462,18 @@ async function init() {
           console.log("🔌 Session restored offline:", currentUser.name);
         } catch (err) {
           clearUser();
+          updateAuthUI(null);
           showAuthScreen();
         }
       } else {
         clearUser();
+        updateAuthUI(null);
         showAuthScreen();
       }
     }
   } else {
     clearUser();
+    updateAuthUI(null);
     showAuthScreen();
   }
 
@@ -464,4 +493,8 @@ window.LinkLoop = {
   hideAuthScreen, showAuthScreen,
 };
 
-initClient();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initClient);
+} else {
+  initClient();
+}

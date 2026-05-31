@@ -94,7 +94,7 @@
             <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
             Settings
           </a>
-          <a class="nav-item" data-page="admin" onclick="navigateTo('admin', this)">
+          <a class="nav-item" data-page="admin" onclick="navigateTo('admin', this)" id="sidebarAdminLink" style="display: none;">
             <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
             Admin
           </a>
@@ -102,7 +102,16 @@
       </nav>
 
       <div class="sidebar-footer" id="sidebarFooter">
-        <!-- Rendered dynamically by updateAuthUI -->
+        <div style="width:100%">
+          <button class="btn btn-primary" onclick="window.LinkLoop.showAuthScreen()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+              <polyline points="10 17 15 12 10 7"/>
+              <line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+            Login / Sign Up
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -144,7 +153,7 @@
           <button class="topbar-icon-btn" onclick="navigateTo('messages')" title="Messages">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </button>
-          <div class="sidebar-user-avatar" id="topbarUserAvatar" style="width:34px;height:34px;font-size:0.75rem;cursor:pointer" onclick="showLogoutMenu()">AK</div>
+          <div class="sidebar-user-avatar" id="topbarUserAvatar" style="border-radius:6px;width:auto;height:34px;padding:0 16px;background:var(--primary-gradient);color:white;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showLogoutMenu()">Login</div>
         </div>
       </header>
 
