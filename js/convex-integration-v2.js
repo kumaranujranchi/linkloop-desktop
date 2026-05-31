@@ -531,13 +531,44 @@ function updateWebsitesTable(mySites) {
       <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
       <td>${w.niche}</td>
       <td>${w.country}</td>
-      <td><span class="badge ${w.verified ? 'badge-success' : 'badge-warning'}">${w.verified ? 'Verified' : 'Pending'}</span></td>
+      <td><span class="badge ${w.verified ? 'badge-success' : 'badge-warning'}">${w.verified ? '✓ Verified' : '⚠ Pending'}</span></td>
       <td>${w.referringDomains || 0}</td>
-      <td><button class="btn btn-ghost btn-sm">Manage</button></td>
+      <td>
+        ${w.verified
+          ? '<button class="btn btn-ghost btn-sm">Manage</button>'
+          : `<button class="btn btn-primary btn-sm" onclick="window.LinkBuild.openVerifyModal('${w._id}')">🔐 Verify</button>`
+        }
+      </td>
     </tr>`).join("");
 }
 
 // =============================================
+// VERIFICATION FUNCTIONS
+// =============================================
+async function getVerificationInfo(websiteId) {
+  try {
+    const result = await client.query("websites:getVerificationInfo", { websiteId });
+    return result;
+  } catch (e) {
+    console.error("Failed to get verification info:", e);
+    return null;
+  }
+}
+
+async function checkAndVerifyWebsite(websiteId, domain, verificationCode, method) {
+  try {
+    const result = await client.action("verification:checkAndVerify", {
+      websiteId,
+      domain,
+      verificationCode,
+      method,
+    });
+    return result;
+  } catch (e) {
+    console.error("Verification check failed:", e);
+    return { success: false, message: "Verification check failed. Please try again." };
+  }
+}
 // SETTINGS PAGE POPULATION
 // =============================================
 function populateSettingsPage(user) {
@@ -629,6 +660,7 @@ window.LinkBuild = {
   loadDashboardData, loadMyWebsites, addWebsite, loadMarketplace,
   loadExchangeRequests, sendExchangeRequest, loadConversations, loadNotifications,
   hideAuthScreen, showAuthScreen, populateSettingsPage,
+  getVerificationInfo, checkAndVerifyWebsite,
 };
 
 if (document.readyState === "loading") {

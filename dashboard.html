@@ -1615,6 +1615,54 @@
     </div>
   </div>
 
+  <!-- ========== VERIFY WEBSITE MODAL ========== -->
+  <div class="modal-overlay hidden" id="verifyWebsiteModal">
+    <div class="modal-box" style="max-width:560px">
+      <div class="modal-header">
+        <h2>🔐 Verify Website Ownership</h2>
+        <button class="modal-close" onclick="closeVerifyWebsiteModal()">✕</button>
+      </div>
+      <div class="modal-body" style="display:flex;flex-direction:column;gap:20px">
+        <div id="verifyDomainName" style="font-weight:700;font-size:1rem;color:var(--primary);word-break:break-all"></div>
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin:0">
+          To prove you own this domain, choose one of the verification methods below. 
+          After implementing it, click <strong>"Check Verification"</strong>.
+        </p>
+
+        <!-- Method Tabs -->
+        <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--border-color)">
+          <button id="verifyTabDns" class="verify-method-tab" onclick="switchVerifyTab('dns')" style="flex:1;padding:10px;background:var(--primary);color:white;border:none;cursor:pointer;font-weight:600;font-size:0.85rem;transition:all 0.2s">🌐 DNS TXT Record</button>
+          <button id="verifyTabMeta" class="verify-method-tab" onclick="switchVerifyTab('metatag')" style="flex:1;padding:10px;background:var(--bg-tertiary);color:var(--text-secondary);border:none;cursor:pointer;font-weight:600;font-size:0.85rem;transition:all 0.2s">🏷️ Meta Tag</button>
+        </div>
+
+        <!-- DNS Method -->
+        <div id="verifyPanelDns" style="background:var(--bg-tertiary);border-radius:8px;padding:16px">
+          <p style="font-weight:600;margin:0 0 8px 0;font-size:0.85rem">Add this TXT record to your domain's DNS configuration:</p>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:0.85rem">
+            <span style="color:var(--text-tertiary)">Type:</span><strong>TXT</strong>
+            <span style="color:var(--text-tertiary)">Name/Host:</span><strong>@</strong> <span style="color:var(--text-tertiary);font-size:0.75rem">(or leave blank for root domain)</span>
+            <span style="color:var(--text-tertiary)">Value:</span>
+            <code id="verifyCodeDns" style="background:var(--bg-primary);padding:8px 12px;border-radius:6px;word-break:break-all;font-size:0.8rem;user-select:all;border:1px solid var(--border-color)"></code>
+          </div>
+          <p style="color:var(--text-tertiary);font-size:0.75rem;margin:8px 0 0 0">⏱️ DNS changes may take 1-5 minutes to propagate.</p>
+        </div>
+
+        <!-- Meta Tag Method -->
+        <div id="verifyPanelMeta" style="background:var(--bg-tertiary);border-radius:8px;padding:16px;display:none">
+          <p style="font-weight:600;margin:0 0 8px 0;font-size:0.85rem">Add this meta tag inside the <code>&lt;head&gt;</code> section of your website's homepage:</p>
+          <code id="verifyCodeMeta" style="display:block;background:var(--bg-primary);padding:12px;border-radius:6px;word-break:break-all;font-size:0.8rem;user-select:all;border:1px solid var(--border-color);margin-top:8px"></code>
+          <p style="color:var(--text-tertiary);font-size:0.75rem;margin:8px 0 0 0">✅ Changes are instant once you deploy the updated HTML.</p>
+        </div>
+
+        <div id="verifyMessage" style="text-align:center;font-size:0.85rem;padding:8px;border-radius:6px"></div>
+        <button class="btn btn-primary" id="verifyCheckBtn" onclick="handleVerifyWebsite()" style="width:100%">
+          🔍 Check Verification
+        </button>
+        <button class="btn btn-ghost" onclick="closeVerifyWebsiteModal()" style="width:100%;margin-top:-8px">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ========== SCRIPTS ========== -->
   <script src="js/app.js"></script>
 </body>

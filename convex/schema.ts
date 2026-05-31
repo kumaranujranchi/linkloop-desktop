@@ -36,6 +36,8 @@ export default defineSchema({
     nofollowLinks: v.number(),
     exchangeSuccessRate: v.number(),   // percentage
     verified: v.boolean(),
+    verificationCode: v.optional(v.string()),  // unique code for DNS/meta-tag ownership verification
+    verificationMethod: v.optional(v.union(v.literal("dns"), v.literal("metatag"))),
     status: v.union(v.literal("active"), v.literal("pending"), v.literal("rejected"), v.literal("suspended")),
     metricsUpdatedAt: v.number(),      // timestamp: when Moz/Ahrefs API refreshed
     lastCheckedAt: v.number(),         // timestamp: when LinkBuild verified backlinks

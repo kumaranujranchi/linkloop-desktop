@@ -779,6 +779,121 @@ window.handleAddWebsite = async function(e) {
 };
 
 // =============================================
+// VERIFY WEBSITE MODAL
+// =============================================
+let currentVerifyWebsiteId = null;
+let currentVerifyMethod = "dns";
+
+// Attach openVerifyModal to LinkBuild so it can be called from table buttons
+window.LinkBuild.openVerifyModal = async function(websiteId) {
+  if (!window.LinkBuild.isLoggedIn()) {
+    alert("Please login first.");
+    window.LinkBuild.showAuthScreen();
+    return;
+  }
+
+  currentVerifyWebsiteId = websiteId;
+  currentVerifyMethod = "dns";
+  document.getElementById("verifyMessage").innerHTML = "";
+  document.getElementById("verifyCheckBtn").disabled = false;
+  document.getElementById("verifyCheckBtn").textContent = "🔍 Check Verification";
+
+  // Get verification info
+  const info = await window.LinkBuild.getVerificationInfo(websiteId);
+  if (!info || info.verified) {
+    // Already verified — reload table and return
+    window.LinkBuild.loadMyWebsites();
+    return;
+  }
+
+  document.getElementById("verifyDomainName").textContent = info.domain;
+  const code = info.verificationCode;
+  document.getElementById("verifyCodeDns").textContent = code;
+  document.getElementById("verifyCodeMeta").textContent = `<meta name="linkbuild-verify" content="${code}">`;
+
+  // Reset to DNS tab
+  switchVerifyTab("dns");
+
+  document.getElementById("verifyWebsiteModal").classList.add("active");
+  document.getElementById("verifyWebsiteModal").classList.remove("hidden");
+};
+
+window.closeVerifyWebsiteModal = function() {
+  document.getElementById("verifyWebsiteModal").classList.remove("active");
+  document.getElementById("verifyWebsiteModal").classList.add("hidden");
+  currentVerifyWebsiteId = null;
+};
+
+window.switchVerifyTab = function(method) {
+  currentVerifyMethod = method;
+  const dnsTab = document.getElementById("verifyTabDns");
+  const metaTab = document.getElementById("verifyTabMeta");
+  const dnsPanel = document.getElementById("verifyPanelDns");
+  const metaPanel = document.getElementById("verifyPanelMeta");
+
+  if (method === "dns") {
+    dnsTab.style.background = "var(--primary)";
+    dnsTab.style.color = "white";
+    metaTab.style.background = "var(--bg-tertiary)";
+    metaTab.style.color = "var(--text-secondary)";
+    dnsPanel.style.display = "block";
+    metaPanel.style.display = "none";
+  } else {
+    metaTab.style.background = "var(--primary)";
+    metaTab.style.color = "white";
+    dnsTab.style.background = "var(--bg-tertiary)";
+    dnsTab.style.color = "var(--text-secondary)";
+    metaPanel.style.display = "block";
+    dnsPanel.style.display = "none";
+  }
+  document.getElementById("verifyMessage").innerHTML = "";
+};
+
+window.handleVerifyWebsite = async function() {
+  if (!currentVerifyWebsiteId) return;
+
+  const msgEl = document.getElementById("verifyMessage");
+  const btn = document.getElementById("verifyCheckBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Checking...";
+  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Checking verification, please wait...</span>';
+  msgEl.style.background = "var(--bg-tertiary)";
+
+  const domain = document.getElementById("verifyDomainName").textContent;
+  const code = document.getElementById("verifyCodeDns").textContent;
+
+  try {
+    const result = await window.LinkBuild.checkAndVerifyWebsite(
+      currentVerifyWebsiteId,
+      domain,
+      code,
+      currentVerifyMethod
+    );
+
+    if (result.success) {
+      msgEl.innerHTML = `<span style="color:var(--success)">${result.message}</span>`;
+      msgEl.style.background = "rgba(34,197,94,0.1)";
+      btn.textContent = "✅ Verified!";
+      // Reload websites table after short delay
+      setTimeout(() => {
+        closeVerifyWebsiteModal();
+        window.LinkBuild.loadMyWebsites();
+      }, 1500);
+    } else {
+      msgEl.innerHTML = `<span style="color:var(--danger);white-space:pre-line">${result.message}</span>`;
+      msgEl.style.background = "rgba(239,68,68,0.1)";
+      btn.disabled = false;
+      btn.textContent = "🔄 Try Again";
+    }
+  } catch (e) {
+    msgEl.innerHTML = `<span style="color:var(--danger)">Verification check failed. Please try again.</span>`;
+    msgEl.style.background = "rgba(239,68,68,0.1)";
+    btn.disabled = false;
+    btn.textContent = "🔍 Check Verification";
+  }
+};
+
+// =============================================
 // LOAD DATA ON PAGE NAVIGATION
 // =============================================
 const originalNavigateTo = navigateTo;

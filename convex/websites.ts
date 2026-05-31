@@ -133,6 +133,17 @@ export const stats = query({
   },
 });
 
+// ========== HELPERS ==========
+
+function generateVerificationCode(): string {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let code = "";
+  for (let i = 0; i < 24; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `linkbuild-verify=${code}`;
+}
+
 // ========== MUTATIONS ==========
 
 // Add a new website (with optional userId param for email-based auth)
@@ -165,6 +176,7 @@ export const add = mutation({
     }
 
     const now = Date.now();
+    const verificationCode = generateVerificationCode();
     const websiteId = await ctx.db.insert("websites", {
       ownerId: userId,
       domain: args.domain,
@@ -178,8 +190,9 @@ export const add = mutation({
       dofollowLinks: Math.floor(args.referringDomains * 0.6),
       nofollowLinks: Math.floor(args.referringDomains * 0.4),
       exchangeSuccessRate: Math.floor(Math.random() * 15) + 85,
-      verified: true,
-      status: "active",
+      verified: false,
+      verificationCode,
+      status: "pending",
       metricsUpdatedAt: now,
       lastCheckedAt: now,
       createdAt: now,
@@ -205,14 +218,33 @@ export const add = mutation({
   },
 });
 
-// Verify a website
-export const verify = mutation({
+// Get verification code for a website (so owner can see DNS/meta-tag instructions)
+export const getVerificationInfo = query({
   args: { websiteId: v.id("websites") },
+  handler: async (ctx, args) => {
+    const website = await ctx.db.get(args.websiteId);
+    if (!website) return null;
+    return {
+      domain: website.domain,
+      verificationCode: website.verificationCode,
+      verified: website.verified,
+      verificationMethod: website.verificationMethod,
+    };
+  },
+});
+
+// Verify a website (marks verified + records method used)
+export const verify = mutation({
+  args: {
+    websiteId: v.id("websites"),
+    verificationMethod: v.union(v.literal("dns"), v.literal("metatag")),
+  },
   handler: async (ctx, args) => {
     const now = Date.now();
     await ctx.db.patch(args.websiteId, {
       verified: true,
       status: "active",
+      verificationMethod: args.verificationMethod,
       lastCheckedAt: now,
     });
   },
