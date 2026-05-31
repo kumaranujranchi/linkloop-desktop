@@ -72,10 +72,10 @@ async function signup(name, email, password) {
       if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
         if (result.user.role === "admin") {
           console.log("Admin logged in. Redirecting to admin workspace...");
-          window.location.href = "dashboard.html";
+          window.location.href = getDashboardUrl();
         } else {
           console.log("User logged in. Redirecting to dashboard...");
-          window.location.href = "dashboard.html";
+          window.location.href = getDashboardUrl();
         }
       }
       return { success: true, user: result.user };
@@ -98,10 +98,10 @@ async function login(email, password) {
       if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
         if (result.user.role === "admin") {
           console.log("Admin logged in. Redirecting to admin workspace...");
-          window.location.href = "dashboard.html";
+          window.location.href = getDashboardUrl();
         } else {
           console.log("User logged in. Redirecting to dashboard...");
-          window.location.href = "dashboard.html";
+          window.location.href = getDashboardUrl();
         }
       }
       return { success: true, user: result.user };
@@ -118,12 +118,31 @@ function logout() {
   handleLoggedOutRedirect();
 }
 
+function getLandingUrl(params) {
+  // On Vercel (clean URLs), origin is the root /
+  // Locally (file:// or simple server), we need index.html
+  const base = window.location.origin;
+  const isCleanUrl = !window.location.pathname.includes(".html");
+  const loginParam = params ? "?auth=" + params : "";
+  
+  if (isCleanUrl) {
+    return "/" + loginParam;                   // Vercel: /  or /?auth=login
+  } else {
+    return "index.html" + loginParam;          // Local: index.html?auth=login
+  }
+}
+
+function getDashboardUrl() {
+  const isCleanUrl = !window.location.pathname.includes(".html");
+  return isCleanUrl ? "/dashboard" : "dashboard.html";
+}
+
 function handleLoggedOutRedirect() {
   const path = window.location.pathname;
   if (path.includes("dashboard") || path.includes("dashboard.html")) {
-    window.location.href = "index.html?auth=login";
+    window.location.href = getLandingUrl("login");
   } else {
-    // On landing page: check if URL params request showing it
+    // On landing page: check if URL params request showing auth modal
     const params = new URLSearchParams(window.location.search);
     if (params.get("auth") === "login" || params.get("auth") === "signup") {
       showAuthScreen();
@@ -201,12 +220,12 @@ function updateAuthUI(user) {
 
     if (landingAuthBtn) {
       landingAuthBtn.textContent = "Dashboard";
-      landingAuthBtn.onclick = () => window.location.href = "dashboard.html";
+      landingAuthBtn.onclick = () => window.location.href = getDashboardUrl();
       landingAuthBtn.style.padding = "10px 24px";
     }
     if (landingHeroCta) {
       landingHeroCta.textContent = "Go to Dashboard";
-      landingHeroCta.onclick = () => window.location.href = "dashboard.html";
+      landingHeroCta.onclick = () => window.location.href = getDashboardUrl();
     }
   } else {
     // Logged out / Not logged in

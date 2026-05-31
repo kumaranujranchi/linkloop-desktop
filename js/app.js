@@ -585,14 +585,24 @@ window.handleLogin = async function(e) {
   const msgEl = document.getElementById("authMessage");
   if (!email || !password) { msgEl.innerHTML = '<span style="color:var(--danger)">Please enter your email and password</span>'; return; }
 
+  const btnEl = e.target.querySelector('button[type="submit"]');
+  if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Logging in...'; }
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Logging in...</span>';
+  
   const result = await window.LinkLoop.login(email, password);
   if (result.success) {
-    window.LinkLoop.hideAuthScreen();
-    window.LinkLoop.loadDashboardData().catch(() => {});
-    msgEl.innerHTML = '';
+    msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
     document.getElementById("loginForm").reset();
+    // redirect is handled inside window.LinkLoop.login() based on page context:
+    // - on landing page → redirects to dashboard.html
+    // - on dashboard page → just closes overlay
+    const onDashboard = window.location.pathname.includes("dashboard");
+    if (onDashboard) {
+      window.LinkLoop.hideAuthScreen();
+      window.LinkLoop.loadDashboardData().catch(() => {});
+    }
   } else {
+    if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
     msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Login failed") + '</span>';
   }
 };
@@ -605,14 +615,24 @@ window.handleSignup = async function(e) {
   const msgEl = document.getElementById("authMessage");
   if (!name || !email || !password) { msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in all fields</span>'; return; }
 
+  const btnEl = e.target.querySelector('button[type="submit"]');
+  if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Creating...'; }
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Creating account...</span>';
+  
   const result = await window.LinkLoop.signup(name, email, password);
   if (result.success) {
-    window.LinkLoop.hideAuthScreen();
-    window.LinkLoop.loadDashboardData().catch(() => {});
-    msgEl.innerHTML = '';
+    msgEl.innerHTML = '<span style="color:var(--success)">✓ Account created! Redirecting...</span>';
     document.getElementById("signupForm").reset();
+    // redirect is handled inside window.LinkLoop.signup() based on page context:
+    // - on landing page → redirects to dashboard.html
+    // - on dashboard page → just closes overlay
+    const onDashboard = window.location.pathname.includes("dashboard");
+    if (onDashboard) {
+      window.LinkLoop.hideAuthScreen();
+      window.LinkLoop.loadDashboardData().catch(() => {});
+    }
   } else {
+    if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Create Account'; }
     msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Signup failed") + '</span>';
   }
 };
