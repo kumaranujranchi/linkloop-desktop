@@ -525,10 +525,12 @@ function handleResize() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('mobileOverlay');
 
+  if (!sidebar) return;
+
   // Close sidebar overlay on resize to larger screen
   if (window.innerWidth > 900) {
     sidebar.classList.remove('mobile-open');
-    overlay.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
     // Reset chat area on desktop
     const chatArea = document.querySelector('.chat-area');
     const convList = document.querySelector('.conversations-list');

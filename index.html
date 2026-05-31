@@ -1,1443 +1,802 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkLoop — SEO Link Exchange Marketplace</title>
+  <title>LinkLoop — Collaborative SEO Link Exchange Marketplace</title>
+  <meta name="description" content="Safely exchange high-quality backlinks with verified partners, track search engine authority metrics, and monitor backlink health automatically in real-time.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236C4DF6%22 stroke-width=%222.5%22><path d=%22M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71%22/><path d=%22M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71%22/></svg>">
+  
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Variables & Styles -->
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/dark-mode.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  
+  <style>
+    :root {
+      --bg-landing: #0b0f19;
+      --bg-card: rgba(30, 41, 59, 0.4);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --font-outfit: 'Outfit', sans-serif;
+      --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+    }
 
-  <!-- Convex Browser Bundle (loaded before integration) -->
-  <script src="./node_modules/convex/dist/browser.bundle.js"></script>
-  <!-- Convex Integration (regular script) -->
-  <script src="js/convex-integration-v2.js"></script>
+    body {
+      font-family: var(--font-jakarta);
+      background-color: var(--bg-landing);
+      color: #cbd5e1;
+      overflow-y: auto;
+      height: auto;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-outfit);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Navbar styling */
+    .landing-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4%;
+      background: rgba(11, 15, 25, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+    }
+
+    .landing-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .landing-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-gradient);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .landing-logo-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: white;
+    }
+
+    .landing-logo-text {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: var(--font-outfit);
+      letter-spacing: -0.03em;
+    }
+
+    .landing-logo-text span {
+      color: #818cf8;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #94a3b8;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      padding: 160px 4% 100px;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    /* Background blobs */
+    .glow-blob {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(108, 77, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      border-radius: 50%;
+      z-index: -1;
+      filter: blur(50px);
+    }
+
+    .glow-blob-1 { top: 10%; left: -100px; }
+    .glow-blob-2 { bottom: 10%; right: -100px; }
+
+    .hero-content {
+      flex: 1;
+      max-width: 650px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(108, 77, 246, 0.1);
+      border: 1px solid rgba(108, 77, 246, 0.2);
+      border-radius: var(--radius-full);
+      color: #818cf8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: #94a3b8;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .hero-mockup {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-mockup-wrapper {
+      position: relative;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(108, 77, 246, 0.15);
+      overflow: hidden;
+      max-width: 550px;
+      transition: transform var(--transition-slow);
+    }
+
+    .hero-mockup-wrapper:hover {
+      transform: translateY(-8px) rotate(-1deg);
+    }
+
+    .hero-mockup img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Social proof / KPI Section */
+    .metrics {
+      padding: 60px 4%;
+      background: rgba(15, 23, 42, 0.3);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .metric-card h3 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: linear-gradient(135deg, #a5b4fc 0%, #6c4df6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .metric-card p {
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 100px 4%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 70px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-tag {
+      font-size: 0.85rem;
+      color: #818cf8;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      transition: all var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .feature-card:hover {
+      background: rgba(30, 41, 59, 0.6);
+      border-color: rgba(108, 77, 246, 0.3);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(108, 77, 246, 0.1);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #818cf8;
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .feature-card h4 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+
+    /* Target Audience */
+    .audience {
+      padding: 100px 4%;
+      background: rgba(15, 23, 42, 0.2);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .audience-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      text-align: center;
+      transition: all var(--transition-normal);
+    }
+
+    .audience-card:hover {
+      border-color: rgba(108, 77, 246, 0.2);
+      transform: scale(1.02);
+    }
+
+    .audience-card h4 {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      color: #818cf8;
+    }
+
+    .audience-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 0;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .audience-card li {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .audience-card li::before {
+      content: "✓";
+      color: #10b981;
+      font-weight: 700;
+    }
+
+    /* FAQ Section */
+    .faq {
+      padding: 100px 4%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: all var(--transition-fast);
+    }
+
+    .faq-question {
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      color: #ffffff;
+      user-select: none;
+    }
+
+    .faq-answer {
+      padding: 0 24px 24px;
+      color: #94a3b8;
+      display: none;
+      font-size: 0.95rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding-top: 16px;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-chevron {
+      transition: transform var(--transition-fast);
+    }
+
+    .faq-item.active .faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    /* CTA Section */
+    .cta-banner {
+      padding: 100px 4%;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta-banner-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      background: linear-gradient(135deg, rgba(15, 76, 129, 0.3) 0%, rgba(108, 77, 246, 0.3) 100%);
+      border: 1px solid rgba(108, 77, 246, 0.2);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-banner h2 {
+      font-size: 2.75rem;
+      margin-bottom: 20px;
+    }
+
+    .cta-banner p {
+      font-size: 1.1rem;
+      color: #a5b4fc;
+      margin-bottom: 32px;
+    }
+
+    /* Footer styling */
+    .landing-footer {
+      background: #06080f;
+      border-top: 1px solid var(--border-color);
+      padding: 80px 4% 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 60px;
+      max-width: 1200px;
+      margin: 0 auto 60px;
+    }
+
+    .footer-desc h4 {
+      margin-bottom: 20px;
+    }
+
+    .footer-desc p {
+      font-size: 0.9rem;
+      color: #64748b;
+      max-width: 320px;
+      margin-bottom: 20px;
+    }
+
+    .footer-links h5 {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      font-size: 0.9rem;
+      color: #64748b;
+      transition: color var(--transition-fast);
+    }
+
+    .footer-links a:hover {
+      color: #818cf8;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding-top: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #475569;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        padding-top: 120px;
+        text-align: center;
+      }
+      .hero-content {
+        max-width: 100%;
+      }
+      .hero-title {
+        font-size: 2.75rem;
+      }
+      .hero-actions {
+        justify-content: center;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Mobile Overlay -->
-  <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileSidebar()"></div>
 
-  <!-- ========== APP SHELL ========== -->
-  <div class="app-shell">
-
-    <!-- ===== SIDEBAR ===== -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-logo">
-        <div class="sidebar-logo-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-          </svg>
-        </div>
-        <span class="sidebar-logo-text">Link<span>Loop</span></span>
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="landing-nav">
+    <a href="#" class="landing-logo">
+      <div class="landing-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
       </div>
-
-      <nav class="sidebar-nav">
-        <div class="sidebar-section">
-          <div class="sidebar-section-label">Main</div>
-          <a class="nav-item active" data-page="dashboard" onclick="navigateTo('dashboard', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
-            Dashboard
-          </a>
-          <a class="nav-item" data-page="websites" onclick="navigateTo('websites', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-            Websites
-          </a>
-          <a class="nav-item" data-page="marketplace" onclick="navigateTo('marketplace', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-            Marketplace
-            <span class="nav-badge">New</span>
-          </a>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-section-label">Exchange</div>
-          <a class="nav-item" data-page="exchange-requests" onclick="navigateTo('exchange-requests', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5M3 3l7.5 7.5"/><path d="M8 21H3v-5M16 21h5v-5"/><path d="M21 21l-7.5-7.5M3 21l7.5-7.5"/></svg></span>
-            Exchange Requests
-            <span class="nav-badge warning">12</span>
-          </a>
-          <a class="nav-item" data-page="messages" onclick="navigateTo('messages', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-            Messages
-            <span class="nav-badge">5</span>
-          </a>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-section-label">Monitor</div>
-          <a class="nav-item" data-page="backlink-monitor" onclick="navigateTo('backlink-monitor', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-            Backlink Monitor
-          </a>
-          <a class="nav-item" data-page="notifications" onclick="navigateTo('notifications', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
-            Notifications
-            <span class="nav-badge danger">3</span>
-          </a>
-          <a class="nav-item" data-page="analytics" onclick="navigateTo('analytics', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
-            Analytics
-          </a>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-section-label">Account</div>
-          <a class="nav-item" data-page="billing" onclick="navigateTo('billing', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
-            Billing
-          </a>
-          <a class="nav-item" data-page="settings" onclick="navigateTo('settings', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
-            Settings
-          </a>
-          <a class="nav-item" data-page="admin" onclick="navigateTo('admin', this)" id="sidebarAdminLink" style="display: none;">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-            Admin
-          </a>
-        </div>
-      </nav>
-
-      <div class="sidebar-footer" id="sidebarFooter">
-        <div style="width:100%">
-          <button class="btn btn-primary" onclick="window.LinkLoop.showAuthScreen()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-              <polyline points="10 17 15 12 10 7"/>
-              <line x1="15" y1="12" x2="3" y2="12"/>
-            </svg>
-            Login / Sign Up
-          </button>
-        </div>
-      </div>
-    </aside>
-
-    <!-- ===== MAIN CONTENT ===== -->
-    <div class="main-content">
-
-      <!-- ===== TOPBAR ===== -->
-      <header class="topbar">
-        <div class="topbar-left">
-          <button class="topbar-hamburger" onclick="toggleSidebar()" title="Toggle sidebar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
-          </button>
-          <div class="topbar-breadcrumb">
-            <span id="breadcrumbParent">Home</span>
-            <span>/</span>
-            <span class="current" id="breadcrumbCurrent">Dashboard</span>
-          </div>
-        </div>
-
-        <div class="topbar-center">
-          <div class="topbar-search">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search websites, domains, or partners...">
-            <span class="topbar-shortcut">⌘K</span>
-          </div>
-        </div>
-
-        <div class="topbar-right">
-          <button class="topbar-icon-btn theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-            <svg id="themeIconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            <svg id="themeIconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          </button>
-          <button class="topbar-icon-btn" onclick="navigateTo('notifications')" title="Notifications">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            <span class="dot"></span>
-          </button>
-          <button class="topbar-icon-btn" onclick="navigateTo('messages')" title="Messages">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </button>
-          <div class="sidebar-user-avatar" id="topbarUserAvatar" style="border-radius:6px;width:auto;height:34px;padding:0 16px;background:var(--primary-gradient);color:white;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showLogoutMenu()">Login</div>
-        </div>
-      </header>
-
-      <!-- ===== PAGE CONTENT ===== -->
-      <div class="page-content" id="pageContent">
-
-        <!-- ==================== DASHBOARD ==================== -->
-        <section class="page-section active" id="page-dashboard">
-          <h1 class="page-title">Dashboard</h1>
-          <p class="page-subtitle" id="dashboardSubtitle">Welcome back, Anuj. Here's your link exchange overview.</p>
-
-          <!-- KPI Cards -->
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-card-header">
-                <span class="kpi-card-label">Total Websites</span>
-                <div class="kpi-card-icon blue">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-value">1,284</div>
-              <div class="kpi-card-change up">↑ 12.5% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-card-header">
-                <span class="kpi-card-label">Active Exchanges</span>
-                <div class="kpi-card-icon purple">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5M3 3l7.5 7.5"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-value">342</div>
-              <div class="kpi-card-change up">↑ 8.3% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-card-header">
-                <span class="kpi-card-label">Pending Requests</span>
-                <div class="kpi-card-icon orange">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-value">48</div>
-              <div class="kpi-card-change down">↓ 3.1% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-card-header">
-                <span class="kpi-card-label">Verified Backlinks</span>
-                <div class="kpi-card-icon green">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-value">2,891</div>
-              <div class="kpi-card-change up">↑ 15.7% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-card-header">
-                <span class="kpi-card-label">Reputation Score</span>
-                <div class="kpi-card-icon purple">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-value">94<span style="font-size:1rem;color:var(--text-tertiary)">/100</span></div>
-              <div class="kpi-card-change up">↑ 2.4 pts</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-card-header">
-                <span class="kpi-card-label">Monthly Growth</span>
-                <div class="kpi-card-icon green">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                </div>
-              </div>
-              <div class="kpi-card-value">23.4%</div>
-              <div class="kpi-card-change up">↑ 4.1% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
-            </div>
-          </div>
-
-          <!-- Charts -->
-          <div class="charts-grid">
-            <div class="chart-card">
-              <h3>Exchange Activity</h3>
-              <canvas id="chartExchangeActivity" height="240"></canvas>
-            </div>
-            <div class="chart-card">
-              <h3>Backlinks Verified</h3>
-              <canvas id="chartBacklinksVerified" height="240"></canvas>
-            </div>
-          </div>
-
-          <!-- Widgets Row -->
-          <div class="widgets-grid">
-            <!-- Recent Messages Widget -->
-            <div class="card">
-              <div class="card-header">
-                <span class="card-header-title">Recent Messages</span>
-                <button class="btn btn-ghost btn-sm" onclick="navigateTo('messages')">View All →</button>
-              </div>
-              <div class="card-body" style="padding:0">
-                <div class="conversation-item">
-                  <div class="conversation-avatar" style="background:#10B981">SR</div>
-                  <div class="conversation-info">
-                    <div class="conversation-name">Sarah from SEOHub</div>
-                    <div class="conversation-preview">Great! Let me check the anchor text options...</div>
-                  </div>
-                  <div class="conversation-time">2m ago</div>
-                </div>
-                <div class="conversation-item">
-                  <div class="conversation-avatar" style="background:#F59E0B">MK</div>
-                  <div class="conversation-info">
-                    <div class="conversation-name">Mike from BacklinkPro</div>
-                    <div class="conversation-preview">I've sent the exchange request. Please review.</div>
-                  </div>
-                  <div class="conversation-time">15m ago</div>
-                </div>
-                <div class="conversation-item">
-                  <div class="conversation-avatar" style="background:#6C4DF6">JD</div>
-                  <div class="conversation-info">
-                    <div class="conversation-name">Jessica (Agency Owner)</div>
-                    <div class="conversation-preview">We have 3 new websites available for exchange...</div>
-                  </div>
-                  <div class="conversation-time">1h ago</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- New Opportunities Widget -->
-            <div class="card">
-              <div class="card-header">
-                <span class="card-header-title">New Opportunities</span>
-                <button class="btn btn-ghost btn-sm" onclick="navigateTo('marketplace')">View All →</button>
-              </div>
-              <div class="card-body" style="padding:0">
-                <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.9rem">seomastery.com</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 65 · Tech · 🇺🇸</div>
-                  </div>
-                  <span class="badge badge-success">High Match</span>
-                </div>
-                <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.9rem">contentforge.io</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 52 · SaaS · 🇬🇧</div>
-                  </div>
-                  <span class="badge badge-purple">New</span>
-                </div>
-                <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.9rem">growthhacker.blog</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 58 · Marketing · 🇨🇦</div>
-                  </div>
-                  <span class="badge badge-warning">Trending</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== WEBSITES ==================== -->
-        <section class="page-section" id="page-websites">
-          <h1 class="page-title">My Websites</h1>
-          <p class="page-subtitle">Manage your registered websites for link exchanges.</p>
-
-          <div style="display:flex;gap:12px;margin-bottom:20px">
-            <button class="btn btn-primary" onclick="openAddWebsiteModal()">+ Add Website</button>
-            <button class="btn btn-secondary">Import from CSV</button>
-          </div>
-
-          <div class="card">
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Domain</th>
-                    <th>DA</th>
-                    <th>Traffic</th>
-                    <th>Niche</th>
-                    <th>Country</th>
-                    <th>Status</th>
-                    <th>Backlinks</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="myWebsitesTableBody">
-                  <tr>
-                    <td><strong>myseotools.com</strong></td>
-                    <td><span class="badge badge-info">52</span></td>
-                    <td>45K/mo</td>
-                    <td>SEO Tools</td>
-                    <td>🇺🇸 US</td>
-                    <td><span class="badge badge-success">Verified</span></td>
-                    <td>24</td>
-                    <td><button class="btn btn-ghost btn-sm">Manage</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>contentmarketing.ai</strong></td>
-                    <td><span class="badge badge-info">38</span></td>
-                    <td>12K/mo</td>
-                    <td>AI Content</td>
-                    <td>🇺🇸 US</td>
-                    <td><span class="badge badge-success">Verified</span></td>
-                    <td>18</td>
-                    <td><button class="btn btn-ghost btn-sm">Manage</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>saasgrowthtips.com</strong></td>
-                    <td><span class="badge badge-info">45</span></td>
-                    <td>28K/mo</td>
-                    <td>SaaS Growth</td>
-                    <td>🇬🇧 UK</td>
-                    <td><span class="badge badge-warning">Pending</span></td>
-                    <td>7</td>
-                    <td><button class="btn btn-ghost btn-sm">Verify</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>affiliatemastery.org</strong></td>
-                    <td><span class="badge badge-info">61</span></td>
-                    <td>89K/mo</td>
-                    <td>Affiliate</td>
-                    <td>🇺🇸 US</td>
-                    <td><span class="badge badge-success">Verified</span></td>
-                    <td>42</td>
-                    <td><button class="btn btn-ghost btn-sm">Manage</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>bloggingwizard.co</strong></td>
-                    <td><span class="badge badge-info">33</span></td>
-                    <td>6K/mo</td>
-                    <td>Blogging</td>
-                    <td>🇨🇦 CA</td>
-                    <td><span class="badge badge-danger">Rejected</span></td>
-                    <td>2</td>
-                    <td><button class="btn btn-ghost btn-sm">Retry</button></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== MARKETPLACE ==================== -->
-        <section class="page-section" id="page-marketplace">
-          <h1 class="page-title">Website Marketplace</h1>
-          <p class="page-subtitle">Discover websites for backlink opportunities. Find the perfect exchange partners.</p>
-
-          <!-- Search & Filters -->
-          <div class="card" style="margin-bottom:20px">
-            <div class="card-body">
-              <div style="display:flex;gap:12px;margin-bottom:12px">
-                <div style="flex:1;position:relative">
-                  <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray-400)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                  <input class="input" type="text" placeholder="Search by domain, niche, or keyword..." style="padding-left:36px">
-                </div>
-                <button class="btn btn-primary">Search</button>
-              </div>
-              <div class="filter-bar">
-                <select class="select"><option>All Niches</option><option>SEO Tools</option><option>SaaS</option><option>Marketing</option><option>Tech</option><option>Blogging</option><option>Ecommerce</option></select>
-                <select class="select"><option>Any DA</option><option>DA 0-20</option><option>DA 20-40</option><option>DA 40-60</option><option>DA 60-80</option><option>DA 80+</option></select>
-                <select class="select"><option>Any Traffic</option><option>&lt; 10K</option><option>10K-50K</option><option>50K-100K</option><option>100K+</option></select>
-                <select class="select"><option>All Countries</option><option>🇺🇸 US</option><option>🇬🇧 UK</option><option>🇨🇦 Canada</option><option>🇦🇺 Australia</option><option>🇩🇪 Germany</option></select>
-                <select class="select"><option>All Languages</option><option>English</option><option>Spanish</option><option>German</option><option>French</option></select>
-                <select class="select"><option>Any Link Type</option><option>Dofollow</option><option>Nofollow</option><option>Both</option></select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Results Table -->
-          <div class="card">
-            <div class="card-header">
-              <span class="card-header-title">1,284 Results</span>
-              <span style="font-size:0.8rem;color:var(--text-tertiary)">Sorted by Relevance</span>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Domain</th>
-                    <th>DA</th>
-                    <th>Traffic</th>
-                    <th>Niche</th>
-                    <th>Country</th>
-                    <th>Reputation</th>
-                    <th>Last Updated</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="marketplaceTableBody">
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">SM</div>
-                        <strong>seomastery.com</strong>
-                        <span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">65</span></td>
-                    <td>120K/mo</td>
-                    <td>SEO Tools</td>
-                    <td>🇺🇸</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:92%"></div></div>
-                        92%
-                      </div>
-                    </td>
-                    <td>2 days ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:#10B981;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">CF</div>
-                        <strong>contentforge.io</strong>
-                        <span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">52</span></td>
-                    <td>38K/mo</td>
-                    <td>SaaS</td>
-                    <td>🇬🇧</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:87%"></div></div>
-                        87%
-                      </div>
-                    </td>
-                    <td>5 days ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:#F59E0B;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">GH</div>
-                        <strong>growthhacker.blog</strong>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">58</span></td>
-                    <td>72K/mo</td>
-                    <td>Marketing</td>
-                    <td>🇨🇦</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill warning" style="width:74%"></div></div>
-                        74%
-                      </div>
-                    </td>
-                    <td>1 week ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:#EF4444;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">LS</div>
-                        <strong>linkstrategist.com</strong>
-                        <span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">71</span></td>
-                    <td>210K/mo</td>
-                    <td>SEO Agency</td>
-                    <td>🇺🇸</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:96%"></div></div>
-                        96%
-                      </div>
-                    </td>
-                    <td>3 days ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:#3B82F6;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">BP</div>
-                        <strong>backlinkpro.net</strong>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">44</span></td>
-                    <td>18K/mo</td>
-                    <td>Link Building</td>
-                    <td>🇩🇪</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill warning" style="width:68%"></div></div>
-                        68%
-                      </div>
-                    </td>
-                    <td>2 weeks ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="card-footer">
-              <span style="font-size:0.85rem;color:var(--text-tertiary)">Showing 1-5 of 1,284 results</span>
-              <div style="display:flex;gap:4px">
-                <button class="btn btn-ghost btn-sm" disabled>← Prev</button>
-                <button class="btn btn-primary btn-sm">1</button>
-                <button class="btn btn-ghost btn-sm">2</button>
-                <button class="btn btn-ghost btn-sm">3</button>
-                <button class="btn btn-ghost btn-sm">…</button>
-                <button class="btn btn-ghost btn-sm">257</button>
-                <button class="btn btn-ghost btn-sm">Next →</button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== WEBSITE DETAIL ==================== -->
-        <section class="page-section" id="page-website-detail">
-          <button class="btn btn-ghost btn-sm" style="margin-bottom:16px" onclick="navigateTo('marketplace')">← Back to Marketplace</button>
-
-          <!-- Hero Section -->
-          <div class="card" style="margin-bottom:24px">
-            <div class="card-body" style="padding:28px">
-              <div style="display:flex;align-items:center;gap:20px">
-                <div style="width:64px;height:64px;border-radius:var(--radius-lg);background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:1.5rem;flex-shrink:0">SM</div>
-                <div style="flex:1">
-                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-                    <h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em">seomastery.com</h2>
-                    <span class="badge badge-success">✓ Verified</span>
-                  </div>
-                  <div style="color:var(--text-secondary);font-size:0.9rem">SEO Tools &amp; Resources · United States · English</div>
-                </div>
-                <div style="text-align:center">
-                  <div class="reputation-ring" style="width:80px;height:80px">
-                    <svg width="80" height="80" viewBox="0 0 80 80">
-                      <circle class="bg-circle" cx="40" cy="40" r="34" stroke-width="6"/>
-                      <circle class="progress-circle" cx="40" cy="40" r="34" stroke-width="6"
-                        stroke-dasharray="213.6" stroke-dashoffset="17.1"/>
-                    </svg>
-                    <span class="reputation-score-text">92</span>
-                  </div>
-                  <div style="font-size:0.75rem;color:var(--text-tertiary);margin-top:4px">Reputation</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Metrics Cards -->
-          <div class="kpi-grid" style="margin-bottom:24px">
-            <div class="kpi-card">
-              <span class="kpi-card-label">Domain Authority</span>
-              <div class="kpi-card-value">65</div>
-              <div class="kpi-card-change up">↑ 3 pts this month</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Spam Score</span>
-              <div class="kpi-card-value" style="color:var(--success)">2<span style="font-size:1rem">%</span></div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">Very Low Risk</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Traffic Estimate</span>
-              <div class="kpi-card-value">120K<span style="font-size:0.9rem;color:var(--text-tertiary)">/mo</span></div>
-              <div class="kpi-card-change up">↑ 15% vs last month</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Referring Domains</span>
-              <div class="kpi-card-value">3,240</div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">1,820 dofollow</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Exchange Success Rate</span>
-              <div class="kpi-card-value">94<span style="font-size:1rem;color:var(--text-tertiary)">%</span></div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">47 of 50 completed</div>
-            </div>
-          </div>
-
-          <!-- Tabs -->
-          <div class="tabs">
-            <div class="tab-item active" onclick="switchTab(this)">Overview</div>
-            <div class="tab-item" onclick="switchTab(this)">Exchange Opportunities</div>
-            <div class="tab-item" onclick="switchTab(this)">Reviews</div>
-            <div class="tab-item" onclick="switchTab(this)">Backlink History</div>
-            <div class="tab-item" onclick="switchTab(this)">Owner Information</div>
-          </div>
-
-          <!-- SEO Metrics Strategy UI -->
-          <div class="card" style="margin-bottom:20px">
-            <div class="card-header"><span class="card-header-title">SEO Metrics</span></div>
-            <div class="card-body">
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-                <div>
-                  <div style="margin-bottom:16px">
-                    <div style="font-size:0.8rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:600">Domain Authority</div>
-                    <div style="font-size:2rem;font-weight:800">42</div>
-                    <div class="progress-bar" style="margin-top:8px"><div class="progress-bar-fill" style="width:42%"></div></div>
-                  </div>
-                  <div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:600">Spam Score</div>
-                    <div style="font-size:2rem;font-weight:800;color:var(--success)">2%</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">Low risk — Safe for exchange</div>
-                  </div>
-                </div>
-                <div>
-                  <div style="background:var(--bg-tertiary);border-radius:var(--radius-lg);padding:20px">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-                      <div>
-                        <div style="font-weight:600;font-size:0.9rem">📊 Metrics Updated</div>
-                        <div style="font-size:1.2rem;font-weight:700">15 Jan 2026</div>
-                        <div style="font-size:0.75rem;color:var(--text-tertiary)">Moz API refresh</div>
-                      </div>
-                      <span class="badge badge-info">Updated</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;align-items:center">
-                      <div>
-                        <div style="font-weight:600;font-size:0.9rem">🔍 Last Checked</div>
-                        <div style="font-size:1.2rem;font-weight:700">Today</div>
-                        <div style="font-size:0.75rem;color:var(--text-tertiary)">LinkLoop verification</div>
-                      </div>
-                      <span class="badge badge-success">Checked</span>
-                    </div>
-                    <div style="margin-top:16px;padding:12px;background:rgba(108,77,246,0.08);border-radius:8px;font-size:0.8rem;color:var(--text-secondary)">
-                      <strong>💡 Note:</strong> "Checked" means we verified the backlink is still live. "Updated" means the SEO metrics (DA, traffic) were refreshed from the API. These are different actions.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style="display:flex;gap:12px">
-            <button class="btn btn-primary btn-lg">Send Exchange Request</button>
-            <button class="btn btn-secondary btn-lg">Save to List</button>
-          </div>
-        </section>
-
-        <!-- ==================== EXCHANGE REQUESTS (KANBAN) ==================== -->
-        <section class="page-section" id="page-exchange-requests">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-            <div>
-              <h1 class="page-title" style="margin-bottom:0">Exchange Requests</h1>
-              <p class="page-subtitle" style="margin-bottom:0">Manage your link exchange pipeline</p>
-            </div>
-            <button class="btn btn-primary">+ New Exchange</button>
-          </div>
-
-          <div class="kanban-board">
-            <!-- New Requests -->
-            <div class="kanban-column">
-              <div class="kanban-column-header">
-                <div class="kanban-column-title">
-                  <span class="status-dot blue"></span> New Requests
-                </div>
-                <span class="kanban-column-count">8</span>
-              </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">seomastery.com</div>
-                  <div class="kanban-card-partner">Partner: contentforge.io</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "SEO tools guide"</div>
-                  <div class="kanban-card-meta">
-                    <span>2 hours ago</span>
-                    <span class="badge badge-neutral">New</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">growthhacker.blog</div>
-                  <div class="kanban-card-partner">Partner: saasgrowthtips.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "growth marketing"</div>
-                  <div class="kanban-card-meta">
-                    <span>5 hours ago</span>
-                    <span class="badge badge-neutral">New</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">linkstrategist.com</div>
-                  <div class="kanban-card-partner">Partner: myseotools.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "link building strategy"</div>
-                  <div class="kanban-card-meta">
-                    <span>1 day ago</span>
-                    <span class="badge badge-neutral">New</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Negotiating -->
-            <div class="kanban-column">
-              <div class="kanban-column-header">
-                <div class="kanban-column-title">
-                  <span class="status-dot orange"></span> Negotiating
-                </div>
-                <span class="kanban-column-count">5</span>
-              </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">backlinkpro.net</div>
-                  <div class="kanban-card-partner">Partner: affiliatemastery.org</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "best affiliate programs"</div>
-                  <div class="kanban-card-meta">
-                    <span>3 days ago</span>
-                    <span class="badge badge-warning">Negotiating</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">techinsider.com</div>
-                  <div class="kanban-card-partner">Partner: saasgrowthtips.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "SaaS trends 2026"</div>
-                  <div class="kanban-card-meta">
-                    <span>4 days ago</span>
-                    <span class="badge badge-warning">Counter Offer</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Accepted -->
-            <div class="kanban-column">
-              <div class="kanban-column-header">
-                <div class="kanban-column-title">
-                  <span class="status-dot green"></span> Accepted
-                </div>
-                <span class="kanban-column-count">12</span>
-              </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">contentmarketing.ai</div>
-                  <div class="kanban-card-partner">Partner: seomastery.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "AI content tools"</div>
-                  <div class="kanban-card-meta">
-                    <span>1 week ago</span>
-                    <span class="badge badge-success">Accepted</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">bloggingwizard.co</div>
-                  <div class="kanban-card-partner">Partner: contentforge.io</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "blogging tips"</div>
-                  <div class="kanban-card-meta">
-                    <span>1 week ago</span>
-                    <span class="badge badge-success">Accepted</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Completed -->
-            <div class="kanban-column">
-              <div class="kanban-column-header">
-                <div class="kanban-column-title">
-                  <span class="status-dot green"></span> Completed
-                </div>
-                <span class="kanban-column-count">47</span>
-              </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">saasgrowthtips.com</div>
-                  <div class="kanban-card-partner">Partner: seomastery.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "SaaS growth hacks"</div>
-                  <div class="kanban-card-meta">
-                    <span>2 weeks ago</span>
-                    <span class="badge badge-purple">✓ Done</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">affiliatemastery.org</div>
-                  <div class="kanban-card-partner">Partner: growthhacker.blog</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "affiliate marketing guide"</div>
-                  <div class="kanban-card-meta">
-                    <span>3 weeks ago</span>
-                    <span class="badge badge-purple">✓ Done</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Rejected -->
-            <div class="kanban-column">
-              <div class="kanban-column-header">
-                <div class="kanban-column-title">
-                  <span class="status-dot red"></span> Rejected
-                </div>
-                <span class="kanban-column-count">3</span>
-              </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">spammysite.xyz</div>
-                  <div class="kanban-card-partner">Partner: unknown</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "buy cheap links"</div>
-                  <div class="kanban-card-meta">
-                    <span>1 month ago</span>
-                    <span class="badge badge-danger">Spam Detected</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== MESSAGES ==================== -->
-        <section class="page-section" id="page-messages">
-          <div class="messages-layout">
-            <!-- Conversations List -->
-            <div class="conversations-list">
-              <div class="conversations-search">
-                <div class="topbar-search">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                  <input type="text" placeholder="Search conversations...">
-                </div>
-              </div>
-              <div class="conversation-item active">
-                <div class="conversation-avatar" style="background:#10B981">SR</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Sarah from SEOHub</div>
-                  <div class="conversation-preview">Great! Let me check the anchor text...</div>
-                </div>
-                <div class="conversation-time">2m</div>
-              </div>
-              <div class="conversation-item">
-                <div class="conversation-avatar" style="background:#F59E0B">MK</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Mike (BacklinkPro)</div>
-                  <div class="conversation-preview">I've sent the exchange request.</div>
-                </div>
-                <div class="conversation-time">15m</div>
-              </div>
-              <div class="conversation-item">
-                <div class="conversation-avatar" style="background:#6C4DF6">JD</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Jessica (Agency Owner)</div>
-                  <div class="conversation-preview">We have 3 new websites available...</div>
-                </div>
-                <div class="conversation-time">1h</div>
-              </div>
-              <div class="conversation-item">
-                <div class="conversation-avatar" style="background:#3B82F6">TP</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Tom (SEO Consultant)</div>
-                  <div class="conversation-preview">Can we do a 3-way exchange?</div>
-                </div>
-                <div class="conversation-time">3h</div>
-              </div>
-              <div class="conversation-item">
-                <div class="conversation-avatar" style="background:#EF4444">AM</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Anna (ContentForge)</div>
-                  <div class="conversation-preview">Thanks for the link! Looks great.</div>
-                </div>
-                <div class="conversation-time">1d</div>
-              </div>
-            </div>
-
-            <!-- Chat Area -->
-            <div class="chat-area">
-              <div class="chat-header">
-                <div style="display:flex;align-items:center;gap:10px">
-                  <button class="mobile-back-btn hide-desktop" onclick="backToConversations()" style="margin-right:4px">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-                    Back
-                  </button>
-                  <div class="conversation-avatar" style="background:#10B981;width:36px;height:36px;font-size:0.8rem;flex-shrink:0">SR</div>
-                  <div>
-                    <div style="font-weight:700;font-size:0.95rem">Sarah from SEOHub</div>
-                    <div style="font-size:0.75rem;color:var(--success)">● Online</div>
-                  </div>
-                </div>
-                <button class="btn btn-ghost btn-sm">⋮</button>
-              </div>
-
-              <div class="chat-messages">
-                <div class="chat-bubble received">
-                  Hi Anuj! I saw your website myseotools.com — would you be interested in a link exchange?
-                </div>
-                <div class="chat-bubble received">
-                  We have seomastery.com with DA 65 and could place your link in our "Top SEO Tools" article. Looking for a relevant link back.
-                </div>
-                <div class="chat-bubble sent">
-                  Hi Sarah! That sounds interesting. What anchor text were you thinking?
-                </div>
-                <div class="chat-bubble received">
-                  Something like "best SEO tools for beginners" or "SEO software review" — whatever fits naturally in your content.
-                </div>
-                <div class="chat-bubble sent">
-                  "best SEO tools for beginners" works great. Let me set up the exchange request on LinkLoop.
-                </div>
-                <div class="chat-bubble received">
-                  Perfect! I've already created one on my end. You should see it in your Exchange Requests. 😊
-                </div>
-              </div>
-
-              <div class="chat-input-area">
-                <button class="btn btn-ghost btn-icon" title="Attach">📎</button>
-                <input type="text" placeholder="Type your message...">
-                <button class="btn btn-primary btn-icon" title="Send">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- Exchange Detail Panel -->
-            <div class="chat-detail-panel">
-              <h4 style="font-weight:700;margin-bottom:16px;font-size:0.9rem">Exchange Details</h4>
-              <div style="background:var(--bg-tertiary);border-radius:var(--radius-md);padding:14px;margin-bottom:12px">
-                <div style="font-weight:600;font-size:0.85rem;margin-bottom:4px">Your Website</div>
-                <div style="color:var(--primary-purple);font-weight:600">myseotools.com</div>
-                <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 52 · 45K/mo</div>
-              </div>
-              <div style="text-align:center;color:var(--text-tertiary);margin:8px 0">⇄</div>
-              <div style="background:var(--bg-tertiary);border-radius:var(--radius-md);padding:14px;margin-bottom:12px">
-                <div style="font-weight:600;font-size:0.85rem;margin-bottom:4px">Partner Website</div>
-                <div style="color:var(--primary-purple);font-weight:600">seomastery.com</div>
-                <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 65 · 120K/mo</div>
-              </div>
-              <div style="margin-top:12px">
-                <div style="font-size:0.8rem;font-weight:600;color:var(--text-tertiary);margin-bottom:4px">Status</div>
-                <span class="badge badge-warning">Negotiating</span>
-              </div>
-              <button class="btn btn-primary" style="width:100%;margin-top:16px">View Full Request</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== BACKLINK MONITOR ==================== -->
-        <section class="page-section" id="page-backlink-monitor">
-          <h1 class="page-title">Backlink Monitor</h1>
-          <p class="page-subtitle">Track the health and status of all your backlinks in real-time.</p>
-
-          <!-- Metrics -->
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <span class="kpi-card-label">Active Backlinks</span>
-              <div class="kpi-card-value">2,891</div>
-              <div class="kpi-card-change up">↑ 23 this week</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Lost Links</span>
-              <div class="kpi-card-value" style="color:var(--danger)">12</div>
-              <div class="kpi-card-change down">↓ 3 this week</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Dofollow Links</span>
-              <div class="kpi-card-value">1,820</div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">63% of total</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Nofollow Links</span>
-              <div class="kpi-card-value">1,071</div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">37% of total</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Verification Rate</span>
-              <div class="kpi-card-value">98.4<span style="font-size:1rem">%</span></div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">Last checked: Today</div>
-            </div>
-          </div>
-
-          <!-- Backlink Table -->
-          <div class="card">
-            <div class="card-header">
-              <span class="card-header-title">All Backlinks</span>
-              <div style="display:flex;gap:8px">
-                <select class="select" style="min-width:auto"><option>All Status</option><option>Healthy</option><option>Needs Review</option><option>Removed</option></select>
-                <button class="btn btn-secondary btn-sm">Export</button>
-              </div>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Source URL</th>
-                    <th>Target URL</th>
-                    <th>Anchor Text</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Last Checked</th>
-                    <th>Health Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">seomastery.com/blog/top-seo-tools</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">myseotools.com/features</td>
-                    <td>best SEO tools</td>
-                    <td><span class="badge badge-info">Dofollow</span></td>
-                    <td><span class="badge badge-success">Healthy</span></td>
-                    <td>Today</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:98%"></div></div>
-                        98%
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">contentforge.io/articles/ai-writing</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">contentmarketing.ai/tools</td>
-                    <td>AI content tools</td>
-                    <td><span class="badge badge-info">Dofollow</span></td>
-                    <td><span class="badge badge-success">Healthy</span></td>
-                    <td>Today</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:95%"></div></div>
-                        95%
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">growthhacker.blog/growth-strategies</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">saasgrowthtips.com/playbook</td>
-                    <td>growth marketing</td>
-                    <td><span class="badge badge-neutral">Nofollow</span></td>
-                    <td><span class="badge badge-warning">Needs Review</span></td>
-                    <td>2 days ago</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill warning" style="width:65%"></div></div>
-                        65%
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">oldblog.com/outdated-post</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">myseotools.com/old-page</td>
-                    <td>SEO guide</td>
-                    <td><span class="badge badge-info">Dofollow</span></td>
-                    <td><span class="badge badge-danger">Removed</span></td>
-                    <td>5 days ago</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill danger" style="width:12%"></div></div>
-                        12%
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">linkstrategist.com/guide/link-building</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">myseotools.com/guide</td>
-                    <td>link building strategy</td>
-                    <td><span class="badge badge-info">Dofollow</span></td>
-                    <td><span class="badge badge-success">Healthy</span></td>
-                    <td>Today</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:100%"></div></div>
-                        100%
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== NOTIFICATIONS ==================== -->
-        <section class="page-section" id="page-notifications">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-            <div>
-              <h1 class="page-title" style="margin-bottom:0">Notifications</h1>
-              <p class="page-subtitle" style="margin-bottom:0">Stay updated with your exchange activity</p>
-            </div>
-            <button class="btn btn-ghost btn-sm">Mark All Read</button>
-          </div>
-
-          <div class="card">
-            <div class="card-body" style="padding:0">
-              <div class="notification-item unread">
-                <div class="notification-icon" style="background:var(--success-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">Exchange Completed ✓</div>
-                  <div class="notification-text">Your exchange with <strong>seomastery.com</strong> has been verified. Backlink is now live.</div>
-                  <div class="notification-time">10 minutes ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item unread">
-                <div class="notification-icon" style="background:var(--info-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">New Message from Sarah</div>
-                  <div class="notification-text">"Great! Let me check the anchor text options for our exchange..."</div>
-                  <div class="notification-time">15 minutes ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item unread">
-                <div class="notification-icon" style="background:var(--warning-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">Backlink Needs Review</div>
-                  <div class="notification-text">Your backlink from <strong>growthhacker.blog</strong> has a health score of 65%. Please verify.</div>
-                  <div class="notification-time">2 hours ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item">
-                <div class="notification-icon" style="background:var(--purple-light, rgba(108,77,246,0.1))">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary-purple)" stroke-width="2"><path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">New Exchange Request</div>
-                  <div class="notification-text"><strong>backlinkpro.net</strong> sent you an exchange request.</div>
-                  <div class="notification-time">5 hours ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item">
-                <div class="notification-icon" style="background:var(--success-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">Reputation Score Increased</div>
-                  <div class="notification-text">Your reputation score went up to <strong>94/100</strong>. Keep up the great exchanges!</div>
-                  <div class="notification-time">1 day ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item">
-                <div class="notification-icon" style="background:var(--danger-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">Link Removed</div>
-                  <div class="notification-text">Backlink from <strong>oldblog.com</strong> has been removed. Health score dropped to 12%.</div>
-                  <div class="notification-time">5 days ago</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== ANALYTICS ==================== -->
-        <section class="page-section" id="page-analytics">
-          <h1 class="page-title">Analytics</h1>
-          <p class="page-subtitle">Deep insights into your link exchange performance.</p>
-
-          <div class="charts-grid">
-            <div class="chart-card">
-              <h3>Exchange Activity (6 months)</h3>
-              <canvas id="chartAnalyticsExchange" height="260"></canvas>
-            </div>
-            <div class="chart-card">
-              <h3>Backlink Growth</h3>
-              <canvas id="chartAnalyticsBacklinks" height="260"></canvas>
-            </div>
-            <div class="chart-card">
-              <h3>Domain Authority Distribution</h3>
-              <canvas id="chartAnalyticsDA" height="260"></canvas>
-            </div>
-            <div class="chart-card">
-              <h3>User Growth</h3>
-              <canvas id="chartAnalyticsUsers" height="260"></canvas>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== BILLING ==================== -->
-        <section class="page-section" id="page-billing">
-          <h1 class="page-title">Billing &amp; Subscription</h1>
-          <p class="page-subtitle">Choose the plan that fits your link exchange needs.</p>
-
-          <div class="pricing-grid">
-            <!-- Free -->
-            <div class="pricing-card">
-              <div class="pricing-plan-name">Free</div>
-              <div class="pricing-price">$0<span>/month</span></div>
-              <p style="font-size:0.875rem;color:var(--text-secondary)">For individuals getting started with link exchanges.</p>
-              <ul class="pricing-features">
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 3 Websites</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 10 Exchanges/mo</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Basic Backlink Monitor</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Marketplace Access</li>
-              </ul>
-              <button class="btn btn-secondary" style="width:100%">Current Plan</button>
-            </div>
-
-            <!-- Pro -->
-            <div class="pricing-card featured">
-              <div class="pricing-plan-name">Pro</div>
-              <div class="pricing-price">$49<span>/month</span></div>
-              <p style="font-size:0.875rem;color:var(--text-secondary)">For professional SEOs and growing agencies.</p>
-              <ul class="pricing-features">
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 25 Websites</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 100 Exchanges/mo</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Advanced Backlink Monitor</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Priority Marketplace</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Real-time Messaging</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> API Access</li>
-              </ul>
-              <button class="btn btn-primary" style="width:100%">Upgrade to Pro</button>
-            </div>
-
-            <!-- Agency -->
-            <div class="pricing-card">
-              <div class="pricing-plan-name">Agency</div>
-              <div class="pricing-price">$199<span>/month</span></div>
-              <p style="font-size:0.875rem;color:var(--text-secondary)">For large agencies and enterprise teams.</p>
-              <ul class="pricing-features">
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Unlimited Websites</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Unlimited Exchanges</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> White-label Reports</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Team Management</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Dedicated Support</li>
-                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Custom Integrations</li>
-              </ul>
-              <button class="btn btn-secondary" style="width:100%">Contact Sales</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== SETTINGS ==================== -->
-        <section class="page-section" id="page-settings">
-          <h1 class="page-title">Settings</h1>
-          <p class="page-subtitle">Manage your account and preferences.</p>
-
-          <div class="card" style="max-width:640px">
-            <div class="card-header"><span class="card-header-title">Profile</span></div>
-            <div class="card-body">
-              <div style="display:flex;flex-direction:column;gap:16px">
-                <div>
-                  <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Display Name</label>
-                  <input class="input" type="text" value="Anuj Kumar">
-                </div>
-                <div>
-                  <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Email</label>
-                  <input class="input" type="email" value="anuj@example.com">
-                </div>
-                <div>
-                  <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Company</label>
-                  <input class="input" type="text" placeholder="Your agency or company name">
-                </div>
-                <button class="btn btn-primary" style="align-self:flex-start">Save Changes</button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== ADMIN ==================== -->
-        <section class="page-section" id="page-admin">
-          <h1 class="page-title">Admin Dashboard</h1>
-          <p class="page-subtitle">System overview, moderation, and platform health.</p>
-
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <span class="kpi-card-label">Total Users</span>
-              <div class="kpi-card-value">8,492</div>
-              <div class="kpi-card-change up">↑ 18% this month</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">MRR</span>
-              <div class="kpi-card-value">$124K</div>
-              <div class="kpi-card-change up">↑ 12% this month</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Active Websites</span>
-              <div class="kpi-card-value">15,230</div>
-              <div class="kpi-card-change up">↑ 22% this month</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Spam Reports</span>
-              <div class="kpi-card-value" style="color:var(--warning)">24</div>
-              <div class="kpi-card-change down">↓ 8% this month</div>
-            </div>
-          </div>
-
-          <div class="two-col" style="margin-bottom:24px">
-            <!-- Moderation Queue -->
-            <div class="card">
-              <div class="card-header"><span class="card-header-title">Moderation Queue</span></div>
-              <div class="card-body" style="padding:0">
-                <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.85rem">spammy-backlinks.xyz</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">Reported for spam · 3 reports</div>
-                  </div>
-                  <div style="display:flex;gap:6px">
-                    <button class="btn btn-danger btn-sm">Ban</button>
-                    <button class="btn btn-success btn-sm">Approve</button>
-                  </div>
-                </div>
-                <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.85rem">fake-traffic-site.com</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">Suspicious traffic patterns</div>
-                  </div>
-                  <div style="display:flex;gap:6px">
-                    <button class="btn btn-danger btn-sm">Ban</button>
-                    <button class="btn btn-ghost btn-sm">Review</button>
-                  </div>
-                </div>
-                <div style="padding:14px 16px">
-                  <div style="font-weight:600;font-size:0.85rem">duplicate-links.net</div>
-                  <div style="font-size:0.8rem;color:var(--text-tertiary)">Duplicate site detected</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- System Health -->
-            <div class="card">
-              <div class="card-header"><span class="card-header-title">System Health</span></div>
-              <div class="card-body">
-                <div style="display:flex;flex-direction:column;gap:16px">
-                  <div>
-                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px">
-                      <span>API Usage</span><span style="font-weight:600">67%</span>
-                    </div>
-                    <div class="progress-bar"><div class="progress-bar-fill" style="width:67%"></div></div>
-                  </div>
-                  <div>
-                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px">
-                      <span>Verification Queue</span><span style="font-weight:600">142 pending</span>
-                    </div>
-                    <div class="progress-bar"><div class="progress-bar-fill" style="width:42%;background:var(--warning)"></div></div>
-                  </div>
-                  <div>
-                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px">
-                      <span>Database Load</span><span style="font-weight:600">34%</span>
-                    </div>
-                    <div class="progress-bar"><div class="progress-bar-fill" style="width:34%;background:var(--success)"></div></div>
-                  </div>
-                  <div>
-                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px">
-                      <span>Storage</span><span style="font-weight:600">228GB / 500GB</span>
-                    </div>
-                    <div class="progress-bar"><div class="progress-bar-fill" style="width:45%"></div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-      </div><!-- /page-content -->
-    </div><!-- /main-content -->
-  </div><!-- /app-shell -->
-
-  <!-- ===== MOBILE BOTTOM NAVIGATION ===== -->
-  <nav class="mobile-bottom-nav" id="mobileBottomNav">
-    <button class="mobile-nav-item active" data-mob-page="dashboard" onclick="navigateTo('dashboard')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Home
-    </button>
-    <button class="mobile-nav-item" data-mob-page="marketplace" onclick="navigateTo('marketplace')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      Discover
-    </button>
-    <button class="mobile-nav-item" data-mob-page="exchange-requests" onclick="navigateTo('exchange-requests')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5M3 3l7.5 7.5"/></svg>
-      Exchanges
-      <span class="mobile-nav-badge"></span>
-    </button>
-    <button class="mobile-nav-item" data-mob-page="messages" onclick="navigateTo('messages')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Messages
-      <span class="mobile-nav-badge"></span>
-    </button>
-    <button class="mobile-nav-item" data-mob-page="notifications" onclick="navigateTo('notifications')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      Alerts
-      <span class="mobile-nav-badge"></span>
-    </button>
+      <span class="landing-logo-text">Link<span>Loop</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#audience">Audience</a>
+      <a href="#faq">FAQ</a>
+      <button class="btn btn-secondary btn-sm" id="landingAuthBtn">Login</button>
+    </div>
   </nav>
 
+  <!-- ===== HERO SECTION ===== -->
+  <header class="hero">
+    <div class="glow-blob glow-blob-1"></div>
+    <div class="glow-blob glow-blob-2"></div>
+    
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="status-dot green" style="margin-right: 0; display: inline-block; animation: pulse 2s infinite;"></span>
+        Safe & Collaborative Link Building
+      </div>
+      <h1 class="hero-title">Supercharge Your Search Visibility Safely</h1>
+      <p class="hero-subtitle">Elevate your website’s Domain Authority and organic traffic. Discover verified niche partners, negotiate secure link exchanges, and track backlink health automatically 24/7.</p>
+      
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" id="landingHeroCta">Get Started - Free</button>
+        <a href="#features" class="btn btn-ghost btn-lg">Learn More</a>
+      </div>
+    </div>
+    
+    <div class="hero-mockup">
+      <div class="hero-mockup-wrapper">
+        <img src="assets/hero_dashboard.png" alt="LinkLoop Premium Dashboard Interface Mockup">
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== METRICS BAR ===== -->
+  <section class="metrics">
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <h3>15K+</h3>
+        <p>Verified Domains</p>
+      </div>
+      <div class="metric-card">
+        <h3>300K+</h3>
+        <p>Link Swaps Completed</p>
+      </div>
+      <div class="metric-card">
+        <h3>24/7</h3>
+        <p>Automated Health Checks</p>
+      </div>
+      <div class="metric-card">
+        <h3>98%</h3>
+        <p>Success Rate</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <span class="section-tag">Powerful Utilities</span>
+      <h2 class="section-title">Built for Modern Search Engine Marketing</h2>
+      <p style="color:var(--gray-400)">Say goodbye to messy spreadsheets and unmonitored agreements. LinkLoop automates the entire link exchange workflow from matchmaking to monitoring.</p>
+    </div>
+    
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div>
+          <h4>Niche & Authority Check</h4>
+          <p>Analyze verified domain authority, spam scores, niches, and organic traffic estimates of prospective partners before executing an exchange.</p>
+        </div>
+      </div>
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <div>
+          <h4>Kanban Deal Pipeline</h4>
+          <p>Manage multiple outreach opportunities visually. Move exchanges from "Negotiating" to "Accepted" and "Completed" in a structured workflow.</p>
+        </div>
+      </div>
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <h4>Real-time Backlink Monitor</h4>
+          <p>Our background monitor checks the integrity of your backlinks 24/7. Get alerted immediately if your partner alters a link to nofollow, changes the target URL, or deletes it.</p>
+        </div>
+      </div>
+      <!-- Feature 4 -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div>
+          <h4>Direct Secure Chat</h4>
+          <p>Discuss editorial guidelines, specific anchor text options, and target pages directly within the app, keeping all communications in one central place.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TARGET AUDIENCE ===== -->
+  <section class="audience" id="audience">
+    <div class="section-header">
+      <span class="section-tag">Designed For You</span>
+      <h2 class="section-title">Who is LinkLoop Designed For?</h2>
+      <p style="color:var(--gray-400)">Whether you run a small blog or manage a large SEO agency, LinkLoop provides the tooling to scale your link outreach.</p>
+    </div>
+    
+    <div class="audience-grid">
+      <div class="audience-card">
+        <h4>SEO Agencies</h4>
+        <p style="font-size:0.9rem">Accelerate your client link building pipelines safely. Manage websites in multiple niches from a single central portal.</p>
+        <ul>
+          <li>Bulk domain management</li>
+          <li>White-hat outreach automation</li>
+          <li>Detailed verification reports</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <h4>SaaS & E-commerce</h4>
+        <p style="font-size:0.9rem">Boost search ranking and lower acquisition costs by swapping links with complementary tech and commerce sites.</p>
+        <ul>
+          <li>Targeted niche matching</li>
+          <li>Domain safety scoring</li>
+          <li>Guaranteed link monitoring</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <h4>Bloggers & Publishers</h4>
+        <p style="font-size:0.9rem">Grow organic site traffic naturally. Exchange backlink opportunities with writers and site owners you trust.</p>
+        <ul>
+          <li>Free account forever option</li>
+          <li>No broker commissions</li>
+          <li>Direct chat with site owners</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ SECTION ===== -->
+  <section class="faq" id="faq">
+    <div class="section-header">
+      <span class="section-tag">Learn More</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>What is a collaborative link exchange?</span>
+        <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="faq-answer">
+        A collaborative link exchange is an arrangement where two website owners place links on their websites pointing to each other's websites (direct exchange) or arrange a 3-way/indirect exchange (A links to B, B links to C, C links to A) to safely boost overall search visibility. LinkLoop provides a safe marketplace to negotiate and monitor these exchanges.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>How does LinkLoop ensure safety?</span>
+        <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="faq-answer">
+        We verify every website submitted to the platform using automated domain lookup checks. Additionally, we enforce spam score limitations and track each user's "Reputation Score" based on their response rates, completion rates, and historical trust badges.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>What happens if my partner removes a backlink?</span>
+        <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="faq-answer">
+        Our automated Backlink Monitor checks all completed exchanges daily. If a link is removed, changed to a nofollow relation, or redirected, our system immediately flag-alerts you and penalizes the offending site owner's reputation score.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA BANNER ===== -->
+  <section class="cta-banner">
+    <div class="cta-banner-content">
+      <h2>Join the Organic SEO Revolution</h2>
+      <p>Ready to safely scale your search engine optimization strategy? Start connecting with high-quality partners today.</p>
+      <button class="btn btn-primary btn-lg" onclick="window.LinkLoop.showAuthScreen()">Create Your Free Account</button>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="landing-footer">
+    <div class="footer-grid">
+      <div class="footer-desc">
+        <h4>LinkLoop</h4>
+        <p>LinkLoop is a collaborative link building marketplace helping digital marketers, agencies, and businesses safely grow their online domain authority organically.</p>
+        <span style="font-size:0.8rem; color: #475569">SEO, Link Exchange, Backlink Monitor, Domain Authority Checker</span>
+      </div>
+      <div class="footer-links">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#audience">Target Audience</a></li>
+          <li><a href="#" onclick="window.LinkLoop.showAuthScreen(); return false;">Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="https://convex.dev" target="_blank">Convex Database</a></li>
+          <li><a href="https://vercel.com" target="_blank">Hosting Platform</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:support@linkloop.com">support@linkloop.com</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 LinkLoop. All rights reserved. Built with Convex + Vanilla Web Stack.</span>
+      <span>Designed with Premium Tech Aesthetics</span>
+    </div>
+  </footer>
+
   <!-- ========== AUTH OVERLAY ========== -->
-  <div class="modal-overlay active" id="authOverlay">
+  <div class="modal-overlay hidden" id="authOverlay">
     <div class="modal-box auth-modal">
       <div class="modal-header">
         <h2 id="authTitle">Welcome to LinkLoop</h2>
@@ -1483,73 +842,27 @@
     </div>
   </div>
 
-  <!-- ========== ADD WEBSITE MODAL ========== -->
-  <div class="modal-overlay hidden" id="addWebsiteModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2>Add Website</h2>
-        <button class="modal-close" onclick="closeAddWebsiteModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <form id="addWebsiteForm" onsubmit="handleAddWebsite(event)" style="display:flex;flex-direction:column;gap:14px">
-          <div>
-            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Domain <span style="color:var(--danger)">*</span></label>
-            <input class="input" type="text" id="wsDomain" placeholder="example.com" required style="width:100%">
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Niche <span style="color:var(--danger)">*</span></label>
-              <select class="select" id="wsNiche" required style="width:100%">
-                <option value="">Select...</option>
-                <option>SEO Tools</option><option>SaaS</option><option>Marketing</option><option>Tech</option>
-                <option>Blogging</option><option>Ecommerce</option><option>Health</option><option>Finance</option>
-                <option>Education</option><option>Travel</option><option>Real Estate</option><option>Other</option>
-              </select>
-            </div>
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Country <span style="color:var(--danger)">*</span></label>
-              <select class="select" id="wsCountry" required style="width:100%">
-                <option value="">Select...</option>
-                <option>US</option><option>UK</option><option>CA</option><option>AU</option>
-                <option>DE</option><option>IN</option><option>FR</option><option>ES</option>
-                <option>BR</option><option>NL</option><option>Other</option>
-              </select>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Language</label>
-              <select class="select" id="wsLanguage" style="width:100%">
-                <option>English</option><option>Spanish</option><option>German</option><option>French</option><option>Other</option>
-              </select>
-            </div>
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Domain Authority (DA)</label>
-              <input class="input" type="number" id="wsDA" placeholder="e.g. 45" min="1" max="100" required style="width:100%">
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Spam Score</label>
-              <input class="input" type="number" id="wsSpam" placeholder="e.g. 3" min="0" max="100" style="width:100%">
-            </div>
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Monthly Traffic</label>
-              <input class="input" type="number" id="wsTraffic" placeholder="e.g. 25000" style="width:100%">
-            </div>
-          </div>
-          <div>
-            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Referring Domains</label>
-            <input class="input" type="number" id="wsRefDomains" placeholder="e.g. 500" style="width:100%">
-          </div>
-          <button class="btn btn-primary" type="submit" style="width:100%;margin-top:4px">Add Website</button>
-          <div id="wsMessage" style="text-align:center;font-size:0.85rem;margin-top:4px"></div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== SCRIPTS ========== -->
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="./node_modules/convex/dist/browser.bundle.js"></script>
+  <script src="js/convex-integration-v2.js"></script>
   <script src="js/app.js"></script>
+  
+  <script>
+    // FAQ Accordion Script
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const isActive = item.classList.contains('active');
+        
+        // Close all other FAQ items
+        document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+        
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

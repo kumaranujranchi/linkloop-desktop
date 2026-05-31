@@ -27,6 +27,7 @@ function cpIfExists(src, dest, opts) {
 // Copy static assets
 console.log("  📁 Copying static files...");
 cpIfExists(resolve(ROOT, "index.html"), resolve(DIST, "index.html"));
+cpIfExists(resolve(ROOT, "dashboard.html"), resolve(DIST, "dashboard.html"));
 cpIfExists(resolve(ROOT, "css"), resolve(DIST, "css"), { recursive: true });
 cpIfExists(resolve(ROOT, "js"), resolve(DIST, "js"), { recursive: true });
 cpIfExists(resolve(ROOT, "assets"), resolve(DIST, "assets"), { recursive: true });
@@ -41,15 +42,20 @@ cpSync(convexSrc, resolve(convexDestDir, "convex.js"));
 
 // Update production Convex references
 console.log("  🔧 Updating production Convex references...");
-let html = readFileSync(resolve(DIST, "index.html"), "utf-8");
 
-// Replace dev bundle path with production path
-html = html.replace(
-  /\.\/node_modules\/convex\/dist\/browser\.bundle\.js/g,
-  "./js/vendor/convex.js"
-);
+function updateConvexPaths(filePath) {
+  if (existsSync(filePath)) {
+    let content = readFileSync(filePath, "utf-8");
+    content = content.replace(
+      /\.\/node_modules\/convex\/dist\/browser\.bundle\.js/g,
+      "./js/vendor/convex.js"
+    );
+    writeFileSync(filePath, content);
+  }
+}
 
-writeFileSync(resolve(DIST, "index.html"), html);
+updateConvexPaths(resolve(DIST, "index.html"));
+updateConvexPaths(resolve(DIST, "dashboard.html"));
 
 // Inject Convex URL from Vercel environment if provided
 const convexUrl = process.env.CONVEX_URL;

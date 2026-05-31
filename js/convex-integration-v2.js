@@ -66,6 +66,12 @@ async function signup(name, email, password) {
     if (result.token) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
+      
+      // Redirect to dashboard if on landing page
+      const path = window.location.pathname;
+      if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
+        window.location.href = "/dashboard";
+      }
       return { success: true, user: result.user };
     }
     return { success: false, error: "Signup failed" };
@@ -80,6 +86,12 @@ async function login(email, password) {
     if (result.token) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
+      
+      // Redirect to dashboard if on landing page
+      const path = window.location.pathname;
+      if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
+        window.location.href = "/dashboard";
+      }
       return { success: true, user: result.user };
     }
     return { success: false, error: "Login failed" };
@@ -91,7 +103,25 @@ async function login(email, password) {
 function logout() {
   clearUser();
   updateAuthUI(null);
-  showAuthScreen();
+  handleLoggedOutRedirect();
+}
+
+function handleLoggedOutRedirect() {
+  const path = window.location.pathname;
+  if (path.includes("dashboard") || path.includes("dashboard.html")) {
+    window.location.href = "/?auth=login";
+  } else {
+    // On landing page: check if URL params request showing it
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("auth") === "login" || params.get("auth") === "signup") {
+      showAuthScreen();
+      if (window.switchAuthTab) {
+        window.switchAuthTab(params.get("auth"));
+      }
+    } else {
+      hideAuthScreen();
+    }
+  }
 }
 
 function updateAuthUI(user) {
@@ -100,6 +130,8 @@ function updateAuthUI(user) {
   const dashboardSubtitle = document.getElementById("dashboardSubtitle");
   const authModalClose = document.querySelector("#authOverlay .modal-close");
   const adminLink = document.getElementById("sidebarAdminLink");
+  const landingAuthBtn = document.getElementById("landingAuthBtn");
+  const landingHeroCta = document.getElementById("landingHeroCta");
 
   if (user) {
     const initials = user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
@@ -154,6 +186,16 @@ function updateAuthUI(user) {
         adminLink.style.display = "none"; // Hide admin link
       }
     }
+
+    if (landingAuthBtn) {
+      landingAuthBtn.textContent = "Dashboard";
+      landingAuthBtn.onclick = () => window.location.href = "/dashboard";
+      landingAuthBtn.style.padding = "10px 24px";
+    }
+    if (landingHeroCta) {
+      landingHeroCta.textContent = "Go to Dashboard";
+      landingHeroCta.onclick = () => window.location.href = "/dashboard";
+    }
   } else {
     // Logged out / Not logged in
     if (footer) {
@@ -196,6 +238,16 @@ function updateAuthUI(user) {
 
     if (adminLink) {
       adminLink.style.display = "none"; // Hide admin link when logged out
+    }
+
+    if (landingAuthBtn) {
+      landingAuthBtn.textContent = "Login";
+      landingAuthBtn.onclick = () => { showAuthScreen(); if (window.switchAuthTab) window.switchAuthTab("login"); };
+      landingAuthBtn.style.padding = "10px 24px";
+    }
+    if (landingHeroCta) {
+      landingHeroCta.textContent = "Get Started - Free";
+      landingHeroCta.onclick = () => { showAuthScreen(); if (window.switchAuthTab) window.switchAuthTab("signup"); };
     }
   }
 }
@@ -449,7 +501,7 @@ async function init() {
         console.log("🔌 Session token expired or invalid.");
         clearUser();
         updateAuthUI(null);
-        showAuthScreen();
+        handleLoggedOutRedirect();
       }
     } catch (e) {
       console.error("🔌 Session verification failed:", e.message);
@@ -463,18 +515,18 @@ async function init() {
         } catch (err) {
           clearUser();
           updateAuthUI(null);
-          showAuthScreen();
+          handleLoggedOutRedirect();
         }
       } else {
         clearUser();
         updateAuthUI(null);
-        showAuthScreen();
+        handleLoggedOutRedirect();
       }
     }
   } else {
     clearUser();
     updateAuthUI(null);
-    showAuthScreen();
+    handleLoggedOutRedirect();
   }
 
   loadDashboardData().catch(() => {});
