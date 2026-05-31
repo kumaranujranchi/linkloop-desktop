@@ -1,0 +1,119 @@
+/* =============================================
+   LinkLoop Dark Mode
+   ============================================= */
+
+[data-theme="dark"] {
+  --bg-primary: #0A0A0F;
+  --bg-secondary: #13131A;
+  --bg-tertiary: #1A1A24;
+  --bg-sidebar: #0A0A0F;
+  --bg-sidebar-hover: #1A1A24;
+
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
+  --text-inverse: #FFFFFF;
+  --text-sidebar: #94A3B8;
+  --text-sidebar-active: #FFFFFF;
+
+  --border-light: #1E293B;
+  --border-medium: #334155;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.5);
+
+  --gray-50: #1A1A24;
+  --gray-100: #1E293B;
+  --gray-200: #334155;
+  --gray-300: #475569;
+  --gray-400: #64748B;
+  --gray-500: #94A3B8;
+  --gray-600: #CBD5E1;
+  --gray-700: #E2E8F0;
+  --gray-800: #F1F5F9;
+  --gray-900: #F8FAFC;
+
+  --info-light: rgba(59,130,246,0.15);
+  --success-light: rgba(16,185,129,0.15);
+  --warning-light: rgba(245,158,11,0.15);
+  --danger-light: rgba(239,68,68,0.15);
+
+  --primary-gradient: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+}
+
+[data-theme="dark"] .data-table tbody tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+[data-theme="dark"] .topbar-search {
+  background: var(--bg-tertiary);
+  border-color: var(--border-light);
+}
+
+[data-theme="dark"] .topbar-search input::placeholder {
+  color: var(--gray-500);
+}
+
+[data-theme="dark"] .btn-secondary {
+  background: var(--bg-tertiary);
+  border-color: var(--border-medium);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+  background: var(--border-light);
+}
+
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0,0,0,0.7);
+}
+
+[data-theme="dark"] .kanban-column {
+  background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .chat-bubble.received {
+  background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .pricing-card {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .notification-item.unread {
+  background: rgba(139,92,246,0.08);
+}
+
+[data-theme="dark"] .badge-neutral {
+  background: var(--border-light);
+  color: var(--gray-400);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--gray-600);
+}
+
+/* Mobile responsive dark fixes */
+@media (max-width: 900px) {
+  [data-theme="dark"] .data-table tbody tr {
+    background: var(--bg-secondary);
+    border-color: var(--border-light);
+  }
+}
+
+@media (max-width: 480px) {
+  [data-theme="dark"] .mobile-bottom-nav {
+    background: #0A0A0F;
+    border-top-color: #1E293B;
+  }
+
+  [data-theme="dark"] .sidebar {
+    background: #0A0A0F;
+  }
+
+  [data-theme="dark"] .mobile-overlay {
+    background: rgba(0,0,0,0.7);
+  }
+}

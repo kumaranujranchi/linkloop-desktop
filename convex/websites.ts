@@ -1,0 +1,271 @@
+import { v } from "convex/values";
+import { query, mutation } from "./_generated/server";
+import { Doc, Id } from "./_generated/dataModel";
+
+// ========== QUERIES ==========
+
+// List all websites for marketplace (with filters)
+export const list = query({
+  args: {
+    niche: v.optional(v.string()),
+    minDA: v.optional(v.number()),
+    maxDA: v.optional(v.number()),
+    country: v.optional(v.string()),
+    language: v.optional(v.string()),
+    linkType: v.optional(v.string()),
+    verifiedOnly: v.optional(v.boolean()),
+    limit: v.optional(v.number()),
+    cursor: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    let query = ctx.db.query("websites")
+      .withIndex("by_status", (q) => q.eq("status", "active"));
+
+    const websites = await query.order("desc").take(args.limit || 20);
+
+    // Apply filters in-memory (Convex will add compound indexes in prod)
+    let filtered = websites;
+    if (args.niche) {
+      filtered = filtered.filter((w) => w.niche === args.niche);
+    }
+    if (args.minDA !== undefined) {
+      filtered = filtered.filter((w) => w.domainAuthority >= args.minDA!);
+    }
+    if (args.maxDA !== undefined) {
+      filtered = filtered.filter((w) => w.domainAuthority <= args.maxDA!);
+    }
+    if (args.country) {
+      filtered = filtered.filter((w) => w.country === args.country);
+    }
+    if (args.language) {
+      filtered = filtered.filter((w) => w.language === args.language);
+    }
+    if (args.verifiedOnly) {
+      filtered = filtered.filter((w) => w.verified);
+    }
+
+    // Fetch owner info for each website
+    const withOwners = await Promise.all(
+      filtered.map(async (w) => {
+        const owner = await ctx.db.get(w.ownerId);
+        return {
+          ...w,
+          ownerName: owner?.name || "Unknown",
+        };
+      })
+    );
+
+    return withOwners;
+  },
+});
+
+// Get single website detail
+export const getById = query({
+  args: { websiteId: v.id("websites") },
+  handler: async (ctx, args) => {
+    const website = await ctx.db.get(args.websiteId);
+    if (!website) return null;
+
+    const owner = await ctx.db.get(website.ownerId);
+    const reviews = await ctx.db
+      .query("reviews")
+      .withIndex("by_website", (q) => q.eq("websiteId", args.websiteId))
+      .collect();
+
+    const backlinks = await ctx.db
+      .query("backlinks")
+      .withIndex("by_website", (q) => q.eq("websiteId", args.websiteId))
+      .collect();
+
+    return {
+      ...website,
+      owner: owner ? { name: owner.name, email: owner.email, reputationScore: owner.reputationScore } : null,
+      reviews,
+      backlinks,
+      reviewCount: reviews.length,
+      avgRating: reviews.length > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        : 0,
+    };
+  },
+});
+
+// Get user's own websites
+export const listByOwner = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("websites")
+      .withIndex("by_owner", (q) => q.eq("ownerId", args.userId))
+      .collect();
+  },
+});
+
+// Search websites globally
+export const search = query({
+  args: { query: v.string(), limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const all = await ctx.db.query("websites").collect();
+    const q = args.query.toLowerCase();
+    const results = all.filter(
+      (w) =>
+        w.domain.toLowerCase().includes(q) ||
+        w.niche.toLowerCase().includes(q)
+    );
+    return results.slice(0, args.limit || 10);
+  },
+});
+
+// Analytics: website stats for dashboard
+export const stats = query({
+  args: {},
+  handler: async (ctx) => {
+    const allWebsites = await ctx.db.query("websites").collect();
+    const verified = allWebsites.filter((w) => w.verified).length;
+    const totalDA = allWebsites.reduce((sum, w) => sum + w.domainAuthority, 0);
+
+    return {
+      total: allWebsites.length,
+      verified,
+      avgDA: allWebsites.length > 0 ? Math.round(totalDA / allWebsites.length) : 0,
+      niches: [...new Set(allWebsites.map((w) => w.niche))].length,
+    };
+  },
+});
+
+// ========== MUTATIONS ==========
+
+// Add a new website (with optional auth bypass for seeding)
+export const add = mutation({
+  args: {
+    domain: v.string(),
+    niche: v.string(),
+    country: v.string(),
+    language: v.string(),
+    domainAuthority: v.number(),
+    spamScore: v.number(),
+    trafficEstimate: v.number(),
+    referringDomains: v.number(),
+    skipAuth: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    let userId;
+
+    if (!args.skipAuth) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Not authenticated");
+
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", identity.email!))
+        .first();
+
+      if (!user) throw new Error("User not found");
+      userId = user._id;
+    } else {
+      // For seeding: find or create a demo user
+      const existing = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", "demo@linkloop.io"))
+        .first();
+
+      if (existing) {
+        userId = existing._id;
+      } else {
+        userId = await ctx.db.insert("users", {
+          name: "Demo User",
+          email: "demo@linkloop.io",
+          role: "pro",
+          reputationScore: 85,
+          completedExchanges: 47,
+          responseRate: 96,
+          trustBadges: ["verified", "top-exchanger"],
+          createdAt: Date.now(),
+        });
+      }
+    }
+
+    const now = Date.now();
+    const websiteId = await ctx.db.insert("websites", {
+      ownerId: userId,
+      domain: args.domain,
+      niche: args.niche,
+      country: args.country,
+      language: args.language,
+      domainAuthority: args.domainAuthority,
+      spamScore: args.spamScore,
+      trafficEstimate: args.trafficEstimate,
+      referringDomains: args.referringDomains,
+      dofollowLinks: Math.floor(args.referringDomains * 0.6),
+      nofollowLinks: Math.floor(args.referringDomains * 0.4),
+      exchangeSuccessRate: Math.floor(Math.random() * 15) + 85,
+      verified: true,
+      status: "active",
+      metricsUpdatedAt: now,
+      lastCheckedAt: now,
+      createdAt: now,
+    });
+
+    // Also add some demo backlinks
+    const backlinkCount = Math.floor(Math.random() * 5) + 3;
+    for (let i = 0; i < backlinkCount; i++) {
+      await ctx.db.insert("backlinks", {
+        sourceUrl: `https://${args.domain}/article-${i + 1}`,
+        targetUrl: `https://example.com/page-${i + 1}`,
+        anchorText: ["best SEO tools", "link building guide", "SEO tips", "backlink strategy", "content marketing"][i % 5],
+        linkType: i % 3 === 0 ? "nofollow" : "dofollow",
+        websiteId,
+        status: "healthy",
+        healthScore: Math.floor(Math.random() * 20) + 80,
+        lastCheckedAt: now,
+        createdAt: now - Math.floor(Math.random() * 30) * 86400000,
+      });
+    }
+
+    return websiteId;
+  },
+});
+
+// Verify a website
+export const verify = mutation({
+  args: { websiteId: v.id("websites") },
+  handler: async (ctx, args) => {
+    const now = Date.now();
+    await ctx.db.patch(args.websiteId, {
+      verified: true,
+      status: "active",
+      lastCheckedAt: now,
+    });
+  },
+});
+
+// Update SEO metrics
+export const updateMetrics = mutation({
+  args: {
+    websiteId: v.id("websites"),
+    domainAuthority: v.number(),
+    spamScore: v.number(),
+    trafficEstimate: v.number(),
+    referringDomains: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const now = Date.now();
+    await ctx.db.patch(args.websiteId, {
+      domainAuthority: args.domainAuthority,
+      spamScore: args.spamScore,
+      trafficEstimate: args.trafficEstimate,
+      referringDomains: args.referringDomains,
+      metricsUpdatedAt: now, // "Updated" timestamp
+    });
+  },
+});
+
+// Mark as checked (backlink verification)
+export const markChecked = mutation({
+  args: { websiteId: v.id("websites") },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.websiteId, {
+      lastCheckedAt: Date.now(), // "Checked" timestamp
+    });
+  },
+});

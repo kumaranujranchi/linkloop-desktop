@@ -1,0 +1,21 @@
+{
+  "name": "linkloop",
+  "version": "1.0.0",
+  "description": "LinkLoop — SEO Link Exchange Marketplace & Backlink Collaboration Platform",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "convex dev",
+    "build": "node scripts/build.js",
+    "deploy": "CONVEX_DEPLOYMENT=prod:vibrant-marmot-366 convex deploy --typecheck=disable",
+    "dashboard": "convex dashboard",
+    "seed": "node convex/seed.js",
+    "vercel-build": "node scripts/build.js"
+  },
+  "dependencies": {
+    "convex": "^1.17.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
