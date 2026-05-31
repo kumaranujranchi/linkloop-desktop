@@ -67,10 +67,16 @@ async function signup(name, email, password) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
       
-      // Redirect to dashboard if on landing page
+      // Redirect to dashboard based on role if on landing page
       const path = window.location.pathname;
       if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
-        window.location.href = "/dashboard";
+        if (result.user.role === "admin") {
+          console.log("Admin logged in. Redirecting to admin workspace...");
+          window.location.href = "dashboard.html";
+        } else {
+          console.log("User logged in. Redirecting to dashboard...");
+          window.location.href = "dashboard.html";
+        }
       }
       return { success: true, user: result.user };
     }
@@ -87,10 +93,16 @@ async function login(email, password) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
       
-      // Redirect to dashboard if on landing page
+      // Redirect to dashboard based on role if on landing page
       const path = window.location.pathname;
       if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
-        window.location.href = "/dashboard";
+        if (result.user.role === "admin") {
+          console.log("Admin logged in. Redirecting to admin workspace...");
+          window.location.href = "dashboard.html";
+        } else {
+          console.log("User logged in. Redirecting to dashboard...");
+          window.location.href = "dashboard.html";
+        }
       }
       return { success: true, user: result.user };
     }
@@ -109,7 +121,7 @@ function logout() {
 function handleLoggedOutRedirect() {
   const path = window.location.pathname;
   if (path.includes("dashboard") || path.includes("dashboard.html")) {
-    window.location.href = "/?auth=login";
+    window.location.href = "index.html?auth=login";
   } else {
     // On landing page: check if URL params request showing it
     const params = new URLSearchParams(window.location.search);
@@ -189,12 +201,12 @@ function updateAuthUI(user) {
 
     if (landingAuthBtn) {
       landingAuthBtn.textContent = "Dashboard";
-      landingAuthBtn.onclick = () => window.location.href = "/dashboard";
+      landingAuthBtn.onclick = () => window.location.href = "dashboard.html";
       landingAuthBtn.style.padding = "10px 24px";
     }
     if (landingHeroCta) {
       landingHeroCta.textContent = "Go to Dashboard";
-      landingHeroCta.onclick = () => window.location.href = "/dashboard";
+      landingHeroCta.onclick = () => window.location.href = "dashboard.html";
     }
   } else {
     // Logged out / Not logged in
