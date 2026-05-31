@@ -5,6 +5,7 @@
 
 const DEFAULT_CONVEX_URL = "https://vibrant-marmot-366.convex.cloud";
 const CONVEX_URL = "__CONVEX_URL__";
+const INACTIVITY_LOGOUT_MS = 10 * 60 * 1000; // 10 minutes
 
 // We import ConvexClient from the import map
 let client;
@@ -24,6 +25,47 @@ async function initClient() {
 // AUTH STATE
 // =============================================
 let currentUser = null;
+let inactivityTimer = null;
+let activityEventsBound = false;
+
+function clearInactivityTimer() {
+  if (inactivityTimer) {
+    window.clearTimeout(inactivityTimer);
+    inactivityTimer = null;
+  }
+}
+
+function resetInactivityTimer() {
+  if (!currentUser) return;
+  clearInactivityTimer();
+  inactivityTimer = window.setTimeout(() => {
+    logoutDueToInactivity();
+  }, INACTIVITY_LOGOUT_MS);
+}
+
+function bindInactivityEvents() {
+  if (activityEventsBound) return;
+  const events = ["mousemove", "mousedown", "keydown", "touchstart", "scroll"];
+  events.forEach((eventName) => window.addEventListener(eventName, resetInactivityTimer, { passive: true }));
+  activityEventsBound = true;
+}
+
+function startInactivityWatcher() {
+  if (!currentUser) return;
+  bindInactivityEvents();
+  resetInactivityTimer();
+}
+
+function stopInactivityWatcher() {
+  clearInactivityTimer();
+}
+
+function logoutDueToInactivity() {
+  if (!currentUser) return;
+  stopInactivityWatcher();
+  alert("You have been logged out after 10 minutes of inactivity for security reasons.");
+  logout();
+}
 
 function getUserId() {
   if (currentUser && currentUser.userId) return currentUser.userId;
@@ -38,11 +80,13 @@ function getUserId() {
 function saveUser(user) {
   currentUser = user;
   localStorage.setItem("linkbuild-user", JSON.stringify(user));
+  startInactivityWatcher();
 }
 
 function clearUser() {
   currentUser = null;
   localStorage.removeItem("linkbuild-user");
+  stopInactivityWatcher();
 }
 
 // =============================================
@@ -358,8 +402,16 @@ function init() {
   console.log("🔌 LinkBuild: Initializing...");
   const stored = localStorage.getItem("linkbuild-user");
   if (stored) {
-    try { currentUser = JSON.parse(stored); updateAuthUI(currentUser); hideAuthScreen(); console.log("🔌 Session restored:", currentUser.name); }
-    catch (e) { clearUser(); showAuthScreen(); }
+    try {
+      currentUser = JSON.parse(stored);
+      updateAuthUI(currentUser);
+      hideAuthScreen();
+      startInactivityWatcher();
+      console.log("🔌 Session restored:", currentUser.name);
+    } catch (e) {
+      clearUser();
+      showAuthScreen();
+    }
   } else { showAuthScreen(); }
 
   loadDashboardData().catch(() => {});
