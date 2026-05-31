@@ -832,14 +832,14 @@ window.switchVerifyTab = function(method) {
   const metaPanel = document.getElementById("verifyPanelMeta");
 
   if (method === "dns") {
-    dnsTab.style.background = "var(--primary)";
+    dnsTab.style.background = "var(--primary-purple)";
     dnsTab.style.color = "white";
     metaTab.style.background = "var(--bg-tertiary)";
     metaTab.style.color = "var(--text-secondary)";
     dnsPanel.style.display = "block";
     metaPanel.style.display = "none";
   } else {
-    metaTab.style.background = "var(--primary)";
+    metaTab.style.background = "var(--primary-purple)";
     metaTab.style.color = "white";
     dnsTab.style.background = "var(--bg-tertiary)";
     dnsTab.style.color = "var(--text-secondary)";
