@@ -26,7 +26,7 @@
 
     body {
       font-family: var(--font-jakarta);
-      background-color: transparent;
+      background-color: #080c16;
       color: #cbd5e1;
       overflow-y: auto;
       height: auto;
@@ -129,92 +129,11 @@
       overflow: hidden;
     }
 
-    /* ===== LIQUID ETHER BACKGROUND ===== */
-    .landing-liquid-background {
+    #liquidEtherContainer {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      overflow: hidden;
-      background: var(--bg-landing);
-    }
-
-    /* Grain texture overlay for ether feel */
-    .liquid-grain {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-      pointer-events: none;
-    }
-
-    .liquid-blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      will-change: transform, left, top;
-      transition: left 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                  top 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    .liquid-blob.blob-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle at 40% 40%, rgba(236, 72, 153, 0.65), rgba(139, 92, 246, 0.25), transparent 70%);
-      top: -15%;
-      left: -10%;
-      animation: ether-breathe-1 10s ease-in-out infinite;
-    }
-
-    .liquid-blob.blob-2 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle at 60% 60%, rgba(59, 130, 246, 0.5), rgba(139, 92, 246, 0.2), transparent 70%);
-      top: 40%;
-      right: -12%;
-      animation: ether-breathe-2 12s ease-in-out infinite;
-    }
-
-    .liquid-blob.blob-3 {
-      width: 550px;
-      height: 550px;
-      background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.55), rgba(236, 72, 153, 0.2), transparent 70%);
-      bottom: -18%;
-      left: 30%;
-      animation: ether-breathe-3 11s ease-in-out infinite;
-    }
-
-    .liquid-blob.blob-4 {
-      width: 350px;
-      height: 350px;
-      background: radial-gradient(circle at 50% 50%, rgba(248, 113, 113, 0.4), rgba(236, 72, 153, 0.15), transparent 70%);
-      top: 10%;
-      left: 50%;
-      animation: ether-breathe-4 14s ease-in-out infinite;
-    }
-
-    @keyframes ether-breathe-1 {
-      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.8; }
-      33%  { transform: scale(1.12) translate(30px, -20px); opacity: 0.95; }
-      66%  { transform: scale(0.92) translate(-15px, 25px); opacity: 0.65; }
-    }
-
-    @keyframes ether-breathe-2 {
-      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.7; }
-      50%  { transform: scale(1.15) translate(-25px, -30px); opacity: 0.9; }
-    }
-
-    @keyframes ether-breathe-3 {
-      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.75; }
-      33%  { transform: scale(1.08) translate(-20px, -15px); opacity: 0.9; }
-      66%  { transform: scale(0.9) translate(20px, 20px); opacity: 0.6; }
-    }
-
-    @keyframes ether-breathe-4 {
-      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.6; }
-      50%  { transform: scale(1.2) translate(15px, -25px); opacity: 0.85; }
     }
 
     /* Background blobs */
@@ -652,13 +571,7 @@
   </style>
 </head>
 <body>
-  <div class="landing-liquid-background" id="liquidBg" aria-hidden="true">
-    <div class="liquid-blob blob-1" data-speed="0.04"></div>
-    <div class="liquid-blob blob-2" data-speed="0.06"></div>
-    <div class="liquid-blob blob-3" data-speed="0.05"></div>
-    <div class="liquid-blob blob-4" data-speed="0.07"></div>
-    <div class="liquid-grain"></div>
-  </div>
+  <div id="liquidEtherContainer" aria-hidden="true"></div>
 
   <!-- ===== NAVIGATION ===== -->
   <nav class="landing-nav">
@@ -972,6 +885,8 @@
   </div>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="js/liquid-ether.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="./node_modules/convex/dist/browser.bundle.js"></script>
   <script src="js/convex-integration-v2.js"></script>
@@ -993,50 +908,19 @@
       });
     });
 
-    // ===== LIQUID ETHER MOUSE PARALLAX =====
+    // ===== LIQUID ETHER WEBGL (Three.js fluid simulation) =====
     (function() {
-      const blobs = document.querySelectorAll('.liquid-blob[data-speed]');
-      if (!blobs.length) return;
-
-      let mouseX = window.innerWidth / 2;
-      let mouseY = window.innerHeight / 2;
-      let targetX = mouseX;
-      let targetY = mouseY;
-
-      // Track mouse position
-      document.addEventListener('mousemove', function(e) {
-        targetX = e.clientX;
-        targetY = e.clientY;
+      var container = document.getElementById('liquidEtherContainer');
+      if (!container || typeof THREE === 'undefined' || typeof LiquidEther === 'undefined') return;
+      window._liquidEther = new LiquidEther(container, {
+        colors: ['#5227FF', '#FF9FFC', '#B497CF'],
+        resolution: 0.5,
+        mouseForce: 20,
+        cursorSize: 100,
+        autoDemo: true,
+        autoSpeed: 0.5,
+        autoIntensity: 2.2
       });
-
-      // Also track on touch for mobile
-      document.addEventListener('touchmove', function(e) {
-        if (e.touches.length) {
-          targetX = e.touches[0].clientX;
-          targetY = e.touches[0].clientY;
-        }
-      }, { passive: true });
-
-      function animate() {
-        // Smooth interpolation toward target (easing)
-        mouseX += (targetX - mouseX) * 0.05;
-        mouseY += (targetY - mouseY) * 0.05;
-
-        const cx = window.innerWidth / 2;
-        const cy = window.innerHeight / 2;
-
-        blobs.forEach(function(blob) {
-          const speed = parseFloat(blob.getAttribute('data-speed')) || 0.05;
-          // Parallax: offset from center based on mouse position
-          const offsetX = (mouseX - cx) * speed;
-          const offsetY = (mouseY - cy) * speed;
-          blob.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
-        });
-
-        requestAnimationFrame(animate);
-      }
-
-      requestAnimationFrame(animate);
     })();
   </script>
 </body>
