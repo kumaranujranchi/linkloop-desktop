@@ -846,7 +846,12 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
   visibility: visible;
 }
 
-.modal {
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+.modal,
+.modal-box {
   background: var(--bg-secondary);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
@@ -858,8 +863,13 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
   transition: transform var(--transition-normal);
 }
 
-.modal-overlay.active .modal {
+.modal-overlay.active .modal,
+.modal-overlay.active .modal-box {
   transform: translateY(0);
+}
+
+.auth-modal {
+  max-width: 420px;
 }
 
 .modal-header {

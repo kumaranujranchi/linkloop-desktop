@@ -109,10 +109,10 @@
 
       <div class="sidebar-footer">
         <div class="sidebar-user">
-          <div class="sidebar-user-avatar">AK</div>
+          <div class="sidebar-user-avatar" id="sidebarUserAvatar">AK</div>
           <div class="sidebar-user-info">
-            <div class="sidebar-user-name">Anuj Kumar</div>
-            <div class="sidebar-user-role">Agency Plan</div>
+            <div class="sidebar-user-name" id="sidebarUserName">Anuj Kumar</div>
+            <div class="sidebar-user-role" id="sidebarUserRole">Agency Plan</div>
           </div>
         </div>
       </div>
@@ -156,7 +156,7 @@
           <button class="topbar-icon-btn" onclick="navigateTo('messages')" title="Messages">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </button>
-          <div class="sidebar-user-avatar" style="width:34px;height:34px;font-size:0.75rem;cursor:pointer">AK</div>
+          <div class="sidebar-user-avatar" id="topbarUserAvatar" style="width:34px;height:34px;font-size:0.75rem;cursor:pointer" onclick="showLogoutMenu()">AK</div>
         </div>
       </header>
 
@@ -319,7 +319,7 @@
           <p class="page-subtitle">Manage your registered websites for link exchanges.</p>
 
           <div style="display:flex;gap:12px;margin-bottom:20px">
-            <button class="btn btn-primary">+ Add Website</button>
+            <button class="btn btn-primary" onclick="openAddWebsiteModal()">+ Add Website</button>
             <button class="btn btn-secondary">Import from CSV</button>
           </div>
 
@@ -338,7 +338,7 @@
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="myWebsitesTableBody">
                   <tr>
                     <td><strong>myseotools.com</strong></td>
                     <td><span class="badge badge-info">52</span></td>
@@ -441,7 +441,7 @@
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="marketplaceTableBody">
                   <tr>
                     <td>
                       <div style="display:flex;align-items:center;gap:8px">
@@ -1438,6 +1438,111 @@
       <span class="mobile-nav-badge"></span>
     </button>
   </nav>
+
+  <!-- ========== AUTH OVERLAY ========== -->
+  <div class="modal-overlay active" id="authOverlay">
+    <div class="modal-box auth-modal">
+      <div class="modal-header">
+        <h2 id="authTitle">Welcome to LinkLoop</h2>
+        <button class="modal-close" onclick="window.LinkLoop.hideAuthScreen()">✕</button>
+      </div>
+      <div class="modal-body" id="authBody">
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)" style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Email Address</label>
+            <input class="input" type="email" id="loginEmail" placeholder="you@example.com" required style="width:100%">
+          </div>
+          <button class="btn btn-primary" type="submit" style="width:100%">Login</button>
+          <p style="text-align:center;font-size:0.85rem;color:var(--text-secondary)">
+            Don't have an account? <a href="#" onclick="switchAuthTab('signup');return false" style="color:var(--primary-purple);font-weight:600">Sign Up</a>
+          </p>
+        </form>
+        <!-- Signup Form (hidden by default) -->
+        <form id="signupForm" onsubmit="handleSignup(event)" style="display:none;flex-direction:column;gap:16px">
+          <div>
+            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Full Name</label>
+            <input class="input" type="text" id="signupName" placeholder="Your name" required style="width:100%">
+          </div>
+          <div>
+            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Email Address</label>
+            <input class="input" type="email" id="signupEmail" placeholder="you@example.com" required style="width:100%">
+          </div>
+          <button class="btn btn-primary" type="submit" style="width:100%">Create Account</button>
+          <p style="text-align:center;font-size:0.85rem;color:var(--text-secondary)">
+            Already have an account? <a href="#" onclick="switchAuthTab('login');return false" style="color:var(--primary-purple);font-weight:600">Login</a>
+          </p>
+        </form>
+        <div id="authMessage" style="margin-top:12px;text-align:center;font-size:0.85rem"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== ADD WEBSITE MODAL ========== -->
+  <div class="modal-overlay hidden" id="addWebsiteModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Add Website</h2>
+        <button class="modal-close" onclick="closeAddWebsiteModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="addWebsiteForm" onsubmit="handleAddWebsite(event)" style="display:flex;flex-direction:column;gap:14px">
+          <div>
+            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Domain <span style="color:var(--danger)">*</span></label>
+            <input class="input" type="text" id="wsDomain" placeholder="example.com" required style="width:100%">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Niche <span style="color:var(--danger)">*</span></label>
+              <select class="select" id="wsNiche" required style="width:100%">
+                <option value="">Select...</option>
+                <option>SEO Tools</option><option>SaaS</option><option>Marketing</option><option>Tech</option>
+                <option>Blogging</option><option>Ecommerce</option><option>Health</option><option>Finance</option>
+                <option>Education</option><option>Travel</option><option>Real Estate</option><option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Country <span style="color:var(--danger)">*</span></label>
+              <select class="select" id="wsCountry" required style="width:100%">
+                <option value="">Select...</option>
+                <option>US</option><option>UK</option><option>CA</option><option>AU</option>
+                <option>DE</option><option>IN</option><option>FR</option><option>ES</option>
+                <option>BR</option><option>NL</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Language</label>
+              <select class="select" id="wsLanguage" style="width:100%">
+                <option>English</option><option>Spanish</option><option>German</option><option>French</option><option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Domain Authority (DA)</label>
+              <input class="input" type="number" id="wsDA" placeholder="e.g. 45" min="1" max="100" required style="width:100%">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Spam Score</label>
+              <input class="input" type="number" id="wsSpam" placeholder="e.g. 3" min="0" max="100" style="width:100%">
+            </div>
+            <div>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Monthly Traffic</label>
+              <input class="input" type="number" id="wsTraffic" placeholder="e.g. 25000" style="width:100%">
+            </div>
+          </div>
+          <div>
+            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Referring Domains</label>
+            <input class="input" type="number" id="wsRefDomains" placeholder="e.g. 500" style="width:100%">
+          </div>
+          <button class="btn btn-primary" type="submit" style="width:100%;margin-top:4px">Add Website</button>
+          <div id="wsMessage" style="text-align:center;font-size:0.85rem;margin-top:4px"></div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- ========== SCRIPTS ========== -->
   <script src="js/app.js"></script>

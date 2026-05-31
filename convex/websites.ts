@@ -135,7 +135,7 @@ export const stats = query({
 
 // ========== MUTATIONS ==========
 
-// Add a new website (with optional auth bypass for seeding)
+// Add a new website (with optional userId param for email-based auth)
 export const add = mutation({
   args: {
     domain: v.string(),
@@ -146,14 +146,14 @@ export const add = mutation({
     spamScore: v.number(),
     trafficEstimate: v.number(),
     referringDomains: v.number(),
-    skipAuth: v.optional(v.boolean()),
+    userId: v.optional(v.id("users")),
   },
   handler: async (ctx, args) => {
-    let userId;
+    let userId = args.userId;
 
-    if (!args.skipAuth) {
+    if (!userId) {
       const identity = await ctx.auth.getUserIdentity();
-      if (!identity) throw new Error("Not authenticated");
+      if (!identity) throw new Error("Not authenticated — please login first");
 
       const user = await ctx.db
         .query("users")
@@ -162,27 +162,6 @@ export const add = mutation({
 
       if (!user) throw new Error("User not found");
       userId = user._id;
-    } else {
-      // For seeding: find or create a demo user
-      const existing = await ctx.db
-        .query("users")
-        .withIndex("by_email", (q) => q.eq("email", "demo@linkloop.io"))
-        .first();
-
-      if (existing) {
-        userId = existing._id;
-      } else {
-        userId = await ctx.db.insert("users", {
-          name: "Demo User",
-          email: "demo@linkloop.io",
-          role: "pro",
-          reputationScore: 85,
-          completedExchanges: 47,
-          responseRate: 96,
-          trustBadges: ["verified", "top-exchanger"],
-          createdAt: Date.now(),
-        });
-      }
     }
 
     const now = Date.now();

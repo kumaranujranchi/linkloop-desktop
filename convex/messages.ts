@@ -107,16 +107,25 @@ export const send = mutation({
     attachmentUrl: v.optional(v.string()),
     websiteRef: v.optional(v.id("websites")),
     exchangeId: v.optional(v.id("exchangeRequests")),
+    senderId: v.optional(v.id("users")),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    let userId = args.senderId;
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    if (!userId) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Not authenticated — please login first");
 
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", identity.email!))
+        .first();
+
+      if (!user) throw new Error("User not found");
+      userId = user._id;
+    }
+
+    const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
     const now = Date.now();
@@ -124,7 +133,7 @@ export const send = mutation({
     // Insert message
     const messageId = await ctx.db.insert("messages", {
       exchangeId: args.exchangeId,
-      senderId: user._id,
+      senderId: userId,
       receiverId: args.receiverId,
       text: args.text,
       attachmentUrl: args.attachmentUrl,
@@ -137,7 +146,7 @@ export const send = mutation({
     await ctx.db.patch(args.conversationId, {
       lastMessage: args.text.slice(0, 100),
       lastMessageAt: now,
-      lastSenderId: user._id,
+      lastSenderId: userId,
     });
 
     // Create notification
@@ -159,23 +168,29 @@ export const getOrCreateConversation = mutation({
   args: {
     otherUserId: v.id("users"),
     exchangeId: v.optional(v.id("exchangeRequests")),
+    userId: v.optional(v.id("users")),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    let userId = args.userId;
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    if (!userId) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Not authenticated — please login first");
 
-    if (!user) throw new Error("User not found");
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", identity.email!))
+        .first();
+
+      if (!user) throw new Error("User not found");
+      userId = user._id;
+    }
 
     // Check for existing conversation
     const existing = await ctx.db.query("conversations").collect();
     const found = existing.find(
       (c) =>
-        c.participantIds.includes(user._id) &&
+        c.participantIds.includes(userId!) &&
         c.participantIds.includes(args.otherUserId) &&
         c.exchangeId === args.exchangeId
     );
@@ -185,10 +200,10 @@ export const getOrCreateConversation = mutation({
     // Create new conversation
     const now = Date.now();
     return await ctx.db.insert("conversations", {
-      participantIds: [user._id, args.otherUserId],
+      participantIds: [userId!, args.otherUserId],
       lastMessage: "",
       lastMessageAt: now,
-      lastSenderId: user._id,
+      lastSenderId: userId!,
       exchangeId: args.exchangeId,
     });
   },

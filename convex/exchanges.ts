@@ -117,21 +117,30 @@ export const send = mutation({
     fromAnchorText: v.string(),
     fromTargetUrl: v.string(),
     notes: v.optional(v.string()),
+    fromUserId: v.optional(v.id("users")),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    let userId = args.fromUserId;
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    if (!userId) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Not authenticated — please login first");
 
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", identity.email!))
+        .first();
+
+      if (!user) throw new Error("User not found");
+      userId = user._id;
+    }
+
+    const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
     const now = Date.now();
     const exchangeId = await ctx.db.insert("exchangeRequests", {
-      fromUserId: user._id,
+      fromUserId: userId,
       toUserId: args.toUserId,
       fromWebsiteId: args.fromWebsiteId,
       toWebsiteId: args.toWebsiteId,
@@ -157,7 +166,7 @@ export const send = mutation({
     // Log analytics event
     await ctx.db.insert("analyticsEvents", {
       type: "exchange_created",
-      userId: user._id,
+      userId: userId,
       metadata: { exchangeId },
       createdAt: now,
     });

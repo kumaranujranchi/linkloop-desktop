@@ -92,12 +92,13 @@ export const adminStats = query({
 
 // ========== MUTATIONS ==========
 
-// Create or get user (upsert on login)
-export const upsert = mutation({
+// ========== EMAIL AUTH (no Convex Auth required) ==========
+
+// Sign up with email + name
+export const signupWithEmail = mutation({
   args: {
     name: v.string(),
     email: v.string(),
-    company: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const existing = await ctx.db
@@ -106,18 +107,13 @@ export const upsert = mutation({
       .first();
 
     if (existing) {
-      // Update name if changed
-      if (existing.name !== args.name) {
-        await ctx.db.patch(existing._id, { name: args.name });
-      }
-      return existing._id;
+      return { userId: existing._id, isNew: false };
     }
 
     const now = Date.now();
     const userId = await ctx.db.insert("users", {
       name: args.name,
       email: args.email,
-      company: args.company,
       role: "free",
       reputationScore: 50,
       completedExchanges: 0,
@@ -138,14 +134,50 @@ export const upsert = mutation({
       createdAt: now,
     });
 
-    // Log analytics
     await ctx.db.insert("analyticsEvents", {
       type: "user_signup",
       userId,
       createdAt: now,
     });
 
-    return userId;
+    return { userId, isNew: true };
+  },
+});
+
+// Login with email
+export const loginWithEmail = mutation({
+  args: {
+    email: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .first();
+
+    if (!user) {
+      return { error: "User not found. Please sign up first." };
+    }
+
+    return {
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      reputationScore: user.reputationScore,
+    };
+  },
+});
+
+// Create or get user (upsert on login) — legacy
+export const upsert = mutation({
+  args: {
+    name: v.string(),
+    email: v.string(),
+    company: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    return (await signupWithEmail.handler(ctx, args)).userId;
   },
 });
 

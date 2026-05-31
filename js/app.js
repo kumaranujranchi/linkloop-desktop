@@ -561,3 +561,142 @@ window.closeMobileSidebar = closeMobileSidebar;
 window.switchTab = switchTab;
 window.initDashboardCharts = initDashboardCharts;
 window.initAnalyticsCharts = initAnalyticsCharts;
+
+// =============================================
+// AUTH HANDLING
+// =============================================
+window.handleLogin = async function(e) {
+  e.preventDefault();
+  const email = document.getElementById("loginEmail").value.trim();
+  const msgEl = document.getElementById("authMessage");
+  if (!email) { msgEl.innerHTML = '<span style="color:var(--danger)">Please enter your email</span>'; return; }
+
+  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Logging in...</span>';
+  const result = await window.LinkLoop.login(email);
+  if (result.success) {
+    window.LinkLoop.hideAuthScreen();
+    window.LinkLoop.loadDashboardData().catch(() => {});
+    msgEl.innerHTML = '';
+  } else {
+    msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Login failed") + '</span>';
+  }
+};
+
+window.handleSignup = async function(e) {
+  e.preventDefault();
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const msgEl = document.getElementById("authMessage");
+  if (!name || !email) { msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in all fields</span>'; return; }
+
+  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Creating account...</span>';
+  const result = await window.LinkLoop.signup(name, email);
+  if (result.success) {
+    window.LinkLoop.hideAuthScreen();
+    window.LinkLoop.loadDashboardData().catch(() => {});
+    msgEl.innerHTML = '';
+  } else {
+    msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Signup failed") + '</span>';
+  }
+};
+
+window.switchAuthTab = function(tab) {
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  const title = document.getElementById("authTitle");
+  const msg = document.getElementById("authMessage");
+  if (msg) msg.innerHTML = '';
+  if (tab === "signup") {
+    loginForm.style.display = "none";
+    signupForm.style.display = "flex";
+    if (title) title.textContent = "Create Your Account";
+  } else {
+    loginForm.style.display = "flex";
+    signupForm.style.display = "none";
+    if (title) title.textContent = "Welcome to LinkLoop";
+  }
+};
+
+window.showLogoutMenu = function() {
+  if (!window.LinkLoop.isLoggedIn()) return;
+  if (confirm("Logout from LinkLoop?")) {
+    window.LinkLoop.logout();
+  }
+};
+
+// =============================================
+// ADD WEBSITE MODAL
+// =============================================
+window.openAddWebsiteModal = function() {
+  if (!window.LinkLoop.isLoggedIn()) {
+    alert("Please login first to add a website.");
+    window.LinkLoop.showAuthScreen();
+    return;
+  }
+  document.getElementById("addWebsiteModal").classList.add("active");
+  document.getElementById("addWebsiteModal").classList.remove("hidden");
+};
+
+window.closeAddWebsiteModal = function() {
+  document.getElementById("addWebsiteModal").classList.remove("active");
+  document.getElementById("addWebsiteModal").classList.add("hidden");
+  document.getElementById("addWebsiteForm").reset();
+  document.getElementById("wsMessage").innerHTML = '';
+};
+
+window.handleAddWebsite = async function(e) {
+  e.preventDefault();
+  const msgEl = document.getElementById("wsMessage");
+  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Adding website...</span>';
+
+  const data = {
+    domain: document.getElementById("wsDomain").value.trim(),
+    niche: document.getElementById("wsNiche").value,
+    country: document.getElementById("wsCountry").value,
+    language: document.getElementById("wsLanguage").value,
+    domainAuthority: parseInt(document.getElementById("wsDA").value) || 0,
+    spamScore: parseInt(document.getElementById("wsSpam").value) || 0,
+    trafficEstimate: parseInt(document.getElementById("wsTraffic").value) || 0,
+    referringDomains: parseInt(document.getElementById("wsRefDomains").value) || 0,
+  };
+
+  if (!data.domain || !data.niche || !data.country) {
+    msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in Domain, Niche, and Country</span>';
+    return;
+  }
+
+  const result = await window.LinkLoop.addWebsite(data);
+  if (result.success) {
+    msgEl.innerHTML = '<span style="color:var(--success)">✅ Website added successfully!</span>';
+    setTimeout(() => { closeAddWebsiteModal(); window.LinkLoop.loadMyWebsites(); }, 800);
+  } else {
+    msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Failed to add website") + '</span>';
+  }
+};
+
+// =============================================
+// LOAD DATA ON PAGE NAVIGATION
+// =============================================
+const originalNavigateTo = navigateTo;
+navigateTo = function(pageName, navItem) {
+  originalNavigateTo(pageName, navItem);
+
+  // Load data for specific pages after navigation
+  setTimeout(() => {
+    if (window.LinkLoop && window.LinkLoop.isLoggedIn()) {
+      if (pageName === "websites") {
+        window.LinkLoop.loadMyWebsites();
+      } else if (pageName === "marketplace") {
+        window.LinkLoop.loadMarketplace();
+      } else if (pageName === "exchange-requests") {
+        window.LinkLoop.loadExchangeRequests();
+      } else if (pageName === "messages") {
+        window.LinkLoop.loadConversations();
+      } else if (pageName === "notifications") {
+        window.LinkLoop.loadNotifications();
+      } else if (pageName === "dashboard") {
+        window.LinkLoop.loadDashboardData();
+      }
+    }
+  }, 200);
+};

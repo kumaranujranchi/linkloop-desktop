@@ -1,187 +1,175 @@
 /* =============================================
    LinkLoop — Convex Integration Layer
-   Bridges Convex backend with the HTML UI
+   Email Auth + All Backend Functions
    ============================================= */
 
-import { ConvexClient } from "convex";
-
-// =============================================
-// CONFIGURATION
-// =============================================
-// After running `npx convex deploy`, this URL can be injected at build time from Vercel.
 const DEFAULT_CONVEX_URL = "https://vibrant-marmot-366.convex.cloud";
 const CONVEX_URL = "__CONVEX_URL__";
-const client = new ConvexClient(CONVEX_URL === "__CONVEX_URL__" || !CONVEX_URL ? DEFAULT_CONVEX_URL : CONVEX_URL);
 
-// Track current user (replace with real auth later)
-let currentUserId = null;
+// We import ConvexClient from the import map
+let client;
 
-// =============================================
-// INITIALIZATION
-// =============================================
-async function initConvex() {
-  console.log("🔌 Convex: Initializing...");
-
-  try {
-    // Try to load existing user or create demo user
-    const stored = localStorage.getItem("linkloop-user-id");
-    if (stored) {
-      currentUserId = stored;
-      console.log("🔌 Convex: User session restored:", currentUserId);
-    } else {
-      // Create demo user for testing
-      const email = "demo@linkloop.io";
-      const name = "Anuj Kumar";
-      try {
-        // This needs auth — for demo, we use a placeholder
-        // In production, use Convex Auth
-        console.log("🔌 Convex: Using demo mode (no auth)");
-      } catch (e) {
-        console.warn("Convex auth not configured:", e.message);
-      }
-    }
-
-    // Load dashboard data
-    await loadDashboardData();
-
-    // Set up real-time subscriptions
-    setupSubscriptions();
-
-    console.log("🔌 Convex: Ready!");
-  } catch (e) {
-    console.warn("🔌 Convex: Backend not connected — using demo data:", e.message);
-    // UI already has static demo data, so no action needed
-  }
+async function initClient() {
+  const { ConvexClient } = await import("convex");
+  client = new ConvexClient(CONVEX_URL === "__CONVEX_URL__" || !CONVEX_URL ? DEFAULT_CONVEX_URL : CONVEX_URL);
+  init();
 }
 
 // =============================================
-// DASHBOARD DATA LOADING
+// AUTH STATE
+// =============================================
+let currentUser = null;
+
+function getUserId() {
+  if (currentUser && currentUser.userId) return currentUser.userId;
+  const stored = localStorage.getItem("linkloop-user");
+  if (stored) {
+    try { currentUser = JSON.parse(stored); return currentUser.userId; }
+    catch (e) { /* ignore */ }
+  }
+  return null;
+}
+
+function saveUser(user) {
+  currentUser = user;
+  localStorage.setItem("linkloop-user", JSON.stringify(user));
+}
+
+function clearUser() {
+  currentUser = null;
+  localStorage.removeItem("linkloop-user");
+}
+
+// =============================================
+// AUTH FUNCTIONS
+// =============================================
+async function signup(name, email) {
+  try {
+    const result = await client.mutation("users:signupWithEmail", { name, email });
+    if (result.userId) {
+      const user = { userId: result.userId, name, email, role: "free", isNew: result.isNew };
+      saveUser(user);
+      updateAuthUI(user);
+      return { success: true, user };
+    }
+    return { success: false, error: "Signup failed" };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+}
+
+async function login(email) {
+  try {
+    const result = await client.mutation("users:loginWithEmail", { email });
+    if (result.error) return { success: false, error: result.error };
+    if (result.userId) {
+      const user = { userId: result.userId, name: result.name, email: result.email, role: result.role };
+      saveUser(user);
+      updateAuthUI(user);
+      return { success: true, user };
+    }
+    return { success: false, error: "Login failed" };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+}
+
+function logout() {
+  clearUser();
+  updateAuthUI(null);
+  showAuthScreen();
+}
+
+function updateAuthUI(user) {
+  const sidebarName = document.getElementById("sidebarUserName");
+  const sidebarRole = document.getElementById("sidebarUserRole");
+  const sidebarAvatar = document.getElementById("sidebarUserAvatar");
+  const topbarAvatar = document.getElementById("topbarUserAvatar");
+  if (user) {
+    const initials = user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    if (sidebarName) sidebarName.textContent = user.name;
+    if (sidebarRole) sidebarRole.textContent = user.role === "free" ? "Free Plan" : user.role === "pro" ? "Pro Plan" : "Agency Plan";
+    if (sidebarAvatar) sidebarAvatar.textContent = initials;
+    if (topbarAvatar) topbarAvatar.textContent = initials;
+  }
+}
+
+function showAuthScreen() {
+  const el = document.getElementById("authOverlay");
+  if (el) { el.classList.add("active"); el.classList.remove("hidden"); }
+}
+
+function hideAuthScreen() {
+  const el = document.getElementById("authOverlay");
+  if (el) { el.classList.remove("active"); el.classList.add("hidden"); }
+}
+
+function isLoggedIn() {
+  return !!getUserId();
+}
+
+function getCurrentUser() {
+  return currentUser || JSON.parse(localStorage.getItem("linkloop-user") || "null");
+}
+
+// =============================================
+// DASHBOARD DATA
 // =============================================
 async function loadDashboardData() {
   try {
-    // Fetch KPIs
     const kpis = await client.query("analytics:dashboardKpis", {});
-    if (kpis) {
-      updateKpiCards(kpis);
-    }
-
-    // Fetch exchange activity for chart
+    if (kpis) updateKpiCards(kpis);
     const activity = await client.query("analytics:exchangeActivity", { months: 6 });
-    if (activity) {
-      updateExchangeChart(activity);
-    }
-
-    // Fetch backlink stats
+    if (activity) updateExchangeChart(activity);
     const backlinkStats = await client.query("backlinks:stats", {});
-    if (backlinkStats) {
-      updateBacklinkStats(backlinkStats);
+    if (backlinkStats) updateBacklinkStats(backlinkStats);
+    const uid = getUserId();
+    if (uid) {
+      const unreadCount = await client.query("notifications:unreadCount", { userId: uid });
+      if (unreadCount !== undefined) updateNotificationBadge(unreadCount);
     }
-
-    // Fetch conversations
-    if (currentUserId) {
-      const conversations = await client.query("messages:listConversations", {
-        userId: currentUserId,
-      });
-      if (conversations && conversations.length > 0) {
-        updateConversationsList(conversations);
-      }
-    }
-
-    // Fetch notifications count
-    if (currentUserId) {
-      const unreadCount = await client.query("notifications:unreadCount", {
-        userId: currentUserId,
-      });
-      if (unreadCount !== undefined) {
-        updateNotificationBadge(unreadCount);
-      }
-    }
-
   } catch (e) {
-    console.log("📊 Using demo data (Convex not connected):", e.message);
+    console.log("📊 Using demo data:", e.message);
   }
 }
 
 // =============================================
-// REAL-TIME SUBSCRIPTIONS
+// WEBSITES
 // =============================================
-function setupSubscriptions() {
-  if (!currentUserId) return;
-
-  // Only subscribe to notifications (lightweight)
+async function loadMyWebsites() {
+  const uid = getUserId();
+  if (!uid) return [];
   try {
-    client.subscribe("notifications:unreadCount", { userId: currentUserId }, (count) => {
-      if (count !== undefined) updateNotificationBadge(count);
-    });
-  } catch (e) { /* subscription not critical */ }
-
-  // NOTE: Dashboard KPI subscription removed to prevent chart flicker.
-  // Dashboard data is loaded once on page load via loadDashboardData().
-  // Other subscriptions (Kanban, Conversations) activate only on their pages.
+    const sites = await client.query("websites:listByOwner", { userId: uid });
+    updateWebsitesTable(sites);
+    return sites;
+  } catch (e) {
+    console.log("📋 Websites:", e.message);
+    return [];
+  }
 }
 
-// Track which page subscriptions are active
-let activePageSubscriptions = {};
-
-function setupPageSubscriptions(pageName) {
-  if (!currentUserId) return;
-
-  // Clean up previous page subscriptions
-  // (Convex client handles this — we just track state)
-  
-  if (pageName === "exchange-requests" && !activePageSubscriptions.exchanges) {
-    activePageSubscriptions.exchanges = true;
-    try {
-      client.subscribe("exchanges:listKanban", { userId: currentUserId }, (kanban) => {
-        if (kanban) updateKanbanBoard(kanban);
-      });
-    } catch (e) { /* silent */ }
-  }
-
-  if (pageName === "messages" && !activePageSubscriptions.conversations) {
-    activePageSubscriptions.conversations = true;
-    try {
-      client.subscribe("messages:listConversations", { userId: currentUserId }, (convs) => {
-        if (convs) updateConversationsList(convs);
-      });
-    } catch (e) { /* silent */ }
+async function addWebsite(data) {
+  const uid = getUserId();
+  if (!uid) return { success: false, error: "Please login first" };
+  try {
+    const websiteId = await client.mutation("websites:add", { ...data, userId: uid });
+    return { success: true, websiteId };
+  } catch (e) {
+    return { success: false, error: e.message };
   }
 }
 
 // =============================================
-// MARKETPLACE DATA
+// MARKETPLACE
 // =============================================
 async function loadMarketplace(filters = {}) {
   try {
-    const websites = await client.query("websites:list", {
-      ...filters,
-      limit: 20,
-    });
+    const websites = await client.query("websites:list", { ...filters, limit: 20 });
     updateMarketplaceTable(websites);
     return websites;
   } catch (e) {
-    console.log("🏪 Marketplace: Using demo data");
-    return null;
-  }
-}
-
-async function searchMarketplace(query) {
-  try {
-    return await client.query("websites:search", { query, limit: 10 });
-  } catch (e) {
-    return null;
-  }
-}
-
-// =============================================
-// WEBSITE DETAIL
-// =============================================
-async function loadWebsiteDetail(websiteId) {
-  try {
-    const website = await client.query("websites:getById", { websiteId });
-    if (website) updateWebsiteDetail(website);
-    return website;
-  } catch (e) {
+    console.log("🏪 Marketplace:", e.message);
     return null;
   }
 }
@@ -190,36 +178,22 @@ async function loadWebsiteDetail(websiteId) {
 // EXCHANGE REQUESTS
 // =============================================
 async function loadExchangeRequests() {
-  if (!currentUserId) return null;
+  const uid = getUserId();
+  if (!uid) return null;
   try {
-    const kanban = await client.query("exchanges:listKanban", {
-      userId: currentUserId,
-    });
+    const kanban = await client.query("exchanges:listKanban", { userId: uid });
     if (kanban) updateKanbanBoard(kanban);
     return kanban;
-  } catch (e) {
-    return null;
-  }
+  } catch (e) { return null; }
 }
 
 async function sendExchangeRequest(data) {
+  const uid = getUserId();
+  if (!uid) return { success: false, error: "Please login first" };
   try {
-    return await client.mutation("exchanges:send", data);
+    return { success: true, id: await client.mutation("exchanges:send", { ...data, fromUserId: uid }) };
   } catch (e) {
-    console.error("Failed to send exchange request:", e);
-    return null;
-  }
-}
-
-async function updateExchangeStatus(exchangeId, status) {
-  try {
-    return await client.mutation("exchanges:updateStatus", {
-      exchangeId,
-      status,
-    });
-  } catch (e) {
-    console.error("Failed to update exchange status:", e);
-    return null;
+    return { success: false, error: e.message };
   }
 }
 
@@ -227,104 +201,22 @@ async function updateExchangeStatus(exchangeId, status) {
 // MESSAGES
 // =============================================
 async function loadConversations() {
-  if (!currentUserId) return null;
+  const uid = getUserId();
+  if (!uid) return null;
   try {
-    return await client.query("messages:listConversations", {
-      userId: currentUserId,
-    });
-  } catch (e) {
-    return null;
-  }
-}
-
-async function loadMessages(conversationId) {
-  try {
-    return await client.query("messages:listMessages", {
-      conversationId,
-      limit: 50,
-    });
-  } catch (e) {
-    return null;
-  }
-}
-
-async function sendMessage(data) {
-  try {
-    return await client.mutation("messages:send", data);
-  } catch (e) {
-    console.error("Failed to send message:", e);
-    return null;
-  }
-}
-
-async function createConversation(otherUserId, exchangeId) {
-  try {
-    return await client.mutation("messages:getOrCreateConversation", {
-      otherUserId,
-      exchangeId,
-    });
-  } catch (e) {
-    return null;
-  }
+    return await client.query("messages:listConversations", { userId: uid });
+  } catch (e) { return null; }
 }
 
 // =============================================
 // NOTIFICATIONS
 // =============================================
 async function loadNotifications() {
-  if (!currentUserId) return null;
+  const uid = getUserId();
+  if (!uid) return null;
   try {
-    return await client.query("notifications:listByUser", {
-      userId: currentUserId,
-      limit: 50,
-    });
-  } catch (e) {
-    return null;
-  }
-}
-
-async function markNotificationRead(notificationId) {
-  try {
-    await client.mutation("notifications:markRead", { notificationId });
-  } catch (e) { /* silent */ }
-}
-
-async function markAllNotificationsRead() {
-  if (!currentUserId) return;
-  try {
-    await client.mutation("notifications:markAllRead", { userId: currentUserId });
-  } catch (e) { /* silent */ }
-}
-
-// =============================================
-// BACKLINK MONITOR
-// =============================================
-async function loadBacklinks(websiteId) {
-  try {
-    return await client.query("backlinks:listByWebsite", { websiteId });
-  } catch (e) {
-    return null;
-  }
-}
-
-async function loadBacklinkStats() {
-  try {
-    return await client.query("backlinks:stats", {});
-  } catch (e) {
-    return null;
-  }
-}
-
-// =============================================
-// WEBSITE MANAGEMENT
-// =============================================
-async function addWebsite(data) {
-  try {
-    return await client.mutation("websites:add", data);
-  } catch (e) {
-    console.error("Failed to add website:", e);
-    return null;
-  }
+    return await client.query("notifications:listByUser", { userId: uid, limit: 50 });
+  } catch (e) { return null; }
 }
 
 // =============================================
@@ -332,23 +224,18 @@ async function addWebsite(data) {
 // =============================================
 function updateKpiCards(kpis) {
   if (!kpis) return;
-
-  // Only update values that are > 0 (avoid overwriting demo data with zeros)
   document.querySelectorAll(".kpi-card").forEach((card) => {
     const label = card.querySelector(".kpi-card-label")?.textContent?.trim();
     const valueEl = card.querySelector(".kpi-card-value");
     if (!valueEl) return;
-
-    const labelMap = {
+    const map = {
       "Total Websites": kpis.totalWebsites,
       "Active Exchanges": kpis.activeExchanges,
       "Pending Requests": kpis.pendingRequests,
       "Verified Backlinks": kpis.verifiedBacklinks,
     };
-
-    const newValue = labelMap[label];
-    if (newValue !== undefined && newValue !== null && newValue > 0) {
-      valueEl.textContent = newValue.toLocaleString();
+    if (map[label] !== undefined && map[label] !== null && map[label] > 0) {
+      valueEl.textContent = Number(map[label]).toLocaleString();
     }
   });
 }
@@ -356,15 +243,12 @@ function updateKpiCards(kpis) {
 function updateExchangeChart(activity) {
   const chart = window.__charts?.exchangeActivity;
   if (!chart || !activity) return;
-
-  // Only update if there's actual data (non-empty arrays)
   const hasData = activity.some((a) => a.created > 0 || a.completed > 0);
-  if (!hasData) return; // Keep existing demo data
-
+  if (!hasData) return;
   chart.data.labels = activity.map((a) => a.month);
   chart.data.datasets[0].data = activity.map((a) => a.completed);
   chart.data.datasets[1].data = activity.map((a) => a.created);
-  chart.update("none"); // Use 'none' for silent update without animation
+  chart.update("none");
 }
 
 function updateBacklinkStats(stats) {
@@ -373,117 +257,90 @@ function updateBacklinkStats(stats) {
     const label = card.querySelector(".kpi-card-label")?.textContent?.trim();
     const valueEl = card.querySelector(".kpi-card-value");
     if (!valueEl) return;
-
-    const labelMap = {
-      "Active Backlinks": stats.active,
-      "Lost Links": stats.lost,
-      "Dofollow Links": stats.dofollow,
-      "Nofollow Links": stats.nofollow,
-    };
-
-    if (labelMap[label] !== undefined) {
-      valueEl.textContent = labelMap[label].toLocaleString();
-    }
-  });
-}
-
-function updateConversationsList(conversations) {
-  // Update conversation list in messages page
-  const container = document.querySelector(".conversations-list");
-  if (!container) return;
-
-  // Only update if on messages page
-  if (!document.getElementById("page-messages")?.classList.contains("active")) return;
-
-  // Keep existing demo items if no real data
-  if (!conversations || conversations.length === 0) return;
-
-  // Build new conversation items
-  const existingItems = container.querySelectorAll(".conversation-item");
-  // Don't replace if already has demo data and no new data
-  if (existingItems.length > 0 && conversations.length <= existingItems.length) return;
-}
-
-function updateKanbanBoard(kanban) {
-  if (!kanban) return;
-  // Update Kanban column counts
-  const columns = {
-    new: kanban.new?.length || 0,
-    negotiating: kanban.negotiating?.length || 0,
-    accepted: kanban.accepted?.length || 0,
-    completed: kanban.completed?.length || 0,
-    rejected: kanban.rejected?.length || 0,
-  };
-
-  document.querySelectorAll(".kanban-column-count").forEach((countEl) => {
-    const column = countEl.closest(".kanban-column");
-    const title = column?.querySelector(".kanban-column-title")?.textContent?.trim().toLowerCase();
-    const statusMap = {
-      "new requests": "new",
-      "negotiating": "negotiating",
-      "accepted": "accepted",
-      "completed": "completed",
-      "rejected": "rejected",
-    };
-    const key = Object.entries(statusMap).find(([k]) => title?.includes(k))?.[1];
-    if (key && columns[key] !== undefined) {
-      countEl.textContent = columns[key];
-    }
+    const map = { "Active Backlinks": stats.active, "Lost Links": stats.lost, "Dofollow Links": stats.dofollow, "Nofollow Links": stats.nofollow };
+    if (map[label] !== undefined) valueEl.textContent = Number(map[label]).toLocaleString();
   });
 }
 
 function updateNotificationBadge(count) {
-  // Update notification badge in topbar
   const badge = document.querySelector(".nav-item[data-page='notifications'] .nav-badge");
-  if (badge) {
-    badge.textContent = count;
-    badge.style.display = count > 0 ? "inline" : "none";
-  }
-
-  // Update topbar notification dot
-  const dot = document.querySelector(".topbar-icon-btn .dot");
-  if (dot) {
-    dot.style.display = count > 0 ? "block" : "none";
-  }
+  if (badge) { badge.textContent = count; badge.style.display = count > 0 ? "" : "none"; }
 }
 
-function updateWebsiteDetail(website) {
-  // This would update the website detail page
-  console.log("Website detail loaded:", website.domain);
+function updateKanbanBoard(kanban) {
+  if (!kanban) return;
+  const cols = { new: kanban.new?.length || 0, negotiating: kanban.negotiating?.length || 0, accepted: kanban.accepted?.length || 0, completed: kanban.completed?.length || 0, rejected: kanban.rejected?.length || 0 };
+  document.querySelectorAll(".kanban-column-count").forEach((el) => {
+    const col = el.closest(".kanban-column");
+    const title = col?.querySelector(".kanban-column-title")?.textContent?.trim().toLowerCase();
+    const map = { "new requests": "new", "negotiating": "negotiating", "accepted": "accepted", "completed": "completed", "rejected": "rejected" };
+    const key = Object.entries(map).find(([k]) => title?.includes(k))?.[1];
+    if (key && cols[key] !== undefined) el.textContent = cols[key];
+  });
 }
 
 function updateMarketplaceTable(websites) {
-  if (!websites || websites.length === 0) return;
+  if (!websites || !websites.length) return;
+  const tbody = document.getElementById("marketplaceTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = websites.map(w => `
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0,2).toUpperCase()}</div><strong>${w.domain}</strong>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ''}</div></td>
+      <td><span class="badge badge-info">${w.domainAuthority}</span></td>
+      <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
+      <td>${w.niche}</td>
+      <td>${w.country}</td>
+      <td><div class="health-score"><div class="health-bar"><div class="health-bar-fill good" style="width:${w.exchangeSuccessRate || 85}%"></div></div>${w.exchangeSuccessRate || 85}%</div></td>
+      <td>Just now</td>
+      <td><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm">Profile</button><button class="btn btn-primary btn-sm" onclick="window.LinkLoop.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'})">Send Request</button></div></td>
+    </tr>`).join("");
+}
 
-  // This would dynamically rebuild the marketplace table
-  // For now, we use static demo data in HTML
-  console.log(`Marketplace: ${websites.length} websites loaded from Convex`);
+function updateWebsitesTable(mySites) {
+  const tbody = document.getElementById("myWebsitesTableBody");
+  if (!tbody) return;
+  if (!mySites || !mySites.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites yet. Click "Add Website" to get started.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = mySites.map(w => `
+    <tr>
+      <td><strong>${w.domain}</strong></td>
+      <td><span class="badge badge-info">${w.domainAuthority}</span></td>
+      <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
+      <td>${w.niche}</td>
+      <td>${w.country}</td>
+      <td><span class="badge ${w.verified ? 'badge-success' : 'badge-warning'}">${w.verified ? 'Verified' : 'Pending'}</span></td>
+      <td>${w.referringDomains || 0}</td>
+      <td><button class="btn btn-ghost btn-sm">Manage</button></td>
+    </tr>`).join("");
 }
 
 // =============================================
-// EXPORT FOR GLOBAL ACCESS
+// INIT
 // =============================================
-window.ConvexAPI = {
-  client,
-  init: initConvex,
-  loadDashboardData,
-  loadMarketplace,
-  searchMarketplace,
-  loadWebsiteDetail,
-  loadExchangeRequests,
-  sendExchangeRequest,
-  updateExchangeStatus,
-  loadConversations,
-  loadMessages,
-  sendMessage,
-  createConversation,
-  loadNotifications,
-  markNotificationRead,
-  markAllNotificationsRead,
-  loadBacklinks,
-  loadBacklinkStats,
-  addWebsite,
+function init() {
+  console.log("🔌 LinkLoop: Initializing...");
+  const stored = localStorage.getItem("linkloop-user");
+  if (stored) {
+    try { currentUser = JSON.parse(stored); updateAuthUI(currentUser); hideAuthScreen(); console.log("🔌 Session restored:", currentUser.name); }
+    catch (e) { clearUser(); showAuthScreen(); }
+  } else { showAuthScreen(); }
+
+  loadDashboardData().catch(() => {});
+  console.log("🔌 LinkLoop: Ready!");
+}
+
+// =============================================
+// GLOBAL API
+// =============================================
+window.LinkLoop = {
+  client: null,
+  getClient: () => client,
+  signup, login, logout, isLoggedIn, getCurrentUser, getUserId,
+  loadDashboardData, loadMyWebsites, addWebsite, loadMarketplace,
+  loadExchangeRequests, sendExchangeRequest, loadConversations, loadNotifications,
+  hideAuthScreen, showAuthScreen,
 };
 
-// Auto-initialize when loaded
-initConvex();
+initClient();
