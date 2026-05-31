@@ -870,6 +870,53 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
 
 .auth-modal {
   max-width: 420px;
+  /* Force light theme on auth modal regardless of parent page theme */
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+}
+
+/* All text inside auth modal must be dark */
+.auth-modal h2,
+.auth-modal label,
+.auth-modal p,
+.auth-modal .modal-header {
+  color: #0F172A !important;
+}
+
+.auth-modal .modal-header {
+  border-bottom-color: #E2E8F0 !important;
+  background: #FFFFFF !important;
+}
+
+.auth-modal .modal-body {
+  background: #FFFFFF !important;
+}
+
+/* Input fields inside auth modal */
+.auth-modal .input {
+  background: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+.auth-modal .input::placeholder {
+  color: #94A3B8 !important;
+}
+
+.auth-modal .input:focus {
+  border-color: #6C4DF6 !important;
+  background: #FFFFFF !important;
+}
+
+/* Secondary text (eg. "Don't have an account?") */
+.auth-modal p {
+  color: #475569 !important;
+}
+
+/* Close button */
+.auth-modal .modal-close {
+  background: #F1F5F9 !important;
+  color: #475569 !important;
 }
 
 .modal-header {
