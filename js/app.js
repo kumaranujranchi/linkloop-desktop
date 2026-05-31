@@ -654,15 +654,69 @@ window.switchAuthTab = function(tab) {
   }
 };
 
-window.showLogoutMenu = function() {
-  if (window.LinkLoop.isLoggedIn()) {
-    if (confirm("Logout from LinkLoop?")) {
-      window.LinkLoop.logout();
-    }
-  } else {
-    window.LinkLoop.showAuthScreen();
+// =============================================
+// PROFILE DROPDOWN
+// =============================================
+function updateProfileDropdown(user) {
+  const avatarEl = document.getElementById("profileDropdownAvatar");
+  const nameEl   = document.getElementById("profileDropdownName");
+  const emailEl  = document.getElementById("profileDropdownEmail");
+  const badgeEl  = document.getElementById("profileDropdownBadge");
+
+  if (!user) return;
+
+  const initials = user.name
+    ? user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
+    : "?";
+  const roleLabelMap = { free: "Free Plan", pro: "Pro Plan", agency: "Agency Plan", admin: "Administrator" };
+  const roleLabel = roleLabelMap[user.role] || "Free Plan";
+
+  if (avatarEl) avatarEl.textContent = initials;
+  if (nameEl)   nameEl.textContent   = user.name  || "—";
+  if (emailEl)  emailEl.textContent  = user.email || "—";
+  if (badgeEl)  badgeEl.textContent  = roleLabel;
+}
+window.updateProfileDropdown = updateProfileDropdown;
+
+window.toggleProfileDropdown = function() {
+  const dd = document.getElementById("profileDropdown");
+  if (!dd) return;
+
+  if (dd.classList.contains("open")) {
+    dd.classList.remove("open");
+    return;
   }
+
+  // If not logged in, show auth screen instead
+  if (window.LinkLoop && !window.LinkLoop.isLoggedIn()) {
+    window.LinkLoop.showAuthScreen();
+    return;
+  }
+
+  // Populate with fresh user data
+  if (window.LinkLoop) {
+    updateProfileDropdown(window.LinkLoop.getCurrentUser());
+  }
+
+  dd.classList.add("open");
 };
+
+window.closeProfileDropdown = function() {
+  const dd = document.getElementById("profileDropdown");
+  if (dd) dd.classList.remove("open");
+};
+
+// Close dropdown on outside click
+document.addEventListener("click", function(e) {
+  const wrapper = document.getElementById("profileDropdownWrapper");
+  const dd = document.getElementById("profileDropdown");
+  if (dd && dd.classList.contains("open") && wrapper && !wrapper.contains(e.target)) {
+    dd.classList.remove("open");
+  }
+});
+
+// Keep legacy showLogoutMenu as fallback alias
+window.showLogoutMenu = window.toggleProfileDropdown;
 
 window.saveSettingsProfile = function() {
   const user = window.LinkLoop.getCurrentUser();

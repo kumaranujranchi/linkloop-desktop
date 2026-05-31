@@ -199,7 +199,14 @@ function updateAuthUI(user) {
       topbarAvatar.style.fontWeight = "";
       topbarAvatar.style.display = "";
       topbarAvatar.textContent = initials;
-      topbarAvatar.title = "Logged in as " + user.name + " (Click to Logout)";
+      topbarAvatar.title = user.name + " — Click to view profile";
+    }
+
+    // Also populate the profile dropdown header
+    if (typeof updateProfileDropdown === "function") {
+      updateProfileDropdown(user);
+    } else if (window.updateProfileDropdown) {
+      window.updateProfileDropdown(user);
     }
 
     if (dashboardSubtitle) {
