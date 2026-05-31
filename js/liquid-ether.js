@@ -242,9 +242,9 @@
     this.container = c;
     this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     this.resize();
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     this.renderer.autoClear = false;
-    this.renderer.setClearColor(new THREE.Color(0x000000), 0);
+    this.renderer.setClearColor(new THREE.Color('#080c16'), 1.0);
     this.renderer.setPixelRatio(this.pixelRatio);
     this.renderer.setSize(this.width, this.height);
     this.renderer.domElement.style.width = '100%';
@@ -643,12 +643,12 @@
     this.scene = new THREE.Scene(); this.camera = new THREE.Camera();
     this.output = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.RawShaderMaterial({
       vertexShader: FACE_VERT, fragmentShader: COLOR_FRAG, transparent: true, depthWrite: false,
-      uniforms: { velocity: { value: this.simulation.fbos.vel_0.texture }, boundarySpace: { value: new THREE.Vector2() }, palette: { value: this.paletteTex }, bgColor: { value: new THREE.Vector4(0, 0, 0, 0) } }
+      uniforms: { velocity: { value: this.simulation.fbos.vel_0.texture }, boundarySpace: { value: new THREE.Vector2() }, palette: { value: this.paletteTex }, bgColor: { value: new THREE.Vector4(0.031, 0.047, 0.086, 1.0) } }
     }));
     this.scene.add(this.output);
   };
   Output.prototype.resize = function () { this.simulation.resize(); };
-  Output.prototype.render = function () { CommonInst.renderer.setRenderTarget(null); CommonInst.renderer.render(this.scene, this.camera); };
+  Output.prototype.render = function () { CommonInst.renderer.setRenderTarget(null); CommonInst.renderer.clear(); CommonInst.renderer.render(this.scene, this.camera); };
   Output.prototype.update = function () { this.simulation.update(); this.render(); };
 
   // ── WebGLManager ─────────────────────────────────────────
@@ -695,7 +695,8 @@
     CommonInst = new CommonClass(); MouseInst = new MouseClass();
     var opts = { mouseForce: 20, cursorSize: 100, isViscous: false, viscous: 30, iterationsViscous: 32, iterationsPoisson: 32, dt: 0.014, BFECC: true, resolution: 0.5, isBounce: false, colors: ['#5227FF', '#FF9FFC', '#B497CF'], autoDemo: true, autoSpeed: 0.5, autoIntensity: 2.2, takeoverDuration: 0.25, autoResumeDelay: 1000, autoRampDuration: 0.6 };
     if (options) for (var k in options) { if (options.hasOwnProperty(k)) opts[k] = options[k]; }
-    container.style.position = container.style.position || 'relative';
+    var cs = window.getComputedStyle(container);
+    container.style.position = (cs.position === 'static') ? 'relative' : '';
     container.style.overflow = container.style.overflow || 'hidden';
     this._mgr = new WebGLManager(container, opts); this._mgr.start();
   }
