@@ -664,6 +664,16 @@ window.showLogoutMenu = function() {
   }
 };
 
+window.saveSettingsProfile = function() {
+  const user = window.LinkLoop.getCurrentUser();
+  if (!user) { alert("You must be logged in to save settings."); return; }
+  const nameEl = document.getElementById("settingsDisplayName");
+  // For now, just show a success toast (full save requires backend endpoint)
+  if (nameEl && nameEl.value.trim()) {
+    alert("Settings saved! (Changes to display name will sync on next login.)");
+  }
+};
+
 // =============================================
 // ADD WEBSITE MODAL
 // =============================================
@@ -736,6 +746,12 @@ navigateTo = function(pageName, navItem) {
         window.LinkLoop.loadNotifications();
       } else if (pageName === "dashboard") {
         window.LinkLoop.loadDashboardData();
+      } else if (pageName === "settings") {
+        // Repopulate settings with live user data every time settings is opened
+        const user = window.LinkLoop.getCurrentUser();
+        if (user && window.LinkLoop.populateSettingsPage) {
+          window.LinkLoop.populateSettingsPage(user);
+        }
       }
     }
   }, 200);

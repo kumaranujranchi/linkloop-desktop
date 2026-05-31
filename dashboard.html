@@ -11,6 +11,19 @@
   <link rel="stylesheet" href="css/dark-mode.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
+  <!-- CRITICAL: Immediate auth guard — if no token, redirect before any rendering -->
+  <script>
+    (function() {
+      const token = localStorage.getItem('linkloop-token');
+      const user = localStorage.getItem('linkloop-user');
+      if (!token || !user) {
+        // No session at all — redirect immediately to landing page with login prompt
+        const isCleanUrl = !window.location.pathname.includes('.html');
+        window.location.replace(isCleanUrl ? '/?auth=login' : 'index.html?auth=login');
+      }
+    })();
+  </script>
+
   <!-- Convex Browser Bundle (loaded before integration) -->
   <script src="./node_modules/convex/dist/browser.bundle.js"></script>
   <!-- Convex Integration (regular script) -->
@@ -1294,17 +1307,21 @@
               <div style="display:flex;flex-direction:column;gap:16px">
                 <div>
                   <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Display Name</label>
-                  <input class="input" type="text" value="Anuj Kumar">
+                  <input class="input" type="text" id="settingsDisplayName" placeholder="Your name">
                 </div>
                 <div>
                   <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Email</label>
-                  <input class="input" type="email" value="anuj@example.com">
+                  <input class="input" type="email" id="settingsEmail" placeholder="your@email.com" readonly style="opacity:0.7;cursor:not-allowed">
+                </div>
+                <div>
+                  <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Role</label>
+                  <input class="input" type="text" id="settingsRole" placeholder="-" readonly style="opacity:0.7;cursor:not-allowed">
                 </div>
                 <div>
                   <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Company</label>
-                  <input class="input" type="text" placeholder="Your agency or company name">
+                  <input class="input" type="text" id="settingsCompany" placeholder="Your agency or company name">
                 </div>
-                <button class="btn btn-primary" style="align-self:flex-start">Save Changes</button>
+                <button class="btn btn-primary" style="align-self:flex-start" onclick="saveSettingsProfile()">Save Changes</button>
               </div>
             </div>
           </div>

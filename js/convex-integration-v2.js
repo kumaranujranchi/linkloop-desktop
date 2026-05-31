@@ -506,13 +506,35 @@ function updateWebsitesTable(mySites) {
 }
 
 // =============================================
+// SETTINGS PAGE POPULATION
+// =============================================
+function populateSettingsPage(user) {
+  const nameEl = document.getElementById("settingsDisplayName");
+  const emailEl = document.getElementById("settingsEmail");
+  const roleEl = document.getElementById("settingsRole");
+  if (nameEl) nameEl.value = user.name || "";
+  if (emailEl) emailEl.value = user.email || "";
+  if (roleEl) {
+    const roleLabels = { free: "Free Plan", pro: "Pro Plan", agency: "Agency Plan", admin: "Administrator" };
+    roleEl.value = roleLabels[user.role] || user.role || "Free Plan";
+  }
+}
+
+// =============================================
 // INIT
 // =============================================
 async function init() {
   console.log("🔌 LinkLoop: Initializing...");
   const token = getSessionToken();
   const storedUser = localStorage.getItem("linkloop-user");
-  
+  const onDashboard = window.location.pathname.includes("dashboard");
+
+  // Make auth overlay non-closeable on dashboard until auth is verified
+  if (onDashboard) {
+    const authClose = document.querySelector("#authOverlay .modal-close");
+    if (authClose) authClose.style.display = "none";
+  }
+
   if (token) {
     try {
       // Query the me endpoint with our session token to verify validity
@@ -527,7 +549,10 @@ async function init() {
         saveUser(user, token);
         updateAuthUI(user);
         hideAuthScreen();
+        populateSettingsPage(user);
         console.log("🔌 Session restored securely from token:", user.name);
+        // Only load dashboard data when confirmed logged in
+        if (onDashboard) loadDashboardData().catch(() => {});
       } else {
         console.log("🔌 Session token expired or invalid.");
         clearUser();
@@ -542,7 +567,9 @@ async function init() {
           currentUser = JSON.parse(storedUser);
           updateAuthUI(currentUser);
           hideAuthScreen();
+          populateSettingsPage(currentUser);
           console.log("🔌 Session restored offline:", currentUser.name);
+          if (onDashboard) loadDashboardData().catch(() => {});
         } catch (err) {
           clearUser();
           updateAuthUI(null);
@@ -560,7 +587,6 @@ async function init() {
     handleLoggedOutRedirect();
   }
 
-  loadDashboardData().catch(() => {});
   console.log("🔌 LinkLoop: Ready!");
 }
 
@@ -573,7 +599,7 @@ window.LinkLoop = {
   signup, login, logout, isLoggedIn, getCurrentUser, getUserId,
   loadDashboardData, loadMyWebsites, addWebsite, loadMarketplace,
   loadExchangeRequests, sendExchangeRequest, loadConversations, loadNotifications,
-  hideAuthScreen, showAuthScreen,
+  hideAuthScreen, showAuthScreen, populateSettingsPage,
 };
 
 if (document.readyState === "loading") {
