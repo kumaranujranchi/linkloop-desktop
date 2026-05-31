@@ -11,19 +11,10 @@
   <link rel="stylesheet" href="css/dark-mode.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-  <!-- Convex Browser Bundle (loaded before modules) -->
+  <!-- Convex Browser Bundle (loaded before integration) -->
   <script src="./node_modules/convex/dist/browser.bundle.js"></script>
-
-  <!-- Convex Import Map (for ESM module fallback) -->
-  <script type="importmap">
-  {
-    "imports": {
-      "convex": "./node_modules/convex/dist/esm/browser/index.js"
-    }
-  }
-  </script>
-  <!-- Convex Integration Module -->
-  <script type="module" src="js/convex-integration.js"></script>
+  <!-- Convex Integration (regular script) -->
+  <script src="js/convex-integration.js"></script>
 </head>
 <body>
   <!-- Mobile Overlay -->

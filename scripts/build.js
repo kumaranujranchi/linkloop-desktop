@@ -39,7 +39,7 @@ if (!existsSync(convexDestDir)) mkdirSync(convexDestDir, { recursive: true });
 
 cpSync(convexSrc, resolve(convexDestDir, "convex.js"));
 
-// Update the import map in index.html to use the bundled Convex
+// Update production Convex references
 console.log("  🔧 Updating production Convex references...");
 let html = readFileSync(resolve(DIST, "index.html"), "utf-8");
 
@@ -47,12 +47,6 @@ let html = readFileSync(resolve(DIST, "index.html"), "utf-8");
 html = html.replace(
   /\.\/node_modules\/convex\/dist\/browser\.bundle\.js/g,
   "./js/vendor/convex.js"
-);
-
-// Remove import map entirely (browser bundle uses global, not ESM)
-html = html.replace(
-  /<script type="importmap">[\s\S]*?<\/script>/g,
-  ""
 );
 
 writeFileSync(resolve(DIST, "index.html"), html);
