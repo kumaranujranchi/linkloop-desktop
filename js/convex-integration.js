@@ -8,10 +8,10 @@ import { ConvexClient } from "convex";
 // =============================================
 // CONFIGURATION
 // =============================================
-// After running `npx convex deploy`, replace this URL:
-const CONVEX_URL = "https://vibrant-marmot-366.convex.cloud";
-
-const client = new ConvexClient(CONVEX_URL);
+// After running `npx convex deploy`, this URL can be injected at build time from Vercel.
+const DEFAULT_CONVEX_URL = "https://vibrant-marmot-366.convex.cloud";
+const CONVEX_URL = "__CONVEX_URL__";
+const client = new ConvexClient(CONVEX_URL === "__CONVEX_URL__" || !CONVEX_URL ? DEFAULT_CONVEX_URL : CONVEX_URL);
 
 // Track current user (replace with real auth later)
 let currentUserId = null;
