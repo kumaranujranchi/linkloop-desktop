@@ -611,9 +611,6 @@
 <body>
   <div id="liquidEtherContainer" aria-hidden="true"></div>
 
-  <!-- Landing content wrapper — ensures content stays above WebGL canvas -->
-  <div class="landing-content">
-
   <!-- ===== NAVIGATION ===== -->
   <nav class="landing-nav">
     <a href="#" class="landing-logo">
@@ -632,6 +629,9 @@
       <button class="btn btn-secondary btn-sm" id="landingAuthBtn" onclick="window.LinkBuild.showAuthScreen(); if (window.switchAuthTab) window.switchAuthTab('login');">Login</button>
     </div>
   </nav>
+
+  <!-- Landing content wrapper — ensures content stays above WebGL canvas -->
+  <div class="landing-content">
 
   <!-- ===== HERO SECTION ===== -->
   <header class="hero">
@@ -878,6 +878,8 @@
     </div>
   </footer>
 
+  </div><!-- /landing-content -->
+
   <!-- ========== AUTH OVERLAY ========== -->
   <div class="modal-overlay hidden" id="authOverlay">
     <div class="modal-box auth-modal">
@@ -924,8 +926,6 @@
       </div>
     </div>
   </div>
-
-  </div><!-- /landing-content -->
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
