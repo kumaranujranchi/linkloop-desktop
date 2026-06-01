@@ -1155,3 +1155,39 @@ window.handleChangePassword = async function() {
     msgEl.innerHTML = '<span style="color:var(--danger)">Connection error. Please try again.</span>';
   }
 };
+
+window.copyToClipboard = function(elementId, container) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const text = el.textContent || el.innerText;
+  
+  navigator.clipboard.writeText(text).then(() => {
+    // Show tooltip
+    const tooltip = container.querySelector('.copy-tooltip');
+    if (tooltip) {
+      tooltip.style.display = 'block';
+      
+      // Update button text/color to show success state
+      const btnSpan = container.querySelector('button span');
+      const originalText = btnSpan ? btnSpan.textContent : 'Copy';
+      if (btnSpan) btnSpan.textContent = 'Copied!';
+      
+      const btnSvg = container.querySelector('button svg');
+      let originalSvg = btnSvg ? btnSvg.outerHTML : '';
+      if (btnSvg) {
+        btnSvg.outerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>`;
+      }
+      
+      setTimeout(() => {
+        tooltip.style.display = 'none';
+        if (btnSpan) btnSpan.textContent = originalText;
+        const newSvg = container.querySelector('button svg');
+        if (newSvg && originalSvg) {
+          newSvg.outerHTML = originalSvg;
+        }
+      }, 2000);
+    }
+  }).catch(err => {
+    console.error('Failed to copy: ', err);
+  });
+};
