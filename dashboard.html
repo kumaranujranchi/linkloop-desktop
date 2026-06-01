@@ -29,7 +29,7 @@
   <!-- Convex Integration (regular script) -->
   <script src="js/convex-integration-v2.js"></script>
 </head>
-<body>
+<body class="dashboard-body">
   <!-- Mobile Overlay -->
   <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileSidebar()"></div>
 
@@ -236,8 +236,8 @@
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </div>
               </div>
-              <div class="kpi-card-value">1,284</div>
-              <div class="kpi-card-change up">↑ 12.5% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
+              <div class="kpi-card-value">—</div>
+              <div class="kpi-card-change" style="color:var(--text-tertiary)">Loading...</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-card-header">
@@ -246,8 +246,8 @@
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5M3 3l7.5 7.5"/></svg>
                 </div>
               </div>
-              <div class="kpi-card-value">342</div>
-              <div class="kpi-card-change up">↑ 8.3% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
+              <div class="kpi-card-value">—</div>
+              <div class="kpi-card-change" style="color:var(--text-tertiary)">Loading...</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-card-header">
@@ -256,8 +256,8 @@
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
               </div>
-              <div class="kpi-card-value">48</div>
-              <div class="kpi-card-change down">↓ 3.1% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
+              <div class="kpi-card-value">—</div>
+              <div class="kpi-card-change" style="color:var(--text-tertiary)">Loading...</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-card-header">
@@ -266,8 +266,8 @@
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
               </div>
-              <div class="kpi-card-value">2,891</div>
-              <div class="kpi-card-change up">↑ 15.7% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
+              <div class="kpi-card-value">—</div>
+              <div class="kpi-card-change" style="color:var(--text-tertiary)">Loading...</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-card-header">
@@ -276,8 +276,8 @@
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 </div>
               </div>
-              <div class="kpi-card-value">94<span style="font-size:1rem;color:var(--text-tertiary)">/100</span></div>
-              <div class="kpi-card-change up">↑ 2.4 pts</div>
+              <div class="kpi-card-value">—</div>
+              <div class="kpi-card-change" style="color:var(--text-tertiary)">Loading...</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-card-header">
@@ -286,8 +286,8 @@
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
                 </div>
               </div>
-              <div class="kpi-card-value">23.4%</div>
-              <div class="kpi-card-change up">↑ 4.1% <span style="color:var(--text-tertiary);font-weight:400">vs last month</span></div>
+              <div class="kpi-card-value">—</div>
+              <div class="kpi-card-change" style="color:var(--text-tertiary)">Loading...</div>
             </div>
           </div>
 
@@ -311,30 +311,10 @@
                 <span class="card-header-title">Recent Messages</span>
                 <button class="btn btn-ghost btn-sm" onclick="navigateTo('messages')">View All →</button>
               </div>
-              <div class="card-body" style="padding:0">
-                <div class="conversation-item">
-                  <div class="conversation-avatar" style="background:#10B981">SR</div>
-                  <div class="conversation-info">
-                    <div class="conversation-name">Sarah from SEOHub</div>
-                    <div class="conversation-preview">Great! Let me check the anchor text options...</div>
-                  </div>
-                  <div class="conversation-time">2m ago</div>
-                </div>
-                <div class="conversation-item">
-                  <div class="conversation-avatar" style="background:#F59E0B">MK</div>
-                  <div class="conversation-info">
-                    <div class="conversation-name">Mike from BacklinkPro</div>
-                    <div class="conversation-preview">I've sent the exchange request. Please review.</div>
-                  </div>
-                  <div class="conversation-time">15m ago</div>
-                </div>
-                <div class="conversation-item">
-                  <div class="conversation-avatar" style="background:#6C4DF6">JD</div>
-                  <div class="conversation-info">
-                    <div class="conversation-name">Jessica (Agency Owner)</div>
-                    <div class="conversation-preview">We have 3 new websites available for exchange...</div>
-                  </div>
-                  <div class="conversation-time">1h ago</div>
+              <div class="card-body" style="padding:0" id="dashboardRecentMessages">
+                <div style="padding:32px 16px;text-align:center;color:var(--text-tertiary);font-size:0.85rem">
+                  <div style="font-size:1.5rem;margin-bottom:8px">💬</div>
+                  Loading recent messages...
                 </div>
               </div>
             </div>
@@ -345,27 +325,10 @@
                 <span class="card-header-title">New Opportunities</span>
                 <button class="btn btn-ghost btn-sm" onclick="navigateTo('marketplace')">View All →</button>
               </div>
-              <div class="card-body" style="padding:0">
-                <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.9rem">seomastery.com</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 65 · Tech · 🇺🇸</div>
-                  </div>
-                  <span class="badge badge-success">High Match</span>
-                </div>
-                <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.9rem">contentforge.io</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 52 · SaaS · 🇬🇧</div>
-                  </div>
-                  <span class="badge badge-purple">New</span>
-                </div>
-                <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.9rem">growthhacker.blog</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 58 · Marketing · 🇨🇦</div>
-                  </div>
-                  <span class="badge badge-warning">Trending</span>
+              <div class="card-body" style="padding:0" id="dashboardOpportunities">
+                <div style="padding:32px 16px;text-align:center;color:var(--text-tertiary);font-size:0.85rem">
+                  <div style="font-size:1.5rem;margin-bottom:8px">🔍</div>
+                  Loading opportunities...
                 </div>
               </div>
             </div>
@@ -398,56 +361,10 @@
                   </tr>
                 </thead>
                 <tbody id="myWebsitesTableBody">
-                  <tr>
-                    <td><strong>myseotools.com</strong></td>
-                    <td><span class="badge badge-info">52</span></td>
-                    <td>45K/mo</td>
-                    <td>SEO Tools</td>
-                    <td>🇺🇸 US</td>
-                    <td><span class="badge badge-success">Verified</span></td>
-                    <td>24</td>
-                    <td><button class="btn btn-ghost btn-sm">Manage</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>contentmarketing.ai</strong></td>
-                    <td><span class="badge badge-info">38</span></td>
-                    <td>12K/mo</td>
-                    <td>AI Content</td>
-                    <td>🇺🇸 US</td>
-                    <td><span class="badge badge-success">Verified</span></td>
-                    <td>18</td>
-                    <td><button class="btn btn-ghost btn-sm">Manage</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>saasgrowthtips.com</strong></td>
-                    <td><span class="badge badge-info">45</span></td>
-                    <td>28K/mo</td>
-                    <td>SaaS Growth</td>
-                    <td>🇬🇧 UK</td>
-                    <td><span class="badge badge-warning">Pending</span></td>
-                    <td>7</td>
-                    <td><button class="btn btn-ghost btn-sm">Verify</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>affiliatemastery.org</strong></td>
-                    <td><span class="badge badge-info">61</span></td>
-                    <td>89K/mo</td>
-                    <td>Affiliate</td>
-                    <td>🇺🇸 US</td>
-                    <td><span class="badge badge-success">Verified</span></td>
-                    <td>42</td>
-                    <td><button class="btn btn-ghost btn-sm">Manage</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>bloggingwizard.co</strong></td>
-                    <td><span class="badge badge-info">33</span></td>
-                    <td>6K/mo</td>
-                    <td>Blogging</td>
-                    <td>🇨🇦 CA</td>
-                    <td><span class="badge badge-danger">Rejected</span></td>
-                    <td>2</td>
-                    <td><button class="btn btn-ghost btn-sm">Retry</button></td>
-                  </tr>
+                  <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">
+                    <div style="font-size:1.5rem;margin-bottom:8px">🌐</div>
+                    Loading your websites...
+                  </td></tr>
                 </tbody>
               </table>
             </div>
@@ -465,9 +382,10 @@
               <div style="display:flex;gap:12px;margin-bottom:12px">
                 <div style="flex:1;position:relative">
                   <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray-400)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                  <input class="input" type="text" placeholder="Search by domain, niche, or keyword..." style="padding-left:36px">
+                  <input class="input" type="text" id="marketplaceSearchInput" placeholder="Search by domain, niche, or keyword..." style="padding-left:36px"
+                    onkeydown="if(event.key==='Enter')searchMarketplace()">
                 </div>
-                <button class="btn btn-primary">Search</button>
+                <button class="btn btn-primary" onclick="searchMarketplace()">Search</button>
               </div>
               <div class="filter-bar">
                 <select class="select"><option>All Niches</option><option>SEO Tools</option><option>SaaS</option><option>Marketing</option><option>Tech</option><option>Blogging</option><option>Ecommerce</option></select>
@@ -483,7 +401,7 @@
           <!-- Results Table -->
           <div class="card">
             <div class="card-header">
-              <span class="card-header-title">1,284 Results</span>
+              <span class="card-header-title" id="marketplaceResultsLabel">Loading...</span>
               <span style="font-size:0.8rem;color:var(--text-tertiary)">Sorted by Relevance</span>
             </div>
             <div class="table-container">
@@ -501,134 +419,10 @@
                   </tr>
                 </thead>
                 <tbody id="marketplaceTableBody">
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">SM</div>
-                        <strong>seomastery.com</strong>
-                        <span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">65</span></td>
-                    <td>120K/mo</td>
-                    <td>SEO Tools</td>
-                    <td>🇺🇸</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:92%"></div></div>
-                        92%
-                      </div>
-                    </td>
-                    <td>2 days ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:#10B981;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">CF</div>
-                        <strong>contentforge.io</strong>
-                        <span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">52</span></td>
-                    <td>38K/mo</td>
-                    <td>SaaS</td>
-                    <td>🇬🇧</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:87%"></div></div>
-                        87%
-                      </div>
-                    </td>
-                    <td>5 days ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:#F59E0B;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">GH</div>
-                        <strong>growthhacker.blog</strong>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">58</span></td>
-                    <td>72K/mo</td>
-                    <td>Marketing</td>
-                    <td>🇨🇦</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill warning" style="width:74%"></div></div>
-                        74%
-                      </div>
-                    </td>
-                    <td>1 week ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:#EF4444;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">LS</div>
-                        <strong>linkstrategist.com</strong>
-                        <span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">71</span></td>
-                    <td>210K/mo</td>
-                    <td>SEO Agency</td>
-                    <td>🇺🇸</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:96%"></div></div>
-                        96%
-                      </div>
-                    </td>
-                    <td>3 days ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="display:flex;align-items:center;gap:8px">
-                        <div style="width:28px;height:28px;border-radius:6px;background:#3B82F6;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">BP</div>
-                        <strong>backlinkpro.net</strong>
-                      </div>
-                    </td>
-                    <td><span class="badge badge-info">44</span></td>
-                    <td>18K/mo</td>
-                    <td>Link Building</td>
-                    <td>🇩🇪</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill warning" style="width:68%"></div></div>
-                        68%
-                      </div>
-                    </td>
-                    <td>2 weeks ago</td>
-                    <td>
-                      <div style="display:flex;gap:6px">
-                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('website-detail')">Profile</button>
-                        <button class="btn btn-primary btn-sm">Send Request</button>
-                      </div>
-                    </td>
-                  </tr>
+                  <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">
+                    <div style="font-size:1.5rem;margin-bottom:8px">🔍</div>
+                    Loading marketplace...<br><span style="font-size:0.8rem">Use the filters above and click Search to find exchange partners.</span>
+                  </td></tr>
                 </tbody>
               </table>
             </div>
@@ -651,118 +445,9 @@
         <section class="page-section" id="page-website-detail">
           <button class="btn btn-ghost btn-sm" style="margin-bottom:16px" onclick="navigateTo('marketplace')">← Back to Marketplace</button>
 
-          <!-- Hero Section -->
-          <div class="card" style="margin-bottom:24px">
-            <div class="card-body" style="padding:28px">
-              <div style="display:flex;align-items:center;gap:20px">
-                <div style="width:64px;height:64px;border-radius:var(--radius-lg);background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:1.5rem;flex-shrink:0">SM</div>
-                <div style="flex:1">
-                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-                    <h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em">seomastery.com</h2>
-                    <span class="badge badge-success">✓ Verified</span>
-                  </div>
-                  <div style="color:var(--text-secondary);font-size:0.9rem">SEO Tools &amp; Resources · United States · English</div>
-                </div>
-                <div style="text-align:center">
-                  <div class="reputation-ring" style="width:80px;height:80px">
-                    <svg width="80" height="80" viewBox="0 0 80 80">
-                      <circle class="bg-circle" cx="40" cy="40" r="34" stroke-width="6"/>
-                      <circle class="progress-circle" cx="40" cy="40" r="34" stroke-width="6"
-                        stroke-dasharray="213.6" stroke-dashoffset="17.1"/>
-                    </svg>
-                    <span class="reputation-score-text">92</span>
-                  </div>
-                  <div style="font-size:0.75rem;color:var(--text-tertiary);margin-top:4px">Reputation</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Metrics Cards -->
-          <div class="kpi-grid" style="margin-bottom:24px">
-            <div class="kpi-card">
-              <span class="kpi-card-label">Domain Authority</span>
-              <div class="kpi-card-value">65</div>
-              <div class="kpi-card-change up">↑ 3 pts this month</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Spam Score</span>
-              <div class="kpi-card-value" style="color:var(--success)">2<span style="font-size:1rem">%</span></div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">Very Low Risk</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Traffic Estimate</span>
-              <div class="kpi-card-value">120K<span style="font-size:0.9rem;color:var(--text-tertiary)">/mo</span></div>
-              <div class="kpi-card-change up">↑ 15% vs last month</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Referring Domains</span>
-              <div class="kpi-card-value">3,240</div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">1,820 dofollow</div>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-card-label">Exchange Success Rate</span>
-              <div class="kpi-card-value">94<span style="font-size:1rem;color:var(--text-tertiary)">%</span></div>
-              <div style="font-size:0.8rem;color:var(--text-tertiary)">47 of 50 completed</div>
-            </div>
-          </div>
-
-          <!-- Tabs -->
-          <div class="tabs">
-            <div class="tab-item active" onclick="switchTab(this)">Overview</div>
-            <div class="tab-item" onclick="switchTab(this)">Exchange Opportunities</div>
-            <div class="tab-item" onclick="switchTab(this)">Reviews</div>
-            <div class="tab-item" onclick="switchTab(this)">Backlink History</div>
-            <div class="tab-item" onclick="switchTab(this)">Owner Information</div>
-          </div>
-
-          <!-- SEO Metrics Strategy UI -->
-          <div class="card" style="margin-bottom:20px">
-            <div class="card-header"><span class="card-header-title">SEO Metrics</span></div>
-            <div class="card-body">
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-                <div>
-                  <div style="margin-bottom:16px">
-                    <div style="font-size:0.8rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:600">Domain Authority</div>
-                    <div style="font-size:2rem;font-weight:800">42</div>
-                    <div class="progress-bar" style="margin-top:8px"><div class="progress-bar-fill" style="width:42%"></div></div>
-                  </div>
-                  <div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:600">Spam Score</div>
-                    <div style="font-size:2rem;font-weight:800;color:var(--success)">2%</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">Low risk — Safe for exchange</div>
-                  </div>
-                </div>
-                <div>
-                  <div style="background:var(--bg-tertiary);border-radius:var(--radius-lg);padding:20px">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-                      <div>
-                        <div style="font-weight:600;font-size:0.9rem">📊 Metrics Updated</div>
-                        <div style="font-size:1.2rem;font-weight:700">15 Jan 2026</div>
-                        <div style="font-size:0.75rem;color:var(--text-tertiary)">Moz API refresh</div>
-                      </div>
-                      <span class="badge badge-info">Updated</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;align-items:center">
-                      <div>
-                        <div style="font-weight:600;font-size:0.9rem">🔍 Last Checked</div>
-                        <div style="font-size:1.2rem;font-weight:700">Today</div>
-                        <div style="font-size:0.75rem;color:var(--text-tertiary)">LinkBuild verification</div>
-                      </div>
-                      <span class="badge badge-success">Checked</span>
-                    </div>
-                    <div style="margin-top:16px;padding:12px;background:rgba(108,77,246,0.08);border-radius:8px;font-size:0.8rem;color:var(--text-secondary)">
-                      <strong>💡 Note:</strong> "Checked" means we verified the backlink is still live. "Updated" means the SEO metrics (DA, traffic) were refreshed from the API. These are different actions.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style="display:flex;gap:12px">
-            <button class="btn btn-primary btn-lg">Send Exchange Request</button>
-            <button class="btn btn-secondary btn-lg">Save to List</button>
+          <div id="websiteDetailContent" style="text-align:center;padding:60px 20px;color:var(--text-tertiary)">
+            <div style="font-size:2.5rem;margin-bottom:12px">🌐</div>
+            <div style="font-weight:600;font-size:1rem">Select a website from the Marketplace to view details.</div>
           </div>
         </section>
 
@@ -783,36 +468,10 @@
                 <div class="kanban-column-title">
                   <span class="status-dot blue"></span> New Requests
                 </div>
-                <span class="kanban-column-count">8</span>
+                <span class="kanban-column-count">0</span>
               </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">seomastery.com</div>
-                  <div class="kanban-card-partner">Partner: contentforge.io</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "SEO tools guide"</div>
-                  <div class="kanban-card-meta">
-                    <span>2 hours ago</span>
-                    <span class="badge badge-neutral">New</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">growthhacker.blog</div>
-                  <div class="kanban-card-partner">Partner: saasgrowthtips.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "growth marketing"</div>
-                  <div class="kanban-card-meta">
-                    <span>5 hours ago</span>
-                    <span class="badge badge-neutral">New</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">linkstrategist.com</div>
-                  <div class="kanban-card-partner">Partner: myseotools.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "link building strategy"</div>
-                  <div class="kanban-card-meta">
-                    <span>1 day ago</span>
-                    <span class="badge badge-neutral">New</span>
-                  </div>
-                </div>
+              <div class="kanban-cards" id="kanban-new">
+                <div style="padding:24px 16px;text-align:center;color:var(--text-tertiary);font-size:0.8rem">Loading...</div>
               </div>
             </div>
 
@@ -822,27 +481,10 @@
                 <div class="kanban-column-title">
                   <span class="status-dot orange"></span> Negotiating
                 </div>
-                <span class="kanban-column-count">5</span>
+                <span class="kanban-column-count">0</span>
               </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">backlinkpro.net</div>
-                  <div class="kanban-card-partner">Partner: affiliatemastery.org</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "best affiliate programs"</div>
-                  <div class="kanban-card-meta">
-                    <span>3 days ago</span>
-                    <span class="badge badge-warning">Negotiating</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">techinsider.com</div>
-                  <div class="kanban-card-partner">Partner: saasgrowthtips.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "SaaS trends 2026"</div>
-                  <div class="kanban-card-meta">
-                    <span>4 days ago</span>
-                    <span class="badge badge-warning">Counter Offer</span>
-                  </div>
-                </div>
+              <div class="kanban-cards" id="kanban-negotiating">
+                <div style="padding:24px 16px;text-align:center;color:var(--text-tertiary);font-size:0.8rem">Loading...</div>
               </div>
             </div>
 
@@ -852,27 +494,10 @@
                 <div class="kanban-column-title">
                   <span class="status-dot green"></span> Accepted
                 </div>
-                <span class="kanban-column-count">12</span>
+                <span class="kanban-column-count">0</span>
               </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">contentmarketing.ai</div>
-                  <div class="kanban-card-partner">Partner: seomastery.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "AI content tools"</div>
-                  <div class="kanban-card-meta">
-                    <span>1 week ago</span>
-                    <span class="badge badge-success">Accepted</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">bloggingwizard.co</div>
-                  <div class="kanban-card-partner">Partner: contentforge.io</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "blogging tips"</div>
-                  <div class="kanban-card-meta">
-                    <span>1 week ago</span>
-                    <span class="badge badge-success">Accepted</span>
-                  </div>
-                </div>
+              <div class="kanban-cards" id="kanban-accepted">
+                <div style="padding:24px 16px;text-align:center;color:var(--text-tertiary);font-size:0.8rem">Loading...</div>
               </div>
             </div>
 
@@ -882,27 +507,10 @@
                 <div class="kanban-column-title">
                   <span class="status-dot green"></span> Completed
                 </div>
-                <span class="kanban-column-count">47</span>
+                <span class="kanban-column-count">0</span>
               </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">saasgrowthtips.com</div>
-                  <div class="kanban-card-partner">Partner: seomastery.com</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "SaaS growth hacks"</div>
-                  <div class="kanban-card-meta">
-                    <span>2 weeks ago</span>
-                    <span class="badge badge-purple">✓ Done</span>
-                  </div>
-                </div>
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">affiliatemastery.org</div>
-                  <div class="kanban-card-partner">Partner: growthhacker.blog</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "affiliate marketing guide"</div>
-                  <div class="kanban-card-meta">
-                    <span>3 weeks ago</span>
-                    <span class="badge badge-purple">✓ Done</span>
-                  </div>
-                </div>
+              <div class="kanban-cards" id="kanban-completed">
+                <div style="padding:24px 16px;text-align:center;color:var(--text-tertiary);font-size:0.8rem">Loading...</div>
               </div>
             </div>
 
@@ -912,18 +520,10 @@
                 <div class="kanban-column-title">
                   <span class="status-dot red"></span> Rejected
                 </div>
-                <span class="kanban-column-count">3</span>
+                <span class="kanban-column-count">0</span>
               </div>
-              <div class="kanban-cards">
-                <div class="kanban-card">
-                  <div class="kanban-card-domain">spammysite.xyz</div>
-                  <div class="kanban-card-partner">Partner: unknown</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "buy cheap links"</div>
-                  <div class="kanban-card-meta">
-                    <span>1 month ago</span>
-                    <span class="badge badge-danger">Spam Detected</span>
-                  </div>
-                </div>
+              <div class="kanban-cards" id="kanban-rejected">
+                <div style="padding:24px 16px;text-align:center;color:var(--text-tertiary);font-size:0.8rem">Loading...</div>
               </div>
             </div>
           </div>
@@ -932,123 +532,118 @@
         <!-- ==================== MESSAGES ==================== -->
         <section class="page-section" id="page-messages">
           <div class="messages-layout">
-            <!-- Conversations List -->
-            <div class="conversations-list">
+
+            <!-- ===== Conversations List ===== -->
+            <div class="conversations-list" id="conversationsList">
               <div class="conversations-search">
                 <div class="topbar-search">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                  <input type="text" placeholder="Search conversations...">
+                  <input type="text" id="convSearchInput" placeholder="Search conversations..." oninput="window.LinkBuild.filterConversations(this.value)">
                 </div>
               </div>
-              <div class="conversation-item active">
-                <div class="conversation-avatar" style="background:#10B981">SR</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Sarah from SEOHub</div>
-                  <div class="conversation-preview">Great! Let me check the anchor text...</div>
+              <div id="convsListInner">
+                <div id="convsLoading" style="padding:32px 16px;text-align:center;color:var(--text-tertiary);font-size:0.85rem">
+                  <div style="margin-bottom:8px;font-size:1.5rem">💬</div>Loading conversations...
                 </div>
-                <div class="conversation-time">2m</div>
               </div>
-              <div class="conversation-item">
-                <div class="conversation-avatar" style="background:#F59E0B">MK</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Mike (BacklinkPro)</div>
-                  <div class="conversation-preview">I've sent the exchange request.</div>
-                </div>
-                <div class="conversation-time">15m</div>
-              </div>
-              <div class="conversation-item">
-                <div class="conversation-avatar" style="background:#6C4DF6">JD</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Jessica (Agency Owner)</div>
-                  <div class="conversation-preview">We have 3 new websites available...</div>
-                </div>
-                <div class="conversation-time">1h</div>
-              </div>
-              <div class="conversation-item">
-                <div class="conversation-avatar" style="background:#3B82F6">TP</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Tom (SEO Consultant)</div>
-                  <div class="conversation-preview">Can we do a 3-way exchange?</div>
-                </div>
-                <div class="conversation-time">3h</div>
-              </div>
-              <div class="conversation-item">
-                <div class="conversation-avatar" style="background:#EF4444">AM</div>
-                <div class="conversation-info">
-                  <div class="conversation-name">Anna (ContentForge)</div>
-                  <div class="conversation-preview">Thanks for the link! Looks great.</div>
-                </div>
-                <div class="conversation-time">1d</div>
+              <div id="convsEmpty" style="display:none;padding:40px 20px;text-align:center">
+                <div style="font-size:2rem;margin-bottom:12px">💬</div>
+                <div style="font-weight:600;margin-bottom:6px;font-size:0.95rem">No conversations yet</div>
+                <div style="font-size:0.82rem;color:var(--text-tertiary);margin-bottom:16px">Start a conversation from the Marketplace or Exchange Requests</div>
+                <button class="btn btn-primary btn-sm" onclick="navigateTo('marketplace')">Browse Marketplace →</button>
               </div>
             </div>
 
-            <!-- Chat Area -->
-            <div class="chat-area">
-              <div class="chat-header">
-                <div style="display:flex;align-items:center;gap:10px">
-                  <button class="mobile-back-btn hide-desktop" onclick="backToConversations()" style="margin-right:4px">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-                    Back
-                  </button>
-                  <div class="conversation-avatar" style="background:#10B981;width:36px;height:36px;font-size:0.8rem;flex-shrink:0">SR</div>
-                  <div>
-                    <div style="font-weight:700;font-size:0.95rem">Sarah from SEOHub</div>
-                    <div style="font-size:0.75rem;color:var(--success)">● Online</div>
+            <!-- ===== Chat Area ===== -->
+            <div class="chat-area" id="chatArea">
+
+              <!-- No conversation selected -->
+              <div id="chatPlaceholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-tertiary);gap:8px">
+                <div style="font-size:3.5rem">💬</div>
+                <div style="font-weight:700;font-size:1.05rem;color:var(--text-primary)">Select a conversation</div>
+                <div style="font-size:0.85rem">Click a conversation on the left to start chatting</div>
+              </div>
+
+              <!-- Active Conversation -->
+              <div id="chatActive" style="display:none;flex-direction:column;height:100%">
+
+                <div class="chat-header" id="chatHeader">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <button class="mobile-back-btn hide-desktop" onclick="backToConversations()" style="margin-right:4px">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                      Back
+                    </button>
+                    <div class="conversation-avatar" id="chatHeaderAvatar" style="width:36px;height:36px;font-size:0.8rem;flex-shrink:0">?</div>
+                    <div>
+                      <div style="font-weight:700;font-size:0.95rem" id="chatHeaderName">Partner</div>
+                      <div style="font-size:0.75rem;color:var(--text-tertiary)" id="chatHeaderSub">Exchange Partner</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <button class="btn btn-ghost btn-sm" id="chatViewExchangeBtn" style="display:none" onclick="window.LinkBuild.viewExchangeFromChat()">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                      Exchange
+                    </button>
                   </div>
                 </div>
-                <button class="btn btn-ghost btn-sm">⋮</button>
-              </div>
 
-              <div class="chat-messages">
-                <div class="chat-bubble received">
-                  Hi Anuj! I saw your website myseotools.com — would you be interested in a link exchange?
+                <div class="chat-messages" id="chatMessages">
+                  <!-- Messages rendered by JS -->
                 </div>
-                <div class="chat-bubble received">
-                  We have seomastery.com with DA 65 and could place your link in our "Top SEO Tools" article. Looking for a relevant link back.
-                </div>
-                <div class="chat-bubble sent">
-                  Hi Sarah! That sounds interesting. What anchor text were you thinking?
-                </div>
-                <div class="chat-bubble received">
-                  Something like "best SEO tools for beginners" or "SEO software review" — whatever fits naturally in your content.
-                </div>
-                <div class="chat-bubble sent">
-                  "best SEO tools for beginners" works great. Let me set up the exchange request on LinkBuild.
-                </div>
-                <div class="chat-bubble received">
-                  Perfect! I've already created one on my end. You should see it in your Exchange Requests. 😊
-                </div>
-              </div>
 
-              <div class="chat-input-area">
-                <button class="btn btn-ghost btn-icon" title="Attach">📎</button>
-                <input type="text" placeholder="Type your message...">
-                <button class="btn btn-primary btn-icon" title="Send">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
+                <div id="chatTypingIndicator" style="display:none;padding:4px 16px 0;font-size:0.78rem;color:var(--text-tertiary);font-style:italic"></div>
+
+                <div class="chat-input-area">
+                  <button class="btn btn-ghost btn-icon" title="Attach" id="msgAttachBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                  </button>
+                  <input type="text" id="msgInput" placeholder="Type your message..." autocomplete="off">
+                  <button class="btn btn-primary btn-icon" id="msgSendBtn" title="Send">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <!-- Exchange Detail Panel -->
-            <div class="chat-detail-panel">
+            <!-- ===== Exchange Detail Panel ===== -->
+            <div class="chat-detail-panel" id="chatDetailPanel">
               <h4 style="font-weight:700;margin-bottom:16px;font-size:0.9rem">Exchange Details</h4>
-              <div style="background:var(--bg-tertiary);border-radius:var(--radius-md);padding:14px;margin-bottom:12px">
-                <div style="font-weight:600;font-size:0.85rem;margin-bottom:4px">Your Website</div>
-                <div style="color:var(--primary-purple);font-weight:600">myseotools.com</div>
-                <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 52 · 45K/mo</div>
+
+              <!-- No exchange linked -->
+              <div id="panelNoExchange" style="text-align:center;color:var(--text-tertiary);padding:16px 0">
+                <div style="font-size:1.8rem;margin-bottom:10px">🤝</div>
+                <div style="font-size:0.82rem;line-height:1.5">No exchange linked to this conversation yet.</div>
+                <button class="btn btn-secondary btn-sm" style="margin-top:14px;width:100%" onclick="navigateTo('marketplace')">Find a Partner →</button>
               </div>
-              <div style="text-align:center;color:var(--text-tertiary);margin:8px 0">⇄</div>
-              <div style="background:var(--bg-tertiary);border-radius:var(--radius-md);padding:14px;margin-bottom:12px">
-                <div style="font-weight:600;font-size:0.85rem;margin-bottom:4px">Partner Website</div>
-                <div style="color:var(--primary-purple);font-weight:600">seomastery.com</div>
-                <div style="font-size:0.8rem;color:var(--text-tertiary)">DA 65 · 120K/mo</div>
+
+              <!-- Exchange linked (shown by JS) -->
+              <div id="panelExchangeDetails" style="display:none">
+                <div style="background:var(--bg-tertiary);border-radius:var(--radius-md);padding:14px;margin-bottom:10px">
+                  <div style="font-size:0.75rem;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px">Your Website</div>
+                  <div style="color:var(--primary-purple);font-weight:700;font-size:0.95rem" id="panelFromDomain">—</div>
+                  <div style="font-size:0.78rem;color:var(--text-tertiary);margin-top:2px" id="panelFromStats">—</div>
+                </div>
+                <div style="text-align:center;color:var(--text-tertiary);margin:6px 0;font-size:1.1rem">⇄</div>
+                <div style="background:var(--bg-tertiary);border-radius:var(--radius-md);padding:14px;margin-bottom:14px">
+                  <div style="font-size:0.75rem;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px">Partner Website</div>
+                  <div style="color:var(--primary-purple);font-weight:700;font-size:0.95rem" id="panelToDomain">—</div>
+                  <div style="font-size:0.78rem;color:var(--text-tertiary);margin-top:2px" id="panelToStats">—</div>
+                </div>
+                <div style="margin-bottom:16px">
+                  <div style="font-size:0.75rem;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px">Status</div>
+                  <span class="badge" id="panelStatusBadge">—</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <button class="btn btn-success" id="panelAcceptBtn" style="width:100%;display:none" onclick="window.LinkBuild.dealAction('accepted')">✅ Accept Deal</button>
+                  <button class="btn btn-primary" id="panelCompleteBtn" style="width:100%;display:none" onclick="window.LinkBuild.dealAction('completed')">🎉 Mark as Complete</button>
+                  <button class="btn btn-secondary" id="panelNegotiateBtn" style="width:100%;display:none" onclick="window.LinkBuild.dealAction('negotiating')">💬 Move to Negotiating</button>
+                  <button class="btn btn-ghost btn-sm" id="panelRejectBtn" style="width:100%;color:var(--danger);display:none" onclick="window.LinkBuild.dealAction('rejected')">✕ Decline</button>
+                </div>
+                <hr style="margin:14px 0;border:none;border-top:1px solid var(--border-primary)">
+                <button class="btn btn-ghost btn-sm" style="width:100%" id="panelViewFullBtn" onclick="window.LinkBuild.viewExchangeFromChat()">View Full Request →</button>
               </div>
-              <div style="margin-top:12px">
-                <div style="font-size:0.8rem;font-weight:600;color:var(--text-tertiary);margin-bottom:4px">Status</div>
-                <span class="badge badge-warning">Negotiating</span>
-              </div>
-              <button class="btn btn-primary" style="width:100%;margin-top:16px">View Full Request</button>
             </div>
+
           </div>
         </section>
 
@@ -1108,77 +703,11 @@
                     <th>Health Score</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">seomastery.com/blog/top-seo-tools</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">myseotools.com/features</td>
-                    <td>best SEO tools</td>
-                    <td><span class="badge badge-info">Dofollow</span></td>
-                    <td><span class="badge badge-success">Healthy</span></td>
-                    <td>Today</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:98%"></div></div>
-                        98%
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">contentforge.io/articles/ai-writing</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">contentmarketing.ai/tools</td>
-                    <td>AI content tools</td>
-                    <td><span class="badge badge-info">Dofollow</span></td>
-                    <td><span class="badge badge-success">Healthy</span></td>
-                    <td>Today</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:95%"></div></div>
-                        95%
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">growthhacker.blog/growth-strategies</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">saasgrowthtips.com/playbook</td>
-                    <td>growth marketing</td>
-                    <td><span class="badge badge-neutral">Nofollow</span></td>
-                    <td><span class="badge badge-warning">Needs Review</span></td>
-                    <td>2 days ago</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill warning" style="width:65%"></div></div>
-                        65%
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">oldblog.com/outdated-post</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">myseotools.com/old-page</td>
-                    <td>SEO guide</td>
-                    <td><span class="badge badge-info">Dofollow</span></td>
-                    <td><span class="badge badge-danger">Removed</span></td>
-                    <td>5 days ago</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill danger" style="width:12%"></div></div>
-                        12%
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">linkstrategist.com/guide/link-building</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">myseotools.com/guide</td>
-                    <td>link building strategy</td>
-                    <td><span class="badge badge-info">Dofollow</span></td>
-                    <td><span class="badge badge-success">Healthy</span></td>
-                    <td>Today</td>
-                    <td>
-                      <div class="health-score">
-                        <div class="health-bar"><div class="health-bar-fill good" style="width:100%"></div></div>
-                        100%
-                      </div>
-                    </td>
-                  </tr>
+                <tbody id="backlinkTableBody">
+                  <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-tertiary)">
+                    <div style="font-size:1.5rem;margin-bottom:8px">🔗</div>
+                    Loading backlinks...
+                  </td></tr>
                 </tbody>
               </table>
             </div>
@@ -1196,71 +725,10 @@
           </div>
 
           <div class="card">
-            <div class="card-body" style="padding:0">
-              <div class="notification-item unread">
-                <div class="notification-icon" style="background:var(--success-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">Exchange Completed ✓</div>
-                  <div class="notification-text">Your exchange with <strong>seomastery.com</strong> has been verified. Backlink is now live.</div>
-                  <div class="notification-time">10 minutes ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item unread">
-                <div class="notification-icon" style="background:var(--info-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">New Message from Sarah</div>
-                  <div class="notification-text">"Great! Let me check the anchor text options for our exchange..."</div>
-                  <div class="notification-time">15 minutes ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item unread">
-                <div class="notification-icon" style="background:var(--warning-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">Backlink Needs Review</div>
-                  <div class="notification-text">Your backlink from <strong>growthhacker.blog</strong> has a health score of 65%. Please verify.</div>
-                  <div class="notification-time">2 hours ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item">
-                <div class="notification-icon" style="background:var(--purple-light, rgba(108,77,246,0.1))">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary-purple)" stroke-width="2"><path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">New Exchange Request</div>
-                  <div class="notification-text"><strong>backlinkpro.net</strong> sent you an exchange request.</div>
-                  <div class="notification-time">5 hours ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item">
-                <div class="notification-icon" style="background:var(--success-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">Reputation Score Increased</div>
-                  <div class="notification-text">Your reputation score went up to <strong>94/100</strong>. Keep up the great exchanges!</div>
-                  <div class="notification-time">1 day ago</div>
-                </div>
-              </div>
-
-              <div class="notification-item">
-                <div class="notification-icon" style="background:var(--danger-light)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                </div>
-                <div class="notification-content">
-                  <div class="notification-title">Link Removed</div>
-                  <div class="notification-text">Backlink from <strong>oldblog.com</strong> has been removed. Health score dropped to 12%.</div>
-                  <div class="notification-time">5 days ago</div>
-                </div>
+            <div class="card-body" style="padding:0" id="notificationsList">
+              <div style="padding:40px 20px;text-align:center;color:var(--text-tertiary)">
+                <div style="font-size:1.5rem;margin-bottom:8px">🔔</div>
+                Loading notifications...
               </div>
             </div>
           </div>

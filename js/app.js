@@ -84,6 +84,16 @@ function navigateTo(pageName, navItem) {
     if (pageName === 'analytics') initAnalyticsCharts();
   }, 150);
 
+  // Trigger data loading for each page
+  setTimeout(() => {
+    if (pageName === 'websites') window.LinkBuild.loadMyWebsites();
+    if (pageName === 'marketplace') window.LinkBuild.loadMarketplace();
+    if (pageName === 'exchange-requests') window.LinkBuild.loadExchangeRequests();
+    if (pageName === 'notifications') window.LinkBuild.loadAndRenderNotifications();
+    if (pageName === 'backlink-monitor') window.LinkBuild.loadBacklinks();
+    if (pageName === 'messages') window.LinkBuild.loadConversations();
+  }, 200);
+
   // Scroll to top
   document.getElementById('pageContent').scrollTop = 0;
 
@@ -898,6 +908,11 @@ window.handleVerifyWebsite = async function() {
 // =============================================
 const originalNavigateTo = navigateTo;
 navigateTo = function(pageName, navItem) {
+  // Stop message polling when leaving messages page
+  if (pageName !== 'messages' && typeof stopMessagePolling === 'function') {
+    stopMessagePolling();
+  }
+
   originalNavigateTo(pageName, navItem);
 
   // Load data for specific pages after navigation
