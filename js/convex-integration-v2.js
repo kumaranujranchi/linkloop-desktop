@@ -655,6 +655,11 @@ async function sendExchangeRequest(data, btnEl) {
 
   const targetWebsiteId = data.toWebsiteId;
 
+  if (data.toUserId === uid) {
+    showMsgToast('⚠️ You cannot send an exchange request to your own website.', 'warning');
+    return { success: false, error: "Cannot send request to own website" };
+  }
+
   // === DEDUP: Prevent duplicate requests to same website ===
   if (inFlightRequests.has(targetWebsiteId)) {
     showMsgToast('⏳ Request is already being sent to this website. Please wait.', 'warning');
@@ -1696,21 +1701,29 @@ function updateMarketplaceTable(websites) {
     return;
   }
 
-  tbody.innerHTML = websites.map(w => `
-    <tr>
-      <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0,2).toUpperCase()}</div><strong>${w.domain}</strong>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ''}</div></td>
-      <td><span class="badge badge-info">${w.domainAuthority}</span></td>
-      <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
-      <td>${w.niche}</td>
-      <td>${w.country}</td>
-      <td><div class="health-score"><div class="health-bar"><div class="health-bar-fill good" style="width:${w.exchangeSuccessRate || 85}%"></div></div>${w.exchangeSuccessRate || 85}%</div></td>
-      <td>Just now</td>
-      <td><div style="display:flex;gap:6px">
-        <button class="btn btn-ghost btn-sm">Profile</button>
-        <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.startConversationWith('${w.ownerId}', undefined, '${w.domain.replace(/'/g, "\\'")}')">💬 Message</button>
-        <button class="btn btn-primary btn-sm" id="send-req-${w._id}" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'}, document.getElementById('send-req-${w._id}'))">Send Request</button>
-      </div></td>
-    </tr>`).join("");
+  const uid = getUserId();
+  tbody.innerHTML = websites.map(w => {
+    const isOwnWebsite = w.ownerId === uid;
+    const actionCell = isOwnWebsite
+      ? `<span class="badge" style="font-size:0.75rem;padding:6px 12px;background:var(--gray-200);color:var(--text-secondary);border:1px solid var(--border-light);border-radius:var(--radius-sm)">Your Website</span>`
+      : `<div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm">Profile</button>
+          <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.startConversationWith('${w.ownerId}', undefined, '${w.domain.replace(/'/g, "\\'")}')">💬 Message</button>
+          <button class="btn btn-primary btn-sm" id="send-req-${w._id}" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'}, document.getElementById('send-req-${w._id}'))">Send Request</button>
+        </div>`;
+
+    return `
+      <tr>
+        <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0,2).toUpperCase()}</div><strong>${w.domain}</strong>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ''}</div></td>
+        <td><span class="badge badge-info">${w.domainAuthority}</span></td>
+        <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
+        <td>${w.niche}</td>
+        <td>${w.country}</td>
+        <td><div class="health-score"><div class="health-bar"><div class="health-bar-fill good" style="width:${w.exchangeSuccessRate || 85}%"></div></div>${w.exchangeSuccessRate || 85}%</div></td>
+        <td>Just now</td>
+        <td>${actionCell}</td>
+      </tr>`;
+  }).join("");
 }
 
 function updateWebsitesTable(mySites) {

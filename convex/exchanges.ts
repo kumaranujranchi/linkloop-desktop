@@ -152,6 +152,16 @@ export const send = mutation({
     const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
+    if (userId === args.toUserId) {
+      throw new Error("You cannot send an exchange request to yourself.");
+    }
+
+    const toWebsite = await ctx.db.get(args.toWebsiteId);
+    if (!toWebsite) throw new Error("Target website not found");
+    if (toWebsite.ownerId === userId) {
+      throw new Error("You cannot send an exchange request to your own website.");
+    }
+
     const now = Date.now();
     const exchangeId = await ctx.db.insert("exchangeRequests", {
       fromUserId: userId,
