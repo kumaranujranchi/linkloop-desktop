@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/dark-mode.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/dark-mode.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <!-- CRITICAL: Immediate auth guard — if no token, redirect before any rendering -->
@@ -26,9 +26,9 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <!-- Convex Browser Bundle (loaded before integration) -->
-  <script src="./node_modules/convex/dist/browser.bundle.js"></script>
+  <script src="/node_modules/convex/dist/browser.bundle.js"></script>
   <!-- Convex Integration (regular script) -->
-  <script src="js/convex-integration-v2.js"></script>
+  <script src="/js/convex-integration-v2.js"></script>
 </head>
 <body class="dashboard-body">
   <!-- Mobile Overlay -->
@@ -108,7 +108,7 @@
             <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
             Settings
           </a>
-          <a class="nav-item" data-page="admin" onclick="window.location.href=(window.location.pathname.includes('.html')?'admin.html':'/admin')" id="sidebarAdminLink" style="display: none;">
+          <a class="nav-item" data-page="admin" href="/admin" onclick="window.location.href=(window.location.pathname.includes('.html')?'admin.html':'/admin')" id="sidebarAdminLink" style="display: none;">
             <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
             Admin
           </a>

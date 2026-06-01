@@ -128,13 +128,14 @@ async function signup(name, email, password) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
       
-      // Redirect to dashboard based on role if on landing page
+      // Redirect to dashboard/admin panel after signup when not already on it.
       const path = window.location.pathname;
-      if (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin")) {
+      const shouldRedirect = result.user.role === "admin" || (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin"));
+      if (shouldRedirect) {
         if (result.user.role === "admin") {
           console.log("Admin signed up. Redirecting to admin panel...");
         } else {
-          console.log("User logged in. Redirecting to dashboard...");
+          console.log("User signed up. Redirecting to dashboard...");
         }
         // Close login modal before redirecting
         const overlay = document.getElementById('authOverlay');
@@ -159,9 +160,10 @@ async function login(email, password) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
       
-      // Redirect to dashboard based on role if on landing page
+      // Redirect to dashboard/admin panel after login when not already on it.
       const path = window.location.pathname;
-      if (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin")) {
+      const shouldRedirect = result.user.role === "admin" || (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin"));
+      if (shouldRedirect) {
         if (result.user.role === "admin") {
           console.log("Admin logged in. Redirecting to admin panel...");
         } else {
@@ -190,9 +192,10 @@ async function loginWithGoogle(credential) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
       
-      // Redirect to dashboard based on role if on landing page
+      // Redirect to dashboard/admin panel after Google login when not already on it.
       const path = window.location.pathname;
-      if (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin")) {
+      const shouldRedirect = result.user.role === "admin" || (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin"));
+      if (shouldRedirect) {
         if (result.user.role === "admin") {
           console.log("Admin logged in with Google. Redirecting to admin panel...");
         } else {
