@@ -403,8 +403,8 @@ async function loadDashboardData() {
     if (backlinkStats) updateBacklinkStats(backlinkStats);
     const uid = getUserId();
     if (uid) {
-      const unreadCount = await client.query("notifications:unreadCount", { userId: uid });
-      if (unreadCount !== undefined) updateNotificationBadge(unreadCount);
+      // Update all sidebar badges
+      updateAllSidebarBadges();
 
       // Load dashboard widgets
       const convs = await client.query('messages:listConversations', { userId: uid });
@@ -1082,8 +1082,41 @@ function updateBacklinkStats(stats) {
 }
 
 function updateNotificationBadge(count) {
-  const badge = document.querySelector(".nav-item[data-page='notifications'] .nav-badge");
-  if (badge) { badge.textContent = count; badge.style.display = count > 0 ? "" : "none"; }
+  const badge = document.getElementById("navBadgeNotifications");
+  if (badge) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = count > 0 ? "" : "none"; }
+}
+
+function updateExchangeBadge(count) {
+  const badge = document.getElementById("navBadgeExchanges");
+  if (badge) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = count > 0 ? "" : "none"; }
+}
+
+function updateMessagesBadge(count) {
+  const badge = document.getElementById("navBadgeMessages");
+  if (badge) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = count > 0 ? "" : "none"; }
+}
+
+function updateAllSidebarBadges() {
+  const uid = getUserId();
+  if (!uid) return;
+  // Load notification count
+  client.query("notifications:unreadCount", { userId: uid }).then(count => {
+    if (count !== undefined) updateNotificationBadge(count);
+  }).catch(() => {});
+  // Load exchange requests count (pending = new + negotiating)
+  client.query("exchanges:listKanban", { userId: uid }).then(kanban => {
+    if (kanban) {
+      const pending = (kanban.new?.length || 0) + (kanban.negotiating?.length || 0);
+      updateExchangeBadge(pending);
+    }
+  }).catch(() => {});
+  // Load unread messages count (use conversations unread total)
+  client.query("messages:listConversations", { userId: uid }).then(convs => {
+    if (convs) {
+      const totalUnread = convs.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
+      updateMessagesBadge(totalUnread);
+    }
+  }).catch(() => {});
 }
 
 function updateKanbanBoard(kanban) {
@@ -1405,7 +1438,7 @@ async function init() {
         populateSettingsPage(user);
         console.log("🔌 Session restored securely from token:", user.name);
         // Only load dashboard data when confirmed logged in
-        if (onDashboard) loadDashboardData().catch(() => {});
+        if (onDashboard) { loadDashboardData().catch(() => {}); updateAllSidebarBadges(); }
       } else {
         console.log("🔌 Session token expired or invalid.");
         clearUser();
@@ -1456,6 +1489,7 @@ window.LinkBuild = {
   loadAndRenderNotifications, loadBacklinks,
   hideAuthScreen, showAuthScreen, populateSettingsPage,
   getVerificationInfo, checkAndVerifyWebsite,
+  updateAllSidebarBadges,
   // Messaging
   loadConversations,
   renderConversationsList,
