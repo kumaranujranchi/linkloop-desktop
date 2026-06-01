@@ -105,6 +105,9 @@ function clearUser() {
 // AUTH FUNCTIONS
 // =============================================
 async function signup(name, email, password) {
+  if (!client) {
+    return { success: false, error: "Connection not ready. Please refresh the page and try again." };
+  }
   try {
     const result = await client.mutation("users:signupWithPassword", { name, email, password });
     if (result.token) {
@@ -131,6 +134,9 @@ async function signup(name, email, password) {
 }
 
 async function login(email, password) {
+  if (!client) {
+    return { success: false, error: "Connection not ready. Please refresh the page and try again." };
+  }
   try {
     const result = await client.mutation("users:loginWithPassword", { email, password });
     if (result.token) {

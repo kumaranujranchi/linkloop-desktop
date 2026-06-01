@@ -598,22 +598,36 @@ window.handleLogin = async function(e) {
   const btnEl = e.target.querySelector('button[type="submit"]');
   if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Logging in...'; }
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Logging in...</span>';
-  
-  const result = await window.LinkBuild.login(email, password);
-  if (result.success) {
-    msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
-    document.getElementById("loginForm").reset();
-    // redirect is handled inside window.LinkBuild.login() based on page context:
-    // - on landing page → redirects to dashboard.html
-    // - on dashboard page → just closes overlay
-    const onDashboard = window.location.pathname.includes("dashboard");
-    if (onDashboard) {
-      window.LinkBuild.hideAuthScreen();
-      window.LinkBuild.loadDashboardData().catch(() => {});
-    }
-  } else {
+
+  // Defensive check: ensure LinkBuild API is available
+  if (!window.LinkBuild || !window.LinkBuild.login) {
     if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
-    msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Login failed") + '</span>';
+    msgEl.innerHTML = '<span style="color:var(--danger)">⚠️ Service is initializing. Please wait a moment and try again.</span>';
+    return;
+  }
+
+  // Timeout after 15 seconds
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('Request timed out. Please check your connection and try again.')), 15000)
+  );
+
+  try {
+    const result = await Promise.race([window.LinkBuild.login(email, password), timeoutPromise]);
+    if (result.success) {
+      msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
+      document.getElementById("loginForm").reset();
+      const onDashboard = window.location.pathname.includes("dashboard");
+      if (onDashboard) {
+        window.LinkBuild.hideAuthScreen();
+        window.LinkBuild.loadDashboardData().catch(() => {});
+      }
+    } else {
+      if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
+      msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Login failed") + '</span>';
+    }
+  } catch (err) {
+    if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
+    msgEl.innerHTML = '<span style="color:var(--danger)">' + (err.message || "Connection error. Please try again.") + '</span>';
   }
 };
 
