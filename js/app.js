@@ -602,6 +602,12 @@ window.handleLogin = async function(e) {
   try {
     let result;
 
+    // Close modal immediately on any successful login
+    const closeModal = () => {
+      const overlay = document.getElementById('authOverlay');
+      if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+    };
+
     // Primary: use window.LinkBuild.login if available
     if (window.LinkBuild && typeof window.LinkBuild.login === 'function') {
       result = await window.LinkBuild.login(email, password);
@@ -614,24 +620,23 @@ window.handleLogin = async function(e) {
       });
       const data = await res.json();
       if (data.status === 'success' && data.value && data.value.token) {
-        result = { success: true, user: data.value.user };
         // Save token locally so dashboard can use it
         localStorage.setItem('linkbuild-token', data.value.token);
         localStorage.setItem('linkbuild-user', JSON.stringify(data.value.user));
-        // Redirect to dashboard
-        const isCleanUrl = !window.location.pathname.includes('.html');
-        window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
+        closeModal();
+        // Redirect to dashboard after short delay so modal close is visible
+        setTimeout(() => {
+          const isCleanUrl = !window.location.pathname.includes('.html');
+          window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
+        }, 100);
         return;
       } else {
-        result = { success: false, error: data.errorMessage || data.value || 'Invalid email or password' };
+        result = { success: false, error: data.errorMessage || 'Invalid email or password' };
       }
     }
 
-    if (result.success) {
-      // Always hide the auth modal after successful login
-      const overlay = document.getElementById('authOverlay');
-      if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
-      
+    if (result && result.success) {
+      closeModal();
       msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
       document.getElementById("loginForm").reset();
 
@@ -641,11 +646,9 @@ window.handleLogin = async function(e) {
           window.LinkBuild.hideAuthScreen();
           window.LinkBuild.loadDashboardData().catch(() => {});
         }
-      } else {
-        // On landing page, redirect to dashboard
-        const isCleanUrl = !window.location.pathname.includes('.html');
-        window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
       }
+      // Note: on landing page, window.LinkBuild.login() already handles redirect to dashboard.
+      // Only if that didn't happen (e.g. login returned but no redirect), we redirect here.
     } else {
       if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
       msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || 'Login failed') + '</span>';

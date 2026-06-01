@@ -119,11 +119,13 @@ async function signup(name, email, password) {
       if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
         if (result.user.role === "admin") {
           console.log("Admin logged in. Redirecting to admin workspace...");
-          window.location.href = getDashboardUrl();
         } else {
           console.log("User logged in. Redirecting to dashboard...");
-          window.location.href = getDashboardUrl();
         }
+        // Close login modal before redirecting
+        const overlay = document.getElementById('authOverlay');
+        if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+        window.location.href = getDashboardUrl();
       }
       return { success: true, user: result.user };
     }
@@ -148,11 +150,13 @@ async function login(email, password) {
       if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
         if (result.user.role === "admin") {
           console.log("Admin logged in. Redirecting to admin workspace...");
-          window.location.href = getDashboardUrl();
         } else {
           console.log("User logged in. Redirecting to dashboard...");
-          window.location.href = getDashboardUrl();
         }
+        // Close login modal before redirecting
+        const overlay = document.getElementById('authOverlay');
+        if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+        window.location.href = getDashboardUrl();
       }
       return { success: true, user: result.user };
     }
