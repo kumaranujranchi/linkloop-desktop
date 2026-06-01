@@ -15,6 +15,7 @@ import type * as exchanges from "../exchanges.js";
 import type * as messages from "../messages.js";
 import type * as notifications from "../notifications.js";
 import type * as users from "../users.js";
+import type * as verification from "../verification.js";
 import type * as websites from "../websites.js";
 
 import type {
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   messages: typeof messages;
   notifications: typeof notifications;
   users: typeof users;
+  verification: typeof verification;
   websites: typeof websites;
 }>;
 

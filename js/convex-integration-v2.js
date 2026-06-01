@@ -581,7 +581,7 @@ function renderConversationsList(conversations) {
 
     return `
       <div class="conversation-item${isActive ? ' active' : ''}" 
-           onclick="window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ''}', '${name.replace(/'/g, \"\\'\")}')"
+           onclick="window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ''}', '${name.replace(/'/g, "\\'")}')"
            style="cursor:pointer">
         <div class="conversation-avatar" style="background:${color};position:relative">
           ${initials}

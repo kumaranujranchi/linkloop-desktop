@@ -17,18 +17,33 @@ export const listConversations = query({
       c.participantIds.some((id) => id === args.userId)
     );
 
-    // Enrich with participant info
+    // Enrich with participant info and unread count
     const enriched = await Promise.all(
       userConvs.map(async (conv) => {
         const otherUserId = conv.participantIds.find((id) => id !== args.userId);
         const otherUser = otherUserId ? await ctx.db.get(otherUserId) : null;
         const lastSender = await ctx.db.get(conv.lastSenderId);
+
+        // Count unread messages sent to this user
+        const unreadMsgs = await ctx.db
+          .query("messages")
+          .withIndex("by_receiver", (q) => q.eq("receiverId", args.userId))
+          .filter((q) => q.eq(q.field("read"), false))
+          .collect();
+
+        // Filter to this conversation's messages
+        const convUnread = unreadMsgs.filter((m) =>
+          conv.participantIds.includes(m.senderId) &&
+          (conv.exchangeId ? m.exchangeId === conv.exchangeId : !m.exchangeId || m.senderId === otherUserId)
+        );
+
         return {
           ...conv,
           otherUser: otherUser
             ? { _id: otherUser._id, name: otherUser.name, email: otherUser.email }
             : null,
           lastSenderName: lastSender?.name || "Unknown",
+          unreadCount: convUnread.length,
         };
       })
     );
@@ -39,7 +54,7 @@ export const listConversations = query({
   },
 });
 
-// Get messages for a conversation
+// Get messages for a conversation (works with or without exchangeId)
 export const listMessages = query({
   args: {
     conversationId: v.id("conversations"),
@@ -49,14 +64,35 @@ export const listMessages = query({
     const conversation = await ctx.db.get(args.conversationId);
     if (!conversation) return [];
 
-    // Get all messages between the two participants
-    const messages = await ctx.db
-      .query("messages")
-      .withIndex("by_exchange", (q) =>
-        q.eq("exchangeId", conversation.exchangeId!)
-      )
-      .order("asc")
-      .collect();
+    const [p1, p2] = conversation.participantIds;
+
+    let messages;
+
+    if (conversation.exchangeId) {
+      // If conversation is tied to an exchange, query by exchangeId
+      messages = await ctx.db
+        .query("messages")
+        .withIndex("by_exchange", (q) =>
+          q.eq("exchangeId", conversation.exchangeId!)
+        )
+        .order("asc")
+        .collect();
+    } else {
+      // General DM: get messages between the two participants
+      const sentByP1 = await ctx.db
+        .query("messages")
+        .withIndex("by_sender", (q) => q.eq("senderId", p1))
+        .filter((q) => q.eq(q.field("receiverId"), p2))
+        .collect();
+
+      const sentByP2 = await ctx.db
+        .query("messages")
+        .withIndex("by_sender", (q) => q.eq("senderId", p2))
+        .filter((q) => q.eq(q.field("receiverId"), p1))
+        .collect();
+
+      messages = [...sentByP1, ...sentByP2].sort((a, b) => a.createdAt - b.createdAt);
+    }
 
     // Enrich with sender info
     const enriched = await Promise.all(
@@ -69,7 +105,7 @@ export const listMessages = query({
       })
     );
 
-    return enriched.slice(-(args.limit || 50));
+    return enriched.slice(-(args.limit || 100));
   },
 });
 
@@ -97,6 +133,19 @@ export const listByExchange = query({
   },
 });
 
+// Get unread message count for a user
+export const unreadCount = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    const unread = await ctx.db
+      .query("messages")
+      .withIndex("by_receiver", (q) => q.eq("receiverId", args.userId))
+      .filter((q) => q.eq(q.field("read"), false))
+      .collect();
+    return unread.length;
+  },
+});
+
 // ========== MUTATIONS ==========
 
 // Send a message
@@ -109,9 +158,15 @@ export const send = mutation({
     websiteRef: v.optional(v.id("websites")),
     exchangeId: v.optional(v.id("exchangeRequests")),
     senderId: v.optional(v.id("users")),
+    token: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     let userId = args.senderId;
+
+    if (!userId && args.token) {
+      const fromToken = await getUserIdFromToken(ctx.db, args.token);
+      if (fromToken) userId = fromToken;
+    }
 
     if (!userId) {
       const identity = await ctx.auth.getUserIdentity();
@@ -126,6 +181,8 @@ export const send = mutation({
       userId = user._id;
     }
 
+    if (!userId) throw new Error("Not authenticated");
+
     const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
@@ -138,7 +195,6 @@ export const send = mutation({
       receiverId: args.receiverId,
       text: args.text,
       attachmentUrl: args.attachmentUrl,
-      websiteRef: args.websiteRef,
       read: false,
       createdAt: now,
     });
@@ -170,9 +226,15 @@ export const getOrCreateConversation = mutation({
     otherUserId: v.id("users"),
     exchangeId: v.optional(v.id("exchangeRequests")),
     userId: v.optional(v.id("users")),
+    token: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     let userId = args.userId;
+
+    if (!userId && args.token) {
+      const fromToken = await getUserIdFromToken(ctx.db, args.token);
+      if (fromToken) userId = fromToken;
+    }
 
     if (!userId) {
       const identity = await ctx.auth.getUserIdentity();
@@ -187,13 +249,15 @@ export const getOrCreateConversation = mutation({
       userId = user._id;
     }
 
+    if (!userId) throw new Error("Not authenticated");
+
     // Check for existing conversation
     const existing = await ctx.db.query("conversations").collect();
     const found = existing.find(
       (c) =>
         c.participantIds.includes(userId!) &&
         c.participantIds.includes(args.otherUserId) &&
-        c.exchangeId === args.exchangeId
+        (args.exchangeId ? c.exchangeId === args.exchangeId : true)
     );
 
     if (found) return found._id;
@@ -215,13 +279,16 @@ export const markRead = mutation({
   args: {
     conversationId: v.id("conversations"),
     token: v.optional(v.string()),
+    userId: v.optional(v.id("users")),
   },
   handler: async (ctx, args) => {
-    let userId = null;
+    let userId = args.userId || null;
 
-    if (args.token) {
+    if (!userId && args.token) {
       userId = await getUserIdFromToken(ctx.db, args.token);
-    } else {
+    }
+
+    if (!userId) {
       const identity = await ctx.auth.getUserIdentity();
       if (identity) {
         const user = await ctx.db
@@ -232,27 +299,26 @@ export const markRead = mutation({
       }
     }
 
-    if (!userId) throw new Error("Not authenticated");
-    const user = await ctx.db.get(userId);
-    if (!user) throw new Error("User not found");
-
+    if (!userId) return; // silently fail if not authenticated
 
     const conversation = await ctx.db.get(args.conversationId);
     if (!conversation) return;
 
-    // Mark all messages from other participant as read
-    const otherParticipant = conversation.participantIds.find(
-      (id) => id !== user._id
-    );
-    if (!otherParticipant) return;
-
-    const messages = await ctx.db
+    // Mark all unread messages received by this user in this conversation as read
+    const unread = await ctx.db
       .query("messages")
-      .withIndex("by_sender", (q) => q.eq("senderId", otherParticipant))
+      .withIndex("by_receiver", (q) => q.eq("receiverId", userId!))
       .filter((q) => q.eq(q.field("read"), false))
       .collect();
 
-    for (const msg of messages) {
+    // Filter to messages in this conversation
+    const otherParticipant = conversation.participantIds.find((id) => id !== userId);
+    const toMark = unread.filter(
+      (m) => m.senderId === otherParticipant &&
+             (conversation.exchangeId ? m.exchangeId === conversation.exchangeId : true)
+    );
+
+    for (const msg of toMark) {
       await ctx.db.patch(msg._id, { read: true });
     }
   },
