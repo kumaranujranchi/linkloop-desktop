@@ -28,6 +28,7 @@ function cpIfExists(src, dest, opts) {
 console.log("  📁 Copying static files...");
 cpIfExists(resolve(ROOT, "index.html"), resolve(DIST, "index.html"));
 cpIfExists(resolve(ROOT, "dashboard.html"), resolve(DIST, "dashboard.html"));
+cpIfExists(resolve(ROOT, "admin.html"), resolve(DIST, "admin.html"));
 cpIfExists(resolve(ROOT, "css"), resolve(DIST, "css"), { recursive: true });
 cpIfExists(resolve(ROOT, "js"), resolve(DIST, "js"), { recursive: true });
 cpIfExists(resolve(ROOT, "assets"), resolve(DIST, "assets"), { recursive: true });
@@ -56,6 +57,7 @@ function updateConvexPaths(filePath) {
 
 updateConvexPaths(resolve(DIST, "index.html"));
 updateConvexPaths(resolve(DIST, "dashboard.html"));
+updateConvexPaths(resolve(DIST, "admin.html"));
 
 // Inject Convex URL from Vercel environment if provided
 const convexUrl = process.env.CONVEX_URL;

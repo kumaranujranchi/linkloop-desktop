@@ -110,6 +110,7 @@ export const adminStats = query({
 
     const mrr = proCount * 49 + agencyCount * 99;
     const activeWebsites = websites.filter((w) => w.status === "active").length;
+    const pendingApprovals = websites.filter((w) => w.status === "pending").length;
     const spamReports = websites.filter((w) => w.status === "suspended" || w.status === "rejected").length;
 
     return {
@@ -122,6 +123,7 @@ export const adminStats = query({
         admin: adminCount,
       },
       totalWebsites: activeWebsites,
+      pendingApprovals,
       mrr,
       spamReports,
     };
