@@ -763,6 +763,18 @@
       border-color: rgba(239, 68, 68, 0.3);
     }
 
+    /* Spinner for send request button */
+    .spinner-mini {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin-mini 0.6s linear infinite;
+    }
+    @keyframes spin-mini { to { transform: rotate(360deg); } }
+
     .footer-bottom {
       border-top: 1px solid rgba(255, 255, 255, 0.03);
       padding-top: 30px;

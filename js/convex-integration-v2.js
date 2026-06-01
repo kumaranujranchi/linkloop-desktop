@@ -536,11 +536,60 @@ async function loadExchangeRequests() {
   } catch (e) { return null; }
 }
 
-async function sendExchangeRequest(data) {
+// ==== EXCHANGE REQUEST DEDUP & COOLDOWN ====
+const REQUEST_COOLDOWN_MS = 30000; // 30 second cooldown per website
+const pendingRequests = new Map();   // toWebsiteId → timestamp (when request was sent)
+const inFlightRequests = new Set();  // toWebsiteId → currently sending
+
+async function sendExchangeRequest(data, btnEl) {
   const uid = getUserId();
   if (!uid) {
     showMsgToast('⚠️ Please login first to send exchange requests.', 'warning');
     return { success: false, error: "Please login first" };
+  }
+
+  const targetWebsiteId = data.toWebsiteId;
+
+  // === DEDUP: Prevent duplicate requests to same website ===
+  if (inFlightRequests.has(targetWebsiteId)) {
+    showMsgToast('⏳ Request is already being sent to this website. Please wait.', 'warning');
+    return { success: false, error: "Request already in flight" };
+  }
+
+  if (pendingRequests.has(targetWebsiteId)) {
+    const elapsed = Date.now() - pendingRequests.get(targetWebsiteId);
+    if (elapsed < REQUEST_COOLDOWN_MS) {
+      const remaining = Math.ceil((REQUEST_COOLDOWN_MS - elapsed) / 1000);
+      showMsgToast(`⏳ Request already sent to this website. Please wait ${remaining}s before retrying.`, 'warning');
+      return { success: false, error: "Duplicate request blocked — cooldown active" };
+    }
+    // Cooldown expired, allow retry
+    pendingRequests.delete(targetWebsiteId);
+  }
+
+  // Also check server-side for existing pending requests to same website
+  try {
+    const existing = await client.query("exchanges:listKanban", { userId: uid });
+    if (existing) {
+      const allRequests = [...(existing.new || []), ...(existing.negotiating || []), ...(existing.accepted || [])];
+      const alreadySent = allRequests.find(r => r.toWebsiteId === targetWebsiteId);
+      if (alreadySent) {
+        // Mark as pending in our local cache too
+        pendingRequests.set(targetWebsiteId, Date.now());
+        showMsgToast('⚠️ You already have an active request with this website. Check your Exchange Requests panel.', 'warning');
+        return { success: false, error: "Active request already exists for this website" };
+      }
+    }
+  } catch (e) { /* proceed even if check fails */ }
+
+  // === BUTTON FEEDBACK: Mark as in-flight ===
+  inFlightRequests.add(targetWebsiteId);
+  if (btnEl) {
+    btnEl.disabled = true;
+    btnEl.style.opacity = '0.7';
+    btnEl.style.cursor = 'not-allowed';
+    const origHTML = btnEl.innerHTML;
+    btnEl.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px"><span class="spinner-mini"></span> Sending...</span>';
   }
 
   // Auto-detect user's website if not provided (e.g., from marketplace)
@@ -548,29 +597,55 @@ async function sendExchangeRequest(data) {
     try {
       const mySites = await client.query("websites:listByOwner", { userId: uid });
       if (!mySites || mySites.length === 0) {
-        showMsgToast('⚠️ You need to add at least one website before sending exchange requests. Go to "My Websites" to add one.', 'warning');
-        return { success: false, error: "No websites found. Please add a website first." };
+        showMsgToast('⚠️ You need to add at least one website before sending exchange requests.', 'warning');
+        resetRequestButton(btnEl, targetWebsiteId);
+        return { success: false, error: "No websites found" };
       }
-      // Pick the first verified website, or fall back to first website
       const verified = mySites.find((s) => s.verified);
       data.fromWebsiteId = verified ? verified._id : mySites[0]._id;
-      if (!verified) {
-        showMsgToast('ℹ️ Using your first website. Verify it for better results.', 'info');
-      }
     } catch (e) {
       showMsgToast('⚠️ Failed to load your websites. Please try again.', 'warning');
-      return { success: false, error: "Failed to load your websites" };
+      resetRequestButton(btnEl, targetWebsiteId);
+      return { success: false, error: "Failed to load websites" };
     }
   }
 
   try {
     const result = await client.mutation("exchanges:send", { ...data, fromUserId: uid });
+    // Mark as pending with timestamp for cooldown
+    pendingRequests.set(targetWebsiteId, Date.now());
+    inFlightRequests.delete(targetWebsiteId);
+    // Button → success state
+    if (btnEl) {
+      btnEl.disabled = true;
+      btnEl.style.opacity = '1';
+      btnEl.style.cursor = 'not-allowed';
+      btnEl.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      btnEl.style.border = '1px solid #10b981';
+      btnEl.innerHTML = '✓ Sent';
+      // Re-enable after cooldown
+      setTimeout(() => resetRequestButton(btnEl, targetWebsiteId), REQUEST_COOLDOWN_MS);
+    }
     showMsgToast('✅ Exchange request sent successfully!', 'success');
     return { success: true, id: result };
   } catch (e) {
+    inFlightRequests.delete(targetWebsiteId);
+    resetRequestButton(btnEl, targetWebsiteId);
     showMsgToast('❌ ' + formatConvexError(e, "Failed to send exchange request"), 'danger');
     return { success: false, error: formatConvexError(e, "Failed to send exchange request") };
   }
+}
+
+function resetRequestButton(btnEl, websiteId) {
+  if (!btnEl) return;
+  btnEl.disabled = false;
+  btnEl.style.opacity = '';
+  btnEl.style.cursor = '';
+  btnEl.style.background = '';
+  btnEl.style.border = '';
+  btnEl.innerHTML = 'Send Request';
+  pendingRequests.delete(websiteId);
+  inFlightRequests.delete(websiteId);
 }
 
 // =============================================
@@ -1522,7 +1597,7 @@ function updateMarketplaceTable(websites) {
       <td><div style="display:flex;gap:6px">
         <button class="btn btn-ghost btn-sm">Profile</button>
         <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.startConversationWith('${w.ownerId}', undefined, '${w.domain.replace(/'/g, "\\'")}')">💬 Message</button>
-        <button class="btn btn-primary btn-sm" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'})">Send Request</button>
+        <button class="btn btn-primary btn-sm" id="send-req-${w._id}" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'}, document.getElementById('send-req-${w._id}'))">Send Request</button>
       </div></td>
     </tr>`).join("");
 }
