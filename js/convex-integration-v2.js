@@ -248,16 +248,9 @@ function handleLoggedOutRedirect() {
   if (path.includes("dashboard") || path.includes("dashboard.html")) {
     window.location.href = getLandingUrl("login");
   } else {
-    // On landing page: check if URL params request showing auth modal
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("auth") === "login" || params.get("auth") === "signup") {
-      showAuthScreen();
-      if (window.switchAuthTab) {
-        window.switchAuthTab(params.get("auth"));
-      }
-    } else {
-      hideAuthScreen();
-    }
+    // On landing page: always keep the auth modal hidden by default.
+    // The login/signup overlay should only open when the user clicks a button.
+    hideAuthScreen();
   }
 }
 
