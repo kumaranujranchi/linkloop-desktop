@@ -130,16 +130,16 @@ async function signup(name, email, password) {
       
       // Redirect to dashboard based on role if on landing page
       const path = window.location.pathname;
-      if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
+      if (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin")) {
         if (result.user.role === "admin") {
-          console.log("Admin logged in. Redirecting to admin workspace...");
+          console.log("Admin signed up. Redirecting to admin panel...");
         } else {
           console.log("User logged in. Redirecting to dashboard...");
         }
         // Close login modal before redirecting
         const overlay = document.getElementById('authOverlay');
         if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
-        window.location.href = getDashboardUrl();
+        window.location.href = getDashboardUrl(result.user.role);
       }
       return { success: true, user: result.user };
     }
@@ -161,16 +161,16 @@ async function login(email, password) {
       
       // Redirect to dashboard based on role if on landing page
       const path = window.location.pathname;
-      if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
+      if (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin")) {
         if (result.user.role === "admin") {
-          console.log("Admin logged in. Redirecting to admin workspace...");
+          console.log("Admin logged in. Redirecting to admin panel...");
         } else {
           console.log("User logged in. Redirecting to dashboard...");
         }
         // Close login modal before redirecting
         const overlay = document.getElementById('authOverlay');
         if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
-        window.location.href = getDashboardUrl();
+        window.location.href = getDashboardUrl(result.user.role);
       }
       return { success: true, user: result.user };
     }
@@ -192,16 +192,16 @@ async function loginWithGoogle(credential) {
       
       // Redirect to dashboard based on role if on landing page
       const path = window.location.pathname;
-      if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
+      if (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin")) {
         if (result.user.role === "admin") {
-          console.log("Admin logged in with Google. Redirecting to admin...");
+          console.log("Admin logged in with Google. Redirecting to admin panel...");
         } else {
           console.log("User logged in with Google. Redirecting to dashboard...");
         }
         // Close login modal before redirecting
         const overlay = document.getElementById('authOverlay');
         if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
-        window.location.href = getDashboardUrl();
+        window.location.href = getDashboardUrl(result.user.role);
       }
       return { success: true, user: result.user };
     }
@@ -231,9 +231,12 @@ function getLandingUrl(params) {
   }
 }
 
-function getDashboardUrl() {
+function getDashboardUrl(role) {
   const isCleanUrl = !window.location.pathname.includes(".html");
-  return isCleanUrl ? "/dashboard" : "dashboard.html";
+  if (role === 'admin') {
+    return isCleanUrl ? '/admin' : 'admin.html';
+  }
+  return isCleanUrl ? '/dashboard' : 'dashboard.html';
 }
 
 function handleLoggedOutRedirect() {
