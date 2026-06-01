@@ -1281,6 +1281,13 @@ function updateMarketplaceTable(websites) {
   const tbody = document.getElementById("marketplaceTableBody");
   if (!tbody) return;
 
+  // Update pagination text
+  const paginationEl = document.getElementById("marketplacePaginationText");
+  if (paginationEl) {
+    const count = websites ? websites.length : 0;
+    paginationEl.textContent = count > 0 ? `Showing ${count} result${count !== 1 ? 's' : ''}` : 'No results';
+  }
+
   if (!websites || !websites.length) {
     tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites found. Try adjusting your search filters or check back later.</td></tr>';
     return;

@@ -280,3 +280,32 @@ export const markChecked = mutation({
     });
   },
 });
+
+// Clear demo/seed websites by known domains
+export const clearSeedData = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const seedDomains = [
+      "seomastery.com",
+      "contentforge.io",
+      "growthhacker.blog",
+      "linkstrategist.com",
+      "backlinkpro.net",
+      "myseotools.com",
+      "contentmarketing.ai",
+      "affiliatemastery.org",
+    ];
+    let deleted = 0;
+    for (const domain of seedDomains) {
+      const existing = await ctx.db
+        .query("websites")
+        .withIndex("by_domain", (q) => q.eq("domain", domain))
+        .first();
+      if (existing) {
+        await ctx.db.delete(existing._id);
+        deleted++;
+      }
+    }
+    return { deleted };
+  },
+});
