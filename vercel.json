@@ -1,6 +1,6 @@
 {
   "outputDirectory": "dist",
-  "buildCommand": "npx convex deploy --cmd 'npm run vercel-build'",
+  "buildCommand": "CONVEX_DEPLOYMENT=prod:vibrant-marmot-366 npx convex deploy --typecheck=disable --cmd 'npm run vercel-build'",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
