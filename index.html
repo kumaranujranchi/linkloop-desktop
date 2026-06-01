@@ -24,11 +24,6 @@
       --font-jakarta: 'Plus Jakarta Sans', sans-serif;
     }
 
-    .landing-content {
-      position: relative;
-      z-index: 1;
-    }
-
     body {
       font-family: var(--font-jakarta);
       background-color: #080c16 !important;
@@ -36,8 +31,6 @@
       overflow-y: auto !important;
       height: auto !important;
       line-height: 1.6;
-      position: relative;
-      z-index: 1;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -630,11 +623,8 @@
     </div>
   </nav>
 
-  <!-- Landing content wrapper — ensures content stays above WebGL canvas -->
-  <div class="landing-content">
-
   <!-- ===== HERO SECTION ===== -->
-  <header class="hero">
+  <header class="hero" style="position:relative;z-index:1">
     <div class="glow-blob glow-blob-1"></div>
     <div class="glow-blob glow-blob-2"></div>
     
@@ -660,7 +650,7 @@
   </header>
 
   <!-- ===== METRICS BAR ===== -->
-  <section class="metrics">
+  <section class="metrics" style="position:relative;z-index:1">
     <div class="metrics-grid">
       <div class="metric-card">
         <h3>15K+</h3>
@@ -754,7 +744,7 @@
   </section>
 
   <!-- ===== TARGET AUDIENCE ===== -->
-  <section class="audience" id="audience">
+  <section class="audience" id="audience" style="position:relative;z-index:1">
     <div class="section-header">
       <span class="section-tag">Designed For You</span>
       <h2 class="section-title">Who is LinkBuild Designed For?</h2>
@@ -793,7 +783,7 @@
   </section>
 
   <!-- ===== FAQ SECTION ===== -->
-  <section class="faq" id="faq">
+  <section class="faq" id="faq" style="position:relative;z-index:1">
     <div class="section-header">
       <span class="section-tag">Learn More</span>
       <h2 class="section-title">Frequently Asked Questions</h2>
@@ -831,7 +821,7 @@
   </section>
 
   <!-- ===== CTA BANNER ===== -->
-  <section class="cta-banner">
+  <section class="cta-banner" style="position:relative;z-index:1">
     <div class="cta-banner-content">
       <h2>Join the Organic SEO Revolution</h2>
       <p>Ready to safely scale your search engine optimization strategy? Start connecting with high-quality partners today.</p>
@@ -840,7 +830,7 @@
   </section>
 
   <!-- ===== FOOTER ===== -->
-  <footer class="landing-footer">
+  <footer class="landing-footer" style="position:relative;z-index:1">
     <div class="footer-grid">
       <div class="footer-desc">
         <h4>LinkBuild</h4>
@@ -877,8 +867,6 @@
       <span>Designed with Premium Tech Aesthetics</span>
     </div>
   </footer>
-
-  </div><!-- /landing-content -->
 
   <!-- ========== AUTH OVERLAY ========== -->
   <div class="modal-overlay hidden" id="authOverlay">
