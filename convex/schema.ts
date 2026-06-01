@@ -189,4 +189,15 @@ export default defineSchema({
   })
     .index("by_token", ["token"])
     .index("by_user", ["userId"]),
+
+  // ========== FEEDBACK & FEATURES ==========
+  feedbacks: defineTable({
+    name: v.string(),
+    email: v.string(),
+    note: v.string(),
+    status: v.union(v.literal("new"), v.literal("reviewed")),
+    createdAt: v.number(),
+  })
+    .index("by_status", ["status"])
+    .index("by_email", ["email"]),
 });

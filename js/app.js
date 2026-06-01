@@ -1382,4 +1382,54 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-});
+});// =============================================
+// FEEDBACK HANDLING
+// =============================================
+window.handleFeedbackSubmit = async function(e) {
+  e.preventDefault();
+  const name = document.getElementById("feedbackName").value.trim();
+  const email = document.getElementById("feedbackEmail").value.trim();
+  const note = document.getElementById("feedbackNote").value.trim();
+  const btnEl = document.getElementById("feedbackSubmitBtn");
+  const errorEl = document.getElementById("feedbackError");
+  const successEl = document.getElementById("feedbackSuccess");
+
+  errorEl.style.display = 'none';
+  successEl.style.display = 'none';
+
+  if (!name || !email || !note) {
+    errorEl.textContent = 'Please fill in all fields.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  btnEl.disabled = true;
+  btnEl.textContent = 'Submitting...';
+
+  try {
+    const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/mutation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: 'feedback:submit', args: { name, email, note } })
+    });
+    const data = await res.json();
+    
+    if (data.status === 'success') {
+      successEl.style.display = 'block';
+      document.getElementById("feedbackForm").reset();
+      setTimeout(() => {
+        document.getElementById('feedbackOverlay').classList.remove('active');
+        document.getElementById('feedbackOverlay').classList.add('hidden');
+        successEl.style.display = 'none';
+      }, 2000);
+    } else {
+      throw new Error(data.errorMessage || 'Failed to submit feedback');
+    }
+  } catch (err) {
+    errorEl.textContent = err.message || 'Connection error. Please try again.';
+    errorEl.style.display = 'block';
+  } finally {
+    btnEl.disabled = false;
+    btnEl.textContent = 'Submit Feedback';
+  }
+};

@@ -2162,6 +2162,7 @@
           <li><a href="mailto:support@linkbuild.com">support@linkbuild.com</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('feedbackOverlay').classList.add('active'); document.getElementById('feedbackOverlay').classList.remove('hidden');">Suggest Feature & Feedback</a></li>
         </ul>
       </div>
     </div>
@@ -2298,6 +2299,41 @@
     <div class="proof-item">
       <span class="proof-dot"></span>
       <span>New Link Building Partners Daily</span>
+    </div>
+  </div>
+
+  <!-- ===== FEEDBACK MODAL ===== -->
+  <div class="modal-overlay hidden" id="feedbackOverlay" onclick="(function(e){if(e.target===document.getElementById('feedbackOverlay')){document.getElementById('feedbackOverlay').classList.remove('active');document.getElementById('feedbackOverlay').classList.add('hidden');}})(event)">
+    <div class="modal-card">
+      <div class="modal-close" onclick="document.getElementById('feedbackOverlay').classList.remove('active');document.getElementById('feedbackOverlay').classList.add('hidden');" title="Close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </div>
+      <div class="modal-header">
+        <h3 class="modal-title">Suggest Feature & Feedback</h3>
+        <p class="modal-subtitle">Your feedback is precious to us. Let us know how we can improve LinkBuild.</p>
+      </div>
+      <div class="modal-body">
+        <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)" style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:var(--gray-300);font-weight:500">Your Name</label>
+            <input class="input" type="text" id="feedbackName" placeholder="John Doe" required style="width:100%">
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:var(--gray-300);font-weight:500">Email Address</label>
+            <input class="input" type="email" id="feedbackEmail" placeholder="you@example.com" required style="width:100%">
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:var(--gray-300);font-weight:500">Open Note</label>
+            <textarea class="input" id="feedbackNote" placeholder="Tell us what you'd like to see..." required style="width:100%;min-height:100px;resize:vertical;font-family:inherit;padding:12px"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" id="feedbackSubmitBtn">Submit Feedback</button>
+          <div id="feedbackError" style="color:var(--danger);font-size:0.85rem;display:none;text-align:center"></div>
+          <div id="feedbackSuccess" style="color:var(--success);font-size:0.85rem;display:none;text-align:center">Thank you for your feedback!</div>
+        </form>
+      </div>
     </div>
   </div>
 
