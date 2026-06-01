@@ -624,10 +624,15 @@ window.handleLogin = async function(e) {
         localStorage.setItem('linkbuild-token', data.value.token);
         localStorage.setItem('linkbuild-user', JSON.stringify(data.value.user));
         closeModal();
-        // Redirect to dashboard after short delay so modal close is visible
+        // Redirect to dashboard or admin after short delay so modal close is visible
         setTimeout(() => {
           const isCleanUrl = !window.location.pathname.includes('.html');
-          window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
+          const role = (data.value.user && data.value.user.role || "").toString().toLowerCase();
+          if (role === 'admin') {
+            window.location.href = isCleanUrl ? '/admin' : 'admin.html';
+          } else {
+            window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
+          }
         }, 100);
         return;
       } else {
@@ -647,7 +652,16 @@ window.handleLogin = async function(e) {
       msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
       document.getElementById("loginForm").reset();
 
+      const userRole = (result.user && result.user.role || "").toString().toLowerCase();
+      const isAdmin = userRole === "admin";
       const onDashboard = window.location.pathname.includes("dashboard");
+
+      if (isAdmin) {
+        const isCleanUrl = !window.location.pathname.includes('.html');
+        window.location.href = isCleanUrl ? '/admin' : 'admin.html';
+        return;
+      }
+
       if (onDashboard) {
         if (window.LinkBuild) {
           window.LinkBuild.hideAuthScreen();
