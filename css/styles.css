@@ -1179,23 +1179,29 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
   background: rgba(15, 23, 42, 0.98);
 }
 
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .feedback-field {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
 .feedback-field label {
   color: #94a3b8;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
 }
 
 .feedback-modal .input {
   width: 100%;
-  min-height: 48px;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.06);
+  min-height: 54px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(148, 163, 184, 0.22);
   color: #ffffff;
   border-radius: 16px;
