@@ -47,9 +47,10 @@ console.log("  🔧 Updating production Convex references...");
 function updateConvexPaths(filePath) {
   if (existsSync(filePath)) {
     let content = readFileSync(filePath, "utf-8");
+    // Match both absolute (/node_modules/...) and relative (./node_modules/...) paths
     content = content.replace(
-      /\.\/node_modules\/convex\/dist\/browser\.bundle\.js/g,
-      "./js/vendor/convex.js"
+      /["']\/node_modules\/convex\/dist\/browser\.bundle\.js["']|["']\.\/node_modules\/convex\/dist\/browser\.bundle\.js["']/g,
+      '"./js/vendor/convex.js"'
     );
     writeFileSync(filePath, content);
   }

@@ -1476,6 +1476,12 @@ async function init() {
   if (token) {
     try {
       // Query the me endpoint with our session token to verify validity
+      if (!client) {
+        console.warn("🔌 Convex client not ready yet, will retry...");
+        // Retry after a short delay
+        setTimeout(() => init(), 500);
+        return;
+      }
       const userProfile = await client.query("users:me", { token });
       if (userProfile) {
         const user = {
@@ -1489,6 +1495,13 @@ async function init() {
         hideAuthScreen();
         populateSettingsPage(user);
         console.log("🔌 Session restored securely from token:", user.name);
+        // Redirect admin users to admin panel if on dashboard
+        if (onDashboard && user.role === 'admin') {
+          console.log("🔌 Admin user detected, redirecting to admin panel...");
+          const isCleanUrl = !window.location.pathname.includes('.html');
+          window.location.replace(isCleanUrl ? '/admin' : 'admin.html');
+          return;
+        }
         // Only load dashboard data when confirmed logged in
         if (onDashboard) { loadDashboardData().catch(() => {}); updateAllSidebarBadges(); }
       } else {
@@ -1508,6 +1521,13 @@ async function init() {
           populateSettingsPage(currentUser);
           startInactivityWatcher();
           console.log("🔌 Session restored offline:", currentUser.name);
+          // Redirect admin users to admin panel
+          if (onDashboard && currentUser.role === 'admin') {
+            console.log("🔌 Admin user (offline), redirecting to admin panel...");
+            const isCleanUrl = !window.location.pathname.includes('.html');
+            window.location.replace(isCleanUrl ? '/admin' : 'admin.html');
+            return;
+          }
           if (onDashboard) loadDashboardData().catch(() => {});
         } catch (err) {
           clearUser();

@@ -7,28 +7,36 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="/css/dark-mode.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/dark-mode.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <!-- CRITICAL: Immediate auth guard — if no token, redirect before any rendering -->
   <script>
     (function() {
-      const token = localStorage.getItem('linkbuild-token');
-      const user = localStorage.getItem('linkbuild-user');
-      if (!token || !user) {
+      var token = localStorage.getItem('linkbuild-token');
+      var userRaw = localStorage.getItem('linkbuild-user');
+      if (!token || !userRaw) {
         // No session at all — redirect immediately to landing page with login prompt
-        const isCleanUrl = !window.location.pathname.includes('.html');
+        var isCleanUrl = !window.location.pathname.includes('.html');
         window.location.replace(isCleanUrl ? '/?auth=login' : 'index.html?auth=login');
       }
+      // If user is admin, redirect to admin panel immediately
+      try {
+        var user = JSON.parse(userRaw);
+        if (user && user.role === 'admin') {
+          var isCleanUrl = !window.location.pathname.includes('.html');
+          window.location.replace(isCleanUrl ? '/admin' : 'admin.html');
+        }
+      } catch(e) { /* ignore parse errors */ }
     })();
   </script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <!-- Convex Browser Bundle (loaded before integration) -->
-  <script src="/node_modules/convex/dist/browser.bundle.js"></script>
+  <script src="./node_modules/convex/dist/browser.bundle.js"></script>
   <!-- Convex Integration (regular script) -->
-  <script src="/js/convex-integration-v2.js"></script>
+  <script src="js/convex-integration-v2.js"></script>
 </head>
 <body class="dashboard-body">
   <!-- Mobile Overlay -->
