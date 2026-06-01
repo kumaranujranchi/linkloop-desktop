@@ -236,7 +236,8 @@ function getLandingUrl(params) {
 
 function getDashboardUrl(role) {
   const isCleanUrl = !window.location.pathname.includes(".html");
-  if (role === 'admin') {
+  const normalizedRole = role ? role.toString().toLowerCase() : "";
+  if (normalizedRole === 'admin') {
     return isCleanUrl ? '/admin' : 'admin.html';
   }
   return isCleanUrl ? '/dashboard' : 'dashboard.html';
