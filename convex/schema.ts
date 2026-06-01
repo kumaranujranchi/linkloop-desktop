@@ -127,6 +127,8 @@ export default defineSchema({
       v.literal("exchange_accepted"),
       v.literal("exchange_completed"),
       v.literal("exchange_rejected"),
+      v.literal("exchange_negotiating"),
+      v.literal("exchange_new"),
       v.literal("new_message"),
       v.literal("backlink_health"),
       v.literal("link_removed"),

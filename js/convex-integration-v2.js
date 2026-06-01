@@ -1448,7 +1448,12 @@ function renderNotificationsList(notifications) {
   }
 
   const iconMap = {
+    exchange_request: { bg: 'rgba(108,77,246,0.1)', color: 'var(--primary-purple)', svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>' },
+    exchange_new: { bg: 'rgba(108,77,246,0.1)', color: 'var(--primary-purple)', svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>' },
+    exchange_negotiating: { bg: 'var(--warning-light)', color: 'var(--warning)', svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' },
+    exchange_accepted: { bg: 'var(--success-light)', color: 'var(--success)', svg: '<polyline points="20 6 9 17 4 12"/>' },
     exchange_completed: { bg: 'var(--success-light)', color: 'var(--success)', svg: '<polyline points="20 6 9 17 4 12"/>' },
+    exchange_rejected: { bg: 'var(--danger-light)', color: 'var(--danger)', svg: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>' },
     new_message: { bg: 'var(--info-light)', color: 'var(--info)', svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' },
     new_exchange: { bg: 'rgba(108,77,246,0.1)', color: 'var(--primary-purple)', svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>' },
     backlink_alert: { bg: 'var(--warning-light)', color: 'var(--warning)', svg: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' },
