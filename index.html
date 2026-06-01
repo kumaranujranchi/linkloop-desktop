@@ -31,6 +31,8 @@
       overflow-y: auto !important;
       height: auto !important;
       line-height: 1.6;
+      position: relative;
+      z-index: 1;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -131,7 +133,16 @@
       position: fixed;
       inset: 0;
       z-index: 0;
-      pointer-events: none;
+      pointer-events: none !important;
+    }
+
+    #liquidEtherContainer canvas {
+      pointer-events: none !important;
+    }
+
+    .landing-nav,
+    .landing-nav * {
+      pointer-events: auto !important;
     }
 
     /* Background blobs */
@@ -619,7 +630,7 @@
       <a href="#features">Features</a>
       <a href="#audience">Audience</a>
       <a href="#faq">FAQ</a>
-      <button class="btn btn-secondary btn-sm" id="landingAuthBtn" onclick="window.LinkBuild.showAuthScreen(); if (window.switchAuthTab) window.switchAuthTab('login');">Login</button>
+      <button class="btn btn-secondary btn-sm" id="landingAuthBtn" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen();if(window.switchAuthTab)window.switchAuthTab('login')})()">Login</button>
     </div>
   </nav>
 
@@ -637,7 +648,7 @@
       <p class="hero-subtitle">Elevate your website’s Domain Authority and organic traffic. Discover verified niche partners, negotiate secure link exchanges, and track backlink health automatically 24/7.</p>
       
       <div class="hero-actions">
-        <button class="btn btn-primary btn-lg" id="landingHeroCta" onclick="window.LinkBuild.showAuthScreen(); if (window.switchAuthTab) window.switchAuthTab('signup');">Get Started - Free</button>
+        <button class="btn btn-primary btn-lg" id="landingHeroCta" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen();if(window.switchAuthTab)window.switchAuthTab('signup')})()">Get Started - Free</button>
         <a href="#features" class="btn btn-ghost btn-lg">Learn More</a>
       </div>
     </div>
@@ -825,7 +836,7 @@
     <div class="cta-banner-content">
       <h2>Join the Organic SEO Revolution</h2>
       <p>Ready to safely scale your search engine optimization strategy? Start connecting with high-quality partners today.</p>
-      <button class="btn btn-primary btn-lg" onclick="window.LinkBuild.showAuthScreen()">Create Your Free Account</button>
+      <button class="btn btn-primary btn-lg" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen()})()">Create Your Free Account</button>
     </div>
   </section>
 
@@ -842,7 +853,7 @@
         <ul>
           <li><a href="#features">Features</a></li>
           <li><a href="#audience">Target Audience</a></li>
-          <li><a href="#" onclick="window.LinkBuild.showAuthScreen(); return false;">Login</a></li>
+          <li><a href="#" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen();return false})()">Login</a></li>
         </ul>
       </div>
       <div class="footer-links">
