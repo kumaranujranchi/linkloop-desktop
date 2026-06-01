@@ -134,7 +134,11 @@ export const adminStats = query({
 
 // Repair old user accounts that are missing schema fields
 export const repairUser = mutation({
-  args: { email: v.string(), password: v.optional(v.string()) },
+  args: {
+    email: v.string(),
+    password: v.optional(v.string()),
+    role: v.optional(v.union(v.literal("free"), v.literal("pro"), v.literal("agency"), v.literal("admin"))),
+  },
   handler: async (ctx, args) => {
     const user = await ctx.db
       .query("users")
@@ -149,6 +153,7 @@ export const repairUser = mutation({
     if (!user.responseRate && user.responseRate !== 0) patch.responseRate = 100;
     if (!user.trustBadges) patch.trustBadges = [];
     if (!user.createdAt) patch.createdAt = now;
+    if (args.role) patch.role = args.role;
     
     // Also set password if provided
     if (args.password) {
