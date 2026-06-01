@@ -3,6 +3,111 @@
    Email Auth + All Backend Functions
    ============================================= */
 
+// =============================================
+// CUSTOM MODAL DIALOGS
+// =============================================
+function showCustomAlert(message, title = "Notification", type = "info") {
+  return new Promise((resolve) => {
+    // Create overlay
+    const overlay = document.createElement("div");
+    overlay.className = "custom-modal-overlay";
+    
+    // Icon mapping
+    const icons = {
+      info: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+      warning: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+      danger: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><octagon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+    };
+
+    overlay.innerHTML = `
+      <div class="custom-modal-box">
+        <div class="custom-modal-header">
+          <div class="custom-modal-icon ${type}">
+            ${icons[type] || icons.info}
+          </div>
+          <div class="custom-modal-title">${title}</div>
+        </div>
+        <div class="custom-modal-body">${message}</div>
+        <div class="custom-modal-footer">
+          <button class="btn btn-primary" id="custom-modal-ok-btn">OK</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Trigger animation
+    setTimeout(() => overlay.classList.add("active"), 10);
+
+    const okBtn = overlay.querySelector("#custom-modal-ok-btn");
+    okBtn.focus();
+
+    const close = () => {
+      overlay.classList.remove("active");
+      setTimeout(() => {
+        overlay.remove();
+        resolve();
+      }, 200);
+    };
+
+    okBtn.addEventListener("click", close);
+  });
+}
+
+function showCustomConfirm(message, title = "Confirm Action", type = "warning") {
+  return new Promise((resolve) => {
+    // Create overlay
+    const overlay = document.createElement("div");
+    overlay.className = "custom-modal-overlay";
+    
+    // Icon mapping
+    const icons = {
+      info: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+      warning: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+      danger: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><octagon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+    };
+
+    overlay.innerHTML = `
+      <div class="custom-modal-box">
+        <div class="custom-modal-header">
+          <div class="custom-modal-icon ${type}">
+            ${icons[type] || icons.warning}
+          </div>
+          <div class="custom-modal-title">${title}</div>
+        </div>
+        <div class="custom-modal-body">${message}</div>
+        <div class="custom-modal-footer">
+          <button class="btn btn-secondary" id="custom-modal-cancel-btn">Cancel</button>
+          <button class="btn btn-primary" id="custom-modal-confirm-btn">Confirm</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Trigger animation
+    setTimeout(() => overlay.classList.add("active"), 10);
+
+    const cancelBtn = overlay.querySelector("#custom-modal-cancel-btn");
+    const confirmBtn = overlay.querySelector("#custom-modal-confirm-btn");
+    confirmBtn.focus();
+
+    const close = (result) => {
+      overlay.classList.remove("active");
+      setTimeout(() => {
+        overlay.remove();
+        resolve(result);
+      }, 200);
+    };
+
+    cancelBtn.addEventListener("click", () => close(false));
+    confirmBtn.addEventListener("click", () => close(true));
+  });
+}
+
+window.showCustomAlert = showCustomAlert;
+window.showCustomConfirm = showCustomConfirm;
+
 const DEFAULT_CONVEX_URL = "https://vibrant-marmot-366.convex.cloud";
 const CONVEX_URL = "__CONVEX_URL__";
 const INACTIVITY_LOGOUT_MS = 10 * 60 * 1000; // 10 minutes
@@ -61,10 +166,10 @@ function stopInactivityWatcher() {
   clearInactivityTimer();
 }
 
-function logoutDueToInactivity() {
+async function logoutDueToInactivity() {
   if (!currentUser) return;
   stopInactivityWatcher();
-  alert("You have been logged out after 10 minutes of inactivity for security reasons.");
+  await showCustomAlert("You have been logged out after 10 minutes of inactivity for security reasons.", "Session Expired", "warning");
   logout();
 }
 
@@ -1182,7 +1287,8 @@ async function dealAction(newStatus) {
     rejected: 'Decline this exchange request? This cannot be undone.',
     negotiating: 'Move this exchange to Negotiating status?',
   };
-  if (!confirm(confirmMap[newStatus] || 'Confirm this action?')) return;
+  const confirmed = await showCustomConfirm(confirmMap[newStatus] || 'Confirm this action?', 'Confirm Action', 'warning');
+  if (!confirmed) return;
 
   try {
     const token = getSessionToken();
@@ -1252,7 +1358,7 @@ async function startConversationWith(otherUserId, exchangeId, otherUserName) {
       if (convId) openConversation(convId, otherUserId, otherUserName || 'Partner');
     }, 300);
   } catch(e) {
-    alert('Failed to start conversation: ' + e.message);
+    showCustomAlert('Failed to start conversation: ' + e.message, 'Error', 'danger');
   }
 }
 

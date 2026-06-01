@@ -821,10 +821,10 @@ window.handleGoogleSignIn = async function() {
       }
     });
 
-    google.accounts.id.prompt((notification) => {
+    google.accounts.id.prompt(async (notification) => {
       if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
         console.log("Google One Tap was skipped or not displayed, attempting to show Google Sign-In prompt...");
-        alert("Google Sign-In initialized. Please check your browser's prompt or ensure popups are enabled.");
+        await showCustomAlert("Google Sign-In initialized. Please check your browser's prompt or ensure popups are enabled.", "Google Sign-In", "info");
       }
     });
   } catch (err) {
@@ -896,22 +896,22 @@ document.addEventListener("click", function(e) {
 // Keep legacy showLogoutMenu as fallback alias
 window.showLogoutMenu = window.toggleProfileDropdown;
 
-window.saveSettingsProfile = function() {
+window.saveSettingsProfile = async function() {
   const user = window.LinkBuild.getCurrentUser();
-  if (!user) { alert("You must be logged in to save settings."); return; }
+  if (!user) { await showCustomAlert("You must be logged in to save settings.", "Authentication Required", "warning"); return; }
   const nameEl = document.getElementById("settingsDisplayName");
   // For now, just show a success toast (full save requires backend endpoint)
   if (nameEl && nameEl.value.trim()) {
-    alert("Settings saved! (Changes to display name will sync on next login.)");
+    await showCustomAlert("Settings saved! (Changes to display name will sync on next login.)", "Settings Saved", "info");
   }
 };
 
 // =============================================
 // ADD WEBSITE MODAL
 // =============================================
-window.openAddWebsiteModal = function() {
+window.openAddWebsiteModal = async function() {
   if (!window.LinkBuild.isLoggedIn()) {
-    alert("Please login first to add a website.");
+    await showCustomAlert("Please login first to add a website.", "Authentication Required", "warning");
     window.LinkBuild.showAuthScreen();
     return;
   }
@@ -965,7 +965,7 @@ let currentVerifyMethod = "dns";
 // Attach openVerifyModal to LinkBuild so it can be called from table buttons
 window.LinkBuild.openVerifyModal = async function(websiteId) {
   if (!window.LinkBuild.isLoggedIn()) {
-    alert("Please login first.");
+    await showCustomAlert("Please login first.", "Authentication Required", "warning");
     window.LinkBuild.showAuthScreen();
     return;
   }
@@ -1272,7 +1272,7 @@ window.handleModerateWebsite = async function(websiteId, status) {
     // Refresh admin dashboard
     await window.loadAdminDashboard();
   } else {
-    alert("Moderation failed: " + (res?.error || "Unknown error"));
+    await showCustomAlert("Moderation failed: " + (res?.error || "Unknown error"), "Moderation Error", "danger");
   }
 };
 
@@ -1348,19 +1348,20 @@ window.handleUserRoleChange = async function(userId, newRole) {
     if (user) user.role = newRole;
     console.log(`Role updated successfully for user ${userId} to ${newRole}`);
   } else {
-    alert("Failed to update role: " + (res?.error || "Unknown error"));
+    await showCustomAlert("Failed to update role: " + (res?.error || "Unknown error"), "Error", "danger");
   }
 };
 
 window.handleSuspendUser = async function(userId) {
-  if (!confirm("Are you sure you want to suspend this user? This will set their reputation to 0 and force logout all active sessions.")) return;
+  const confirmed = await showCustomConfirm("Are you sure you want to suspend this user? This will set their reputation to 0 and force logout all active sessions.", "Suspend User?", "danger");
+  if (!confirmed) return;
   if (!window.LinkBuild) return;
   const res = await window.LinkBuild.banAdminUser(userId);
   if (res && res.success) {
     // Refresh user list
     await loadAdminUserDirectory();
   } else {
-    alert("Suspension failed: " + (res?.error || "Unknown error"));
+    await showCustomAlert("Suspension failed: " + (res?.error || "Unknown error"), "Suspension Error", "danger");
   }
 };
 
