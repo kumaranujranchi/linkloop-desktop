@@ -13,6 +13,7 @@ export default defineSchema({
     completedExchanges: v.number(),
     responseRate: v.number(),          // percentage
     trustBadges: v.array(v.string()),
+    publicKey: v.optional(v.string()), // ECDH public key JWK for E2E encryption
     createdAt: v.number(),             // timestamp
     passwordHash: v.optional(v.string()),
     passwordSalt: v.optional(v.string()),
@@ -81,6 +82,7 @@ export default defineSchema({
     senderId: v.id("users"),
     receiverId: v.id("users"),
     text: v.string(),
+    encrypted: v.optional(v.boolean()), // Whether the message is E2E encrypted
     attachmentUrl: v.optional(v.string()),
     websiteRef: v.optional(v.id("websites")),
     read: v.boolean(),

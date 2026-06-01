@@ -538,10 +538,37 @@ async function loadExchangeRequests() {
 
 async function sendExchangeRequest(data) {
   const uid = getUserId();
-  if (!uid) return { success: false, error: "Please login first" };
+  if (!uid) {
+    showMsgToast('⚠️ Please login first to send exchange requests.', 'warning');
+    return { success: false, error: "Please login first" };
+  }
+
+  // Auto-detect user's website if not provided (e.g., from marketplace)
+  if (!data.fromWebsiteId || data.fromWebsiteId === '') {
+    try {
+      const mySites = await client.query("websites:listByOwner", { userId: uid });
+      if (!mySites || mySites.length === 0) {
+        showMsgToast('⚠️ You need to add at least one website before sending exchange requests. Go to "My Websites" to add one.', 'warning');
+        return { success: false, error: "No websites found. Please add a website first." };
+      }
+      // Pick the first verified website, or fall back to first website
+      const verified = mySites.find((s) => s.verified);
+      data.fromWebsiteId = verified ? verified._id : mySites[0]._id;
+      if (!verified) {
+        showMsgToast('ℹ️ Using your first website. Verify it for better results.', 'info');
+      }
+    } catch (e) {
+      showMsgToast('⚠️ Failed to load your websites. Please try again.', 'warning');
+      return { success: false, error: "Failed to load your websites" };
+    }
+  }
+
   try {
-    return { success: true, id: await client.mutation("exchanges:send", { ...data, fromUserId: uid }) };
+    const result = await client.mutation("exchanges:send", { ...data, fromUserId: uid });
+    showMsgToast('✅ Exchange request sent successfully!', 'success');
+    return { success: true, id: result };
   } catch (e) {
+    showMsgToast('❌ ' + formatConvexError(e, "Failed to send exchange request"), 'danger');
     return { success: false, error: formatConvexError(e, "Failed to send exchange request") };
   }
 }
@@ -549,6 +576,79 @@ async function sendExchangeRequest(data) {
 // =============================================
 // MESSAGES — Full Real-time Chat System
 // =============================================
+
+// ========== E2E ENCRYPTION ==========
+// Hybrid encryption: ECDH key exchange + AES-GCM per-message encryption
+const CRYPTO_ALGORITHM = { name: 'ECDH', namedCurve: 'P-256' };
+const AES_ALGORITHM = { name: 'AES-GCM', length: 256 };
+
+async function getOrCreateKeyPair() {
+  // Try to load existing key pair from localStorage
+  const stored = localStorage.getItem('linkbuild-crypto-keypair');
+  if (stored) {
+    try {
+      const jwk = JSON.parse(stored);
+      return await crypto.subtle.importKey('jwk', jwk, CRYPTO_ALGORITHM, true, ['deriveBits']);
+    } catch (e) { /* ignore, regenerate */ }
+  }
+  // Generate new key pair
+  const keyPair = await crypto.subtle.generateKey(CRYPTO_ALGORITHM, true, ['deriveBits']);
+  // Export and store private key
+  const jwk = await crypto.subtle.exportKey('jwk', keyPair.privateKey);
+  localStorage.setItem('linkbuild-crypto-keypair', JSON.stringify(jwk));
+  // Upload public key to server
+  await uploadPublicKey(keyPair.publicKey);
+  return keyPair;
+}
+
+async function uploadPublicKey(publicKey) {
+  const jwk = await crypto.subtle.exportKey('jwk', publicKey);
+  const token = getSessionToken();
+  if (!token || !client) return;
+  try {
+    await client.mutation('users:storePublicKey', { publicKey: JSON.stringify(jwk), token });
+  } catch (e) { console.warn('Failed to upload public key:', e); }
+}
+
+async function deriveSharedSecret(privateKey, otherPublicJwk) {
+  const otherPublicKey = await crypto.subtle.importKey(
+    'jwk', JSON.parse(otherPublicJwk), CRYPTO_ALGORITHM, true, []
+  );
+  const sharedBits = await crypto.subtle.deriveBits(
+    { name: 'ECDH', public: otherPublicKey },
+    privateKey,
+    256
+  );
+  return await crypto.subtle.importKey('raw', sharedBits, AES_ALGORITHM, false, ['encrypt', 'decrypt']);
+}
+
+async function encryptMessage(plaintext, otherPublicJwk) {
+  const keyPair = await getOrCreateKeyPair();
+  const sharedKey = await deriveSharedSecret(keyPair.privateKey, otherPublicJwk);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encoded = new TextEncoder().encode(plaintext);
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, sharedKey, encoded);
+  // Return as JSON with base64-encoded IV and ciphertext
+  return JSON.stringify({
+    iv: btoa(String.fromCharCode(...iv)),
+    data: btoa(String.fromCharCode(...new Uint8Array(ciphertext)))
+  });
+}
+
+async function decryptMessage(encryptedJson, senderPublicJwk) {
+  try {
+    const { iv, data } = JSON.parse(encryptedJson);
+    const keyPair = await getOrCreateKeyPair();
+    const sharedKey = await deriveSharedSecret(keyPair.privateKey, senderPublicJwk);
+    const ivBytes = Uint8Array.from(atob(iv), c => c.charCodeAt(0));
+    const cipherBytes = Uint8Array.from(atob(data), c => c.charCodeAt(0));
+    const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ivBytes }, sharedKey, cipherBytes);
+    return new TextDecoder().decode(plaintext);
+  } catch (e) {
+    console.warn('Decryption failed:', e);
+    return '[Unable to decrypt this message]';
+  }
+}
 
 // State
 let currentConversationId = null;
@@ -730,7 +830,7 @@ async function fetchAndRenderMessages() {
   if (!currentConversationId) return;
   try {
     const msgs = await client.query('messages:listMessages', { conversationId: currentConversationId, limit: 100 });
-    renderMessages(msgs || []);
+    await renderMessages(msgs || []);
     lastMsgCount = (msgs || []).length;
   } catch(e) {
     const msgsEl = document.getElementById('chatMessages');
@@ -738,7 +838,7 @@ async function fetchAndRenderMessages() {
   }
 }
 
-function renderMessages(messages) {
+async function renderMessages(messages) {
   const msgsEl = document.getElementById('chatMessages');
   if (!msgsEl) return;
   const uid = getUserId();
@@ -753,8 +853,30 @@ function renderMessages(messages) {
     return;
   }
 
+  // Pre-fetch senders' public keys for decryption
+  const senderIds = [...new Set(messages.filter(m => m.encrypted).map(m => m.senderId))];
+  const publicKeyMap = {};
+  for (const sid of senderIds) {
+    try {
+      const u = await client.query('users:getPublicKey', { userId: sid });
+      if (u && u.publicKey) publicKeyMap[sid] = u.publicKey;
+    } catch (e) { /* ignore */ }
+  }
+
   let lastDate = null;
-  const html = messages.map(msg => {
+  const decryptedTexts = await Promise.all(messages.map(async msg => {
+    let displayText = msg.text;
+    if (msg.encrypted && publicKeyMap[msg.senderId]) {
+      try {
+        displayText = await decryptMessage(msg.text, publicKeyMap[msg.senderId]);
+      } catch (e) {
+        displayText = '🔒 [Encrypted message — cannot decrypt]';
+      }
+    }
+    return { ...msg, displayText };
+  }));
+
+  const html = decryptedTexts.map(msg => {
     const isSent = msg.senderId === uid;
     const msgDate = new Date(msg.createdAt).toLocaleDateString();
     let dateSep = '';
@@ -767,10 +889,12 @@ function renderMessages(messages) {
     }
     const time = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const readTick = isSent ? (msg.read ? ' <span style="color:var(--primary-purple);font-size:0.7rem">✓✓</span>' : ' <span style="color:var(--text-tertiary);font-size:0.7rem">✓</span>') : '';
+    const lockIcon = msg.encrypted && !isSent ? ' <span title="End-to-end encrypted" style="font-size:0.7rem">🔒</span>' : '';
+    const sentLock = msg.encrypted && isSent ? ' <span title="End-to-end encrypted" style="font-size:0.7rem;opacity:0.5">🔒</span>' : '';
 
     return `${dateSep}<div class="chat-bubble ${isSent ? 'sent' : 'received'}" style="position:relative">
-      ${msg.text}
-      <span style="font-size:0.65rem;opacity:0.6;margin-left:8px;white-space:nowrap">${time}${readTick}</span>
+      ${msg.displayText}
+      <span style="font-size:0.65rem;opacity:0.6;margin-left:8px;white-space:nowrap">${time}${readTick}${lockIcon}${sentLock}</span>
     </div>`;
   }).join('');
 
@@ -830,10 +954,21 @@ async function doSendMessage() {
   try {
     const uid = getUserId();
     const token = getSessionToken();
+    // Fetch receiver's public key for E2E encryption
+    let encryptedText = text;
+    let isEncrypted = false;
+    try {
+      const receiverUser = await client.query('users:getPublicKey', { userId: currentReceiverId });
+      if (receiverUser && receiverUser.publicKey) {
+        encryptedText = await encryptMessage(text, receiverUser.publicKey);
+        isEncrypted = true;
+      }
+    } catch (e) { console.warn('Encryption unavailable, sending plaintext:', e); }
     await client.mutation('messages:send', {
       conversationId: currentConversationId,
       receiverId: currentReceiverId,
-      text,
+      text: encryptedText,
+      encrypted: isEncrypted || undefined,
       exchangeId: currentExchangeId || undefined,
       senderId: uid || undefined,
       token: token || undefined,
@@ -1017,11 +1152,15 @@ async function openConversationForExchange(exchangeId, fromUserId, toUserId) {
   if (!isLoggedIn()) { showAuthScreen(); return; }
   const uid = getUserId();
   const otherUserId = uid === fromUserId ? toUserId : fromUserId;
+  // Initialize crypto key pair before opening conversation
+  await getOrCreateKeyPair();
   await startConversationWith(otherUserId, exchangeId, 'Exchange Partner');
 }
 
 async function startConversationWith(otherUserId, exchangeId, otherUserName) {
   if (!isLoggedIn()) { showAuthScreen(); return; }
+  // Initialize crypto key pair for E2E encryption
+  await getOrCreateKeyPair();
   const uid = getUserId();
   const token = getSessionToken();
   try {

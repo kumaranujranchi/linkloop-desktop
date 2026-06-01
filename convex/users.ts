@@ -649,3 +649,31 @@ export const banUser = mutation({
   },
 });
 
+// Store user's ECDH public key for E2E encryption
+export const storePublicKey = mutation({
+  args: {
+    publicKey: v.string(),
+    token: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getUserIdFromToken(ctx.db, args.token);
+    if (!userId) throw new ConvexError("Not authenticated");
+
+    await ctx.db.patch(userId, { publicKey: args.publicKey });
+    return { success: true };
+  },
+});
+
+// Get a user's public key for E2E encryption
+export const getPublicKey = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    const user = await ctx.db.get(args.userId);
+    if (!user) return null;
+    return {
+      _id: user._id,
+      publicKey: (user as any).publicKey || null,
+    };
+  },
+});
+

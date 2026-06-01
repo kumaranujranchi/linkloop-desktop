@@ -154,6 +154,7 @@ export const send = mutation({
     conversationId: v.id("conversations"),
     receiverId: v.id("users"),
     text: v.string(),
+    encrypted: v.optional(v.boolean()),
     attachmentUrl: v.optional(v.string()),
     websiteRef: v.optional(v.id("websites")),
     exchangeId: v.optional(v.id("exchangeRequests")),
@@ -194,6 +195,7 @@ export const send = mutation({
       senderId: userId,
       receiverId: args.receiverId,
       text: args.text,
+      encrypted: args.encrypted || false,
       attachmentUrl: args.attachmentUrl,
       read: false,
       createdAt: now,
@@ -207,11 +209,14 @@ export const send = mutation({
     });
 
     // Create notification
+    const notificationBody = args.encrypted
+      ? `🔒 Encrypted message from ${user.name}`
+      : args.text.slice(0, 150);
     await ctx.db.insert("notifications", {
       userId: args.receiverId,
       type: "new_message",
       title: `New message from ${user.name}`,
-      body: args.text.slice(0, 150),
+      body: notificationBody,
       read: false,
       createdAt: now,
     });
