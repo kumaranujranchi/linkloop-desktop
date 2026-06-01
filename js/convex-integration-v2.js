@@ -1522,6 +1522,70 @@ async function init() {
   console.log("🔌 LinkBuild: Ready!");
 }
 
+// Admin panel wrappers
+async function getAdminStats() {
+  const token = localStorage.getItem("linkbuild-token");
+  if (!token) return null;
+  try {
+    return await client.query("users:adminStats", { token });
+  } catch (e) {
+    console.error("Error getting admin stats:", e);
+    return null;
+  }
+}
+
+async function getAdminUsers(limit = 100) {
+  const token = localStorage.getItem("linkbuild-token");
+  if (!token) return [];
+  try {
+    return await client.query("users:listAll", { token, limit });
+  } catch (e) {
+    console.error("Error getting admin users:", e);
+    return [];
+  }
+}
+
+async function updateAdminUserRole(userId, role) {
+  const token = localStorage.getItem("linkbuild-token");
+  if (!token) return { success: false, error: "Not logged in" };
+  try {
+    return await client.mutation("users:updateRole", { token, userId, role });
+  } catch (e) {
+    return { success: false, error: formatConvexError(e, "Failed to update role") };
+  }
+}
+
+async function banAdminUser(userId) {
+  const token = localStorage.getItem("linkbuild-token");
+  if (!token) return { success: false, error: "Not logged in" };
+  try {
+    return await client.mutation("users:banUser", { token, userId });
+  } catch (e) {
+    return { success: false, error: formatConvexError(e, "Failed to ban user") };
+  }
+}
+
+async function getPendingWebsites() {
+  const token = localStorage.getItem("linkbuild-token");
+  if (!token) return [];
+  try {
+    return await client.query("websites:listPending", { token });
+  } catch (e) {
+    console.error("Error getting pending websites:", e);
+    return [];
+  }
+}
+
+async function moderateAdminWebsite(websiteId, status) {
+  const token = localStorage.getItem("linkbuild-token");
+  if (!token) return { success: false, error: "Not logged in" };
+  try {
+    return await client.mutation("websites:moderate", { token, websiteId, status });
+  } catch (e) {
+    return { success: false, error: formatConvexError(e, "Failed to moderate website") };
+  }
+}
+
 // =============================================
 // GLOBAL API
 // =============================================
@@ -1544,6 +1608,8 @@ window.LinkBuild = {
   openConversationForExchange,
   dealAction,
   viewExchangeFromChat,
+  // Admin Panel
+  getAdminStats, getAdminUsers, updateAdminUserRole, banAdminUser, getPendingWebsites, moderateAdminWebsite,
 };
 
 if (document.readyState === "loading") {

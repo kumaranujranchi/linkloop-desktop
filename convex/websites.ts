@@ -1,6 +1,7 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
+import { getUserIdFromToken } from "./auth_helpers";
 
 // ========== QUERIES ==========
 
@@ -307,5 +308,46 @@ export const clearSeedData = mutation({
       }
     }
     return { deleted };
+  },
+});
+
+async function verifyAdminToken(db: any, token: string) {
+  const userId = await getUserIdFromToken(db, token);
+  if (!userId) throw new ConvexError("Not authenticated");
+  const user = await db.get(userId);
+  if (!user || user.role !== "admin") {
+    throw new ConvexError("Unauthorized access to admin APIs");
+  }
+  return user;
+}
+
+// Admin: list all pending websites
+export const listPending = query({
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
+    const pending = await ctx.db
+      .query("websites")
+      .withIndex("by_status", (q) => q.eq("status", "pending"))
+      .collect();
+    return pending;
+  },
+});
+
+// Admin: moderate a website (approve or ban)
+export const moderate = mutation({
+  args: {
+    token: v.string(),
+    websiteId: v.id("websites"),
+    status: v.union(v.literal("active"), v.literal("rejected"), v.literal("suspended")),
+  },
+  handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
+    const verified = args.status === "active";
+    await ctx.db.patch(args.websiteId, {
+      status: args.status,
+      verified,
+    });
+    return { success: true };
   },
 });

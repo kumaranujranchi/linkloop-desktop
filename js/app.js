@@ -1084,6 +1084,10 @@ navigateTo = function(pageName, navItem) {
         window.LinkBuild.loadNotifications();
       } else if (pageName === "dashboard") {
         window.LinkBuild.loadDashboardData();
+      } else if (pageName === "admin") {
+        if (typeof window.loadAdminDashboard === "function") {
+          window.loadAdminDashboard();
+        }
       } else if (pageName === "settings") {
         // Repopulate settings with live user data every time settings is opened
         const user = window.LinkBuild.getCurrentUser();
@@ -1191,3 +1195,177 @@ window.copyToClipboard = function(elementId, container) {
     console.error('Failed to copy: ', err);
   });
 };
+
+window.loadAdminDashboard = async function() {
+  if (!window.LinkBuild) return;
+  
+  // 1. Fetch KPI statistics
+  const stats = await window.LinkBuild.getAdminStats();
+  if (stats) {
+    document.getElementById("adminTotalUsers").textContent = stats.total.toLocaleString();
+    document.getElementById("adminNewUsers").textContent = `${stats.newThisMonth} new this month`;
+    document.getElementById("adminMRR").textContent = `$${stats.mrr.toLocaleString()}`;
+    document.getElementById("adminActiveWebsites").textContent = stats.totalWebsites.toLocaleString();
+    document.getElementById("adminSpamReports").textContent = stats.spamReports.toLocaleString();
+  }
+
+  // 2. Fetch & Render Moderation Queue
+  await loadAdminModerationQueue();
+
+  // 3. Fetch & Render User Directory
+  await loadAdminUserDirectory();
+};
+
+async function loadAdminModerationQueue() {
+  const queueContainer = document.getElementById("adminModerationQueue");
+  if (!queueContainer) return;
+
+  const pendingWebsites = await window.LinkBuild.getPendingWebsites();
+  if (!pendingWebsites || pendingWebsites.length === 0) {
+    queueContainer.innerHTML = `
+      <div style="padding:30px 20px;text-align:center;color:var(--text-tertiary)">
+        🎉 All caught up! No pending verification requests.
+      </div>
+    `;
+    return;
+  }
+
+  let html = "";
+  pendingWebsites.forEach((site) => {
+    html += `
+      <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:600;font-size:0.85rem">${site.domain}</div>
+          <div style="font-size:0.8rem;color:var(--text-tertiary)">
+            Niche: ${site.niche} · DA: ${site.domainAuthority} · Spam Score: ${site.spamScore}%
+          </div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button type="button" class="btn btn-danger btn-sm" onclick="handleModerateWebsite('${site._id}', 'rejected')">Reject</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="handleModerateWebsite('${site._id}', 'active')">Approve</button>
+        </div>
+      </div>
+    `;
+  });
+  
+  queueContainer.innerHTML = html;
+}
+
+window.handleModerateWebsite = async function(websiteId, status) {
+  if (!window.LinkBuild) return;
+  const res = await window.LinkBuild.moderateAdminWebsite(websiteId, status);
+  if (res && res.success) {
+    // Refresh admin dashboard
+    await window.loadAdminDashboard();
+  } else {
+    alert("Moderation failed: " + (res?.error || "Unknown error"));
+  }
+};
+
+let allAdminUsers = []; // Cache to support instant search filter
+
+async function loadAdminUserDirectory() {
+  const tableBody = document.getElementById("adminUsersTableBody");
+  if (!tableBody) return;
+
+  const users = await window.LinkBuild.getAdminUsers(100);
+  allAdminUsers = users || [];
+  renderAdminUsersList(allAdminUsers);
+}
+
+function renderAdminUsersList(users) {
+  const tableBody = document.getElementById("adminUsersTableBody");
+  if (!tableBody) return;
+
+  if (!users || users.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="6" style="padding:30px;text-align:center;color:var(--text-tertiary)">No users found</td>
+      </tr>
+    `;
+    return;
+  }
+
+  let html = "";
+  users.forEach((u) => {
+    const formattedDate = new Date(u.createdAt).toLocaleDateString();
+    
+    // Select options for roles
+    const roles = ["free", "pro", "agency", "admin"];
+    let roleSelectOptions = "";
+    roles.forEach((r) => {
+      const selected = u.role === r ? "selected" : "";
+      roleSelectOptions += `<option value="${r}" ${selected}>${r.toUpperCase()}</option>`;
+    });
+
+    html += `
+      <tr style="border-bottom:1px solid var(--border-light)">
+        <td style="padding:12px 16px;font-weight:500">${u.name}</td>
+        <td style="padding:12px 16px;color:var(--text-secondary)">${u.email}</td>
+        <td style="padding:12px 16px">
+          <select class="input" style="font-size:0.75rem;padding:4px 8px;width:auto;margin:0" onchange="handleUserRoleChange('${u._id}', this.value)">
+            ${roleSelectOptions}
+          </select>
+        </td>
+        <td style="padding:12px 16px">
+          <span style="font-weight:600;color:${u.reputationScore >= 70 ? 'var(--success)' : u.reputationScore >= 40 ? 'var(--warning)' : 'var(--danger)'}">
+            ${u.reputationScore}
+          </span>
+        </td>
+        <td style="padding:12px 16px;color:var(--text-tertiary)">${formattedDate}</td>
+        <td style="padding:12px 16px;text-align:right">
+          <button type="button" class="btn btn-ghost btn-sm" style="color:var(--danger);padding:4px 8px" onclick="handleSuspendUser('${u._id}')" ${u.reputationScore === 0 ? 'disabled' : ''}>
+            ${u.reputationScore === 0 ? 'Suspended' : 'Suspend'}
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+
+  tableBody.innerHTML = html;
+}
+
+window.handleUserRoleChange = async function(userId, newRole) {
+  if (!window.LinkBuild) return;
+  const res = await window.LinkBuild.updateAdminUserRole(userId, newRole);
+  if (res && res.success) {
+    // Dynamically update the cached user role locally to avoid full list reload
+    const user = allAdminUsers.find(u => u._id === userId);
+    if (user) user.role = newRole;
+    console.log(`Role updated successfully for user ${userId} to ${newRole}`);
+  } else {
+    alert("Failed to update role: " + (res?.error || "Unknown error"));
+  }
+};
+
+window.handleSuspendUser = async function(userId) {
+  if (!confirm("Are you sure you want to suspend this user? This will set their reputation to 0 and force logout all active sessions.")) return;
+  if (!window.LinkBuild) return;
+  const res = await window.LinkBuild.banAdminUser(userId);
+  if (res && res.success) {
+    // Refresh user list
+    await loadAdminUserDirectory();
+  } else {
+    alert("Suspension failed: " + (res?.error || "Unknown error"));
+  }
+};
+
+// Bind user search field event
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("adminUserSearch");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      if (!q) {
+        renderAdminUsersList(allAdminUsers);
+      } else {
+        const filtered = allAdminUsers.filter(
+          (u) =>
+            u.name.toLowerCase().includes(q) ||
+            u.email.toLowerCase().includes(q)
+        );
+        renderAdminUsersList(filtered);
+      }
+    });
+  }
+});

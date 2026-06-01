@@ -866,55 +866,33 @@
           <div class="kpi-grid">
             <div class="kpi-card">
               <span class="kpi-card-label">Total Users</span>
-              <div class="kpi-card-value">8,492</div>
-              <div class="kpi-card-change up">↑ 18% this month</div>
+              <div class="kpi-card-value" id="adminTotalUsers">--</div>
+              <div class="kpi-card-change" id="adminNewUsers">-- new this month</div>
             </div>
             <div class="kpi-card">
               <span class="kpi-card-label">MRR</span>
-              <div class="kpi-card-value">$124K</div>
-              <div class="kpi-card-change up">↑ 12% this month</div>
+              <div class="kpi-card-value" id="adminMRR">--</div>
+              <div class="kpi-card-change">active monthly revenue</div>
             </div>
             <div class="kpi-card">
               <span class="kpi-card-label">Active Websites</span>
-              <div class="kpi-card-value">15,230</div>
-              <div class="kpi-card-change up">↑ 22% this month</div>
+              <div class="kpi-card-value" id="adminActiveWebsites">--</div>
+              <div class="kpi-card-change">verified domains</div>
             </div>
             <div class="kpi-card">
               <span class="kpi-card-label">Spam Reports</span>
-              <div class="kpi-card-value" style="color:var(--warning)">24</div>
-              <div class="kpi-card-change down">↓ 8% this month</div>
+              <div class="kpi-card-value" id="adminSpamReports" style="color:var(--warning)">--</div>
+              <div class="kpi-card-change">suspended websites</div>
             </div>
           </div>
 
           <div class="two-col" style="margin-bottom:24px">
             <!-- Moderation Queue -->
             <div class="card">
-              <div class="card-header"><span class="card-header-title">Moderation Queue</span></div>
-              <div class="card-body" style="padding:0">
-                <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.85rem">spammy-backlinks.xyz</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">Reported for spam · 3 reports</div>
-                  </div>
-                  <div style="display:flex;gap:6px">
-                    <button class="btn btn-danger btn-sm">Ban</button>
-                    <button class="btn btn-success btn-sm">Approve</button>
-                  </div>
-                </div>
-                <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
-                  <div>
-                    <div style="font-weight:600;font-size:0.85rem">fake-traffic-site.com</div>
-                    <div style="font-size:0.8rem;color:var(--text-tertiary)">Suspicious traffic patterns</div>
-                  </div>
-                  <div style="display:flex;gap:6px">
-                    <button class="btn btn-danger btn-sm">Ban</button>
-                    <button class="btn btn-ghost btn-sm">Review</button>
-                  </div>
-                </div>
-                <div style="padding:14px 16px">
-                  <div style="font-weight:600;font-size:0.85rem">duplicate-links.net</div>
-                  <div style="font-size:0.8rem;color:var(--text-tertiary)">Duplicate site detected</div>
-                </div>
+              <div class="card-header"><span class="card-header-title">Moderation Queue (Pending Verification)</span></div>
+              <div class="card-body" id="adminModerationQueue" style="padding:0">
+                <!-- Loaded dynamically -->
+                <div style="padding:20px;text-align:center;color:var(--text-tertiary)">Loading moderation queue...</div>
               </div>
             </div>
 
@@ -931,9 +909,9 @@
                   </div>
                   <div>
                     <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px">
-                      <span>Verification Queue</span><span style="font-weight:600">142 pending</span>
+                      <span>Verification Queue</span><span style="font-weight:600">Healthy</span>
                     </div>
-                    <div class="progress-bar"><div class="progress-bar-fill" style="width:42%;background:var(--warning)"></div></div>
+                    <div class="progress-bar"><div class="progress-bar-fill" style="width:100%;background:var(--success)"></div></div>
                   </div>
                   <div>
                     <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px">
@@ -949,6 +927,33 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- User Directory -->
+          <div class="card">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+              <span class="card-header-title">User Directory</span>
+              <input type="text" id="adminUserSearch" class="input" placeholder="Search by name or email..." style="max-width:300px;font-size:0.8rem;padding:6px 12px;margin:0">
+            </div>
+            <div class="card-body" style="padding:0;overflow-x:auto">
+              <table class="table" style="width:100%;border-collapse:collapse;font-size:0.85rem">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border-color);background:var(--bg-secondary);text-align:left">
+                    <th style="padding:12px 16px">Name</th>
+                    <th style="padding:12px 16px">Email</th>
+                    <th style="padding:12px 16px">Role</th>
+                    <th style="padding:12px 16px">Reputation</th>
+                    <th style="padding:12px 16px">Created At</th>
+                    <th style="padding:12px 16px;text-align:right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersTableBody">
+                  <tr>
+                    <td colspan="6" style="padding:20px;text-align:center;color:var(--text-tertiary)">Loading user directory...</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

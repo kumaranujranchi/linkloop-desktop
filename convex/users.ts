@@ -72,31 +72,58 @@ export const getById = query({
 });
 
 // Get users for admin dashboard
+async function verifyAdminToken(db: any, token: string) {
+  const userId = await getUserIdFromToken(db, token);
+  if (!userId) throw new ConvexError("Not authenticated");
+  const user = await db.get(userId);
+  if (!user || user.role !== "admin") {
+    throw new ConvexError("Unauthorized access to admin APIs");
+  }
+  return user;
+}
+
+// Get users for admin dashboard
 export const listAll = query({
-  args: { limit: v.optional(v.number()) },
+  args: { token: v.string(), limit: v.optional(v.number()) },
   handler: async (ctx, args) => {
-    const users = await ctx.db.query("users").take(args.limit || 50);
+    await verifyAdminToken(ctx.db, args.token);
+    const users = await ctx.db.query("users").take(args.limit || 100);
     return users;
   },
 });
 
 // User stats for admin
 export const adminStats = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
+
     const users = await ctx.db.query("users").collect();
+    const websites = await ctx.db.query("websites").collect();
     const now = Date.now();
     const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+
+    const freeCount = users.filter((u) => u.role === "free").length;
+    const proCount = users.filter((u) => u.role === "pro").length;
+    const agencyCount = users.filter((u) => u.role === "agency").length;
+    const adminCount = users.filter((u) => u.role === "admin").length;
+
+    const mrr = proCount * 49 + agencyCount * 99;
+    const activeWebsites = websites.filter((w) => w.status === "active").length;
+    const spamReports = websites.filter((w) => w.status === "suspended" || w.status === "rejected").length;
 
     return {
       total: users.length,
       newThisMonth: users.filter((u) => u.createdAt >= thirtyDaysAgo).length,
       byRole: {
-        free: users.filter((u) => u.role === "free").length,
-        pro: users.filter((u) => u.role === "pro").length,
-        agency: users.filter((u) => u.role === "agency").length,
-        admin: users.filter((u) => u.role === "admin").length,
+        free: freeCount,
+        pro: proCount,
+        agency: agencyCount,
+        admin: adminCount,
       },
+      totalWebsites: activeWebsites,
+      mrr,
+      spamReports,
     };
   },
 });
@@ -570,6 +597,48 @@ export const loginWithGoogle = mutation({
         role: user.role,
       }
     };
+  },
+});
+
+// Admin: update user role
+export const updateRole = mutation({
+  args: {
+    token: v.string(),
+    userId: v.id("users"),
+    role: v.union(v.literal("free"), v.literal("pro"), v.literal("agency"), v.literal("admin")),
+  },
+  handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
+    await ctx.db.patch(args.userId, { role: args.role });
+    return { success: true };
+  },
+});
+
+// Admin: ban/suspend user (lower reputation to 0, revoke sessions)
+export const banUser = mutation({
+  args: {
+    token: v.string(),
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
+
+    // Lower reputation, set role to free (safest suspension state)
+    await ctx.db.patch(args.userId, {
+      reputationScore: 0,
+      role: "free",
+    });
+
+    // Delete user sessions to force logout
+    const sessions = await ctx.db
+      .query("sessions")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+    for (const session of sessions) {
+      await ctx.db.delete(session._id);
+    }
+
+    return { success: true };
   },
 });
 
