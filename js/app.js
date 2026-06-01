@@ -628,12 +628,23 @@ window.handleLogin = async function(e) {
     }
 
     if (result.success) {
+      // Always hide the auth modal after successful login
+      const overlay = document.getElementById('authOverlay');
+      if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+      
       msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
       document.getElementById("loginForm").reset();
+
       const onDashboard = window.location.pathname.includes("dashboard");
       if (onDashboard) {
-        window.LinkBuild.hideAuthScreen();
-        window.LinkBuild.loadDashboardData().catch(() => {});
+        if (window.LinkBuild) {
+          window.LinkBuild.hideAuthScreen();
+          window.LinkBuild.loadDashboardData().catch(() => {});
+        }
+      } else {
+        // On landing page, redirect to dashboard
+        const isCleanUrl = !window.location.pathname.includes('.html');
+        window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
       }
     } else {
       if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
