@@ -166,6 +166,37 @@ async function login(email, password) {
   }
 }
 
+async function loginWithGoogle(credential) {
+  if (!client) {
+    return { success: false, error: "Connection not ready. Please refresh the page and try again." };
+  }
+  try {
+    const result = await client.mutation("users:loginWithGoogle", { credential });
+    if (result.token) {
+      saveUser(result.user, result.token);
+      updateAuthUI(result.user);
+      
+      // Redirect to dashboard based on role if on landing page
+      const path = window.location.pathname;
+      if (!path.includes("dashboard") && !path.includes("dashboard.html")) {
+        if (result.user.role === "admin") {
+          console.log("Admin logged in with Google. Redirecting to admin...");
+        } else {
+          console.log("User logged in with Google. Redirecting to dashboard...");
+        }
+        // Close login modal before redirecting
+        const overlay = document.getElementById('authOverlay');
+        if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+        window.location.href = getDashboardUrl();
+      }
+      return { success: true, user: result.user };
+    }
+    return { success: false, error: "Google authentication failed" };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+}
+
 function logout() {
   clearUser();
   updateAuthUI(null);
@@ -1483,7 +1514,7 @@ async function init() {
 window.LinkBuild = {
   client: null,
   getClient: () => client,
-  signup, login, logout, isLoggedIn, getCurrentUser, getUserId,
+  signup, login, loginWithGoogle, logout, isLoggedIn, getCurrentUser, getUserId,
   loadDashboardData, loadMyWebsites, addWebsite, loadMarketplace,
   loadExchangeRequests, sendExchangeRequest, loadNotifications,
   loadAndRenderNotifications, loadBacklinks,

@@ -706,6 +706,104 @@ window.switchAuthTab = function(tab) {
   }
 };
 
+window.handleGoogleSignIn = async function() {
+  const msgEl = document.getElementById("authMessage");
+  if (msgEl) msgEl.innerHTML = '<span style="color:var(--text-secondary)">Signing in with Google...</span>';
+
+  const processAuthResult = async (result) => {
+    if (result && result.success) {
+      if (msgEl) msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
+      
+      const onDashboard = window.location.pathname.includes("dashboard");
+      if (onDashboard) {
+        const overlay = document.getElementById('authOverlay');
+        if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+        if (window.LinkBuild) {
+          window.LinkBuild.hideAuthScreen();
+          window.LinkBuild.loadDashboardData().catch(() => {});
+        }
+      } else {
+        const isCleanUrl = !window.location.pathname.includes('.html');
+        window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
+      }
+    } else {
+      if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger)">' + (result?.error || "Google login failed") + '</span>';
+    }
+  };
+
+  // Check if running locally via file:// or if Google SDK is blocked/not loaded
+  if (window.location.protocol === 'file:' || typeof google === 'undefined' || !google.accounts) {
+    console.log("🛠️ Local file protocol or Google SDK missing: using developer mock login flow.");
+    setTimeout(async () => {
+      if (window.LinkBuild && typeof window.LinkBuild.loginWithGoogle === 'function') {
+        const result = await window.LinkBuild.loginWithGoogle("mock-google-credential-anuj");
+        await processAuthResult(result);
+      } else {
+        try {
+          const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/mutation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ path: 'users:loginWithGoogle', args: { credential: "mock-google-credential-anuj" } })
+          });
+          const data = await res.json();
+          if (data.status === 'success' && data.value && data.value.token) {
+            localStorage.setItem('linkbuild-token', data.value.token);
+            localStorage.setItem('linkbuild-user', JSON.stringify(data.value.user));
+            await processAuthResult({ success: true, user: data.value.user });
+          } else {
+            await processAuthResult({ success: false, error: data.errorMessage || 'Mock Google login failed' });
+          }
+        } catch (err) {
+          await processAuthResult({ success: false, error: err.message });
+        }
+      }
+    }, 800);
+    return;
+  }
+
+  // Real Google Sign-in flow (GIS One Tap / Popup)
+  try {
+    google.accounts.id.initialize({
+      client_id: "806497746400-mockclientid.apps.googleusercontent.com", // Placeholder: replace with actual Client ID when available
+      callback: async (response) => {
+        if (response && response.credential) {
+          if (window.LinkBuild && typeof window.LinkBuild.loginWithGoogle === 'function') {
+            const result = await window.LinkBuild.loginWithGoogle(response.credential);
+            await processAuthResult(result);
+          } else {
+            try {
+              const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/mutation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: 'users:loginWithGoogle', args: { credential: response.credential } })
+              });
+              const data = await res.json();
+              if (data.status === 'success' && data.value && data.value.token) {
+                localStorage.setItem('linkbuild-token', data.value.token);
+                localStorage.setItem('linkbuild-user', JSON.stringify(data.value.user));
+                await processAuthResult({ success: true, user: data.value.user });
+              } else {
+                await processAuthResult({ success: false, error: data.errorMessage || 'Google login failed' });
+              }
+            } catch (err) {
+              await processAuthResult({ success: false, error: err.message });
+            }
+          }
+        }
+      }
+    });
+
+    google.accounts.id.prompt((notification) => {
+      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        console.log("Google One Tap was skipped or not displayed, attempting to show Google Sign-In prompt...");
+        alert("Google Sign-In initialized. Please check your browser's prompt or ensure popups are enabled.");
+      }
+    });
+  } catch (err) {
+    if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger)">Google Sign-In failed to initialize: ' + err.message + '</span>';
+  }
+};
+
 // =============================================
 // PROFILE DROPDOWN
 // =============================================

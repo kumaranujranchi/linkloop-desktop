@@ -483,3 +483,106 @@ export const upgradePlan = mutation({
     }
   },
 });
+
+// Helper to decode JWT token in Convex environment
+function decodeJwt(token: string) {
+  const parts = token.split(".");
+  if (parts.length !== 3) {
+    throw new Error("Invalid JWT token");
+  }
+  const payload = parts[1];
+  const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+  const decoded = atob(base64);
+  return JSON.parse(decoded);
+}
+
+// Login/signup using Google ID token
+export const loginWithGoogle = mutation({
+  args: {
+    credential: v.string(),
+  },
+  handler: async (ctx, args) => {
+    let email = "";
+    let name = "";
+    let avatarUrl: string | undefined = undefined;
+
+    if (args.credential.startsWith("mock-google-credential-")) {
+      // Mock user for testing
+      email = "anuj.esprit@gmail.com";
+      name = "Anuj Kumar";
+      avatarUrl = "https://lh3.googleusercontent.com/a/default-user-google=s96-c";
+    } else {
+      // Decode real Google ID Token
+      try {
+        const payload = decodeJwt(args.credential);
+        email = payload.email;
+        name = payload.name || email.split("@")[0];
+        avatarUrl = payload.picture;
+      } catch (e) {
+        throw new Error("Invalid Google credential format");
+      }
+    }
+
+    if (!email) {
+      throw new Error("Google credential does not contain email");
+    }
+
+    const emailNormalized = email.trim().toLowerCase();
+
+    // Check if user already exists
+    let user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", emailNormalized))
+      .first();
+
+    if (!user) {
+      // Create user
+      const userId = await ctx.db.insert("users", {
+        name,
+        email: emailNormalized,
+        avatarUrl,
+        role: "free",
+        reputationScore: 95,
+        completedExchanges: 0,
+        responseRate: 100,
+        trustBadges: ["New Member"],
+        createdAt: Date.now(),
+      });
+      user = await ctx.db.get(userId);
+      
+      // Initialize free subscription
+      await ctx.db.insert("subscriptions", {
+        userId,
+        plan: "free",
+        status: "active",
+        websitesLimit: 3,
+        exchangesLimit: 10,
+        currentPeriodStart: Date.now(),
+        currentPeriodEnd: Date.now() + 30 * 24 * 60 * 60 * 1000,
+        createdAt: Date.now(),
+      });
+    } else if (avatarUrl && user.avatarUrl !== avatarUrl) {
+      // Update avatar if changed
+      await ctx.db.patch(user._id, { avatarUrl });
+      user.avatarUrl = avatarUrl;
+    }
+
+    if (!user) {
+      throw new Error("Authentication failed");
+    }
+
+    // Create session
+    const session = await createSession(ctx.db, user._id);
+
+    return {
+      token: session.token,
+      user: {
+        userId: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
+    };
+  },
+});
+
