@@ -105,6 +105,35 @@ export const adminStats = query({
 
 // ========== PASSWORD AUTH ==========
 
+// Repair old user accounts that are missing schema fields
+export const repairUser = mutation({
+  args: { email: v.string(), password: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email.trim().toLowerCase()))
+      .first();
+    if (!user) throw new Error("User not found");
+    
+    const now = Date.now();
+    const patch: any = {};
+    if (!user.reputationScore && user.reputationScore !== 0) patch.reputationScore = 50;
+    if (!user.completedExchanges && user.completedExchanges !== 0) patch.completedExchanges = 0;
+    if (!user.responseRate && user.responseRate !== 0) patch.responseRate = 100;
+    if (!user.trustBadges) patch.trustBadges = [];
+    if (!user.createdAt) patch.createdAt = now;
+    
+    // Also set password if provided
+    if (args.password) {
+      patch.passwordSalt = generateSalt();
+      patch.passwordHash = await hashPassword(args.password, patch.passwordSalt);
+    }
+    
+    await ctx.db.patch(user._id, patch);
+    return { success: true, userId: user._id };
+  },
+});
+
 // Sign up with email + name + password
 export const signupWithPassword = mutation({
   args: {
@@ -113,6 +142,7 @@ export const signupWithPassword = mutation({
     password: v.string(),
   },
   handler: async (ctx, args) => {
+    try {
     const emailNormalized = args.email.trim().toLowerCase();
     const existing = await ctx.db
       .query("users")
@@ -120,6 +150,25 @@ export const signupWithPassword = mutation({
       .first();
 
     if (existing) {
+      // If existing user doesn't have password credentials, allow re-registration
+      if (!existing.passwordHash || !existing.passwordSalt) {
+        const salt = generateSalt();
+        const passwordHash = await hashPassword(args.password, salt);
+        await ctx.db.patch(existing._id, {
+          passwordHash,
+          passwordSalt: salt,
+        });
+        const session = await createSession(ctx.db, existing._id);
+        return {
+          token: session.token,
+          user: {
+            userId: existing._id,
+            name: existing.name,
+            email: existing.email,
+            role: existing.role,
+          }
+        };
+      }
       throw new Error("Email already registered");
     }
 
@@ -169,6 +218,9 @@ export const signupWithPassword = mutation({
         role: "free",
       }
     };
+    } catch (e: any) {
+      throw new Error(e.message || "Signup failed. Please try again.");
+    }
   },
 });
 
@@ -179,36 +231,40 @@ export const loginWithPassword = mutation({
     password: v.string(),
   },
   handler: async (ctx, args) => {
-    const emailNormalized = args.email.trim().toLowerCase();
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", emailNormalized))
-      .first();
+    try {
+      const emailNormalized = args.email.trim().toLowerCase();
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", emailNormalized))
+        .first();
 
-    if (!user) {
-      throw new Error("Invalid email or password");
-    }
-
-    if (!user.passwordHash || !user.passwordSalt) {
-      throw new Error("This account does not have password credentials. Please register again.");
-    }
-
-    const computedHash = await hashPassword(args.password, user.passwordSalt);
-    if (computedHash !== user.passwordHash) {
-      throw new Error("Invalid email or password");
-    }
-
-    const session = await createSession(ctx.db, user._id);
-
-    return {
-      token: session.token,
-      user: {
-        userId: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
+      if (!user) {
+        throw new Error("Invalid email or password");
       }
-    };
+
+      if (!user.passwordHash || !user.passwordSalt) {
+        throw new Error("This account needs to reset its password. Please sign up again with the same email to create a password.");
+      }
+
+      const computedHash = await hashPassword(args.password, user.passwordSalt);
+      if (computedHash !== user.passwordHash) {
+        throw new Error("Invalid email or password");
+      }
+
+      const session = await createSession(ctx.db, user._id);
+
+      return {
+        token: session.token,
+        user: {
+          userId: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        }
+      };
+    } catch (e: any) {
+      throw new Error(e.message || "Login failed. Please try again.");
+    }
   },
 });
 

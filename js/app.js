@@ -599,57 +599,24 @@ window.handleLogin = async function(e) {
   if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Logging in...'; }
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Logging in...</span>';
 
-  // Try window.LinkBuild first, fall back to direct Convex HTTP API
-  const doLogin = async () => {
-    // Primary: use LinkBuild API if available
-    if (window.LinkBuild && window.LinkBuild.login) {
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timed out. Please try again.')), 15000)
-      );
-      return await Promise.race([window.LinkBuild.login(email, password), timeoutPromise]);
-    }
-
-    // Fallback: direct Convex HTTP mutation
-    const CONVEX_URL = 'https://vibrant-marmot-366.convex.cloud';
-    try {
-      const res = await fetch(CONVEX_URL + '/api/mutation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path: 'users:loginWithPassword', args: { email, password } }),
-        signal: AbortSignal.timeout(15000)
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || 'Login failed — invalid email or password');
-      }
-      const data = await res.json();
-      if (data.token) {
-        // Save session
-        localStorage.setItem('linkbuild-token', data.token);
-        localStorage.setItem('linkbuild-user', JSON.stringify(data.user));
-        // Redirect
-        const isCleanUrl = !window.location.pathname.includes('.html');
-        window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
-        return { success: true, user: data.user };
-      }
-      throw new Error('Login failed');
-    } catch (e) {
-      throw e;
-    }
-  };
-
   try {
-    const result = await doLogin();
-    if (result && result.success) {
+    const result = await window.LinkBuild.login(email, password);
+    if (result.success) {
       msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
       document.getElementById("loginForm").reset();
-      // Redirect handled inside login functions
+      const onDashboard = window.location.pathname.includes("dashboard");
+      if (onDashboard) {
+        window.LinkBuild.hideAuthScreen();
+        window.LinkBuild.loadDashboardData().catch(() => {});
+      }
     } else {
-      throw new Error((result && result.error) || 'Login failed');
+      if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
+      msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || 'Login failed') + '</span>';
     }
   } catch (err) {
     if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
-    msgEl.innerHTML = '<span style="color:var(--danger)">' + (err.message || 'Connection error. Please try again.') + '</span>';
+    msgEl.innerHTML = '<span style="color:var(--danger)">Connection error. Please try again.</span>';
+    console.error('Login error:', err);
   }
 };
 
