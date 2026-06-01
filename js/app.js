@@ -631,7 +631,14 @@ window.handleLogin = async function(e) {
         }, 100);
         return;
       } else {
-        result = { success: false, error: data.errorMessage || 'Invalid email or password' };
+        let errorMsg = data.errorMessage || 'Invalid email or password';
+        if (typeof errorMsg === 'string' && errorMsg.includes("ConvexError:")) {
+          const parts = errorMsg.split("ConvexError:");
+          if (parts.length > 1) {
+            errorMsg = parts[1].trim();
+          }
+        }
+        result = { success: false, error: errorMsg };
       }
     }
 
@@ -727,7 +734,14 @@ window.handleGoogleSignIn = async function() {
         window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
       }
     } else {
-      if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger)">' + (result?.error || "Google login failed") + '</span>';
+      let errorMsg = result?.error || "Google login failed";
+      if (typeof errorMsg === 'string' && errorMsg.includes("ConvexError:")) {
+        const parts = errorMsg.split("ConvexError:");
+        if (parts.length > 1) {
+          errorMsg = parts[1].trim();
+        }
+      }
+      if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger)">' + errorMsg + '</span>';
     }
   };
 
@@ -1128,8 +1142,14 @@ window.handleChangePassword = async function() {
       document.getElementById('settingsNewPassword').value = '';
       document.getElementById('settingsConfirmPassword').value = '';
     } else {
-      msgEl.innerHTML = '<span style="color:var(--danger)">' +
-        (data.errorMessage || (data.value && data.value.message) || 'Failed to change password') + '</span>';
+      let errorMsg = data.errorMessage || (data.value && data.value.message) || 'Failed to change password';
+      if (typeof errorMsg === 'string' && errorMsg.includes("ConvexError:")) {
+        const parts = errorMsg.split("ConvexError:");
+        if (parts.length > 1) {
+          errorMsg = parts[1].trim();
+        }
+      }
+      msgEl.innerHTML = '<span style="color:var(--danger)">' + errorMsg + '</span>';
     }
   } catch (e) {
     msgEl.innerHTML = '<span style="color:var(--danger)">Connection error. Please try again.</span>';

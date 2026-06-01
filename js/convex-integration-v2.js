@@ -104,6 +104,20 @@ function clearUser() {
 // =============================================
 // AUTH FUNCTIONS
 // =============================================
+function formatConvexError(e, defaultMsg) {
+  if (e && e.data && typeof e.data === 'string') {
+    return e.data;
+  }
+  let msg = (e && e.message) || defaultMsg;
+  if (typeof msg === 'string' && msg.includes("ConvexError:")) {
+    const parts = msg.split("ConvexError:");
+    if (parts.length > 1) {
+      return parts[1].trim();
+    }
+  }
+  return msg;
+}
+
 async function signup(name, email, password) {
   if (!client) {
     return { success: false, error: "Connection not ready. Please refresh the page and try again." };
@@ -131,7 +145,7 @@ async function signup(name, email, password) {
     }
     return { success: false, error: "Signup failed" };
   } catch (e) {
-    return { success: false, error: e.message };
+    return { success: false, error: formatConvexError(e, "Signup failed") };
   }
 }
 
@@ -162,7 +176,7 @@ async function login(email, password) {
     }
     return { success: false, error: "Login failed" };
   } catch (e) {
-    return { success: false, error: e.message };
+    return { success: false, error: formatConvexError(e, "Login failed") };
   }
 }
 
@@ -193,7 +207,7 @@ async function loginWithGoogle(credential) {
     }
     return { success: false, error: "Google authentication failed" };
   } catch (e) {
-    return { success: false, error: e.message };
+    return { success: false, error: formatConvexError(e, "Google authentication failed") };
   }
 }
 
@@ -477,7 +491,7 @@ async function addWebsite(data) {
     const websiteId = await client.mutation("websites:add", { ...data, userId: uid });
     return { success: true, websiteId };
   } catch (e) {
-    return { success: false, error: e.message };
+    return { success: false, error: formatConvexError(e, "Failed to add website") };
   }
 }
 
@@ -528,7 +542,7 @@ async function sendExchangeRequest(data) {
   try {
     return { success: true, id: await client.mutation("exchanges:send", { ...data, fromUserId: uid }) };
   } catch (e) {
-    return { success: false, error: e.message };
+    return { success: false, error: formatConvexError(e, "Failed to send exchange request") };
   }
 }
 

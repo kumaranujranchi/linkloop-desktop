@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { getUserIdFromToken, generateSalt, hashPassword, createSession } from "./auth_helpers";
 
@@ -113,7 +113,7 @@ export const repairUser = mutation({
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", args.email.trim().toLowerCase()))
       .first();
-    if (!user) throw new Error("User not found");
+    if (!user) throw new ConvexError("User not found");
     
     const now = Date.now();
     const patch: any = {};
@@ -151,9 +151,9 @@ export const signupWithPassword = mutation({
 
     if (existing) {
       if (!existing.passwordHash || !existing.passwordSalt) {
-        throw new Error("Social login already active on this mail id - so use social login");
+        throw new ConvexError("Social login already active on this mail id - so use social login");
       }
-      throw new Error("Email already registered");
+      throw new ConvexError("Email already registered");
     }
 
     const salt = generateSalt();
@@ -203,7 +203,8 @@ export const signupWithPassword = mutation({
       }
     };
     } catch (e: any) {
-      throw new Error(e.message || "Signup failed. Please try again.");
+      if (e instanceof ConvexError) throw e;
+      throw new ConvexError(e.message || "Signup failed. Please try again.");
     }
   },
 });
@@ -223,16 +224,16 @@ export const loginWithPassword = mutation({
         .first();
 
       if (!user) {
-        throw new Error("Invalid email or password");
+        throw new ConvexError("Invalid email or password");
       }
 
       if (!user.passwordHash || !user.passwordSalt) {
-        throw new Error("Social login already active on this mail id - so use social login");
+        throw new ConvexError("Social login already active on this mail id - so use social login");
       }
 
       const computedHash = await hashPassword(args.password, user.passwordSalt);
       if (computedHash !== user.passwordHash) {
-        throw new Error("Invalid email or password");
+        throw new ConvexError("Invalid email or password");
       }
 
       const session = await createSession(ctx.db, user._id);
@@ -247,7 +248,8 @@ export const loginWithPassword = mutation({
         }
       };
     } catch (e: any) {
-      throw new Error(e.message || "Login failed. Please try again.");
+      if (e instanceof ConvexError) throw e;
+      throw new ConvexError(e.message || "Login failed. Please try again.");
     }
   },
 });
@@ -267,15 +269,15 @@ export const changePassword = mutation({
       .withIndex("by_email", (q) => q.eq("email", emailNormalized))
       .first();
 
-    if (!user) throw new Error("User not found");
+    if (!user) throw new ConvexError("User not found");
     if (!user.passwordHash || !user.passwordSalt) {
-      throw new Error("No password set on this account. Please sign up again to set a password.");
+      throw new ConvexError("No password set on this account. Please sign up again to set a password.");
     }
 
     // Verify current password
     const currentHash = await hashPassword(args.currentPassword, user.passwordSalt);
     if (currentHash !== user.passwordHash) {
-      throw new Error("Current password is incorrect");
+      throw new ConvexError("Current password is incorrect");
     }
 
     // Set new password
@@ -288,7 +290,8 @@ export const changePassword = mutation({
 
     return { success: true };
     } catch (e: any) {
-      throw new Error(e.message || "Failed to change password");
+      if (e instanceof ConvexError) throw e;
+      throw new ConvexError(e.message || "Failed to change password");
     }
   },
 });
@@ -406,9 +409,9 @@ export const updateProfile = mutation({
       }
     }
 
-    if (!userId) throw new Error("Not authenticated");
+    if (!userId) throw new ConvexError("Not authenticated");
     const user = await ctx.db.get(userId);
-    if (!user) throw new Error("User not found");
+    if (!user) throw new ConvexError("User not found");
 
     const updates: any = {};
     if (args.name) updates.name = args.name;
@@ -441,9 +444,9 @@ export const upgradePlan = mutation({
       }
     }
 
-    if (!userId) throw new Error("Not authenticated");
+    if (!userId) throw new ConvexError("Not authenticated");
     const user = await ctx.db.get(userId);
-    if (!user) throw new Error("User not found");
+    if (!user) throw new ConvexError("User not found");
 
     await ctx.db.patch(user._id, { role: args.plan });
 
@@ -472,7 +475,7 @@ export const upgradePlan = mutation({
 function decodeJwt(token: string) {
   const parts = token.split(".");
   if (parts.length !== 3) {
-    throw new Error("Invalid JWT token");
+    throw new ConvexError("Invalid JWT token");
   }
   const payload = parts[1];
   const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
@@ -503,12 +506,12 @@ export const loginWithGoogle = mutation({
         name = payload.name || email.split("@")[0];
         avatarUrl = payload.picture;
       } catch (e) {
-        throw new Error("Invalid Google credential format");
+        throw new ConvexError("Invalid Google credential format");
       }
     }
 
     if (!email) {
-      throw new Error("Google credential does not contain email");
+      throw new ConvexError("Google credential does not contain email");
     }
 
     const emailNormalized = email.trim().toLowerCase();
@@ -552,7 +555,7 @@ export const loginWithGoogle = mutation({
     }
 
     if (!user) {
-      throw new Error("Authentication failed");
+      throw new ConvexError("Authentication failed");
     }
 
     // Create session
