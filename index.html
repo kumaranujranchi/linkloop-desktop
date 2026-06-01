@@ -578,6 +578,191 @@
       color: #818cf8;
     }
 
+    /* ---- Promo Popup ---- */
+    .promo-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .promo-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .promo-popup {
+      background: linear-gradient(160deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+      border: 1px solid rgba(108, 77, 246, 0.35);
+      border-radius: 20px;
+      padding: 0;
+      max-width: 500px;
+      width: 92%;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(108, 77, 246, 0.15);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .promo-popup::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #7C3AED, #3B82F6, #06B6D4, #10B981);
+      z-index: 2;
+    }
+
+    .promo-header {
+      padding: 32px 32px 0;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .promo-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 12px;
+      display: block;
+      animation: bounce-emoji 2s infinite;
+    }
+
+    @keyframes bounce-emoji {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .promo-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: var(--font-outfit);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .promo-title span {
+      background: linear-gradient(135deg, #34d399, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .promo-body {
+      padding: 20px 32px 32px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .promo-body p {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .promo-highlights {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .promo-highlight-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: #a5b4fc;
+      font-weight: 600;
+    }
+
+    .promo-highlight-item svg {
+      color: #34d399;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .promo-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .promo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 36px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      border: none;
+      font-family: var(--font-jakarta);
+      transition: all 0.2s ease;
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 4px 20px rgba(108, 77, 246, 0.4);
+      text-decoration: none;
+    }
+
+    .promo-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(108, 77, 246, 0.5);
+    }
+
+    .promo-later {
+      font-size: 0.85rem;
+      color: #64748b;
+      cursor: pointer;
+      transition: color 0.15s ease;
+      background: none;
+      border: none;
+      font-family: var(--font-jakarta);
+      padding: 8px 16px;
+    }
+
+    .promo-later:hover {
+      color: #94a3b8;
+    }
+
+    .promo-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      z-index: 3;
+    }
+
+    .promo-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
     .footer-bottom {
       border-top: 1px solid rgba(255, 255, 255, 0.03);
       padding-top: 30px;
@@ -1974,7 +2159,46 @@
       <span>Designed with Premium Tech Aesthetics</span>
     </div>
   </footer>
- 
+
+  <!-- ========== PROMO POPUP (auto-shows on page load) ========== -->
+  <div class="promo-overlay active" id="promoOverlay">
+    <div class="promo-popup">
+      <button class="promo-close" onclick="closePromoPopup()" title="Close">✕</button>
+      
+      <div class="promo-header">
+        <span class="promo-emoji">🚀</span>
+        <h2 class="promo-title">This Tool is <span>100% Free</span> Right Now!</h2>
+      </div>
+      
+      <div class="promo-body">
+        <p>We're offering <strong style="color:#ffffff">complete free access</strong> to LinkBuild for a limited time. No credit card required. Grab this opportunity to make it your next go-to tool in your SEO stack.</p>
+        
+        <div class="promo-highlights">
+          <span class="promo-highlight-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            Unlimited Exchanges
+          </span>
+          <span class="promo-highlight-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            No Credit Card
+          </span>
+          <span class="promo-highlight-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            Limited Time
+          </span>
+        </div>
+        
+        <div class="promo-actions">
+          <button class="promo-btn" onclick="openAuthFromPromo()">
+            Get Started Free
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+          <button class="promo-later" onclick="closePromoPopup()">Maybe later — take me to the page</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ========== AUTH OVERLAY ========== -->
   <div class="modal-overlay hidden" id="authOverlay" onclick="(function(e){if(e.target===document.getElementById('authOverlay')){var el=document.getElementById('authOverlay');if(el){el.classList.remove('active');el.classList.add('hidden')};if(window.LinkBuild&&window.LinkBuild.hideAuthScreen)window.LinkBuild.hideAuthScreen()}})(event)">
     <div class="modal-box auth-modal">
@@ -2079,6 +2303,38 @@
         }
       });
     });
+
+    // ===== PROMO POPUP =====
+    function closePromoPopup() {
+      var overlay = document.getElementById('promoOverlay');
+      if (overlay) {
+        overlay.classList.remove('active');
+        // Store in session so it doesn't show again in same session
+        sessionStorage.setItem('linkbuild-promo-closed', 'true');
+      }
+    }
+
+    function openAuthFromPromo() {
+      closePromoPopup();
+      // Small delay then open auth overlay
+      setTimeout(function() {
+        var authEl = document.getElementById('authOverlay');
+        if (authEl) {
+          authEl.classList.add('active');
+          authEl.classList.remove('hidden');
+        }
+        if (window.LinkBuild && window.LinkBuild.showAuthScreen) {
+          window.LinkBuild.showAuthScreen();
+        }
+        if (window.switchAuthTab) window.switchAuthTab('signup');
+      }, 300);
+    }
+
+    // Don't show promo if already closed this session
+    if (sessionStorage.getItem('linkbuild-promo-closed') === 'true') {
+      var promoOverlay = document.getElementById('promoOverlay');
+      if (promoOverlay) promoOverlay.classList.remove('active');
+    }
 
     // ===== LIQUID ETHER WEBGL (Three.js fluid simulation) =====
     (function() {
