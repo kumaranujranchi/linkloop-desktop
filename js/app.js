@@ -600,7 +600,33 @@ window.handleLogin = async function(e) {
   msgEl.innerHTML = '<span style="color:var(--text-secondary)">Logging in...</span>';
 
   try {
-    const result = await window.LinkBuild.login(email, password);
+    let result;
+
+    // Primary: use window.LinkBuild.login if available
+    if (window.LinkBuild && typeof window.LinkBuild.login === 'function') {
+      result = await window.LinkBuild.login(email, password);
+    } else {
+      // Fallback: direct Convex HTTP API call
+      const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/mutation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: 'users:loginWithPassword', args: { email, password } })
+      });
+      const data = await res.json();
+      if (data.status === 'success' && data.value && data.value.token) {
+        result = { success: true, user: data.value.user };
+        // Save token locally so dashboard can use it
+        localStorage.setItem('linkbuild-token', data.value.token);
+        localStorage.setItem('linkbuild-user', JSON.stringify(data.value.user));
+        // Redirect to dashboard
+        const isCleanUrl = !window.location.pathname.includes('.html');
+        window.location.href = isCleanUrl ? '/dashboard' : 'dashboard.html';
+        return;
+      } else {
+        result = { success: false, error: data.errorMessage || data.value || 'Invalid email or password' };
+      }
+    }
+
     if (result.success) {
       msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
       document.getElementById("loginForm").reset();
@@ -615,8 +641,7 @@ window.handleLogin = async function(e) {
     }
   } catch (err) {
     if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
-    msgEl.innerHTML = '<span style="color:var(--danger)">Connection error. Please try again.</span>';
-    console.error('Login error:', err);
+    msgEl.innerHTML = '<span style="color:var(--danger)">' + (err.message || 'Connection error. Please try again.') + '</span>';
   }
 };
 
