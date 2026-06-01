@@ -2173,7 +2173,7 @@
   </footer>
 
   <!-- ========== PROMO POPUP (auto-shows on page load) ========== -->
-  <div class="promo-overlay active" id="promoOverlay">
+  <div class="promo-overlay" id="promoOverlay">
     <div class="promo-popup">
       <button class="promo-close" onclick="closePromoPopup()" title="Close">✕</button>
       
@@ -2388,10 +2388,12 @@
       }, 300);
     }
 
-    // Don't show promo if already closed this session
+    // Show promo only if it hasn't been closed in this session
+    var promoOverlay = document.getElementById('promoOverlay');
     if (sessionStorage.getItem('linkbuild-promo-closed') === 'true') {
-      var promoOverlay = document.getElementById('promoOverlay');
       if (promoOverlay) promoOverlay.classList.remove('active');
+    } else {
+      if (promoOverlay) promoOverlay.classList.add('active');
     }
 
     // ===== PASSWORD TOGGLE =====
