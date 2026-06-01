@@ -268,6 +268,47 @@ export const loginWithPassword = mutation({
   },
 });
 
+// Change password (requires current password)
+export const changePassword = mutation({
+  args: {
+    email: v.string(),
+    currentPassword: v.string(),
+    newPassword: v.string(),
+  },
+  handler: async (ctx, args) => {
+    try {
+    const emailNormalized = args.email.trim().toLowerCase();
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", emailNormalized))
+      .first();
+
+    if (!user) throw new Error("User not found");
+    if (!user.passwordHash || !user.passwordSalt) {
+      throw new Error("No password set on this account. Please sign up again to set a password.");
+    }
+
+    // Verify current password
+    const currentHash = await hashPassword(args.currentPassword, user.passwordSalt);
+    if (currentHash !== user.passwordHash) {
+      throw new Error("Current password is incorrect");
+    }
+
+    // Set new password
+    const newSalt = generateSalt();
+    const newHash = await hashPassword(args.newPassword, newSalt);
+    await ctx.db.patch(user._id, {
+      passwordHash: newHash,
+      passwordSalt: newSalt,
+    });
+
+    return { success: true };
+    } catch (e: any) {
+      throw new Error(e.message || "Failed to change password");
+    }
+  },
+});
+
 // ========== EMAIL AUTH (no Convex Auth required) ==========
 
 

@@ -982,3 +982,58 @@ navigateTo = function(pageName, navItem) {
     }
   }, 200);
 };
+
+// =============================================
+// CHANGE PASSWORD HANDLER
+// =============================================
+window.handleChangePassword = async function() {
+  const currentPw = document.getElementById('settingsCurrentPassword').value;
+  const newPw = document.getElementById('settingsNewPassword').value;
+  const confirmPw = document.getElementById('settingsConfirmPassword').value;
+  const msgEl = document.getElementById('passwordChangeMsg');
+
+  if (!currentPw || !newPw || !confirmPw) {
+    msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in all fields</span>';
+    return;
+  }
+  if (newPw !== confirmPw) {
+    msgEl.innerHTML = '<span style="color:var(--danger)">New passwords do not match</span>';
+    return;
+  }
+  if (newPw.length < 6) {
+    msgEl.innerHTML = '<span style="color:var(--danger)">Password must be at least 6 characters</span>';
+    return;
+  }
+
+  const user = JSON.parse(localStorage.getItem('linkbuild-user') || '{}');
+  const email = user.email;
+  if (!email) {
+    msgEl.innerHTML = '<span style="color:var(--danger)">Not logged in. Please log in again.</span>';
+    return;
+  }
+
+  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Updating password...</span>';
+
+  try {
+    const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/mutation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        path: 'users:changePassword',
+        args: { email, currentPassword: currentPw, newPassword: newPw }
+      })
+    });
+    const data = await res.json();
+    if (data.status === 'success' && data.value && data.value.success) {
+      msgEl.innerHTML = '<span style="color:var(--success)">✓ Password changed successfully!</span>';
+      document.getElementById('settingsCurrentPassword').value = '';
+      document.getElementById('settingsNewPassword').value = '';
+      document.getElementById('settingsConfirmPassword').value = '';
+    } else {
+      msgEl.innerHTML = '<span style="color:var(--danger)">' +
+        (data.errorMessage || (data.value && data.value.message) || 'Failed to change password') + '</span>';
+    }
+  } catch (e) {
+    msgEl.innerHTML = '<span style="color:var(--danger)">Connection error. Please try again.</span>';
+  }
+};

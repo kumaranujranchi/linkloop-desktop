@@ -833,6 +833,28 @@
               </div>
             </div>
           </div>
+
+          <div class="card" style="max-width:640px;margin-top:24px">
+            <div class="card-header"><span class="card-header-title">🔒 Change Password</span></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <div>
+                  <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Current Password</label>
+                  <input class="input" type="password" id="settingsCurrentPassword" placeholder="Enter current password" autocomplete="current-password">
+                </div>
+                <div>
+                  <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">New Password</label>
+                  <input class="input" type="password" id="settingsNewPassword" placeholder="Enter new password (min 6 chars)" autocomplete="new-password">
+                </div>
+                <div>
+                  <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Confirm New Password</label>
+                  <input class="input" type="password" id="settingsConfirmPassword" placeholder="Re-enter new password" autocomplete="new-password">
+                </div>
+                <div id="passwordChangeMsg" style="font-size:0.85rem"></div>
+                <button class="btn btn-primary" style="align-self:flex-start" onclick="handleChangePassword()">Update Password</button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- ==================== ADMIN ==================== -->
