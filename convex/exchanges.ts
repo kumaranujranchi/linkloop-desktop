@@ -20,7 +20,13 @@ export const listByUser = query({
       .withIndex("by_to_user", (q) => q.eq("toUserId", args.userId))
       .collect();
 
-    const all = [...sent, ...received];
+    // Deduplicate if user is both sender and receiver (e.g., self-exchange)
+    const seenIds = new Set();
+    const all = [...sent, ...received].filter((ex) => {
+      if (seenIds.has(ex._id)) return false;
+      seenIds.add(ex._id);
+      return true;
+    });
 
     // Fetch related website and user data
     const enriched = await Promise.all(
@@ -57,7 +63,13 @@ export const listKanban = query({
       .withIndex("by_to_user", (q) => q.eq("toUserId", args.userId))
       .collect();
 
-    const all = [...sent, ...received];
+    // Deduplicate if user is both sender and receiver (e.g., self-exchange)
+    const seenIds = new Set();
+    const all = [...sent, ...received].filter((ex) => {
+      if (seenIds.has(ex._id)) return false;
+      seenIds.add(ex._id);
+      return true;
+    });
 
     const enriched = await Promise.all(
       all.map(async (ex) => {
