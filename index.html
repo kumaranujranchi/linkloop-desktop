@@ -811,10 +811,18 @@
     /* ---- Supported Niches ---- */
     .niches-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(6, 1fr);
       gap: 16px;
       max-width: 1200px;
       margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .niches-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      .niches-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     .niche-card {
