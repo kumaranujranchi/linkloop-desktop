@@ -24,12 +24,17 @@
       --font-jakarta: 'Plus Jakarta Sans', sans-serif;
     }
 
+    .landing-content {
+      position: relative;
+      z-index: 1;
+    }
+
     body {
       font-family: var(--font-jakarta);
-      background-color: #080c16;
-      color: #cbd5e1;
-      overflow-y: auto;
-      height: auto;
+      background-color: #080c16 !important;
+      color: #cbd5e1 !important;
+      overflow-y: auto !important;
+      height: auto !important;
       line-height: 1.6;
       position: relative;
       z-index: 1;
@@ -424,46 +429,61 @@
 
     /* FAQ Section */
     .faq {
-      padding: 44px 4% 0;
+      padding: 60px 4%;
       max-width: 900px;
       margin: 0 auto;
     }
 
     .faq-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      margin-bottom: 16px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      margin-bottom: 14px;
       overflow: hidden;
-      transition: all var(--transition-fast);
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .faq-item:hover {
+      border-color: rgba(108, 77, 246, 0.4);
+      background: rgba(30, 41, 59, 0.8);
     }
 
     .faq-question {
-      padding: 24px;
+      padding: 22px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
       font-weight: 600;
+      font-size: 0.97rem;
       color: #ffffff;
       user-select: none;
+      gap: 16px;
     }
 
     .faq-answer {
-      padding: 0 24px 24px;
+      padding: 0 24px 20px;
       color: #94a3b8;
       display: none;
-      font-size: 0.95rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.03);
-      padding-top: 16px;
+      font-size: 0.93rem;
+      line-height: 1.7;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 14px;
     }
 
     .faq-item.active .faq-answer {
       display: block;
     }
 
+    .faq-item.active {
+      border-color: rgba(108, 77, 246, 0.35);
+      background: rgba(108, 77, 246, 0.06);
+    }
+
     .faq-chevron {
-      transition: transform var(--transition-fast);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      color: #818cf8;
     }
 
     .faq-item.active .faq-chevron {
@@ -472,7 +492,7 @@
 
     /* CTA Section */
     .cta-banner {
-      padding: 0 4% 44px;
+      padding: 48px 4% 60px;
       text-align: center;
       position: relative;
     }
@@ -590,6 +610,9 @@
 </head>
 <body>
   <div id="liquidEtherContainer" aria-hidden="true"></div>
+
+  <!-- Landing content wrapper — ensures content stays above WebGL canvas -->
+  <div class="landing-content">
 
   <!-- ===== NAVIGATION ===== -->
   <nav class="landing-nav">
@@ -901,6 +924,8 @@
       </div>
     </div>
   </div>
+
+  </div><!-- /landing-content -->
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
