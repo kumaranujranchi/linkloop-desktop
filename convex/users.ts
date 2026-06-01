@@ -150,24 +150,8 @@ export const signupWithPassword = mutation({
       .first();
 
     if (existing) {
-      // If existing user doesn't have password credentials, allow re-registration
       if (!existing.passwordHash || !existing.passwordSalt) {
-        const salt = generateSalt();
-        const passwordHash = await hashPassword(args.password, salt);
-        await ctx.db.patch(existing._id, {
-          passwordHash,
-          passwordSalt: salt,
-        });
-        const session = await createSession(ctx.db, existing._id);
-        return {
-          token: session.token,
-          user: {
-            userId: existing._id,
-            name: existing.name,
-            email: existing.email,
-            role: existing.role,
-          }
-        };
+        throw new Error("Social login already active on this mail id - so use social login");
       }
       throw new Error("Email already registered");
     }
@@ -243,7 +227,7 @@ export const loginWithPassword = mutation({
       }
 
       if (!user.passwordHash || !user.passwordSalt) {
-        throw new Error("This account needs to reset its password. Please sign up again with the same email to create a password.");
+        throw new Error("Social login already active on this mail id - so use social login");
       }
 
       const computedHash = await hashPassword(args.password, user.passwordSalt);
