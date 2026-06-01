@@ -880,11 +880,11 @@
   </footer>
 
   <!-- ========== AUTH OVERLAY ========== -->
-  <div class="modal-overlay hidden" id="authOverlay">
+  <div class="modal-overlay hidden" id="authOverlay" onclick="(function(e){if(e.target===document.getElementById('authOverlay')){var el=document.getElementById('authOverlay');if(el){el.classList.remove('active');el.classList.add('hidden')};if(window.LinkBuild&&window.LinkBuild.hideAuthScreen)window.LinkBuild.hideAuthScreen()}})(event)">
     <div class="modal-box auth-modal">
       <div class="modal-header">
         <h2 id="authTitle">Welcome to LinkBuild</h2>
-        <button class="modal-close" onclick="window.LinkBuild.hideAuthScreen()">✕</button>
+        <button class="modal-close" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.remove('active');el.classList.add('hidden')};if(window.LinkBuild&&window.LinkBuild.hideAuthScreen)window.LinkBuild.hideAuthScreen()})()" style="display:flex !important">✕</button>
       </div>
       <div class="modal-body" id="authBody">
         <!-- Login Form -->

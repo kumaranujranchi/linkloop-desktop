@@ -315,7 +315,10 @@ function updateAuthUI(user) {
     }
 
     if (authModalClose) {
-      authModalClose.style.display = "none"; // Hide close button
+      // On landing page: always show close button so user can dismiss modal
+      // On dashboard: hide close button (user must login to proceed)
+      const onLanding = !window.location.pathname.includes("dashboard");
+      authModalClose.style.display = onLanding ? "flex" : "none";
     }
 
     if (adminLink) {
