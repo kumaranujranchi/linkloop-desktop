@@ -70,6 +70,12 @@
   background: rgba(0,0,0,0.7);
 }
 
+[data-theme="dark"] .action-dropdown-menu {
+  background: #141823;
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+
 [data-theme="dark"] .kanban-column {
   background: var(--bg-tertiary);
 }

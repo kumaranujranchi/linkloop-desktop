@@ -1870,7 +1870,15 @@ function updateWebsitesTable(mySites) {
       <td>${w.referringDomains || 0}</td>
       <td>
         ${w.verified
-          ? '<button class="btn btn-ghost btn-sm">Manage</button>'
+          ? `<div class="action-dropdown" id="action-dd-${w._id}">
+              <button class="btn btn-ghost btn-sm" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')">Manage ▾</button>
+              <div class="action-dropdown-menu" id="action-menu-${w._id}">
+                <button class="action-dropdown-item" onclick="window.LinkBuild.editWebsite('${w._id}')">✏️ Edit</button>
+                <button class="action-dropdown-item warning" onclick="window.LinkBuild.deactivateWebsite('${w._id}')">⏸️ Deactivate</button>
+                <div class="action-dropdown-divider"></div>
+                <button class="action-dropdown-item danger" onclick="window.LinkBuild.deleteWebsite('${w._id}')">🗑️ Delete</button>
+              </div>
+            </div>`
           : `<button class="btn btn-primary btn-sm" onclick="window.LinkBuild.openVerifyModal('${w._id}')">🔐 Verify</button>`
         }
       </td>
@@ -2072,6 +2080,245 @@ async function moderateAdminWebsite(websiteId, status) {
 }
 
 // =============================================
+// WEBSITE ACTION FUNCTIONS (Edit, Delete, Deactivate)
+// =============================================
+
+// Close all dropdowns and restore them to original containers (portal cleanup)
+function closeAllDropdownsAndRestore() {
+  document.querySelectorAll('.action-dropdown-menu.show').forEach(menu => {
+    menu.classList.remove('show');
+    // Move back to original container if it was portaled to body
+    const ddId = menu.id.replace('action-menu-', 'action-dd-');
+    const originalContainer = document.getElementById(ddId);
+    if (originalContainer && menu.parentElement !== originalContainer) {
+      originalContainer.appendChild(menu);
+      menu.style.position = '';
+      menu.style.top = '';
+      menu.style.left = '';
+      menu.style.zIndex = '';
+    }
+  });
+}
+
+// Toggle the action dropdown menu (portal-based to avoid clipping from table-container overflow)
+function toggleActionDropdown(websiteId) {
+  const menu = document.getElementById('action-menu-' + websiteId);
+  if (!menu) return;
+
+  const isCurrentlyOpen = menu.classList.contains('show');
+
+  // Close ALL open dropdowns first
+  document.querySelectorAll('.action-dropdown-menu.show').forEach(m => {
+    m.classList.remove('show');
+  });
+
+  if (isCurrentlyOpen) {
+    // Was open, now closed — move back to original parent
+    const originalContainer = document.getElementById('action-dd-' + websiteId);
+    if (originalContainer && menu.parentElement !== originalContainer) {
+      originalContainer.appendChild(menu);
+    }
+    return;
+  }
+
+  // Move menu to body (portal) to avoid clipping by table-container overflow
+  const btn = document.querySelector(`#action-dd-${websiteId} .btn-ghost`);
+  if (btn) {
+    const btnRect = btn.getBoundingClientRect();
+    menu.style.position = 'fixed';
+    menu.style.top = (btnRect.bottom + 4) + 'px';
+    menu.style.left = (btnRect.right - 170) + 'px'; // 170px = min-width of dropdown
+    menu.style.zIndex = '9999';
+    document.body.appendChild(menu);
+  } else {
+    // Fallback: just move to body
+    document.body.appendChild(menu);
+  }
+
+  menu.classList.add('show');
+}
+
+// Close dropdowns when clicking outside (portal-aware)
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.action-dropdown') && !e.target.closest('.action-dropdown-menu')) {
+    closeAllDropdownsAndRestore();
+  }
+});
+
+// Edit website — opens a modal with editable fields
+async function editWebsite(websiteId) {
+  // Close dropdown and return to original container
+  closeAllDropdownsAndRestore();
+
+  const mySites = await loadMyWebsites();
+  const site = mySites.find(s => s._id === websiteId);
+  if (!site) {
+    alert('Website not found');
+    return;
+  }
+
+  // Build edit modal HTML
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'editWebsiteModal';
+  overlay.style.cssText = 'opacity:1;visibility:visible;z-index:1001;';
+  overlay.innerHTML = `
+    <div class="modal-box" style="max-width:520px;max-height:90vh;overflow-y:auto;">
+      <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2 style="margin:0;">✏️ Edit Website</h2>
+        <button style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);" onclick="this.closest('.modal-overlay').remove()">✕</button>
+      </div>
+      <div class="modal-body" style="display:flex;flex-direction:column;gap:16px;">
+        <div>
+          <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Domain</label>
+          <input type="text" id="editDomain" class="input" value="${site.domain}" style="width:100%;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Niche</label>
+            <select id="editNiche" class="input" style="width:100%;">
+              ${['Marketing','SaaS','E-commerce','Education','Finance','Health','Tech','Real Estate','Travel','Blogging','News','Entertainment','Other'].map(n => `<option value="${n}" ${site.niche === n ? 'selected' : ''}>${n}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Country</label>
+            <input type="text" id="editCountry" class="input" value="${site.country || ''}" style="width:100%;">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Domain Authority</label>
+            <input type="number" id="editDA" class="input" value="${site.domainAuthority || 0}" min="0" max="100" style="width:100%;">
+          </div>
+          <div>
+            <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Spam Score</label>
+            <input type="number" id="editSpamScore" class="input" value="${site.spamScore || 0}" min="0" max="100" style="width:100%;">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Traffic Estimate</label>
+            <input type="number" id="editTraffic" class="input" value="${site.trafficEstimate || 0}" style="width:100%;">
+          </div>
+          <div>
+            <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Referring Domains</label>
+            <input type="number" id="editRefDomains" class="input" value="${site.referringDomains || 0}" style="width:100%;">
+          </div>
+        </div>
+        <div>
+          <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Language</label>
+          <input type="text" id="editLanguage" class="input" value="${site.language || 'English'}" style="width:100%;">
+        </div>
+        <div id="editWebsiteError" style="color:var(--danger);font-size:0.85rem;display:none;"></div>
+      </div>
+      <div class="modal-footer" style="margin-top:24px;display:flex;gap:12px;justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+        <button class="btn btn-primary" id="saveEditBtn" onclick="window.LinkBuild.saveWebsiteEdit('${websiteId}')">💾 Save Changes</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.classList.add('active');
+  overlay.classList.remove('hidden');
+}
+
+// Save edited website
+async function saveWebsiteEdit(websiteId) {
+  const btn = document.getElementById('saveEditBtn');
+  const errorEl = document.getElementById('editWebsiteError');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  if (errorEl) errorEl.style.display = 'none';
+
+  try {
+    const domain = document.getElementById('editDomain').value.trim();
+    const niche = document.getElementById('editNiche').value;
+    const country = document.getElementById('editCountry').value.trim();
+    const domainAuthority = parseInt(document.getElementById('editDA').value) || 0;
+    const spamScore = parseInt(document.getElementById('editSpamScore').value) || 0;
+    const trafficEstimate = parseInt(document.getElementById('editTraffic').value) || 0;
+    const referringDomains = parseInt(document.getElementById('editRefDomains').value) || 0;
+    const language = document.getElementById('editLanguage').value.trim();
+
+    if (!domain) {
+      throw new Error('Domain is required');
+    }
+
+    await client.mutation("websites:update", {
+      websiteId,
+      domain,
+      niche,
+      country,
+      language,
+      domainAuthority,
+      spamScore,
+      trafficEstimate,
+      referringDomains,
+    });
+
+    // Close modal and refresh
+    document.getElementById('editWebsiteModal').remove();
+    await refreshMyWebsites();
+  } catch (err) {
+    if (errorEl) {
+      errorEl.textContent = err.message || 'Failed to save changes';
+      errorEl.style.display = 'block';
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 Save Changes';
+  }
+}
+
+// Delete website
+async function deleteWebsite(websiteId) {
+  // Close dropdown and return to original container
+  closeAllDropdownsAndRestore();
+
+  const confirmed = await showCustomConfirm(
+    'Are you sure you want to permanently delete this website? This will also remove all associated backlinks. This action cannot be undone.',
+    'Delete Website',
+    'danger'
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await client.mutation("websites:remove", { websiteId });
+    await refreshMyWebsites();
+  } catch (err) {
+    alert('Failed to delete website: ' + (err.message || 'Unknown error'));
+  }
+}
+
+// Deactivate website
+async function deactivateWebsite(websiteId) {
+  // Close dropdown and return to original container
+  closeAllDropdownsAndRestore();
+
+  const confirmed = await showCustomConfirm(
+    'Deactivating this website will hide it from the marketplace and remove its verified status. You can re-add it later. Continue?',
+    'Deactivate Website',
+    'warning'
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await client.mutation("websites:deactivate", { websiteId });
+    await refreshMyWebsites();
+  } catch (err) {
+    alert('Failed to deactivate website: ' + (err.message || 'Unknown error'));
+  }
+}
+
+// Refresh the My Websites table
+async function refreshMyWebsites() {
+  const sites = await loadMyWebsites();
+  updateWebsitesTable(sites);
+}
+
+// =============================================
 // GLOBAL API
 // =============================================
 window.LinkBuild = {
@@ -2095,6 +2342,8 @@ window.LinkBuild = {
   viewExchangeFromChat,
   // Admin Panel
   getAdminStats, getAdminUsers, updateAdminUserRole, banAdminUser, getPendingWebsites, moderateAdminWebsite,
+  // Website Actions
+  toggleActionDropdown, editWebsite, saveWebsiteEdit, deleteWebsite, deactivateWebsite,
 };
 
 if (document.readyState === "loading") {
