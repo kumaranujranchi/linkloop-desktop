@@ -1191,25 +1191,11 @@
                 <option>English</option><option>Spanish</option><option>German</option><option>French</option><option>Other</option>
               </select>
             </div>
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Domain Authority (DA)</label>
-              <input class="input" type="number" id="wsDA" placeholder="e.g. 45" min="1" max="100" required style="width:100%">
-            </div>
+            <div><!-- Empty placeholder to keep grid layout --></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Spam Score</label>
-              <input class="input" type="number" id="wsSpam" placeholder="e.g. 3" min="0" max="100" style="width:100%">
-            </div>
-            <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Monthly Traffic</label>
-              <input class="input" type="number" id="wsTraffic" placeholder="e.g. 25000" style="width:100%">
-            </div>
-          </div>
-          <div>
-            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Referring Domains</label>
-            <input class="input" type="number" id="wsRefDomains" placeholder="e.g. 500" style="width:100%">
-          </div>
+          <p style="font-size:0.8rem;color:var(--text-tertiary);margin:0;padding:8px 12px;background:rgba(108,77,246,0.08);border-radius:8px;border:1px solid rgba(108,77,246,0.15);">
+            💡 <strong>DA, Spam Score, Traffic & Referring Domains</strong> will be fetched automatically from Moz API after you verify your website.
+          </p>
           <button class="btn btn-primary" type="submit" style="width:100%;margin-top:4px">Add Website</button>
           <div id="wsMessage" style="text-align:center;font-size:0.85rem;margin-top:4px"></div>
         </form>

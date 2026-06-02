@@ -936,10 +936,12 @@ window.handleAddWebsite = async function(e) {
     niche: document.getElementById("wsNiche").value,
     country: document.getElementById("wsCountry").value,
     language: document.getElementById("wsLanguage").value,
-    domainAuthority: parseInt(document.getElementById("wsDA").value) || 0,
-    spamScore: parseInt(document.getElementById("wsSpam").value) || 0,
-    trafficEstimate: parseInt(document.getElementById("wsTraffic").value) || 0,
-    referringDomains: parseInt(document.getElementById("wsRefDomains").value) || 0,
+    // DA, Spam Score, Traffic & Referring Domains will be auto-fetched
+    // from Moz API after verification — use placeholder defaults
+    domainAuthority: 0,
+    spamScore: 0,
+    trafficEstimate: 0,
+    referringDomains: 0,
   };
 
   if (!data.domain || !data.niche || !data.country) {
