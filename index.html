@@ -1656,22 +1656,36 @@
         transform: none;
       }
 
-      /* ---- Pricing ---- */
+      /* ---- Pricing — horizontal scroll on mobile ---- */
       .pricing-grid {
-        grid-template-columns: 1fr;
-        gap: 28px;
-        max-width: 420px;
-        margin: 0 auto;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 16px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 12px;
+        margin: 0 -4%;
+        padding-left: 4%;
+        padding-right: 4%;
+        scrollbar-width: none;
+        max-width: none;
+      }
+      .pricing-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .pricing-card {
+        flex: 0 0 280px;
+        scroll-snap-align: start;
+        padding: 28px 22px;
+        gap: 16px;
       }
       .pricing-card.featured {
         transform: none;
-        order: -1;
+        order: 0;
       }
       .pricing-card.featured:hover {
         transform: translateY(-3px);
-      }
-      .pricing-card {
-        padding: 32px 28px;
       }
 
       /* ---- Comparison ---- */
@@ -1896,11 +1910,12 @@
 
       /* ---- Pricing ---- */
       .pricing-card {
-        padding: 28px 22px;
-        gap: 16px;
+        flex: 0 0 260px;
+        padding: 24px 20px;
+        gap: 14px;
       }
       .pricing-price {
-        font-size: 2.4rem;
+        font-size: 2.2rem;
       }
 
       /* ---- Testimonials ---- */
