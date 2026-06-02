@@ -2173,10 +2173,25 @@
         <ul>
           <li><a href="mailto:support@linkbuild.com">support@linkbuild.com</a></li>
           <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('termsOverlay').classList.remove('hidden'); document.getElementById('termsOverlay').classList.add('active');">Terms of Service</a></li>
           <li><a href="#" onclick="event.preventDefault(); document.getElementById('feedbackOverlay').classList.add('active'); document.getElementById('feedbackOverlay').classList.remove('hidden');">Suggest Feature & Feedback</a></li>
         </ul>
-      </div>
+    </div>
+    <!-- Disclaimer Section -->
+    <div class="footer-disclaimer" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding: 30px 0 10px; margin: 30px auto 0; max-width: 1200px; font-size: 0.82rem; color: #64748b; line-height: 1.6; text-align: left;">
+      <h5 style="color: #ffffff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; font-weight: 700;">Disclaimer</h5>
+      <p style="margin-bottom: 12px;">LinkBuild is a backlink exchange and website partnership marketplace that connects website owners, publishers, and SEO professionals. LinkBuild does not participate in, verify, manage, or guarantee any agreements, link exchanges, payments, services, or transactions conducted between users.</p>
+      <p style="margin-bottom: 12px;">All negotiations, link exchange arrangements, payments, and business dealings occur directly between users and are entirely their own responsibility. LinkBuild shall not be held liable for any loss, damage, dispute, fraud, payment issue, SEO impact, or business outcome resulting from interactions between users.</p>
+      <p style="margin-bottom: 8px; font-weight: 600; color: #94a3b8;">Users are strongly advised to:</p>
+      <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+        <li>Verify the authenticity and ownership of any website before entering into an agreement.</li>
+        <li>Communicate and transact only with verified domains whenever possible.</li>
+        <li>Exercise caution when sharing personal information, contact details, or payment information.</li>
+        <li>Conduct proper due diligence before sending money or agreeing to any backlink exchange.</li>
+        <li>Avoid engaging with unverified domains or suspicious users.</li>
+      </ul>
+      <p style="margin-bottom: 12px;">While LinkBuild may provide verification indicators and marketplace safeguards, no verification process can guarantee the legitimacy, quality, or future behavior of any user or website.</p>
+      <p style="margin-bottom: 0;">By using LinkBuild, you acknowledge that all interactions and transactions are undertaken at your own risk.</p>
     </div>
     <div class="footer-bottom">
       <span>&copy; 2026 LinkBuild. All rights reserved.</span>
@@ -2346,6 +2361,240 @@
           <div id="feedbackError" class="feedback-status feedback-error"></div>
           <div id="feedbackSuccess" class="feedback-status feedback-success">Thank you for your feedback!</div>
         </form>
+      </div>
+  </div>
+
+  <!-- ========== TERMS OF SERVICE MODAL ========== -->
+  <div class="modal-overlay hidden" id="termsOverlay" onclick="(function(e){if(e.target===document.getElementById('termsOverlay')){document.getElementById('termsOverlay').classList.remove('active');document.getElementById('termsOverlay').classList.add('hidden');}})(event)">
+    <div class="modal-box" style="max-width: 800px; width: 90%; max-height: 80vh; display: flex; flex-direction: column;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+        <h2 style="margin: 0; font-size: 1.25rem;">Terms and Conditions</h2>
+        <button class="modal-close" onclick="document.getElementById('termsOverlay').classList.remove('active'); document.getElementById('termsOverlay').classList.add('hidden');" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-secondary); display:flex !important;">✕</button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; padding: 20px 0; font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); text-align: left; flex: 1;">
+        <p style="margin-bottom: 12px; font-weight: 600;">Last Updated: June 2, 2026</p>
+        <p style="margin-bottom: 12px;">Welcome to LinkBuild ("Platform", "Website", "Service", "we", "us", "our").</p>
+        <p style="margin-bottom: 20px;">By accessing or using LinkBuild, you agree to be bound by these Terms and Conditions. If you do not agree to these Terms, you must discontinue use of the Platform immediately.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">1. ABOUT LINKBUILD</h3>
+        <p style="margin-bottom: 12px;">LinkBuild is an online marketplace that connects website owners, publishers, bloggers, SEO professionals, agencies, and other users interested in backlink exchanges, guest posting opportunities, sponsorship opportunities, and related website collaborations.</p>
+        <p style="margin-bottom: 12px;">LinkBuild acts solely as a technology platform facilitating introductions and communication between users.</p>
+        <p style="margin-bottom: 20px;">LinkBuild is not a broker, agent, representative, guarantor, employer, partner, or participant in any agreement entered into between users.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">2. ELIGIBILITY</h3>
+        <p style="margin-bottom: 12px;">You must be at least 18 years old to use the Platform.</p>
+        <p style="margin-bottom: 12px;">By using LinkBuild, you represent and warrant that:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 4px;">
+          <li>You have legal capacity to enter into agreements.</li>
+          <li>You own or are authorized to manage any website listed.</li>
+          <li>All information provided is accurate.</li>
+          <li>Your use complies with applicable laws.</li>
+        </ul>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">3. USER ACCOUNTS</h3>
+        <p style="margin-bottom: 12px;">Users are responsible for:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Maintaining account security.</li>
+          <li>Protecting login credentials.</li>
+          <li>Activities performed under their account.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">LinkBuild shall not be liable for unauthorized account access resulting from user negligence.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">4. WEBSITE LISTINGS</h3>
+        <p style="margin-bottom: 12px;">Users may submit websites for listing.</p>
+        <p style="margin-bottom: 12px;">By listing a website, you represent that:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>You own the website or have authority to act on behalf of the owner.</li>
+          <li>Website metrics are accurate.</li>
+          <li>The website does not contain unlawful content.</li>
+          <li>The website complies with search engine guidelines.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">LinkBuild reserves the right to remove any listing at its sole discretion.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">5. BACKLINK EXCHANGES AND AGREEMENTS</h3>
+        <p style="margin-bottom: 12px;">All backlink exchanges, guest posting arrangements, sponsorship agreements, collaborations, and related activities are conducted solely between users.</p>
+        <p style="margin-bottom: 12px;">LinkBuild:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Does not negotiate agreements.</li>
+          <li>Does not enforce agreements.</li>
+          <li>Does not verify performance of agreements.</li>
+          <li>Does not guarantee delivery of backlinks.</li>
+          <li>Does not guarantee permanence of backlinks.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">Any agreement entered into between users is solely the responsibility of those users.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">6. PAYMENTS AND FINANCIAL TRANSACTIONS</h3>
+        <p style="margin-bottom: 12px;">Any payment arrangements between users occur independently and outside the Platform unless explicitly provided otherwise by LinkBuild.</p>
+        <p style="margin-bottom: 12px;">LinkBuild:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Is not a payment processor.</li>
+          <li>Is not responsible for payment disputes.</li>
+          <li>Does not guarantee payment collection.</li>
+          <li>Does not verify payment requests.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">Users are solely responsible for conducting due diligence before making any payment.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">7. NO GUARANTEE OF SEO RESULTS</h3>
+        <p style="margin-bottom: 12px;">LinkBuild makes no representation or warranty regarding:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Search engine rankings</li>
+          <li>Domain Authority (DA)</li>
+          <li>Domain Rating (DR)</li>
+          <li>Organic traffic growth</li>
+          <li>Keyword rankings</li>
+          <li>SEO performance</li>
+          <li>Revenue generation</li>
+        </ul>
+        <p style="margin-bottom: 20px;">SEO outcomes depend on numerous factors beyond the Platform's control.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">8. USER RESPONSIBILITY</h3>
+        <p style="margin-bottom: 12px;">Users are solely responsible for:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Verifying website ownership.</li>
+          <li>Evaluating website quality.</li>
+          <li>Reviewing SEO metrics.</li>
+          <li>Assessing backlink opportunities.</li>
+          <li>Conducting due diligence.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">Users acknowledge that interacting with unknown parties may involve risks.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">9. UNVERIFIED DOMAINS</h3>
+        <p style="margin-bottom: 12px;">LinkBuild may display verification indicators for certain domains.</p>
+        <p style="margin-bottom: 12px;">However:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Verification does not constitute endorsement.</li>
+          <li>Verification does not guarantee legitimacy.</li>
+          <li>Verification does not guarantee quality.</li>
+          <li>Verification does not guarantee future conduct.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">Users must independently evaluate all domains.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">10. PROHIBITED ACTIVITIES</h3>
+        <p style="margin-bottom: 12px;">Users may not:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Commit fraud.</li>
+          <li>Impersonate another person.</li>
+          <li>Misrepresent website metrics.</li>
+          <li>Use stolen domains.</li>
+          <li>Engage in phishing.</li>
+          <li>Send spam.</li>
+          <li>Harass other users.</li>
+          <li>Promote malware.</li>
+          <li>Promote illegal products or services.</li>
+          <li>Engage in deceptive SEO practices.</li>
+          <li>Use automated abuse systems.</li>
+          <li>Circumvent platform security.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">Violation may result in immediate account termination.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">11. COMMUNICATIONS</h3>
+        <p style="margin-bottom: 12px;">LinkBuild may monitor communications for:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Security purposes.</li>
+          <li>Fraud prevention.</li>
+          <li>Abuse detection.</li>
+          <li>Platform integrity.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">Users consent to such monitoring where permitted by law.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">12. SUSPENSION AND TERMINATION</h3>
+        <p style="margin-bottom: 12px;">LinkBuild may suspend or terminate any account at any time for:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Violation of these Terms.</li>
+          <li>Fraud concerns.</li>
+          <li>Security risks.</li>
+          <li>Abuse reports.</li>
+          <li>Legal compliance requirements.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">No prior notice is required.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">13. INTELLECTUAL PROPERTY</h3>
+        <p style="margin-bottom: 12px;">All software, branding, content, design, logos, trademarks, databases, and platform functionality remain the exclusive property of LinkBuild.</p>
+        <p style="margin-bottom: 12px;">Users may not:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Copy</li>
+          <li>Reverse engineer</li>
+          <li>Reproduce</li>
+          <li>Sell</li>
+          <li>Redistribute</li>
+        </ul>
+        <p style="margin-bottom: 20px;">any part of the Platform without permission.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">14. THIRD-PARTY CONTENT</h3>
+        <p style="margin-bottom: 12px;">The Platform may contain:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <li>User-generated content</li>
+          <li>External links</li>
+          <li>Third-party websites</li>
+        </ul>
+        <p style="margin-bottom: 20px;">LinkBuild is not responsible for any third-party content.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">15. DISCLAIMER OF WARRANTIES</h3>
+        <p style="margin-bottom: 12px; font-weight: 600; color: var(--text-primary);">THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE."</p>
+        <p style="margin-bottom: 12px; font-weight: 600; color: var(--text-primary);">LINKBUILD DISCLAIMS ALL WARRANTIES INCLUDING:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; font-weight: 600; color: var(--text-primary);">
+          <li>MERCHANTABILITY</li>
+          <li>FITNESS FOR A PARTICULAR PURPOSE</li>
+          <li>NON-INFRINGEMENT</li>
+          <li>ACCURACY</li>
+          <li>RELIABILITY</li>
+        </ul>
+        <p style="margin-bottom: 20px; font-weight: 600; color: var(--text-primary);">WE DO NOT GUARANTEE UNINTERRUPTED OPERATION.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">16. LIMITATION OF LIABILITY</h3>
+        <p style="margin-bottom: 12px; font-weight: 600; color: var(--text-primary);">TO THE MAXIMUM EXTENT PERMITTED BY LAW, LINKBUILD SHALL NOT BE LIABLE FOR:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; font-weight: 600; color: var(--text-primary);">
+          <li>LOST PROFITS</li>
+          <li>LOST REVENUE</li>
+          <li>LOSS OF DATA</li>
+          <li>BUSINESS INTERRUPTION</li>
+          <li>SEO LOSSES</li>
+          <li>SEARCH ENGINE PENALTIES</li>
+          <li>PAYMENT DISPUTES</li>
+          <li>FRAUD</li>
+          <li>USER MISCONDUCT</li>
+          <li>INDIRECT DAMAGES</li>
+          <li>INCIDENTAL DAMAGES</li>
+          <li>CONSEQUENTIAL DAMAGES</li>
+        </ul>
+        <p style="margin-bottom: 20px; font-weight: 600; color: var(--text-primary);">ARISING FROM USE OF THE PLATFORM.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">17. INDEMNIFICATION</h3>
+        <p style="margin-bottom: 12px;">You agree to defend, indemnify, and hold harmless LinkBuild, its owners, employees, contractors, affiliates, and partners from any claim, liability, loss, damage, expense, or legal proceeding arising from:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Your use of the Platform.</li>
+          <li>Your website listings.</li>
+          <li>Your agreements with other users.</li>
+          <li>Your violation of these Terms.</li>
+        </ul>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">18. FRAUD WARNING</h3>
+        <p style="margin-bottom: 12px;">LinkBuild cannot guarantee the identity, trustworthiness, quality, legitimacy, or conduct of any user.</p>
+        <p style="margin-bottom: 12px;">Users acknowledge that:</p>
+        <ul style="list-style: disc; padding-left: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Fraud may occur on online marketplaces.</li>
+          <li>Website metrics may change.</li>
+          <li>Agreements may not be fulfilled.</li>
+          <li>Payments may be disputed.</li>
+        </ul>
+        <p style="margin-bottom: 20px;">Users assume all risks associated with interactions on the Platform.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">19. DATA AND PRIVACY</h3>
+        <p style="margin-bottom: 12px;">Use of the Platform is also governed by the Privacy Policy.</p>
+        <p style="margin-bottom: 20px;">By using LinkBuild, you consent to data processing as described in the Privacy Policy.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">20. MODIFICATIONS</h3>
+        <p style="margin-bottom: 12px;">LinkBuild reserves the right to modify these Terms at any time.</p>
+        <p style="margin-bottom: 20px;">Continued use of the Platform constitutes acceptance of revised Terms.</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">21. GOVERNING LAW</h3>
+        <p style="margin-bottom: 12px;">These Terms shall be governed by and construed in accordance with the laws of India.</p>
+        <p style="margin-bottom: 20px;">Any disputes shall be subject to the exclusive jurisdiction of the courts located in [Your City, State, India].</p>
+        
+        <h3 style="color: var(--text-primary); font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px;">22. CONTACT INFORMATION</h3>
+        <p style="margin-bottom: 12px;">For questions regarding these Terms:</p>
+        <p style="margin-bottom: 4px;">Email: <a href="mailto:support@linkbuild.store" style="color: var(--primary-purple); text-decoration: underline;">support@linkbuild.store</a></p>
+        <p style="margin-bottom: 0;">Website: <a href="https://www.linkbuild.store" target="_blank" style="color: var(--primary-purple); text-decoration: underline;">https://www.linkbuild.store</a></p>
       </div>
     </div>
   </div>

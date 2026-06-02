@@ -1162,14 +1162,18 @@ async function renderMessages(messages) {
 
     if (linkExchangeRequestRegex.test(msg.displayText)) {
       const domains = extractDomains(msg.displayText);
-      let unverifiedTriggered = false;
-      for (const domain of domains) {
-        if (domainVerificationCache[domain] === false) {
-          unverifiedTriggered = true;
-          break;
+      let triggerWarning = false;
+      if (domains.length === 0) {
+        triggerWarning = true;
+      } else {
+        for (const domain of domains) {
+          if (domainVerificationCache[domain] === false) {
+            triggerWarning = true;
+            break;
+          }
         }
       }
-      if (unverifiedTriggered) {
+      if (triggerWarning) {
         bubbleHtml += `
           <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
             ⚠️ This domain is not verified on our marketplace. Please avoid exchanging links with unverified domains, as their quality, ownership, and SEO metrics cannot be confirmed.
