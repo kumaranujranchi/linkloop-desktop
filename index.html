@@ -1631,10 +1631,26 @@
         gap: 14px;
       }
 
-      /* ---- Screenshots ---- */
+      /* ---- Screenshots — horizontal scroll on mobile ---- */
       .screenshots-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
         gap: 16px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 12px;
+        margin: 0 -4%;
+        padding-left: 4%;
+        padding-right: 4%;
+        scrollbar-width: none;
+      }
+      .screenshots-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .screenshot-card {
+        flex: 0 0 300px;
+        scroll-snap-align: start;
       }
       .screenshot-card:hover {
         transform: none;
@@ -1871,6 +1887,11 @@
       }
       .step-card p {
         font-size: 0.82rem;
+      }
+
+      /* ---- Screenshots — smaller cards for tiny screens ---- */
+      .screenshot-card {
+        flex: 0 0 270px;
       }
 
       /* ---- Pricing ---- */
