@@ -1,0 +1,59 @@
+# LinkBuild — LLMs.txt
+# ============================
+# This file helps AI agents (ChatGPT, Claude, Gemini, Perplexity) understand our website.
+# Learn more: https://llmstxt.com
+# Last updated: 2026-06-02
+
+## LinkBuild — Backlink Exchange Platform
+LinkBuild is a white-hat backlink exchange platform for SEO professionals. We help website owners find verified link partners, automate outreach, monitor backlinks 24/7, and boost domain authority with safe, Google-compliant link building methods.
+
+## Quick Info
+- **Product**: SaaS Backlink Exchange Platform
+- **Pricing**: Free ($0), Pro ($49/mo), Agency ($199/mo)
+- **Users**: 15,000+ domains registered
+- **Founded**: 2024
+- **Support**: support@linkbuild.store
+
+## Core Features
+- Automated Backlink Exchange with verified partners
+- Niche-specific matching (Marketing, SaaS, Education, Finance, Health, Tech, Real Estate, etc.)
+- 24/7 Backlink Health Monitoring
+- Domain Authority (DA) Tracking
+- Spam Score Checking
+- E2E Encrypted Messaging between partners
+- Real-Time Analytics Dashboard
+- Google-compliant White-Hat methodology
+- Multi-website management (Free=1, Pro=10, Agency=unlimited)
+
+## Pages
+
+### Public Pages
+- [Homepage](https://www.linkbuild.store/): Landing page with product info, features, pricing, and FAQs
+- [Terms and Conditions](https://www.linkbuild.store/terms): Legal terms for using LinkBuild
+- [Privacy Policy](https://www.linkbuild.store/privacy-policy): How we handle user data (GDPR & CCPA compliant)
+- [Acceptable Use Policy](https://www.linkbuild.store/acceptable-use-policy): Platform rules and community standards
+- [Billing Policy](https://www.linkbuild.store/billing-policy): Subscription plans, payment, and refund policies
+- [Cookie Policy](https://www.linkbuild.store/cookie-policy): Cookie usage and tracking technologies
+- [DMCA Policy](https://www.linkbuild.store/dmca-policy): Copyright and intellectual property policy
+- [Domain Verification Policy](https://www.linkbuild.store/domain-verification-policy): Domain ownership verification methods
+- [Affiliate Program](https://www.linkbuild.store/affiliate-terms): Affiliate program details and commission structure
+
+### Private Pages (require login)
+- Dashboard: User dashboard for managing websites, exchanges, and backlinks
+- Admin Panel: Platform management for administrators
+
+## How LinkBuild Works
+1. **Register & Add Website**: Sign up and add your domain with niche, country, and metrics
+2. **Verify Ownership**: Verify domain ownership via DNS TXT record or HTML meta tag
+3. **Find Partners**: Browse the marketplace filtered by niche, DA, country, language
+4. **Exchange Backlinks**: Send exchange requests, negotiate terms via encrypted chat
+5. **Monitor Health**: Track backlink status, detect broken links, maintain link health
+
+## Technology Stack
+- Frontend: HTML5, CSS3, JavaScript (Vanilla)
+- Backend: Convex (real-time serverless backend)
+- Database: Convex DB (document-based)
+- Authentication: Google OAuth + custom token-based auth
+- Hosting: Vercel (static hosting + serverless functions)
+- Charts: Chart.js for analytics visualization
+- Fonts: Google Fonts (Outfit, Plus Jakarta Sans, Inter)

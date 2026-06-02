@@ -40,9 +40,10 @@ cpIfExists(resolve(ROOT, "cookie-policy.html"), resolve(DIST, "cookie-policy.htm
 cpIfExists(resolve(ROOT, "dmca-policy.html"), resolve(DIST, "dmca-policy.html"));
 cpIfExists(resolve(ROOT, "domain-verification-policy.html"), resolve(DIST, "domain-verification-policy.html"));
 
-// Copy public files (sitemap.xml, robots.txt)
+// Copy public files (sitemap.xml, robots.txt, llms.txt)
 cpIfExists(resolve(ROOT, "public/sitemap.xml"), resolve(DIST, "sitemap.xml"));
 cpIfExists(resolve(ROOT, "public/robots.txt"), resolve(DIST, "robots.txt"));
+cpIfExists(resolve(ROOT, "public/llms.txt"), resolve(DIST, "llms.txt"));
 
 cpIfExists(resolve(ROOT, "css"), resolve(DIST, "css"), { recursive: true });
 cpIfExists(resolve(ROOT, "js"), resolve(DIST, "js"), { recursive: true });

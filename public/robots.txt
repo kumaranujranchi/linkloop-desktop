@@ -1,13 +1,60 @@
 # LinkBuild Robots.txt
 # https://www.linkbuild.store/
 
+# ====== All Crawlers (Default) ======
 User-agent: *
 Allow: /
 Disallow: /dashboard
 Disallow: /admin
 
-# Sitemap
-Sitemap: https://www.linkbuild.store/sitemap.xml
+# ====== AI Crawlers - Explicitly Allowed ======
+# OpenAI (ChatGPT, GPTBot)
+User-agent: GPTBot
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
 
-# Crawl delay
-Crawl-delay: 10
+# Anthropic (Claude)
+User-agent: Claude-Web
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+# Google AI (Gemini)
+User-agent: Google-Extended
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+# Common Crawl (used by many AI training datasets)
+User-agent: CCBot
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+# ====== Sitemap ======
+Sitemap: https://www.linkbuild.store/sitemap.xml
+Sitemap: https://www.linkbuild.store/llms.txt
