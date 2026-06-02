@@ -1935,7 +1935,7 @@ function updateMarketplaceTable(websites) {
   }
 
   if (!websites || !websites.length) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites found. Try adjusting your search filters or check back later.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites found. Try adjusting your search filters or check back later.</td></tr>';
     return;
   }
 
@@ -1954,6 +1954,7 @@ function updateMarketplaceTable(websites) {
       <tr>
         <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0,2).toUpperCase()}</div><strong>${w.domain}</strong>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ''}</div></td>
         <td><span class="badge badge-info">${w.domainAuthority}</span></td>
+        <td><span class="badge ${w.spamScore > 20 ? 'badge-danger' : w.spamScore > 10 ? 'badge-warning' : 'badge-success'}">${w.spamScore || 0}%</span></td>
         <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
         <td>${w.niche}</td>
         <td>${w.country}</td>
