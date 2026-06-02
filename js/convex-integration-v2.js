@@ -2465,6 +2465,8 @@ window.LinkBuild = {
   getAdminStats, getAdminUsers, updateAdminUserRole, banAdminUser, getPendingWebsites, moderateAdminWebsite,
   // Website Actions
   toggleActionDropdown, editWebsite, saveWebsiteEdit, deleteWebsite, deactivateWebsite,
+  // Notifications
+  toggleNotificationDropdown, markNotificationRead,
 };
 
 if (document.readyState === "loading") {
