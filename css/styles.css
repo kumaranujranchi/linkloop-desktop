@@ -1618,10 +1618,10 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
   background: var(--bg-secondary);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-light);
-  padding: 20px 18px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
   transition: all var(--transition-normal);
   box-shadow: var(--shadow-sm);
 }
