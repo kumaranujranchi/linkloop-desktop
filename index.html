@@ -1015,6 +1015,46 @@
       font-family: var(--font-outfit);
     }
 
+    /* ---- Integrations ---- */
+    .integrations-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .integration-card {
+      background: rgba(30, 41, 59, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .integration-card:hover {
+      border-color: rgba(108, 77, 246, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .integration-card .integration-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .integration-card .integration-name {
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .integration-card .integration-status {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
     /* ---- Trust & Verification ---- */
     .trust-grid {
       display: grid;
@@ -1458,6 +1498,9 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 32px;
       }
+      .integrations-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
       .footer-desc {
         grid-column: 1 / -1;
       }
@@ -1687,6 +1730,27 @@
         transform: translateY(-3px);
       }
 
+      /* ---- Integrations — horizontal scroll on mobile ---- */
+      .integrations-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 16px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 12px;
+        scrollbar-width: none;
+        max-width: 100%;
+      }
+      .integrations-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .integration-card {
+        flex: 0 0 200px;
+        scroll-snap-align: start;
+        padding: 24px 18px;
+      }
+
       /* ---- Comparison ---- */
       .comparison-wrap {
         font-size: 0.82rem;
@@ -1905,6 +1969,19 @@
       /* ---- Screenshots — smaller cards for tiny screens ---- */
       .screenshot-card {
         flex: 0 0 270px;
+      }
+
+      /* ---- Integrations ---- */
+      .integration-card {
+        flex: 0 0 170px;
+        padding: 20px 16px;
+      }
+      .integration-icon {
+        font-size: 1.6rem;
+        margin-bottom: 8px;
+      }
+      .integration-name {
+        font-size: 0.9rem;
       }
 
       /* ---- Pricing ---- */
@@ -2878,36 +2955,36 @@
       <p style="color:#94a3b8">Our integrations are under active development. Full support for the SEO stack is launching soon.</p>
     </div>
     
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:20px;max-width:1200px;margin:0 auto">
-      <div style="background:rgba(30,41,59,0.25);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px 20px;text-align:center;transition:all 0.2s ease">
-        <div style="font-size:2rem;margin-bottom:12px">🔍</div>
-        <div style="font-weight:700;color:#ffffff;font-size:1rem;margin-bottom:4px">Ahrefs</div>
-        <div style="font-size:0.8rem;color:#64748b">Coming Soon</div>
+    <div class="integrations-grid">
+      <div class="integration-card">
+        <div class="integration-icon">🔍</div>
+        <div class="integration-name">Ahrefs</div>
+        <div class="integration-status">Coming Soon</div>
       </div>
-      <div style="background:rgba(30,41,59,0.25);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px 20px;text-align:center;transition:all 0.2s ease">
-        <div style="font-size:2rem;margin-bottom:12px">📊</div>
-        <div style="font-weight:700;color:#ffffff;font-size:1rem;margin-bottom:4px">Semrush</div>
-        <div style="font-size:0.8rem;color:#64748b">Coming Soon</div>
+      <div class="integration-card">
+        <div class="integration-icon">📊</div>
+        <div class="integration-name">Semrush</div>
+        <div class="integration-status">Coming Soon</div>
       </div>
-      <div style="background:rgba(30,41,59,0.25);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px 20px;text-align:center;transition:all 0.2s ease">
-        <div style="font-size:2rem;margin-bottom:12px">🔗</div>
-        <div style="font-weight:700;color:#ffffff;font-size:1rem;margin-bottom:4px">GSC</div>
-        <div style="font-size:0.8rem;color:#64748b">Coming Soon</div>
+      <div class="integration-card">
+        <div class="integration-icon">🔗</div>
+        <div class="integration-name">GSC</div>
+        <div class="integration-status">Coming Soon</div>
       </div>
-      <div style="background:rgba(30,41,59,0.25);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px 20px;text-align:center;transition:all 0.2s ease">
-        <div style="font-size:2rem;margin-bottom:12px">📈</div>
-        <div style="font-weight:700;color:#ffffff;font-size:1rem;margin-bottom:4px">GA4</div>
-        <div style="font-size:0.8rem;color:#64748b">Coming Soon</div>
+      <div class="integration-card">
+        <div class="integration-icon">📈</div>
+        <div class="integration-name">GA4</div>
+        <div class="integration-status">Coming Soon</div>
       </div>
-      <div style="background:rgba(30,41,59,0.25);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px 20px;text-align:center;transition:all 0.2s ease">
-        <div style="font-size:2rem;margin-bottom:12px">🏰</div>
-        <div style="font-weight:700;color:#ffffff;font-size:1rem;margin-bottom:4px">Majestic</div>
-        <div style="font-size:0.8rem;color:#64748b">Coming Soon</div>
+      <div class="integration-card">
+        <div class="integration-icon">🏰</div>
+        <div class="integration-name">Majestic</div>
+        <div class="integration-status">Coming Soon</div>
       </div>
-      <div style="background:rgba(30,41,59,0.25);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px 20px;text-align:center;transition:all 0.2s ease">
-        <div style="font-size:2rem;margin-bottom:12px">🧭</div>
-        <div style="font-weight:700;color:#ffffff;font-size:1rem;margin-bottom:4px">Moz</div>
-        <div style="font-size:0.8rem;color:#64748b">Coming Soon</div>
+      <div class="integration-card">
+        <div class="integration-icon">🧭</div>
+        <div class="integration-name">Moz</div>
+        <div class="integration-status">Coming Soon</div>
       </div>
     </div>
   </section>
