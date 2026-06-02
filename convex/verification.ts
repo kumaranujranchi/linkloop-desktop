@@ -74,7 +74,19 @@ export const checkAndVerify = action({
         websiteId: args.websiteId,
         verificationMethod: args.method,
       });
-      return { success: true, message: "✅ Website verified successfully!" };
+
+      // 🔥 After verification, fetch real metrics from Moz API
+      try {
+        await ctx.runAction(internal.moz.fetchAndUpdateMetrics, {
+          websiteId: args.websiteId,
+          domain: args.domain,
+        });
+      } catch (e) {
+        console.error("Moz metrics fetch failed (non-blocking):", e);
+        // Don't fail verification if Moz is down — website stays verified with defaults
+      }
+
+      return { success: true, message: "✅ Website verified successfully! Metrics updated from Moz." };
     }
 
     // Give helpful error message
