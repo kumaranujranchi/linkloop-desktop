@@ -64,9 +64,11 @@
   --radius-xl: 16px;
   --radius-full: 9999px;
 
-  /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  /* Typography — Apple system fonts */
+  --font-sans: 'SF Pro Text', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif;
+  --font-heading: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', 'Menlo', monospace;
+  --font-serif: 'New York', 'Georgia', 'Times New Roman', serif;
 
   /* Layout */
   --sidebar-width: 260px;
