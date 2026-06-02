@@ -1445,17 +1445,26 @@ window.agreeToSafetyNotice = function() {
   }
 };
 
-// Auto-show safety notice on dashboard load
-document.addEventListener('DOMContentLoaded', function() {
+// Auto-show safety notice on page load (script runs at end of body, DOM is ready)
+(function initSafetyNotice() {
   const agreed = localStorage.getItem('linkbuild-safety-agreed');
-  if (!agreed) {
+  if (agreed) return;
+
+  function showModal() {
     const modal = document.getElementById('safetyNoticeModal');
     if (modal) {
-      // Small delay to let the page render first
-      setTimeout(function() {
-        modal.classList.add('active');
-        modal.classList.remove('hidden');
-      }, 500);
+      modal.classList.remove('hidden');
+      // Force reflow then add active for transition
+      void modal.offsetWidth;
+      modal.classList.add('active');
     }
   }
-});
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(showModal, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(showModal, 500);
+    });
+  }
+})();
