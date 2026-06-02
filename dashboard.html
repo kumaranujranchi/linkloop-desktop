@@ -998,26 +998,6 @@
     </button>
   </nav>
 
-  <!-- ========== SAFETY NOTICE MODAL ========== -->
-  <div class="modal-overlay hidden" id="safetyNoticeModal">
-    <div class="modal-box" style="max-width:550px;">
-      <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center;">
-        <h2 style="display:flex;align-items:center;gap:8px;margin:0;"><span style="font-size:1.4rem;">⚠️</span> Safety Notice</h2>
-        <button class="modal-close" onclick="declineSafetyNotice()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">✕</button>
-      </div>
-      <div class="modal-body" style="font-size:0.92rem;line-height:1.6;color:var(--text-secondary);padding:20px 0 0;">
-        <p style="margin-bottom:14px;font-weight:600;color:var(--text-primary);">LinkBuild is a backlink exchange marketplace only. All link exchange agreements, payments, and business transactions take place directly between users and are not managed by LinkBuild.</p>
-        <p style="margin-bottom:14px;">Please verify website ownership, domain quality, and user authenticity before entering into any agreement. Avoid sending money or exchanging links with unverified domains without proper investigation.</p>
-        <p style="margin-bottom:20px;">For your safety, always exercise caution and perform your own due diligence before proceeding with any transaction.</p>
-        
-        <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:24px;border-top:1px solid var(--border-light);padding-top:16px;">
-          <button class="btn btn-secondary" onclick="declineSafetyNotice()">Cancel</button>
-          <button class="btn btn-primary" onclick="acceptSafetyNotice()">I Agree</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- ========== AUTH OVERLAY ========== -->
   <div class="modal-overlay hidden" id="authOverlay">
     <div class="modal-box auth-modal">
@@ -1232,6 +1212,33 @@
           🔍 Check Verification
         </button>
         <button class="btn btn-ghost" onclick="closeVerifyWebsiteModal()" style="width:100%;margin-top:-8px">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SAFETY NOTICE MODAL ========== -->
+  <div class="modal-overlay hidden" id="safetyNoticeModal" style="z-index: 9999;">
+    <div class="modal-box" style="max-width: 500px; padding: 24px; text-align: left;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--border-light); padding-bottom: 12px; margin-bottom: 16px;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-primary); margin: 0;">
+          ⚠️ Safety Notice
+        </h2>
+      </div>
+      <div class="modal-body" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; display: flex; flex-direction: column; gap: 14px;">
+        <p style="margin: 0; font-weight: 600; color: var(--text-primary);">
+          LinkBuild is a backlink exchange marketplace only. All link exchange agreements, payments, and business transactions take place directly between users and are not managed by LinkBuild.
+        </p>
+        <p style="margin: 0;">
+          Please verify website ownership, domain quality, and user authenticity before entering into any agreement. Avoid sending money or exchanging links with unverified domains without proper investigation.
+        </p>
+        <p style="margin: 0; font-style: italic;">
+          For your safety, always exercise caution and perform your own due diligence before proceeding with any transaction.
+        </p>
+      </div>
+      <div class="modal-footer" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-light); display: flex; justify-content: flex-end;">
+        <button class="btn btn-primary" id="safetyAgreeBtn" onclick="agreeToSafetyNotice()" style="width: 100%; padding: 12px; font-size: 0.95rem;">
+          I Agree
+        </button>
       </div>
     </div>
   </div>

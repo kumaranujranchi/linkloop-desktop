@@ -4,16 +4,6 @@
 
 // ---------- NAVIGATION ----------
 function navigateTo(pageName, navItem) {
-  // Guard messages page navigation with Safety Notice
-  if (pageName === 'messages') {
-    const agreed = localStorage.getItem('linkbuild-safety-agreed');
-    if (!agreed) {
-      document.getElementById('safetyNoticeModal').classList.add('active');
-      document.getElementById('safetyNoticeModal').classList.remove('hidden');
-      return;
-    }
-  }
-
   // Guard admin page navigation
   if (pageName === 'admin') {
     const user = window.LinkBuild ? window.LinkBuild.getCurrentUser() : null;
@@ -1443,26 +1433,4 @@ window.handleFeedbackSubmit = async function(e) {
     btnEl.disabled = false;
     btnEl.textContent = 'Submit Feedback';
   }
-};
-
-// ---------- SAFETY NOTICE HANDLERS ----------
-window.acceptSafetyNotice = function() {
-  localStorage.setItem('linkbuild-safety-agreed', 'true');
-  const modal = document.getElementById('safetyNoticeModal');
-  if (modal) {
-    modal.classList.remove('active');
-    modal.classList.add('hidden');
-  }
-  // Proceed to messages page
-  navigateTo('messages');
-};
-
-window.declineSafetyNotice = function() {
-  const modal = document.getElementById('safetyNoticeModal');
-  if (modal) {
-    modal.classList.remove('active');
-    modal.classList.add('hidden');
-  }
-  // Redirect back to dashboard
-  navigateTo('dashboard');
 };

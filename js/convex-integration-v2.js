@@ -530,7 +530,31 @@ function hideAuthScreen() {
       el.removeEventListener("click", el._backdropHandler);
     }
   }
+  // Check if we need to show safety notice on dashboard
+  checkSafetyNotice();
 }
+
+function checkSafetyNotice() {
+  const agreed = localStorage.getItem("linkbuild-safety-agreed");
+  if (agreed !== "true") {
+    const modal = document.getElementById("safetyNoticeModal");
+    if (modal) {
+      modal.classList.remove("hidden");
+      modal.classList.add("active");
+    }
+  }
+}
+
+function agreeToSafetyNotice() {
+  localStorage.setItem("linkbuild-safety-agreed", "true");
+  const modal = document.getElementById("safetyNoticeModal");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.classList.add("hidden");
+  }
+}
+
+window.agreeToSafetyNotice = agreeToSafetyNotice;
 
 function isLoggedIn() {
   return !!getUserId();
@@ -1899,6 +1923,7 @@ function populateSettingsPage(user) {
 // =============================================
 async function init() {
   console.log("🔌 LinkBuild: Initializing...");
+  checkSafetyNotice();
   const token = getSessionToken();
   const storedUser = localStorage.getItem("linkbuild-user");
   const onDashboard = window.location.pathname.includes("dashboard");
