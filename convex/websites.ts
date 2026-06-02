@@ -193,6 +193,7 @@ export const add = mutation({
     niche: v.string(),
     country: v.string(),
     language: v.string(),
+    listedBy: v.optional(v.union(v.literal("owner"), v.literal("agency"))),
     domainAuthority: v.number(),
     spamScore: v.number(),
     trafficEstimate: v.number(),
@@ -223,6 +224,7 @@ export const add = mutation({
       niche: args.niche,
       country: args.country,
       language: args.language,
+      listedBy: args.listedBy ?? "owner",
       domainAuthority: args.domainAuthority,
       spamScore: args.spamScore,
       trafficEstimate: args.trafficEstimate,
@@ -400,6 +402,7 @@ export const update = mutation({
     niche: v.optional(v.string()),
     country: v.optional(v.string()),
     language: v.optional(v.string()),
+    listedBy: v.optional(v.union(v.literal("owner"), v.literal("agency"))),
     domainAuthority: v.optional(v.number()),
     spamScore: v.optional(v.number()),
     trafficEstimate: v.optional(v.number()),
@@ -436,6 +439,7 @@ export const update = mutation({
     if (args.niche !== undefined) updates.niche = args.niche;
     if (args.country !== undefined) updates.country = args.country;
     if (args.language !== undefined) updates.language = args.language;
+    if (args.listedBy !== undefined) updates.listedBy = args.listedBy;
     if (args.domainAuthority !== undefined) updates.domainAuthority = args.domainAuthority;
     if (args.spamScore !== undefined) updates.spamScore = args.spamScore;
     if (args.trafficEstimate !== undefined) updates.trafficEstimate = args.trafficEstimate;

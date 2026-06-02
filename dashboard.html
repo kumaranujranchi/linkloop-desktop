@@ -450,7 +450,7 @@
               </div>
               <div class="filter-bar">
                 <select class="select" id="filterNiche" onchange="filterMarketplace()">
-                  <option value="">All Niches</option><option value="SEO Tools">SEO Tools</option><option value="SaaS">SaaS</option><option value="Marketing">Marketing</option><option value="Tech">Tech</option><option value="Blogging">Blogging</option><option value="E-commerce">Ecommerce</option><option value="Education">Education</option><option value="Finance">Finance</option><option value="Health">Health</option><option value="Real Estate">Real Estate</option><option value="Travel">Travel</option><option value="News">News</option><option value="Entertainment">Entertainment</option><option value="Other">Other</option>
+                  <option value="">All Niches</option><option value="Automotive">Automotive</option><option value="Blogging">Blogging</option><option value="Construction">Construction</option><option value="E-commerce">E-commerce</option><option value="Education">Education</option><option value="Energy">Energy</option><option value="Entertainment">Entertainment</option><option value="Fashion & Beauty">Fashion & Beauty</option><option value="Finance">Finance</option><option value="Food & Beverage">Food & Beverage</option><option value="Government">Government</option><option value="Health & Wellness">Health & Wellness</option><option value="Insurance">Insurance</option><option value="Legal">Legal</option><option value="Manufacturing">Manufacturing</option><option value="Marketing">Marketing</option><option value="News & Media">News & Media</option><option value="Non-Profit">Non-Profit</option><option value="Real Estate">Real Estate</option><option value="SaaS">SaaS</option><option value="SEO Tools">SEO Tools</option><option value="Sports">Sports</option><option value="Tech">Tech</option><option value="Telecommunications">Telecommunications</option><option value="Travel">Travel</option><option value="Other">Other</option>
                 </select>
                 <select class="select" id="filterDA" onchange="filterMarketplace()">
                   <option value="">Any DA</option><option value="0-20">DA 0-20</option><option value="20-40">DA 20-40</option><option value="40-60">DA 40-60</option><option value="60-80">DA 60-80</option><option value="80-100">DA 80+</option>
@@ -486,13 +486,14 @@
                     <th>Traffic</th>
                     <th>Niche</th>
                     <th>Country</th>
+                    <th>Listed By</th>
                     <th>Reputation</th>
                     <th>Last Updated</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody id="marketplaceTableBody">
-                  <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">
+                  <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-tertiary)">
                     <div style="font-size:1.5rem;margin-bottom:8px">🔍</div>
                     Loading marketplace...<br><span style="font-size:0.8rem">Use the filters above and click Search to find exchange partners.</span>
                   </td></tr>
@@ -1144,9 +1145,21 @@
               <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Niche <span style="color:var(--danger)">*</span></label>
               <select class="select" id="wsNiche" required style="width:100%">
                 <option value="">Select...</option>
-                <option>SEO Tools</option><option>SaaS</option><option>Marketing</option><option>Tech</option>
-                <option>Blogging</option><option>Ecommerce</option><option>Health</option><option>Finance</option>
-                <option>Education</option><option>Travel</option><option>Real Estate</option><option>Other</option>
+                <option>Automotive</option><option>Blogging</option><option>Construction</option><option>E-commerce</option>
+                <option>Education</option><option>Energy</option><option>Entertainment</option><option>Fashion & Beauty</option>
+                <option>Finance</option><option>Food & Beverage</option><option>Government</option><option>Health & Wellness</option>
+                <option>Insurance</option><option>Legal</option><option>Manufacturing</option><option>Marketing</option>
+                <option>News & Media</option><option>Non-Profit</option><option>Real Estate</option><option>SaaS</option>
+                <option>SEO Tools</option><option>Sports</option><option>Tech</option><option>Telecommunications</option>
+                <option>Travel</option><option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Listed By <span style="color:var(--danger)">*</span></label>
+              <select class="select" id="wsListedBy" required style="width:100%">
+                <option value="">Select...</option>
+                <option value="owner">👤 Website Owner</option>
+                <option value="agency">🏢 Agency / Reseller</option>
               </select>
             </div>
             <div>

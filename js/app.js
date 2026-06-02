@@ -936,6 +936,7 @@ window.handleAddWebsite = async function(e) {
     niche: document.getElementById("wsNiche").value,
     country: document.getElementById("wsCountry").value,
     language: document.getElementById("wsLanguage").value,
+    listedBy: document.getElementById("wsListedBy").value || "owner",
     // DA, Spam Score, Traffic & Referring Domains will be auto-fetched
     // from Moz API after verification — use placeholder defaults
     domainAuthority: 0,

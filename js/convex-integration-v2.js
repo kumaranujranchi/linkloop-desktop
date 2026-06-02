@@ -1867,12 +1867,13 @@ function updateMarketplaceTable(websites) {
   }
 
   if (!websites || !websites.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites found. Try adjusting your search filters or check back later.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites found. Try adjusting your search filters or check back later.</td></tr>';
     return;
   }
 
   const uid = getUserId();
   tbody.innerHTML = websites.map(w => {
+    const listedByLabel = w.listedBy === 'agency' ? '🏢 Agency' : '👤 Owner';
     const isOwnWebsite = w.ownerId === uid;
     const actionCell = isOwnWebsite
       ? `<span class="badge" style="font-size:0.75rem;padding:6px 12px;background:var(--gray-200);color:var(--text-secondary);border:1px solid var(--border-light);border-radius:var(--radius-sm)">Your Website</span>`
@@ -1889,6 +1890,7 @@ function updateMarketplaceTable(websites) {
         <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
         <td>${w.niche}</td>
         <td>${w.country}</td>
+        <td>${listedByLabel}</td>
         <td><div class="health-score"><div class="health-bar"><div class="health-bar-fill good" style="width:${w.exchangeSuccessRate || 85}%"></div></div>${w.exchangeSuccessRate || 85}%</div></td>
         <td>Just now</td>
         <td>${actionCell}</td>
@@ -2221,7 +2223,7 @@ async function editWebsite(websiteId) {
           <div>
             <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Niche</label>
             <select id="editNiche" class="input" style="width:100%;">
-              ${['Marketing','SaaS','E-commerce','Education','Finance','Health','Tech','Real Estate','Travel','Blogging','News','Entertainment','Other'].map(n => `<option value="${n}" ${site.niche === n ? 'selected' : ''}>${n}</option>`).join('')}
+              ${['Automotive','Blogging','Construction','E-commerce','Education','Energy','Entertainment','Fashion & Beauty','Finance','Food & Beverage','Government','Health & Wellness','Insurance','Legal','Manufacturing','Marketing','News & Media','Non-Profit','Real Estate','SaaS','SEO Tools','Sports','Tech','Telecommunications','Travel','Other'].map(n => `<option value="${n}" ${site.niche === n ? 'selected' : ''}>${n}</option>`).join('')}
             </select>
           </div>
           <div>
@@ -2253,6 +2255,13 @@ async function editWebsite(websiteId) {
           <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Language</label>
           <input type="text" id="editLanguage" class="input" value="${site.language || 'English'}" style="width:100%;">
         </div>
+        <div>
+          <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Listed By</label>
+          <select id="editListedBy" class="input" style="width:100%;">
+            <option value="owner" ${site.listedBy === 'owner' ? 'selected' : ''}>👤 Website Owner</option>
+            <option value="agency" ${site.listedBy === 'agency' ? 'selected' : ''}>🏢 Agency / Reseller</option>
+          </select>
+        </div>
         <div id="editWebsiteError" style="color:var(--danger);font-size:0.85rem;display:none;"></div>
       </div>
       <div class="modal-footer" style="margin-top:24px;display:flex;gap:12px;justify-content:flex-end;">
@@ -2283,6 +2292,7 @@ async function saveWebsiteEdit(websiteId) {
     const trafficEstimate = parseInt(document.getElementById('editTraffic').value) || 0;
     const referringDomains = parseInt(document.getElementById('editRefDomains').value) || 0;
     const language = document.getElementById('editLanguage').value.trim();
+    const listedBy = document.getElementById('editListedBy')?.value || 'owner';
     const token = getSessionToken();
 
     if (!domain) {
@@ -2296,6 +2306,7 @@ async function saveWebsiteEdit(websiteId) {
       niche,
       country,
       language,
+      listedBy,
       domainAuthority,
       spamScore,
       trafficEstimate,
