@@ -3195,7 +3195,7 @@
   </script>
 
   <!-- ====== COOKIE CONSENT BANNER (GDPR Compliant) ====== -->
-  <div id="cookieConsentBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(15,23,42,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);padding:20px 4%;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);">
+  <div id="cookieConsentBanner" style="position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(15,23,42,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);padding:20px 4%;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:none;opacity:0;">
     <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
       <div style="display:flex;align-items:flex-start;gap:14px;flex:1;min-width:280px;">
         <span style="font-size:1.6rem;flex-shrink:0;">🍪</span>
@@ -3215,21 +3215,18 @@
     (function() {
       var banner = document.getElementById('cookieConsentBanner');
       var consent = localStorage.getItem('linkbuild-cookie-consent');
-      if (consent) return; // Already consented
+      if (consent) return;
 
-      // Show banner with animation
-      banner.style.display = 'block';
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          banner.style.transform = 'translateY(0)';
-        });
-      });
+      // Show banner
+      banner.style.opacity = '1';
+      banner.style.pointerEvents = 'auto';
+      banner.style.transform = 'translateY(0)';
 
       function setConsent(level) {
         localStorage.setItem('linkbuild-cookie-consent', JSON.stringify({ level: level, date: new Date().toISOString() }));
         banner.style.transform = 'translateY(100%)';
-        setTimeout(function() { banner.style.display = 'none'; }, 400);
-        // Dispatch event for analytics/tracking tools
+        banner.style.opacity = '0';
+        banner.style.pointerEvents = 'none';
         window.dispatchEvent(new CustomEvent('cookieConsent', { detail: { level: level } }));
       }
 
