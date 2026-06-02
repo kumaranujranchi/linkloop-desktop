@@ -11,9 +11,12 @@ export const list = query({
     niche: v.optional(v.string()),
     minDA: v.optional(v.number()),
     maxDA: v.optional(v.number()),
+    minTraffic: v.optional(v.number()),
+    maxTraffic: v.optional(v.number()),
     country: v.optional(v.string()),
     language: v.optional(v.string()),
     linkType: v.optional(v.string()),
+    search: v.optional(v.string()),
     verifiedOnly: v.optional(v.boolean()),
     limit: v.optional(v.number()),
     cursor: v.optional(v.string()),
@@ -22,10 +25,22 @@ export const list = query({
     let query = ctx.db.query("websites")
       .withIndex("by_status", (q) => q.eq("status", "active"));
 
-    const websites = await query.order("desc").take(args.limit || 20);
+    const websites = await query.order("desc").take(args.limit || 50);
 
-    // Apply filters in-memory (Convex will add compound indexes in prod)
+    // Apply filters in-memory
     let filtered = websites;
+
+    // Search by domain, niche, or keyword
+    if (args.search) {
+      const searchLower = args.search.toLowerCase();
+      filtered = filtered.filter((w) =>
+        w.domain.toLowerCase().includes(searchLower) ||
+        w.niche.toLowerCase().includes(searchLower) ||
+        w.country.toLowerCase().includes(searchLower) ||
+        w.language.toLowerCase().includes(searchLower)
+      );
+    }
+
     if (args.niche) {
       filtered = filtered.filter((w) => w.niche === args.niche);
     }
@@ -35,11 +50,24 @@ export const list = query({
     if (args.maxDA !== undefined) {
       filtered = filtered.filter((w) => w.domainAuthority <= args.maxDA!);
     }
+    if (args.minTraffic !== undefined) {
+      filtered = filtered.filter((w) => w.trafficEstimate >= args.minTraffic!);
+    }
+    if (args.maxTraffic !== undefined) {
+      filtered = filtered.filter((w) => w.trafficEstimate <= args.maxTraffic!);
+    }
     if (args.country) {
       filtered = filtered.filter((w) => w.country === args.country);
     }
     if (args.language) {
       filtered = filtered.filter((w) => w.language === args.language);
+    }
+    if (args.linkType) {
+      if (args.linkType === "dofollow") {
+        filtered = filtered.filter((w) => w.dofollowLinks > 0);
+      } else if (args.linkType === "nofollow") {
+        filtered = filtered.filter((w) => w.nofollowLinks > 0);
+      }
     }
     if (args.verifiedOnly) {
       filtered = filtered.filter((w) => w.verified);

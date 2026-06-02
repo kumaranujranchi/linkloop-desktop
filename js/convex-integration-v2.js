@@ -629,7 +629,7 @@ async function addWebsite(data) {
 // =============================================
 async function loadMarketplace(filters = {}) {
   try {
-    const websites = await client.query("websites:list", { ...filters, limit: 20 });
+    const websites = await client.query("websites:list", { ...filters, limit: 50 });
     updateMarketplaceTable(websites);
     // Update results count
     const label = document.getElementById('marketplaceResultsLabel');
@@ -641,14 +641,58 @@ async function loadMarketplace(filters = {}) {
   }
 }
 
-// Marketplace search
-function searchMarketplace() {
-  const query = document.getElementById('marketplaceSearchInput')?.value?.trim() || '';
-  if (query) {
-    loadMarketplace({ search: query, limit: 50 });
-  } else {
-    loadMarketplace();
+// Build filter params from dropdowns
+function getMarketplaceFilters() {
+  const filters = {};
+
+  // Niche
+  const niche = document.getElementById('filterNiche')?.value;
+  if (niche) filters.niche = niche;
+
+  // Domain Authority range
+  const da = document.getElementById('filterDA')?.value;
+  if (da) {
+    const [min, max] = da.split('-').map(Number);
+    if (!isNaN(min)) filters.minDA = min;
+    if (!isNaN(max)) filters.maxDA = max;
   }
+
+  // Traffic range
+  const traffic = document.getElementById('filterTraffic')?.value;
+  if (traffic) {
+    const [min, max] = traffic.split('-').map(Number);
+    if (!isNaN(min)) filters.minTraffic = min;
+    if (!isNaN(max)) filters.maxTraffic = max;
+  }
+
+  // Country
+  const country = document.getElementById('filterCountry')?.value;
+  if (country) filters.country = country;
+
+  // Language
+  const language = document.getElementById('filterLanguage')?.value;
+  if (language) filters.language = language;
+
+  // Link type (dofollow / nofollow)
+  const linkType = document.getElementById('filterLinkType')?.value;
+  if (linkType) filters.linkType = linkType;
+
+  // Search query
+  const query = document.getElementById('marketplaceSearchInput')?.value?.trim();
+  if (query) filters.search = query;
+
+  return filters;
+}
+
+// Called when any filter dropdown changes
+function filterMarketplace() {
+  loadMarketplace(getMarketplaceFilters());
+}
+window.filterMarketplace = filterMarketplace;
+
+// Marketplace search (called by search button or Enter key)
+function searchMarketplace() {
+  loadMarketplace(getMarketplaceFilters());
 }
 window.searchMarketplace = searchMarketplace;
 
