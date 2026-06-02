@@ -1946,7 +1946,6 @@ function updateMarketplaceTable(websites) {
     const actionCell = isOwnWebsite
       ? `<span class="badge" style="font-size:0.75rem;padding:6px 12px;background:var(--gray-200);color:var(--text-secondary);border:1px solid var(--border-light);border-radius:var(--radius-sm)">Your Website</span>`
       : `<div style="display:flex;gap:6px">
-          <button class="btn btn-ghost btn-sm">Profile</button>
           <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.startConversationWith('${w.ownerId}', undefined, '${w.domain.replace(/'/g, "\\'")}')">💬 Message</button>
           <button class="btn btn-primary btn-sm" id="send-req-${w._id}" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'}, document.getElementById('send-req-${w._id}'))">Send Request</button>
         </div>`;
@@ -1960,7 +1959,7 @@ function updateMarketplaceTable(websites) {
         <td>${w.country}</td>
         <td>${listedByLabel}</td>
         <td><div class="health-score"><div class="health-bar"><div class="health-bar-fill good" style="width:${w.exchangeSuccessRate || 85}%"></div></div>${w.exchangeSuccessRate || 85}%</div></td>
-        <td>Just now</td>
+        <td>${w.referringDomains || 0}</td>
         <td>${actionCell}</td>
       </tr>`;
   }).join("");
