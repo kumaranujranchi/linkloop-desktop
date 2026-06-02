@@ -9,7 +9,7 @@ LinkBuild is a white-hat backlink exchange platform for SEO professionals. We he
 
 ## Quick Info
 - **Product**: SaaS Backlink Exchange Platform
-- **Pricing**: Free ($0), Pro ($49/mo), Agency ($199/mo)
+- **Pricing**: Free ($0), Pro (was $49, now Free), Agency (was $99, now Free)
 - **Users**: 15,000+ domains registered
 - **Founded**: 2024
 - **Support**: support@linkbuild.store
