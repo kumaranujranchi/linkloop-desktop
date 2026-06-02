@@ -110,7 +110,8 @@ export const updateMetricsFromMoz = internalMutation({
 });
 
 // Main action: fetch Moz metrics for a verified website
-export const fetchAndUpdateMetrics = action({
+// internalAction so it can be scheduled from mutations (admin moderate, etc.)
+export const fetchAndUpdateMetrics = internalAction({
   args: {
     websiteId: v.id("websites"),
     domain: v.string(),

@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
+import { internal } from "./_generated/api";
 import { getUserIdFromToken } from "./auth_helpers";
 
 // ========== QUERIES ==========
@@ -385,10 +386,23 @@ export const moderate = mutation({
   handler: async (ctx, args) => {
     await verifyAdminToken(ctx.db, args.token);
     const verified = args.status === "active";
+
+    // Get website domain BEFORE patching (for Moz fetch)
+    const website = await ctx.db.get(args.websiteId);
+
     await ctx.db.patch(args.websiteId, {
       status: args.status,
       verified,
     });
+
+    // When approving, auto-fetch real metrics from Moz API
+    if (verified && website) {
+      await ctx.scheduler.runAfter(0, internal.moz.fetchAndUpdateMetrics, {
+        websiteId: args.websiteId,
+        domain: website.domain,
+      });
+    }
+
     return { success: true };
   },
 });
