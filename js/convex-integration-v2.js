@@ -1643,15 +1643,19 @@ function updateKpiCards(kpis) {
   document.querySelectorAll(".kpi-card").forEach((card) => {
     const label = card.querySelector(".kpi-card-label")?.textContent?.trim();
     const valueEl = card.querySelector(".kpi-card-value");
+    const changeEl = card.querySelector(".kpi-card-change");
     if (!valueEl) return;
     const map = {
-      "Total Websites": kpis.totalWebsites,
-      "Active Exchanges": kpis.activeExchanges,
-      "Pending Requests": kpis.pendingRequests,
-      "Verified Backlinks": kpis.verifiedBacklinks,
+      "Total Websites": { value: kpis.totalWebsites, change: `${kpis.totalWebsites} registered` },
+      "Active Exchanges": { value: kpis.activeExchanges, change: `${kpis.activeExchanges} in progress` },
+      "Pending Requests": { value: kpis.pendingRequests, change: `${kpis.pendingRequests} awaiting action` },
+      "Verified Backlinks": { value: kpis.verifiedBacklinks, change: `${kpis.verifiedBacklinks} healthy` },
+      "Reputation Score": { value: kpis.reputationScore || 0, change: `${kpis.reputationScore || 0}/100` },
+      "Monthly Growth": { value: kpis.monthlyGrowth || 0, change: `${kpis.monthlyGrowth || 0}% this month` },
     };
-    if (map[label] !== undefined && map[label] !== null) {
-      valueEl.textContent = Number(map[label]).toLocaleString();
+    if (map[label] !== undefined) {
+      valueEl.textContent = Number(map[label].value).toLocaleString();
+      if (changeEl) changeEl.textContent = map[label].change;
     }
   });
 }
