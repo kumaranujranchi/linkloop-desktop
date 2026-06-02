@@ -2,7 +2,7 @@
  * LinkBuild — Reusable JSON-LD Schema Snippets
  * ==============================================
  * Use these templates to inject structured data into dynamically generated pages.
- * All schemas use https://linkbuild.com as the canonical domain.
+ * All schemas use https://linkbuild.store as the canonical domain.
  *
  * Usage:
  *   1. Import the desired schema template
@@ -35,11 +35,11 @@ export const NicheListingSchema = {
   "@type": "CollectionPage",
   "name": "{{NICHE_NAME}} Backlink Exchange Partners | LinkBuild",
   "description": "Find verified {{NICHE_NAME}} websites for backlink exchange on LinkBuild. Connect with niche-relevant link partners, monitor backlinks, and grow your domain authority safely.",
-  "url": "https://linkbuild.com/exchange/niche/{{NICHE_SLUG}}",
+  "url": "https://linkbuild.store/exchange/niche/{{NICHE_SLUG}}",
   "isPartOf": {
     "@type": "WebSite",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "about": {
     "@type": "Thing",
@@ -63,11 +63,11 @@ export const CountryListingSchema = {
   "@type": "CollectionPage",
   "name": "Backlink Exchange in {{COUNTRY_NAME}} | LinkBuild",
   "description": "Find verified backlink exchange partners in {{COUNTRY_NAME}}. Connect with local websites, monitor backlinks, and grow your domain authority with country-specific link building.",
-  "url": "https://linkbuild.com/exchange/country/{{COUNTRY_SLUG}}",
+  "url": "https://linkbuild.store/exchange/country/{{COUNTRY_SLUG}}",
   "isPartOf": {
     "@type": "WebSite",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "about": {
     "@type": "Thing",
@@ -91,11 +91,11 @@ export const LanguageListingSchema = {
   "@type": "CollectionPage",
   "name": "{{LANGUAGE_NAME}} Backlink Exchange Partners | LinkBuild",
   "description": "Find verified {{LANGUAGE_NAME}}-language websites for backlink exchange. Connect with language-specific link partners, monitor backlinks, and grow multilingual domain authority.",
-  "url": "https://linkbuild.com/exchange/language/{{LANGUAGE_SLUG}}",
+  "url": "https://linkbuild.store/exchange/language/{{LANGUAGE_SLUG}}",
   "isPartOf": {
     "@type": "WebSite",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "about": {
     "@type": "Thing",
@@ -119,11 +119,11 @@ export const WebsiteProfileSchema = {
   "@type": "WebPage",
   "name": "{{DOMAIN_NAME}} — Backlink Exchange Profile | LinkBuild",
   "description": "{{DOMAIN_NAME}}: DA {{DA}}, {{NICHE}} website available for backlink exchange on LinkBuild. Verified {{COUNTRY}} domain with {{TRAFFIC}} monthly traffic.",
-  "url": "https://linkbuild.com/websites/{{DOMAIN_SLUG}}",
+  "url": "https://linkbuild.store/websites/{{DOMAIN_SLUG}}",
   "isPartOf": {
     "@type": "WebSite",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "about": {
     "@type": "WebSite",
@@ -151,11 +151,11 @@ export const MarketplaceLandingSchema = {
   "@type": "CollectionPage",
   "name": "Backlink Exchange Marketplace | LinkBuild",
   "description": "Browse the LinkBuild marketplace for verified backlink exchange partners. Filter by niche, country, domain authority, and language to find perfect link building opportunities.",
-  "url": "https://linkbuild.com/marketplace",
+  "url": "https://linkbuild.store/marketplace",
   "isPartOf": {
     "@type": "WebSite",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "mainEntity": {
     "@type": "ItemList",
@@ -176,11 +176,11 @@ export const HighDAMarketplaceSchema = {
   "@type": "CollectionPage",
   "name": "High DA Backlink Exchange Partners (DA ≥ {{MIN_DA}}) | LinkBuild",
   "description": "Find high domain authority (DA ≥ {{MIN_DA}}) backlink exchange partners. Premium link building opportunities with verified, authoritative domains on LinkBuild.",
-  "url": "https://linkbuild.com/marketplace/high-da",
+  "url": "https://linkbuild.store/marketplace/high-da",
   "isPartOf": {
     "@type": "WebSite",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "mainEntity": {
     "@type": "ItemList",
@@ -206,11 +206,11 @@ export const PricingPageSchema = {
   "@type": "WebPage",
   "name": "LinkBuild Pricing — Free, Pro & Agency Plans",
   "description": "Compare LinkBuild pricing plans: Free (basic backlink exchange), Pro ($49/mo — advanced matching & analytics), and Agency ($199/mo — unlimited websites, API access).",
-  "url": "https://linkbuild.com/pricing",
+  "url": "https://linkbuild.store/pricing",
   "isPartOf": {
     "@type": "WebSite",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "mainEntity": {
     "@type": "ItemList",
@@ -272,28 +272,28 @@ export const BlogPostSchema = {
   "@type": "BlogPosting",
   "headline": "{{BLOG_TITLE}}",
   "description": "{{BLOG_DESCRIPTION}}",
-  "url": "https://linkbuild.com/blog/{{BLOG_SLUG}}",
+  "url": "https://linkbuild.store/blog/{{BLOG_SLUG}}",
   "datePublished": "{{PUBLISH_DATE}}",
   "dateModified": "{{MODIFIED_DATE}}",
   "author": {
     "@type": "Organization",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "publisher": {
     "@type": "Organization",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com",
+    "url": "https://linkbuild.store",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://linkbuild.com/assets/logo.png"
+      "url": "https://linkbuild.store/assets/logo.png"
     }
   },
   "image": "{{BLOG_IMAGE_URL}}",
   "isPartOf": {
     "@type": "Blog",
     "name": "LinkBuild SEO Blog",
-    "url": "https://linkbuild.com/blog"
+    "url": "https://linkbuild.store/blog"
   }
 };
 
@@ -306,21 +306,21 @@ export const ContactPageSchema = {
   "@type": "ContactPage",
   "name": "Contact LinkBuild — Backlink Exchange Support",
   "description": "Get in touch with the LinkBuild team. Support for backlink exchange, account issues, billing questions, and partnership inquiries.",
-  "url": "https://linkbuild.com/contact",
+  "url": "https://linkbuild.store/contact",
   "isPartOf": {
     "@type": "WebSite",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com"
+    "url": "https://linkbuild.store"
   },
   "about": {
     "@type": "Organization",
     "name": "LinkBuild",
-    "url": "https://linkbuild.com",
+    "url": "https://linkbuild.store",
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer support",
-      "email": "support@linkbuild.com",
-      "url": "https://linkbuild.com/contact"
+      "email": "support@linkbuild.store",
+      "url": "https://linkbuild.store/contact"
     }
   }
 };
@@ -376,12 +376,12 @@ export const SitelinksSearchBoxSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "LinkBuild",
-  "url": "https://linkbuild.com",
+  "url": "https://linkbuild.store",
   "potentialAction": {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": "https://linkbuild.com/search?q={search_term_string}"
+      "urlTemplate": "https://linkbuild.store/search?q={search_term_string}"
     },
     "query-input": "required name=search_term_string"
   }

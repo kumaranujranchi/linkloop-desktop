@@ -1,0 +1,13 @@
+# LinkBuild Robots.txt
+# https://www.linkbuild.store/
+
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+
+# Sitemap
+Sitemap: https://www.linkbuild.store/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 10

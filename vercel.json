@@ -6,6 +6,14 @@
   "rewrites": [
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/acceptable-use-policy", "destination": "/acceptable-use-policy.html" },
+    { "source": "/affiliate-terms", "destination": "/affiliate-terms.html" },
+    { "source": "/billing-policy", "destination": "/billing-policy.html" },
+    { "source": "/cookie-policy", "destination": "/cookie-policy.html" },
+    { "source": "/dmca-policy", "destination": "/dmca-policy.html" },
+    { "source": "/domain-verification-policy", "destination": "/domain-verification-policy.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
