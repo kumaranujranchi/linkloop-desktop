@@ -30,6 +30,7 @@ cpIfExists(resolve(ROOT, "index.html"), resolve(DIST, "index.html"));
 cpIfExists(resolve(ROOT, "dashboard.html"), resolve(DIST, "dashboard.html"));
 cpIfExists(resolve(ROOT, "admin.html"), resolve(DIST, "admin.html"));
 cpIfExists(resolve(ROOT, "terms.html"), resolve(DIST, "terms.html"));
+cpIfExists(resolve(ROOT, "billing-policy.html"), resolve(DIST, "billing-policy.html"));
 cpIfExists(resolve(ROOT, "css"), resolve(DIST, "css"), { recursive: true });
 cpIfExists(resolve(ROOT, "js"), resolve(DIST, "js"), { recursive: true });
 cpIfExists(resolve(ROOT, "assets"), resolve(DIST, "assets"), { recursive: true });
