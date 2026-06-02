@@ -1608,9 +1608,9 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
 /* ---------- Pricing Cards ---------- */
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  max-width: 900px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1200px;
 }
 
 .pricing-card {
