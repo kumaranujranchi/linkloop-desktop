@@ -3214,8 +3214,11 @@
   <script>
     (function() {
       var banner = document.getElementById('cookieConsentBanner');
-      var consent = localStorage.getItem('linkbuild-cookie-consent');
-      if (consent) return;
+      if (!banner) return;
+      try {
+        var consent = localStorage.getItem('linkbuild-cookie-consent');
+        if (consent) return;
+      } catch(e) {}
 
       // Show banner
       banner.style.opacity = '1';
@@ -3223,15 +3226,18 @@
       banner.style.transform = 'translateY(0)';
 
       function setConsent(level) {
-        localStorage.setItem('linkbuild-cookie-consent', JSON.stringify({ level: level, date: new Date().toISOString() }));
+        try {
+          localStorage.setItem('linkbuild-cookie-consent', JSON.stringify({ level: level, date: new Date().toISOString() }));
+        } catch(e) {}
         banner.style.transform = 'translateY(100%)';
         banner.style.opacity = '0';
         banner.style.pointerEvents = 'none';
-        window.dispatchEvent(new CustomEvent('cookieConsent', { detail: { level: level } }));
       }
 
-      document.getElementById('cookieAcceptBtn').addEventListener('click', function() { setConsent('all'); });
-      document.getElementById('cookieEssentialBtn').addEventListener('click', function() { setConsent('essential'); });
+      var acceptBtn = document.getElementById('cookieAcceptBtn');
+      var essentialBtn = document.getElementById('cookieEssentialBtn');
+      if (acceptBtn) acceptBtn.addEventListener('click', function() { setConsent('all'); });
+      if (essentialBtn) essentialBtn.addEventListener('click', function() { setConsent('essential'); });
     })();
   </script>
 </body>
