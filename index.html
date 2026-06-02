@@ -1587,6 +1587,29 @@
         padding: 28px 24px;
       }
 
+      /* ---- How It Works — horizontal scroll on mobile ---- */
+      .steps-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 16px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 12px;
+        margin: 0 -4%;
+        padding-left: 4%;
+        padding-right: 4%;
+        scrollbar-width: none;
+      }
+      .steps-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .step-card {
+        flex: 0 0 280px;
+        scroll-snap-align: start;
+        padding: 28px 22px;
+      }
+
       /* ---- Audience ---- */
       .audience-grid {
         grid-template-columns: 1fr;
@@ -1831,6 +1854,23 @@
         width: 44px;
         height: 44px;
         font-size: 1.3rem;
+      }
+
+      /* ---- How It Works — step cards ---- */
+      .step-card {
+        flex: 0 0 260px;
+        padding: 24px 18px;
+      }
+      .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+      .step-card h4 {
+        font-size: 1rem;
+      }
+      .step-card p {
+        font-size: 0.82rem;
       }
 
       /* ---- Pricing ---- */
