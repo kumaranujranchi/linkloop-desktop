@@ -147,11 +147,6 @@
             <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
             Backlink Monitor
           </a>
-          <a class="nav-item" data-page="notifications" onclick="navigateTo('notifications', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
-            Notifications
-            <span class="nav-badge danger" id="navBadgeNotifications" style="display:none">0</span>
-          </a>
           <a class="nav-item" data-page="analytics" onclick="navigateTo('analytics', this)">
             <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
             Analytics
@@ -220,9 +215,9 @@
             <svg id="themeIconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             <svg id="themeIconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           </button>
-          <button class="topbar-icon-btn" onclick="navigateTo('notifications')" title="Notifications">
+          <button class="topbar-icon-btn" onclick="window.LinkBuild.toggleNotificationDropdown()" title="Notifications" style="position:relative">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            <span class="dot"></span>
+            <span id="headerBellBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:var(--danger);color:#fff;font-size:0.6rem;font-weight:700;min-width:16px;height:16px;border-radius:10px;display:none;align-items:center;justify-content:center;line-height:1">0</span>
           </button>
           <button class="topbar-icon-btn" onclick="navigateTo('messages')" title="Messages">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -779,26 +774,6 @@
           </div>
         </section>
 
-        <!-- ==================== NOTIFICATIONS ==================== -->
-        <section class="page-section" id="page-notifications">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-            <div>
-              <h1 class="page-title" style="margin-bottom:0">Notifications</h1>
-              <p class="page-subtitle" style="margin-bottom:0">Stay updated with your exchange activity</p>
-            </div>
-            <button class="btn btn-ghost btn-sm">Mark All Read</button>
-          </div>
-
-          <div class="card">
-            <div class="card-body" style="padding:0" id="notificationsList">
-              <div style="padding:40px 20px;text-align:center;color:var(--text-tertiary)">
-                <div style="font-size:1.5rem;margin-bottom:8px">🔔</div>
-                Loading notifications...
-              </div>
-            </div>
-          </div>
-        </section>
-
         <!-- ==================== ANALYTICS ==================== -->
         <section class="page-section" id="page-analytics">
           <h1 class="page-title">Analytics</h1>
@@ -1053,11 +1028,6 @@
     <button class="mobile-nav-item" data-mob-page="messages" onclick="navigateTo('messages')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Messages
-      <span class="mobile-nav-badge"></span>
-    </button>
-    <button class="mobile-nav-item" data-mob-page="notifications" onclick="navigateTo('notifications')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      Alerts
       <span class="mobile-nav-badge"></span>
     </button>
   </nav>

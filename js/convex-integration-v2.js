@@ -1554,6 +1554,63 @@ async function loadAndRenderNotifications() {
   return notifications;
 }
 
+// Toggle notification dropdown from header bell
+window.toggleNotificationDropdown = async function() {
+  let dropdown = document.getElementById('notificationDropdown');
+  if (dropdown) {
+    dropdown.remove();
+    return;
+  }
+
+  const notifications = await loadNotifications();
+  if (!notifications || notifications.length === 0) {
+    showMsgToast('No new notifications', 'info');
+    return;
+  }
+
+  // Create dropdown
+  dropdown = document.createElement('div');
+  dropdown.id = 'notificationDropdown';
+  dropdown.style.cssText = 'position:fixed;top:56px;right:120px;width:340px;max-height:400px;overflow-y:auto;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.3);z-index:9999;padding:8px';
+
+  dropdown.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px 12px;border-bottom:1px solid var(--border-light);margin-bottom:4px">
+      <strong style="font-size:0.9rem">Notifications</strong>
+      <span style="font-size:0.75rem;color:var(--text-tertiary)">${notifications.length} new</span>
+    </div>
+    ${notifications.slice(0, 10).map(n => `
+      <div style="padding:10px 12px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;${n.read ? 'opacity:0.5' : ''}" 
+           onclick="window.LinkBuild.markNotificationRead('${n._id}')">
+        <span style="font-size:1rem;flex-shrink:0">${n.read ? '🔔' : '🔴'}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary)">${n.title || 'Notification'}</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.body || ''}</div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+
+  document.body.appendChild(dropdown);
+
+  // Close on outside click
+  setTimeout(() => {
+    const handler = (e) => {
+      if (!e.target.closest('#notificationDropdown') && !e.target.closest('.topbar-icon-btn')) {
+        dropdown?.remove();
+        document.removeEventListener('click', handler);
+      }
+    };
+    document.addEventListener('click', handler);
+  }, 100);
+};
+
+// Mark notification as read
+window.markNotificationRead = async function(notificationId) {
+  try {
+    await client.mutation("notifications:markRead", { notificationId });
+  } catch(e) { /* ignore */ }
+};
+
 // =============================================
 // BACKLINKS
 // =============================================
@@ -1622,8 +1679,15 @@ function updateBacklinkStats(stats) {
 }
 
 function updateNotificationBadge(count) {
-  const badge = document.getElementById("navBadgeNotifications");
-  if (badge) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = count > 0 ? "" : "none"; }
+  // Header bell badge
+  const bell = document.getElementById("headerBellBadge");
+  if (bell) {
+    bell.textContent = count > 99 ? '99+' : count;
+    bell.style.display = count > 0 ? 'flex' : 'none';
+  }
+  // Also update old sidebar badge if it still exists
+  const sidebarBadge = document.getElementById("navBadgeNotifications");
+  if (sidebarBadge) { sidebarBadge.textContent = count > 99 ? '99+' : count; sidebarBadge.style.display = count > 0 ? "" : "none"; }
 }
 
 function updateExchangeBadge(count) {
