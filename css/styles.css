@@ -1609,7 +1609,7 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 12px;
   max-width: 100%;
   width: 100%;
 }
@@ -1618,7 +1618,7 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
   background: var(--bg-secondary);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-light);
-  padding: 24px 20px;
+  padding: 20px 18px;
   display: flex;
   flex-direction: column;
   gap: 20px;
