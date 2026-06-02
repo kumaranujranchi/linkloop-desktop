@@ -35,6 +35,8 @@ cpIfExists(resolve(ROOT, "privacy-policy.html"), resolve(DIST, "privacy-policy.h
 cpIfExists(resolve(ROOT, "acceptable-use-policy.html"), resolve(DIST, "acceptable-use-policy.html"));
 cpIfExists(resolve(ROOT, "cookie-policy.html"), resolve(DIST, "cookie-policy.html"));
 cpIfExists(resolve(ROOT, "domain-verification-policy.html"), resolve(DIST, "domain-verification-policy.html"));
+cpIfExists(resolve(ROOT, "dmca-policy.html"), resolve(DIST, "dmca-policy.html"));
+cpIfExists(resolve(ROOT, "affiliate-terms.html"), resolve(DIST, "affiliate-terms.html"));
 cpIfExists(resolve(ROOT, "css"), resolve(DIST, "css"), { recursive: true });
 cpIfExists(resolve(ROOT, "js"), resolve(DIST, "js"), { recursive: true });
 cpIfExists(resolve(ROOT, "assets"), resolve(DIST, "assets"), { recursive: true });

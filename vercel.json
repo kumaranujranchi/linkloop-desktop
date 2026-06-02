@@ -13,6 +13,8 @@
     { "source": "/aup", "destination": "/acceptable-use-policy.html" },
     { "source": "/cookie-policy", "destination": "/cookie-policy.html" },
     { "source": "/domain-verification-policy", "destination": "/domain-verification-policy.html" },
+    { "source": "/dmca-policy", "destination": "/dmca-policy.html" },
+    { "source": "/affiliate-terms", "destination": "/affiliate-terms.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
