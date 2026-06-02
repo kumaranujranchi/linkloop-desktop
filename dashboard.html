@@ -1135,15 +1135,18 @@
         <button class="modal-close" onclick="closeAddWebsiteModal()">✕</button>
       </div>
       <div class="modal-body">
-        <form id="addWebsiteForm" onsubmit="handleAddWebsite(event)" style="display:flex;flex-direction:column;gap:14px">
+        <form id="addWebsiteForm" onsubmit="handleAddWebsite(event)" style="display:flex;flex-direction:column;gap:16px">
+          <!-- Domain -->
           <div>
-            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Domain <span style="color:var(--danger)">*</span></label>
-            <input class="input" type="text" id="wsDomain" placeholder="example.com" required style="width:100%">
+            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">🌐 Domain <span style="color:var(--danger)">*</span></label>
+            <input class="input" type="text" id="wsDomain" placeholder="example.com" required style="width:100%;padding:10px 14px;border-radius:10px;font-size:0.95rem;background:var(--bg-primary);border:1.5px solid var(--border-light);transition:border-color 0.2s">
           </div>
+
+          <!-- Niche + Listed By -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Niche <span style="color:var(--danger)">*</span></label>
-              <select class="select" id="wsNiche" required style="width:100%">
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">🏷️ Niche <span style="color:var(--danger)">*</span></label>
+              <select class="select" id="wsNiche" required style="width:100%;padding:10px 12px;border-radius:10px;font-size:0.9rem;background:var(--bg-primary);border:1.5px solid var(--border-light)">
                 <option value="">Select...</option>
                 <option>Automotive</option><option>Blogging</option><option>Construction</option><option>E-commerce</option>
                 <option>Education</option><option>Energy</option><option>Entertainment</option><option>Fashion & Beauty</option>
@@ -1155,16 +1158,20 @@
               </select>
             </div>
             <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Listed By <span style="color:var(--danger)">*</span></label>
-              <select class="select" id="wsListedBy" required style="width:100%">
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">👤 Listed By <span style="color:var(--danger)">*</span></label>
+              <select class="select" id="wsListedBy" required style="width:100%;padding:10px 12px;border-radius:10px;font-size:0.9rem;background:var(--bg-primary);border:1.5px solid var(--border-light)">
                 <option value="">Select...</option>
                 <option value="owner">👤 Website Owner</option>
                 <option value="agency">🏢 Agency / Reseller</option>
               </select>
             </div>
+          </div>
+
+          <!-- Country + Language -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Country <span style="color:var(--danger)">*</span></label>
-              <select class="select" id="wsCountry" required style="width:100%">
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">📍 Country <span style="color:var(--danger)">*</span></label>
+              <select class="select" id="wsCountry" required style="width:100%;padding:10px 12px;border-radius:10px;font-size:0.9rem;background:var(--bg-primary);border:1.5px solid var(--border-light)">
                 <option value="">Select...</option>
                 <option>Afghanistan</option><option>Albania</option><option>Algeria</option><option>Argentina</option>
                 <option>Armenia</option><option>Australia</option><option>Austria</option><option>Azerbaijan</option>
@@ -1196,21 +1203,23 @@
                 <option>Yemen</option><option>Zambia</option><option>Zimbabwe</option><option>Other</option>
               </select>
             </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px">Language</label>
-              <select class="select" id="wsLanguage" style="width:100%">
-                <option>English</option><option>Spanish</option><option>German</option><option>French</option><option>Other</option>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">🗣️ Language</label>
+              <select class="select" id="wsLanguage" style="width:100%;padding:10px 12px;border-radius:10px;font-size:0.9rem;background:var(--bg-primary);border:1.5px solid var(--border-light)">
+                <option>English</option><option>Spanish</option><option>German</option><option>French</option><option>Hindi</option><option>Other</option>
               </select>
             </div>
-            <div><!-- Empty placeholder to keep grid layout --></div>
           </div>
-          <p style="font-size:0.8rem;color:var(--text-tertiary);margin:0;padding:8px 12px;background:rgba(108,77,246,0.08);border-radius:8px;border:1px solid rgba(108,77,246,0.15);">
-            💡 <strong>DA, Spam Score, Traffic & Referring Domains</strong> will be fetched automatically after you verify your website.
-          </p>
-          <button class="btn btn-primary" type="submit" style="width:100%;margin-top:4px">Add Website</button>
-          <div id="wsMessage" style="text-align:center;font-size:0.85rem;margin-top:4px"></div>
+
+          <!-- Info Banner -->
+          <div style="padding:14px 16px;background:linear-gradient(135deg,rgba(108,77,246,0.06),rgba(236,72,153,0.04));border-radius:12px;border:1.5px solid rgba(108,77,246,0.12);display:flex;align-items:flex-start;gap:10px">
+            <span style="font-size:1.1rem;flex-shrink:0">⚡</span>
+            <span style="font-size:0.82rem;color:var(--text-secondary);line-height:1.5"><strong style="color:var(--text-primary)">SEO Metrics</strong> — DA, Spam Score, Traffic & Referring Domains will be fetched automatically after you verify your website.</span>
+          </div>
+
+          <!-- Submit -->
+          <button class="btn btn-primary" type="submit" style="width:100%;padding:12px;font-size:1rem;font-weight:600;border-radius:10px;margin-top:4px;background:linear-gradient(135deg,#7C3AED,#EC4899);border:none;box-shadow:0 4px 15px rgba(124,58,237,0.3)">🚀 Add Website</button>
+          <div id="wsMessage" style="text-align:center;font-size:0.85rem;min-height:20px"></div>
         </form>
       </div>
     </div>
