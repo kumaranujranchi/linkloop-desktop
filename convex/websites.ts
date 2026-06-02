@@ -362,3 +362,150 @@ export const moderate = mutation({
     return { success: true };
   },
 });
+
+// Update website details (owner only)
+export const update = mutation({
+  args: {
+    websiteId: v.id("websites"),
+    token: v.optional(v.string()),
+    domain: v.optional(v.string()),
+    niche: v.optional(v.string()),
+    country: v.optional(v.string()),
+    language: v.optional(v.string()),
+    domainAuthority: v.optional(v.number()),
+    spamScore: v.optional(v.number()),
+    trafficEstimate: v.optional(v.number()),
+    referringDomains: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    // Try token-based auth first, then fall back to Convex Auth
+    let currentUser = null;
+    if (args.token) {
+      const userId = await getUserIdFromToken(ctx.db, args.token);
+      if (userId) {
+        currentUser = await ctx.db.get(userId);
+      }
+    }
+    if (!currentUser) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Not authenticated");
+      currentUser = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", identity.email!))
+        .first();
+      if (!currentUser) throw new Error("User not found");
+    }
+
+    const website = await ctx.db.get(args.websiteId);
+    if (!website) throw new Error("Website not found");
+
+    if (website.ownerId !== currentUser._id) {
+      throw new Error("You can only edit your own websites");
+    }
+
+    const updates: any = {};
+    if (args.domain !== undefined) updates.domain = args.domain;
+    if (args.niche !== undefined) updates.niche = args.niche;
+    if (args.country !== undefined) updates.country = args.country;
+    if (args.language !== undefined) updates.language = args.language;
+    if (args.domainAuthority !== undefined) updates.domainAuthority = args.domainAuthority;
+    if (args.spamScore !== undefined) updates.spamScore = args.spamScore;
+    if (args.trafficEstimate !== undefined) updates.trafficEstimate = args.trafficEstimate;
+    if (args.referringDomains !== undefined) updates.referringDomains = args.referringDomains;
+
+    if (Object.keys(updates).length > 0) {
+      updates.metricsUpdatedAt = Date.now();
+      await ctx.db.patch(args.websiteId, updates);
+    }
+
+    return { success: true };
+  },
+});
+
+// Delete a website (owner only)
+export const remove = mutation({
+  args: {
+    websiteId: v.id("websites"),
+    token: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    // Try token-based auth first, then fall back to Convex Auth
+    let currentUser = null;
+    if (args.token) {
+      const userId = await getUserIdFromToken(ctx.db, args.token);
+      if (userId) {
+        currentUser = await ctx.db.get(userId);
+      }
+    }
+    if (!currentUser) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Not authenticated");
+      currentUser = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", identity.email!))
+        .first();
+      if (!currentUser) throw new Error("User not found");
+    }
+
+    const website = await ctx.db.get(args.websiteId);
+    if (!website) throw new Error("Website not found");
+
+    if (website.ownerId !== currentUser._id) {
+      throw new Error("You can only delete your own websites");
+    }
+
+    // Delete associated backlinks first
+    const backlinks = await ctx.db
+      .query("backlinks")
+      .withIndex("by_website", (q) => q.eq("websiteId", args.websiteId))
+      .collect();
+
+    for (const bl of backlinks) {
+      await ctx.db.delete(bl._id);
+    }
+
+    await ctx.db.delete(args.websiteId);
+    return { success: true };
+  },
+});
+
+// Deactivate a website (owner only — marks as inactive/hidden)
+export const deactivate = mutation({
+  args: {
+    websiteId: v.id("websites"),
+    token: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    // Try token-based auth first, then fall back to Convex Auth
+    let currentUser = null;
+    if (args.token) {
+      const userId = await getUserIdFromToken(ctx.db, args.token);
+      if (userId) {
+        currentUser = await ctx.db.get(userId);
+      }
+    }
+    if (!currentUser) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Not authenticated");
+      currentUser = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", identity.email!))
+        .first();
+      if (!currentUser) throw new Error("User not found");
+    }
+
+    const website = await ctx.db.get(args.websiteId);
+    if (!website) throw new Error("Website not found");
+
+    if (website.ownerId !== currentUser._id) {
+      throw new Error("You can only deactivate your own websites");
+    }
+
+    await ctx.db.patch(args.websiteId, {
+      status: "inactive",
+      verified: false,
+    });
+
+    return { success: true };
+  },
+});

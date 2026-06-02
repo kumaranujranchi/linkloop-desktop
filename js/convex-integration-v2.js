@@ -2239,6 +2239,7 @@ async function saveWebsiteEdit(websiteId) {
     const trafficEstimate = parseInt(document.getElementById('editTraffic').value) || 0;
     const referringDomains = parseInt(document.getElementById('editRefDomains').value) || 0;
     const language = document.getElementById('editLanguage').value.trim();
+    const token = getSessionToken();
 
     if (!domain) {
       throw new Error('Domain is required');
@@ -2246,6 +2247,7 @@ async function saveWebsiteEdit(websiteId) {
 
     await client.mutation("websites:update", {
       websiteId,
+      token,
       domain,
       niche,
       country,
@@ -2284,7 +2286,7 @@ async function deleteWebsite(websiteId) {
   if (!confirmed) return;
 
   try {
-    await client.mutation("websites:remove", { websiteId });
+    await client.mutation("websites:remove", { websiteId, token: getSessionToken() });
     await refreshMyWebsites();
   } catch (err) {
     alert('Failed to delete website: ' + (err.message || 'Unknown error'));
@@ -2305,7 +2307,7 @@ async function deactivateWebsite(websiteId) {
   if (!confirmed) return;
 
   try {
-    await client.mutation("websites:deactivate", { websiteId });
+    await client.mutation("websites:deactivate", { websiteId, token: getSessionToken() });
     await refreshMyWebsites();
   } catch (err) {
     alert('Failed to deactivate website: ' + (err.message || 'Unknown error'));
