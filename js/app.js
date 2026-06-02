@@ -1434,3 +1434,28 @@ window.handleFeedbackSubmit = async function(e) {
     btnEl.textContent = 'Submit Feedback';
   }
 };
+
+// ---------- SAFETY NOTICE HANDLERS ----------
+window.agreeToSafetyNotice = function() {
+  localStorage.setItem('linkbuild-safety-agreed', 'true');
+  const modal = document.getElementById('safetyNoticeModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.classList.add('hidden');
+  }
+};
+
+// Auto-show safety notice on dashboard load
+document.addEventListener('DOMContentLoaded', function() {
+  const agreed = localStorage.getItem('linkbuild-safety-agreed');
+  if (!agreed) {
+    const modal = document.getElementById('safetyNoticeModal');
+    if (modal) {
+      // Small delay to let the page render first
+      setTimeout(function() {
+        modal.classList.add('active');
+        modal.classList.remove('hidden');
+      }, 500);
+    }
+  }
+});
