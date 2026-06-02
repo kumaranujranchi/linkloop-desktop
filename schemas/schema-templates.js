@@ -215,7 +215,7 @@ export const PricingPageSchema = {
   "mainEntity": {
     "@type": "ItemList",
     "name": "LinkBuild Plans",
-    "numberOfItems": 3,
+    "numberOfItems": 4,
     "itemListElement": [
       {
         "@type": "ListItem",
@@ -237,10 +237,10 @@ export const PricingPageSchema = {
         "item": {
           "@type": "Product",
           "name": "LinkBuild Pro",
-          "description": "Advanced link building with priority matching, up to 10 websites, and detailed analytics.",
+          "description": "Up to 10 websites, unlimited exchanges, AI matchmaking, priority support.",
           "offers": {
             "@type": "Offer",
-            "price": "49",
+            "price": "20",
             "priceCurrency": "USD"
           }
         }
@@ -251,10 +251,24 @@ export const PricingPageSchema = {
         "item": {
           "@type": "Product",
           "name": "LinkBuild Agency",
-          "description": "Unlimited websites, white-label reports, API access, and dedicated support.",
+          "description": "Up to 100 websites, unlimited exchanges, custom AI suggestions, white-label, dedicated support.",
           "offers": {
             "@type": "Offer",
-            "price": "199",
+            "price": "99",
+            "priceCurrency": "USD"
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "item": {
+          "@type": "Product",
+          "name": "LinkBuild Custom",
+          "description": "Tailored pricing for large-scale custom requirements. Contact sales.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
             "priceCurrency": "USD"
           }
         }

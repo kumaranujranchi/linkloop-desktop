@@ -1944,8 +1944,8 @@
       "@type": "AggregateOffer",
       "priceCurrency": "USD",
       "lowPrice": "0",
-      "highPrice": "0",
-      "offerCount": "3",
+      "highPrice": "99",
+      "offerCount": "4",
       "offers": [
         {
           "@type": "Offer",
@@ -1956,16 +1956,23 @@
         {
           "@type": "Offer",
           "name": "Pro Plan",
-          "price": "0",
+          "price": "20",
           "priceCurrency": "USD",
-          "description": "Advanced link building with priority matching and detailed analytics."
+          "description": "Up to 10 websites, unlimited exchanges, AI matchmaking, priority support."
         },
         {
           "@type": "Offer",
           "name": "Agency Plan",
+          "price": "99",
+          "priceCurrency": "USD",
+          "description": "Up to 100 websites, unlimited exchanges, custom AI suggestions, white-label, dedicated support."
+        },
+        {
+          "@type": "Offer",
+          "name": "Custom Plan",
           "price": "0",
           "priceCurrency": "USD",
-          "description": "Unlimited websites, white-label reports, API access, and dedicated support."
+          "description": "Tailored pricing for large-scale custom requirements. Contact sales."
         }
       ]
     },
@@ -2023,7 +2030,7 @@
         "name": "What pricing plans does LinkBuild offer?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "LinkBuild is currently free for all users! All three plans (Free, Pro, and Agency) are available at no cost with full access to all features. Sign up now and get unlimited access to backlink exchanges, partner matching, and link monitoring."
+          "text": "LinkBuild offers four plans: Free ($0 — 1 website, 5 exchanges), Pro ($20/mo — 10 websites, unlimited exchanges, AI matchmaking), Agency ($99/mo — 100 websites, unlimited exchanges, custom AI suggestions), and Custom (tailored pricing for enterprise needs). Start free and upgrade anytime."
         }
       },
       {
@@ -2646,7 +2653,7 @@
       <div class="pricing-card featured">
         <div class="pricing-badge">Most Popular</div>
         <div class="pricing-plan">Pro</div>
-        <div class="pricing-price"><s style="color:#64748b;font-size:0.7em">$49</s> Free<span>/mo</span></div>
+        <div class="pricing-price">$20<span>/mo</span></div>
         <p style="font-size:0.85rem;color:#94a3b8">For growing SEO teams</p>
         <ul class="pricing-features">
           <li>Up to 10 websites</li>
@@ -2655,27 +2662,44 @@
           <li>Priority support</li>
           <li>24/7 link monitoring</li>
           <li>Advanced analytics & reports</li>
-          <li>Direct partner chat</li>
         </ul>
-        <button class="btn btn-primary" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen()})()">Get Started Free</button>
+        <button class="btn btn-primary" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen()})()">Get Started</button>
       </div>
       
       <!-- Agency Plan -->
       <div class="pricing-card">
         <div class="pricing-plan">Agency</div>
-        <div class="pricing-price"><s style="color:#64748b;font-size:0.7em">$99</s> Free<span>/mo</span></div>
+        <div class="pricing-price">$99<span>/mo</span></div>
         <p style="font-size:0.85rem;color:#94a3b8">For agencies & enterprises</p>
         <ul class="pricing-features">
-          <li>Unlimited websites</li>
+          <li>Up to 100 websites</li>
           <li>Unlimited exchanges</li>
+          <li>Custom AI exchange suggestions (Active)</li>
           <li>White-label reports</li>
           <li>Dedicated account manager</li>
           <li>Custom integrations</li>
           <li>Team collaboration</li>
           <li>API access</li>
-          <li>Bulk domain management</li>
         </ul>
-        <button class="btn btn-primary" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen()})()">Get Started Free</button>
+        <button class="btn btn-primary" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen()})()">Get Started</button>
+      </div>
+
+      <!-- Custom Plan -->
+      <div class="pricing-card">
+        <div class="pricing-plan">Custom</div>
+        <div class="pricing-price">Let's Talk<span style="font-size:0.45em;display:block;font-weight:400;color:#94a3b8">tailored to your needs</span></div>
+        <p style="font-size:0.85rem;color:#94a3b8">For large-scale & custom requirements</p>
+        <ul class="pricing-features">
+          <li>Unlimited websites</li>
+          <li>Unlimited exchanges</li>
+          <li>Custom AI exchange suggestions</li>
+          <li>Dedicated infrastructure</li>
+          <li>White-label & reseller options</li>
+          <li>Priority API access</li>
+          <li>SLA & uptime guarantee</li>
+          <li>Custom integrations</li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;border:1px solid rgba(255,255,255,0.2);color:#cbd5e1;background:transparent;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer" onclick="window.location.href='mailto:support@linkbuild.store'">Contact Sales</button>
       </div>
     </div>
   </section>
