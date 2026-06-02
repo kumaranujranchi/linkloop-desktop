@@ -12,6 +12,7 @@
     { "source": "/acceptable-use-policy", "destination": "/acceptable-use-policy.html" },
     { "source": "/aup", "destination": "/acceptable-use-policy.html" },
     { "source": "/cookie-policy", "destination": "/cookie-policy.html" },
+    { "source": "/domain-verification-policy", "destination": "/domain-verification-policy.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
