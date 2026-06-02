@@ -90,9 +90,11 @@
 }
 
 html {
-  font-size: 14px;
+  font-size: clamp(12px, 1vw, 14px);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -100,6 +102,7 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.5;
+  overflow-x: hidden;
 }
 
 body.dashboard-body {
@@ -2176,6 +2179,24 @@ html.force-mobile .btn {
     padding-bottom: 80px;
   }
 
+  /* Page header stack on tablet */
+  .page-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* Modal sizing for tablet */
+  .modal-box,
+  .modal {
+    max-width: 90vw;
+    max-height: 88vh;
+  }
+
+  /* Auth modal tablet */
+  .auth-modal {
+    max-width: 90vw !important;
+  }
+
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -2358,6 +2379,7 @@ html.force-mobile .btn {
   /* Show mobile bottom nav, hide sidebar completely */
   .mobile-bottom-nav {
     display: flex;
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
   .sidebar {
@@ -2383,7 +2405,7 @@ html.force-mobile .btn {
 
   .page-content {
     padding: 10px;
-    padding-bottom: 80px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
   }
 
   /* KPI — single column */
@@ -2517,6 +2539,15 @@ html.force-mobile .btn {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     border-radius: var(--radius-md);
+    /* Scroll shadow indicator */
+    background:
+      linear-gradient(to right, var(--bg-primary) 30%, transparent),
+      linear-gradient(to right, transparent, var(--bg-primary) 70%) 100% 0,
+      radial-gradient(farthest-side at 0% 50%, rgba(0,0,0,0.2), transparent),
+      radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.2), transparent) 100% 0;
+    background-repeat: no-repeat;
+    background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+    background-attachment: local, local, scroll, scroll;
   }
 
   .data-table {
@@ -2544,7 +2575,7 @@ html.force-mobile .btn {
 
   /* Buttons */
   .btn {
-    padding: 8px 14px;
+    padding: clamp(8px, 2vw, 14px) clamp(14px, 3vw, 24px);
     font-size: 0.8rem;
   }
 
@@ -2590,6 +2621,59 @@ html.force-mobile .btn {
   /* Admin */
   .notification-item {
     padding: 10px;
+  }
+
+  /* Modal overlays on mobile */
+  .modal-overlay .modal-box,
+  .modal-overlay .modal {
+    width: 94%;
+    max-width: 94vw;
+    max-height: 90vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .custom-modal-box {
+    width: 94%;
+    max-width: 94vw;
+    padding: 20px;
+  }
+
+  /* Two-col forms */
+  .two-col {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Tabs full width */
+  .tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 0;
+    padding-bottom: 4px;
+  }
+
+  .tab-item {
+    padding: 10px 16px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Page header actions stack */
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .page-header-right {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .page-header-right .btn {
+    flex: 1;
+    min-width: 0;
   }
 }
 

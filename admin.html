@@ -1127,6 +1127,170 @@
     [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
       background: #64748B;
     }
+
+    /* ============================================
+       RESPONSIVE — ADMIN PANEL
+    ============================================ */
+
+    /* Tablet (≤1024px) */
+    @media (max-width: 1024px) {
+      .admin-shell {
+        grid-template-columns: 1fr;
+      }
+      .admin-sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        z-index: 300;
+        width: 280px;
+        transition: left 0.3s ease;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+      }
+      .admin-sidebar.mobile-open {
+        left: 0;
+      }
+      .admin-hamburger {
+        display: flex !important;
+      }
+      .admin-top-hamburger {
+        display: flex !important;
+      .admin-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .admin-content {
+        padding: 16px;
+      }
+      .admin-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .admin-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 0;
+      }
+      .admin-tab {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 10px 18px;
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Tablet Portrait (≤768px) */
+    @media (max-width: 768px) {
+      .admin-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .admin-stat-card {
+        padding: 16px;
+      }
+      .admin-stat-value {
+        font-size: 1.5rem;
+      }
+      .admin-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 12px;
+      }
+      .admin-table {
+        min-width: 650px;
+        font-size: 0.8rem;
+      }
+      .admin-table th,
+      .admin-table td {
+        padding: 10px 12px;
+        white-space: nowrap;
+      }
+      .admin-filter-bar {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .admin-filter-bar select,
+      .admin-filter-bar input {
+        flex: 1 1 45%;
+        min-width: 0;
+      }
+      .admin-action-btns {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .admin-action-btns .btn {
+        flex: 1;
+        min-width: 0;
+        font-size: 0.75rem;
+        padding: 6px 10px;
+      }
+    }
+
+    /* Mobile (≤480px) */
+    @media (max-width: 480px) {
+      .admin-stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .admin-stat-card {
+        padding: 12px;
+        gap: 4px;
+      }
+      .admin-stat-value {
+        font-size: 1.3rem;
+      }
+      .admin-stat-label {
+        font-size: 0.7rem;
+      }
+      .admin-content {
+        padding: 10px;
+      }
+      .admin-page-title {
+        font-size: 1.2rem;
+      }
+      .admin-table {
+        min-width: 550px;
+        font-size: 0.72rem;
+      }
+      .admin-table th,
+      .admin-table td {
+        padding: 8px 10px;
+      }
+      .admin-modal-box {
+        width: 94% !important;
+        max-width: 94vw !important;
+        padding: 20px !important;
+        border-radius: 14px !important;
+      }
+      .admin-modal-box h2 {
+        font-size: 1.1rem;
+      }
+      .admin-form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .btn {
+        min-height: 44px;
+      }
+      input, select, textarea {
+        font-size: 16px !important;
+      }
+    }
+
+    /* Touch device optimization */
+    @media (hover: none) and (pointer: coarse) {
+      .admin-tab,
+      .admin-nav-item,
+      .btn,
+      select,
+      button {
+        min-height: 44px;
+      }
+      .admin-action-btns .btn {
+        min-height: 40px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1290,6 +1454,9 @@
 
     <!-- CONTENT -->
     <div class="admin-content">
+
+      <!-- Mobile hamburger — always visible on tablet/mobile -->
+      <button class="admin-hamburger admin-top-hamburger" onclick="var s=document.querySelector('.admin-sidebar');s.classList.toggle('mobile-open');var o=document.getElementById('adminMobileOverlay');o.classList.toggle('active',s.classList.contains('mobile-open'));o.style.display=s.classList.contains('mobile-open')?'block':'none'" title="Menu" style="display:none; background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:8px; font-size:1.2rem; cursor:pointer; padding:8px 12px; margin-bottom:12px; color:var(--text-primary); align-self:flex-start;">☰ Menu</button>
 
       <!-- ====== PAGE: OVERVIEW ====== -->
       <div class="admin-page active" id="page-overview">
@@ -1792,6 +1959,9 @@
     </div><!-- /admin-content -->
   </div><!-- /admin-main -->
 </div><!-- /admin-shell -->
+
+<!-- Mobile overlay for sidebar -->
+<div class="admin-mobile-overlay" id="adminMobileOverlay" onclick="document.querySelector('.admin-sidebar').classList.remove('mobile-open'); this.classList.remove('active')" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:299; backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);"></div>
 
 <!-- ====== CONFIRM MODAL ====== -->
 <div class="modal-overlay" id="confirmModal">

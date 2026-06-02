@@ -101,12 +101,34 @@
     background: var(--bg-secondary);
     border-color: var(--border-light);
   }
+
+  [data-theme="dark"] .data-table tbody tr:hover {
+    background: rgba(108,77,246,0.08);
+  }
+
+  [data-theme="dark"] .table-container {
+    background: var(--bg-primary);
+  }
+
+  [data-theme="dark"] .chat-area {
+    background: var(--bg-primary);
+  }
+
+  [data-theme="dark"] .conversations-list {
+    background: var(--bg-primary);
+  }
+
+  [data-theme="dark"] .kanban-board {
+    background: transparent;
+  }
 }
 
 @media (max-width: 480px) {
   [data-theme="dark"] .mobile-bottom-nav {
-    background: #0A0A0F;
-    border-top-color: #1E293B;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top-color: rgba(255, 255, 255, 0.06);
   }
 
   [data-theme="dark"] .sidebar {
@@ -114,6 +136,32 @@
   }
 
   [data-theme="dark"] .mobile-overlay {
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  [data-theme="dark"] .kpi-card {
+    background: rgba(20, 24, 35, 0.8);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+
+  [data-theme="dark"] .chart-card {
+    background: rgba(20, 24, 35, 0.7);
+  }
+
+  [data-theme="dark"] .card {
+    background: rgba(20, 24, 35, 0.7);
+  }
+
+  [data-theme="dark"] .modal-box,
+  [data-theme="dark"] .custom-modal-box {
+    background: #141823;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  [data-theme="dark"] input,
+  [data-theme="dark"] select,
+  [data-theme="dark"] textarea {
+    background: rgba(20, 24, 35, 0.8);
+    border-color: rgba(255, 255, 255, 0.08);
   }
 }
