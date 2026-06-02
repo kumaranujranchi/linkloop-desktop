@@ -3212,18 +3212,28 @@
   </div>
 
   <script>
-    (function() {
+    function initCookieBanner() {
       var banner = document.getElementById('cookieConsentBanner');
-      if (!banner) return;
+      if (!banner) {
+        console.warn('Cookie banner not found');
+        return;
+      }
+
       try {
         var consent = localStorage.getItem('linkbuild-cookie-consent');
-        if (consent) return;
-      } catch(e) {}
+        if (consent) {
+          console.log('Cookie consent already set:', consent);
+          return;
+        }
+      } catch(e) {
+        console.warn('localStorage error:', e);
+      }
 
       // Show banner
       banner.style.opacity = '1';
       banner.style.pointerEvents = 'auto';
       banner.style.transform = 'translateY(0)';
+      console.log('Cookie banner shown');
 
       function setConsent(level) {
         try {
@@ -3232,13 +3242,21 @@
         banner.style.transform = 'translateY(100%)';
         banner.style.opacity = '0';
         banner.style.pointerEvents = 'none';
+        console.log('Consent set to:', level);
       }
 
       var acceptBtn = document.getElementById('cookieAcceptBtn');
       var essentialBtn = document.getElementById('cookieEssentialBtn');
       if (acceptBtn) acceptBtn.addEventListener('click', function() { setConsent('all'); });
       if (essentialBtn) essentialBtn.addEventListener('click', function() { setConsent('essential'); });
-    })();
+    }
+
+    // Wait for DOM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCookieBanner);
+    } else {
+      initCookieBanner();
+    }
   </script>
 </body>
 </html>
