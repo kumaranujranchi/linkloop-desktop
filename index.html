@@ -141,7 +141,36 @@
       color: #ffffff;
     }
 
-    /* Hero Section */
+    /* Hamburger — hidden on desktop */
+    .hamburger-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      z-index: 101;
+    }
+
+    .hamburger-btn span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger-btn.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .hamburger-btn.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger-btn.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
     .hero {
       position: relative;
       padding: 110px 4% 60px;
@@ -1447,13 +1476,16 @@
       /* ---- Base ---- */
       html {
         font-size: 15px;
+        overflow-x: hidden;
+      }
+      body {
+        overflow-x: hidden;
+        max-width: 100vw;
       }
 
       /* ---- Navigation ---- */
       .landing-nav {
         padding: 12px 4%;
-        flex-wrap: wrap;
-        gap: 12px;
       }
       .landing-logo-text {
         font-size: 1.1rem;
@@ -1462,19 +1494,59 @@
         width: 32px;
         height: 32px;
       }
+
+      /* Show hamburger, hide nav-links by default */
+      .hamburger-btn {
+        display: flex;
+      }
+
       .nav-links {
-        width: 100%;
-        justify-content: center;
-        gap: 12px;
-        flex-wrap: wrap;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 75%;
+        max-width: 320px;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 80px 28px 28px;
+        gap: 20px;
+        transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 100;
+        border-left: 1px solid rgba(255,255,255,0.08);
       }
+
+      .nav-links.open {
+        right: 0;
+      }
+
+      /* Backdrop overlay when menu open */
+      .nav-links.open::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        left: -100vw;
+        width: 200vw;
+        background: rgba(0,0,0,0.4);
+        z-index: -1;
+      }
+
       .nav-links a {
-        font-size: 0.82rem;
-        padding: 6px 10px;
+        font-size: 1.05rem;
+        padding: 8px 0;
+        width: 100%;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
       }
+
       .nav-links .btn {
-        font-size: 0.8rem;
-        padding: 6px 14px;
+        width: 100%;
+        margin-top: 8px;
+        font-size: 0.95rem;
+        padding: 10px 14px;
       }
 
       /* ---- Hero ---- */
@@ -1705,23 +1777,23 @@
     @media (max-width: 480px) {
       html {
         font-size: 14px;
+        overflow-x: hidden;
+      }
+      body {
+        overflow-x: hidden;
+        max-width: 100vw;
       }
 
       /* ---- Nav ---- */
       .landing-nav {
         padding: 10px 3%;
-        gap: 8px;
-      }
-      .nav-links {
-        gap: 6px;
       }
       .nav-links a {
-        font-size: 0.75rem;
-        padding: 4px 8px;
+        font-size: 0.95rem;
       }
       .nav-links .btn {
-        font-size: 0.75rem;
-        padding: 5px 12px;
+        font-size: 0.85rem;
+        padding: 8px 14px;
       }
 
       /* ---- Hero ---- */
@@ -2081,12 +2153,17 @@
       </div>
       <span class="landing-logo-text">Link<span>Build</span></span>
     </a>
-    <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#faq">FAQ</a>
-      <button class="btn btn-secondary btn-sm" id="landingAuthBtn" onclick="(function(){var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen();if(window.switchAuthTab)window.switchAuthTab('login')})()">Login</button>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" onclick="document.getElementById('mobileMenu').classList.toggle('open');this.classList.toggle('active');">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-links" id="mobileMenu">
+      <a href="#features" onclick="document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');">Features</a>
+      <a href="#how-it-works" onclick="document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');">How It Works</a>
+      <a href="#pricing" onclick="document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');">Pricing</a>
+      <a href="#faq" onclick="document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');">FAQ</a>
+      <button class="btn btn-secondary btn-sm" id="landingAuthBtn" onclick="(function(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen();if(window.switchAuthTab)window.switchAuthTab('login')})()">Login</button>
     </div>
   </nav>
 
