@@ -91,6 +91,17 @@ export const getById = query({
   },
 });
 
+// Get website by exact domain
+export const getByDomain = query({
+  args: { domain: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("websites")
+      .withIndex("by_domain", (q) => q.eq("domain", args.domain.toLowerCase()))
+      .first();
+  },
+});
+
 // Get user's own websites
 export const listByOwner = query({
   args: { userId: v.id("users") },

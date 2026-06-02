@@ -835,6 +835,40 @@ async function decryptMessage(encryptedJson, senderPublicJwk) {
   }
 }
 
+// ========== FRAUD & SCAM DETECTION CONTROLS ==========
+const domainVerificationCache = {};
+
+const linkExchangeRequestRegex = /\b(backlink|guest\s?post|link\s?exchange|niche\s?edit|contextual\s?link|exchange\s?link|exchange\s?links|guest\s?blogging|link\s?insertion|insert\s?link|guest\s?posts|backlinks)\b/i;
+
+function detectPhoneContact(text) {
+  const phoneOrContactRegex = /\b(phone|whatsapp|whats\s?app|telegram|tele\s?gram|skype|discord|wechat|viber|signal|line\s?app|contact\s+details|contact\s+number|mobile\s+number|phone\s+number|external\s+contact|email|e-mail|my\s+number)\b/i;
+  const emailRegex = /\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b/;
+  const phoneNumberPatternRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\b\d{7,15}\b/;
+  
+  return phoneOrContactRegex.test(text) || emailRegex.test(text) || phoneNumberPatternRegex.test(text);
+}
+
+function detectMoneyRequest(text) {
+  const moneyRegex = /\b(payment|advance|transfer|bank\s?details|upi|paypal|pay\s?pal|crypto|cryptocurrency|bitcoin|btc|ethereum|eth|usdt|money\s+exchange|currency\s+exchange|send\s?money|send\s?payment|bank\s?transfer|wire\s+transfer|pay\s?me)\b/i;
+  return moneyRegex.test(text);
+}
+
+function extractDomains(text) {
+  const domainRegex = /\b(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9][-a-zA-Z0-9]{0,62}\.[a-zA-Z]{2,10})\b/gi;
+  const domains = [];
+  let match;
+  domainRegex.lastIndex = 0;
+  const cleanText = text.replace(/[\n\r]/g, ' ');
+  while ((match = domainRegex.exec(cleanText)) !== null) {
+    let dom = match[1].toLowerCase();
+    dom = dom.split('/')[0].split('?')[0];
+    if (dom && !domains.includes(dom)) {
+      domains.push(dom);
+    }
+  }
+  return domains;
+}
+
 // State
 let currentConversationId = null;
 let currentReceiverId = null;
@@ -1061,6 +1095,33 @@ async function renderMessages(messages) {
     return { ...msg, displayText };
   }));
 
+  // Collect all domains mentioned in messages that look like link exchange requests
+  const domainsToCheck = [];
+  for (const msg of decryptedTexts) {
+    if (linkExchangeRequestRegex.test(msg.displayText)) {
+      const domains = extractDomains(msg.displayText);
+      for (const domain of domains) {
+        if (!domainsToCheck.includes(domain)) {
+          domainsToCheck.push(domain);
+        }
+      }
+    }
+  }
+
+  // Fetch domain verification status in parallel (caching results to avoid redundant calls)
+  await Promise.all(domainsToCheck.map(async (domain) => {
+    if (domainVerificationCache[domain] !== undefined) {
+      return;
+    }
+    try {
+      const website = await client.query('websites:getByDomain', { domain });
+      domainVerificationCache[domain] = website ? website.verified : false;
+    } catch (e) {
+      console.warn(`Failed to check verification for domain ${domain}:`, e);
+      domainVerificationCache[domain] = false;
+    }
+  }));
+
   const html = decryptedTexts.map(msg => {
     const isSent = msg.senderId === uid;
     const msgDate = new Date(msg.createdAt).toLocaleDateString();
@@ -1077,10 +1138,47 @@ async function renderMessages(messages) {
     const lockIcon = msg.encrypted && !isSent ? ' <span title="End-to-end encrypted" style="font-size:0.7rem">🔒</span>' : '';
     const sentLock = msg.encrypted && isSent ? ' <span title="End-to-end encrypted" style="font-size:0.7rem;opacity:0.5">🔒</span>' : '';
 
-    return `${dateSep}<div class="chat-bubble ${isSent ? 'sent' : 'received'}" style="position:relative">
+    let bubbleHtml = `${dateSep}<div class="chat-bubble ${isSent ? 'sent' : 'received'}" style="position:relative">
       ${msg.displayText}
       <span style="font-size:0.65rem;opacity:0.6;margin-left:8px;white-space:nowrap">${time}${readTick}${lockIcon}${sentLock}</span>
     </div>`;
+
+    // Warnings detection and rendering
+    if (detectPhoneContact(msg.displayText)) {
+      bubbleHtml += `
+        <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
+          ⚠️ Be cautious when sharing your phone number or personal contact details. To avoid spam, scams, and unwanted solicitations, we recommend keeping communication within the platform whenever possible.
+        </div>
+      `;
+    }
+
+    if (detectMoneyRequest(msg.displayText)) {
+      bubbleHtml += `
+        <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
+          ⚠️ Please avoid sending money without proper investigation and verification. Financial transactions with unknown parties may result in monetary loss. Always verify the legitimacy of the request before making any payment.
+        </div>
+      `;
+    }
+
+    if (linkExchangeRequestRegex.test(msg.displayText)) {
+      const domains = extractDomains(msg.displayText);
+      let unverifiedTriggered = false;
+      for (const domain of domains) {
+        if (domainVerificationCache[domain] === false) {
+          unverifiedTriggered = true;
+          break;
+        }
+      }
+      if (unverifiedTriggered) {
+        bubbleHtml += `
+          <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
+            ⚠️ This domain is not verified on our marketplace. Please avoid exchanging links with unverified domains, as their quality, ownership, and SEO metrics cannot be confirmed.
+          </div>
+        `;
+      }
+    }
+
+    return bubbleHtml;
   }).join('');
 
   msgsEl.innerHTML = html;
