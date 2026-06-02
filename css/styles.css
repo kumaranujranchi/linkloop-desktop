@@ -756,12 +756,14 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
 
 .btn-ghost {
   background: transparent;
-  color: var(--text-secondary);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-ghost:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .btn-success { background: var(--success); color: white; }
