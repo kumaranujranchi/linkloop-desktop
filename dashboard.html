@@ -1138,14 +1138,14 @@
         <form id="addWebsiteForm" onsubmit="handleAddWebsite(event)" style="display:flex;flex-direction:column;gap:16px">
           <!-- Domain -->
           <div>
-            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">🌐 Domain <span style="color:var(--danger)">*</span></label>
+            <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">Domain <span style="color:var(--danger)">*</span></label>
             <input class="input" type="text" id="wsDomain" placeholder="example.com" required style="width:100%;padding:10px 14px;border-radius:10px;font-size:0.95rem;background:var(--bg-primary);border:1.5px solid var(--border-light);transition:border-color 0.2s">
           </div>
 
           <!-- Niche + Listed By -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">🏷️ Niche <span style="color:var(--danger)">*</span></label>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">Niche <span style="color:var(--danger)">*</span></label>
               <select class="select" id="wsNiche" required style="width:100%;padding:10px 12px;border-radius:10px;font-size:0.9rem;background:var(--bg-primary);border:1.5px solid var(--border-light)">
                 <option value="">Select...</option>
                 <option>Automotive</option><option>Blogging</option><option>Construction</option><option>E-commerce</option>
@@ -1158,7 +1158,7 @@
               </select>
             </div>
             <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">👤 Listed By <span style="color:var(--danger)">*</span></label>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">Listed By <span style="color:var(--danger)">*</span></label>
               <select class="select" id="wsListedBy" required style="width:100%;padding:10px 12px;border-radius:10px;font-size:0.9rem;background:var(--bg-primary);border:1.5px solid var(--border-light)">
                 <option value="">Select...</option>
                 <option value="owner">👤 Website Owner</option>
@@ -1170,7 +1170,7 @@
           <!-- Country + Language -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">📍 Country <span style="color:var(--danger)">*</span></label>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">Country <span style="color:var(--danger)">*</span></label>
               <select class="select" id="wsCountry" required style="width:100%;padding:10px 12px;border-radius:10px;font-size:0.9rem;background:var(--bg-primary);border:1.5px solid var(--border-light)">
                 <option value="">Select...</option>
                 <option>Afghanistan</option><option>Albania</option><option>Algeria</option><option>Argentina</option>
@@ -1204,7 +1204,7 @@
               </select>
             </div>
             <div>
-              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">🗣️ Language</label>
+              <label style="display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px;color:var(--text-primary)">Language</label>
               <select class="select" id="wsLanguage" style="width:100%;padding:10px 12px;border-radius:10px;font-size:0.9rem;background:var(--bg-primary);border:1.5px solid var(--border-light)">
                 <option>English</option><option>Spanish</option><option>German</option><option>French</option><option>Hindi</option><option>Other</option>
               </select>
@@ -1218,7 +1218,7 @@
           </div>
 
           <!-- Submit -->
-          <button class="btn btn-primary" type="submit" style="width:100%;padding:12px;font-size:1rem;font-weight:600;border-radius:10px;margin-top:4px;background:linear-gradient(135deg,#7C3AED,#EC4899);border:none;box-shadow:0 4px 15px rgba(124,58,237,0.3)">🚀 Add Website</button>
+          <button class="btn btn-primary" type="submit" style="width:100%;padding:12px;font-size:1rem;font-weight:600;border-radius:10px;margin-top:4px;background:linear-gradient(135deg,#7C3AED,#EC4899);border:none;box-shadow:0 4px 15px rgba(124,58,237,0.3)">Add Website</button>
           <div id="wsMessage" style="text-align:center;font-size:0.85rem;min-height:20px"></div>
         </form>
       </div>
