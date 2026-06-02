@@ -1610,7 +1610,8 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  max-width: 1200px;
+  max-width: 100%;
+  width: 100%;
 }
 
 .pricing-card {
@@ -2083,9 +2084,9 @@ html.force-mobile .btn {
 }
 
 /* =============================================
-   RESPONSIVE — TABLET LANDSCAPE (≤1200px)
+   RESPONSIVE — TABLET LANDSCAPE (≤1024px)
    ============================================= */
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
   :root {
     --sidebar-width: 220px;
     --topbar-height: 56px;
@@ -2121,7 +2122,7 @@ html.force-mobile .btn {
   }
 
   .pricing-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
 
