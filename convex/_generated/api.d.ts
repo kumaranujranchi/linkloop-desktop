@@ -14,6 +14,7 @@ import type * as backlinks from "../backlinks.js";
 import type * as exchanges from "../exchanges.js";
 import type * as feedback from "../feedback.js";
 import type * as messages from "../messages.js";
+import type * as moz from "../moz.js";
 import type * as notifications from "../notifications.js";
 import type * as users from "../users.js";
 import type * as verification from "../verification.js";
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   exchanges: typeof exchanges;
   feedback: typeof feedback;
   messages: typeof messages;
+  moz: typeof moz;
   notifications: typeof notifications;
   users: typeof users;
   verification: typeof verification;
