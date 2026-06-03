@@ -199,6 +199,7 @@ export const send = mutation({
       encrypted: args.encrypted || false,
       attachmentUrl: args.attachmentUrl,
       read: false,
+      delivered: false,
       createdAt: now,
     });
 
@@ -336,7 +337,56 @@ export const markRead = mutation({
     );
 
     for (const msg of toMark) {
-      await ctx.db.patch(msg._id, { read: true });
+      await ctx.db.patch(msg._id, { read: true, delivered: true });
+    }
+  },
+});
+
+// Mark messages as delivered (when recipient opens the conversation)
+export const markAsDelivered = mutation({
+  args: {
+    conversationId: v.id("conversations"),
+    token: v.optional(v.string()),
+    userId: v.optional(v.id("users")),
+  },
+  handler: async (ctx, args) => {
+    let userId = args.userId || null;
+
+    if (!userId && args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    }
+
+    if (!userId) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
+
+    if (!userId) return;
+
+    const conversation = await ctx.db.get(args.conversationId);
+    if (!conversation) return;
+
+    // Mark all undelivered messages received by this user as delivered
+    const undelivered = await ctx.db
+      .query("messages")
+      .withIndex("by_receiver", (q) => q.eq("receiverId", userId!))
+      .filter((q) => q.eq(q.field("delivered"), false))
+      .collect();
+
+    const otherParticipant = conversation.participantIds.find((id) => id !== userId);
+    const toMark = undelivered.filter(
+      (m) => m.senderId === otherParticipant &&
+             (conversation.exchangeId ? m.exchangeId === conversation.exchangeId : true)
+    );
+
+    for (const msg of toMark) {
+      await ctx.db.patch(msg._id, { delivered: true });
     }
   },
 });

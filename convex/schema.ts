@@ -87,6 +87,7 @@ export default defineSchema({
     attachmentUrl: v.optional(v.string()),
     websiteRef: v.optional(v.id("websites")),
     read: v.boolean(),
+    delivered: v.optional(v.boolean()),
     createdAt: v.number(),
   })
     .index("by_exchange", ["exchangeId"])

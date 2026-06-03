@@ -1367,6 +1367,16 @@ async function fetchAndRenderMessages() {
       conversationId: currentConversationId,
       limit: 100,
     });
+    // Mark messages as delivered to the recipient
+    try {
+      const token = localStorage.getItem("linkbuild-token");
+      await client.mutation("messages:markAsDelivered", {
+        conversationId: currentConversationId,
+        token,
+      });
+    } catch (e) {
+      /* ignore */
+    }
     await renderMessages(msgs || []);
     lastMsgCount = (msgs || []).length;
   } catch (e) {
@@ -1476,8 +1486,10 @@ async function renderMessages(messages) {
       });
       const readTick = isSent
         ? msg.read
-          ? ' <span style="color:var(--primary-purple);font-size:0.7rem">✓✓</span>'
-          : ' <span style="color:var(--text-tertiary);font-size:0.7rem">✓</span>'
+          ? ' <span style="color:#3b82f6;font-size:0.7rem">✓✓</span>'
+          : msg.delivered
+            ? ' <span style="color:var(--text-secondary);font-size:0.7rem">✓✓</span>'
+            : ' <span style="color:var(--text-tertiary);font-size:0.7rem">✓</span>'
         : "";
       const lockIcon =
         msg.encrypted && !isSent
