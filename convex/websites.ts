@@ -241,6 +241,16 @@ export const add = mutation({
       createdAt: now,
     });
 
+    // Schedule a verification reminder after 4 hours (if still unverified)
+    try {
+      await ctx.scheduler.runAfter(4 * 60 * 60 * 1000, internal.email.sendWebsiteVerificationReminder, {
+        websiteId,
+      });
+    } catch (e) {
+      // scheduler might not be available in some test environments
+      console.warn('Failed to schedule verification reminder', e);
+    }
+
     // Also add some demo backlinks
     const backlinkCount = Math.floor(Math.random() * 5) + 3;
     for (let i = 0; i < backlinkCount; i++) {

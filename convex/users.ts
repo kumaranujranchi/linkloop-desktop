@@ -1,6 +1,7 @@
 import { v, ConvexError } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { getUserIdFromToken, generateSalt, hashPassword, createSession } from "./auth_helpers";
+import { internal } from "./_generated/api";
 
 // ========== QUERIES ==========
 
@@ -226,6 +227,16 @@ export const signupWithPassword = mutation({
     });
 
     const session = await createSession(ctx.db, userId);
+
+    // Send welcome email asynchronously
+    try {
+      await ctx.scheduler.runAfter(0, internal.email.sendWelcomeEmail, {
+        email: emailNormalized,
+        name: args.name,
+      });
+    } catch (e) {
+      console.warn('Failed to schedule welcome email', e);
+    }
 
     return {
       token: session.token,

@@ -247,6 +247,65 @@ export const sendExchangeRequestEmail = internalAction({
   },
 });
 
+// 4. Email reminder for website verification (sent if site still unverified after delay)
+export const sendWebsiteVerificationReminder = internalAction({
+  args: {
+    websiteId: v.id("websites"),
+  },
+  handler: async (ctx, args) => {
+    const website = await ctx.db.get(args.websiteId);
+    if (!website) return;
+    // Only send reminder if still pending and not verified
+    if (website.verified || website.status !== "pending") return;
+
+    const owner = await ctx.db.get(website.ownerId);
+    if (!owner || !owner.email) return;
+
+    const subject = `Please verify your website: ${website.domain}`;
+    const bodyContent = `
+      <p>Hello ${owner.name || ''},</p>
+      <p>You recently added <strong>${website.domain}</strong> to LinkBuild but it looks like the site hasn't been verified yet.</p>
+      <p>Please verify your ownership so your website can go live on the marketplace. You can verify using either method below:</p>
+
+      <h4>DNS (Recommended)</h4>
+      <p>Add the following TXT record to your domain's DNS zone:</p>
+      <pre style="background:#f8fafc;padding:12px;border-radius:6px;border:1px solid #e6eef6;">${website.verificationCode}</pre>
+      <p>Once the DNS record has propagated (may take a few minutes to a few hours), return to your dashboard and click "Verify".</p>
+
+      <h4>HTML Meta Tag</h4>
+      <p>If you cannot edit DNS, add this meta tag to the &lt;head&gt; of your homepage:</p>
+      <pre style="background:#f8fafc;padding:12px;border-radius:6px;border:1px solid #e6eef6;">&lt;meta name="linkbuild-verification" content="${website.verificationCode}" /&gt;</pre>
+
+      <p>If you need help, reply to this email or visit your <a href="https://linkbuild.store/dashboard">dashboard</a> for verification instructions.</p>
+      <p>Thanks,<br/>The LinkBuild Team</p>
+    `;
+
+    const html = getEmailTemplate("Verify your website on LinkBuild", bodyContent, "https://linkbuild.store/dashboard", "Open Dashboard");
+    await sendMail(owner.email, subject, html);
+  },
+});
+
+// 5. Welcome email sent on signup (from CEO Anuj Kumar)
+export const sendWelcomeEmail = internalAction({
+  args: {
+    email: v.string(),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const subject = `Welcome to LinkBuild — ${args.name}`;
+    const bodyContent = `
+      <p>Hello ${args.name},</p>
+      <p>Welcome to LinkBuild! I'm <strong>Anuj Kumar</strong>, CEO and Founder. We're excited to have you on board.</p>
+      <p>LinkBuild helps you discover link exchange opportunities, monitor backlinks, and grow organic traffic. To get started, verify your website, add your first site, and explore the dashboard.</p>
+      <p>If you ever need help, reply to this email and our team will assist you.</p>
+      <p>Warm regards,<br/><strong>Anuj Kumar</strong><br/>CEO &amp; Founder — LinkBuild.Store</p>
+    `;
+
+    const html = getEmailTemplate("Welcome to LinkBuild", bodyContent, "https://linkbuild.store/dashboard", "Go to Dashboard");
+    await sendMail(args.email, subject, html);
+  },
+});
+
 // Public action to trigger a test email (can be run via: npx convex run email:testEmail '{"email": "kumaranujranchi@gmail.com"}')
 export const testEmail = action({
   args: { email: v.string() },
