@@ -2919,3 +2919,56 @@ html.force-mobile .btn {
   justify-content: flex-end;
   gap: 12px;
 }
+
+/* =============================================
+   SMOOTH SCROLLING & MOTION UTILITIES
+   ============================================= */
+html {
+  scroll-behavior: smooth;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Animations initial states when JS is enabled */
+.js-enabled .reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  will-change: transform, opacity;
+}
+
+.js-enabled .reveal-mockup {
+  opacity: 0;
+  transform: scale(0.96) translateY(12px) rotate(-0.5deg);
+  will-change: transform, opacity;
+}
+
+.js-enabled .reveal-badge {
+  opacity: 0;
+  transform: translateY(-10px);
+  will-change: transform, opacity;
+}
+
+.js-enabled .reveal-hero-text {
+  opacity: 0;
+  transform: translateY(15px);
+  will-change: transform, opacity;
+}
+
