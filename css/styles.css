@@ -1631,12 +1631,22 @@ textarea {
   min-width: 320px;
   border-right: 1px solid var(--border-light);
   background: var(--bg-secondary);
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .conversations-search {
   padding: 16px;
   border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+#convsListInner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
 }
 
 .conversation-item {
@@ -1657,7 +1667,72 @@ textarea {
   border-left: 3px solid var(--primary-purple);
 }
 
-.conversation-avatar {
+/* Conversation selection toolbar */
+.convs-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+  gap: 8px;
+  flex-shrink: 0;
+}
+.convs-select-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+.convs-select-all input[type="checkbox"] {
+  accent-color: var(--primary-purple);
+  cursor: pointer;
+}
+.convs-delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.convs-delete-btn:not(:disabled):hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(239,68,68,0.06);
+}
+.convs-delete-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.convs-list-scroll {
+  overflow-y: auto;
+  flex: 1;
+}
+.convs-checkbox {
+  display: flex;
+  align-items: center;
+  padding-right: 4px;
+  flex-shrink: 0;
+}
+.convs-checkbox input[type="checkbox"] {
+  accent-color: var(--primary-purple);
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+}
+.conversation-item {
+  padding-left: 8px;
+}
   width: 40px;
   height: 40px;
   border-radius: var(--radius-full);

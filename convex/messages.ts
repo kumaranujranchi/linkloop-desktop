@@ -530,3 +530,75 @@ export const toggleReaction = mutation({
     return { success: true, reactions: newReactions };
   },
 });
+
+// Admin/both-participant: delete conversations by IDs (removes conversation + associated messages)
+export const deleteConversations = mutation({
+  args: {
+    conversationIds: v.array(v.id("conversations")),
+    token: v.optional(v.string()),
+    userId: v.optional(v.id("users")),
+  },
+  handler: async (ctx, args) => {
+    let userId = args.userId || null;
+
+    if (!userId && args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    }
+
+    if (!userId) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
+
+    if (!userId) throw new Error("Not authenticated");
+
+    let deletedCount = 0;
+
+    for (const convId of args.conversationIds) {
+      const conv = await ctx.db.get(convId);
+      if (!conv) continue;
+
+      // Verify user is a participant
+      if (!conv.participantIds.some((id) => id === userId)) continue;
+
+      // Delete all messages in this conversation
+      const [p1, p2] = conv.participantIds;
+      let messages;
+
+      if (conv.exchangeId) {
+        messages = await ctx.db
+          .query("messages")
+          .withIndex("by_exchange", (q) => q.eq("exchangeId", conv.exchangeId!))
+          .collect();
+      } else {
+        const sentByP1 = await ctx.db
+          .query("messages")
+          .withIndex("by_sender", (q) => q.eq("senderId", p1))
+          .filter((q) => q.eq(q.field("receiverId"), p2))
+          .collect();
+        const sentByP2 = await ctx.db
+          .query("messages")
+          .withIndex("by_sender", (q) => q.eq("senderId", p2))
+          .filter((q) => q.eq(q.field("receiverId"), p1))
+          .collect();
+        messages = [...sentByP1, ...sentByP2];
+      }
+
+      for (const msg of messages) {
+        await ctx.db.delete(msg._id);
+      }
+
+      // Delete the conversation itself
+      await ctx.db.delete(convId);
+      deletedCount++;
+    }
+
+    return { success: true, deleted: deletedCount };
+  },
+});

@@ -1223,38 +1223,101 @@ function renderConversationsList(conversations) {
   }
   if (empty) empty.style.display = "none";
 
-  inner.innerHTML = conversations
-    .map((conv) => {
-      const name = conv.otherUser?.name || "Unknown User";
-      const initials = getInitials(name);
-      const color = getAvatarColor(name);
-      const preview = conv.lastMessage
-        ? conv.lastMessage.slice(0, 55) +
-          (conv.lastMessage.length > 55 ? "..." : "")
-        : "No messages yet";
-      const time = timeAgo(conv.lastMessageAt);
-      const isActive = conv._id === currentConversationId;
-      const unread = conv.unreadCount || 0;
+  inner.innerHTML = `
+    <div class="convs-toolbar" id="convsToolbar">
+      <label class="convs-select-all" onclick="event.stopPropagation()">
+        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this.checked)">
+        <span>Select all</span>
+      </label>
+      <button class="convs-delete-btn" id="convsDeleteBtn" onclick="deleteSelectedConversations()" disabled title="Delete selected">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <span id="selectedCount">Delete</span>
+      </button>
+    </div>
+    <div class="convs-list-scroll">
+    ${conversations
+      .map((conv) => {
+        const name = conv.otherUser?.name || "Unknown User";
+        const initials = getInitials(name);
+        const color = getAvatarColor(name);
+        const preview = conv.lastMessage
+          ? conv.lastMessage.slice(0, 55) +
+            (conv.lastMessage.length > 55 ? "..." : "")
+          : "No messages yet";
+        const time = timeAgo(conv.lastMessageAt);
+        const isActive = conv._id === currentConversationId;
+        const unread = conv.unreadCount || 0;
 
-      return `
-      <div class="conversation-item${isActive ? " active" : ""}" 
-           onclick="window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ""}', '${name.replace(/'/g, "\\'")}')"
-           style="cursor:pointer">
-        <div class="conversation-avatar" style="background:${color};position:relative">
-          ${initials}
-          ${unread > 0 ? `<span style="position:absolute;top:-3px;right:-3px;background:var(--danger);color:white;font-size:0.6rem;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg-primary)">${unread > 9 ? "9+" : unread}</span>` : ""}
-        </div>
-        <div class="conversation-info">
-          <div class="conversation-name">${name}</div>
-          <div class="conversation-preview">${preview}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-          <div class="conversation-time">${time}</div>
-          ${unread > 0 ? `<span style="background:var(--primary-purple);border-radius:10px;color:white;font-size:0.65rem;font-weight:700;padding:1px 6px">${unread}</span>` : ""}
+        return `
+      <div class="conversation-item${isActive ? " active" : ""}" data-conv-id="${conv._id}">
+        <label class="convs-checkbox" onclick="event.stopPropagation()">
+          <input type="checkbox" class="conv-select-cb" data-conv-id="${conv._id}" onchange="updateDeleteButton()">
+        </label>
+        <div onclick="window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ""}', '${name.replace(/'/g, "\\'")}')" style="flex:1;display:flex;align-items:center;gap:10px;cursor:pointer;min-width:0">
+          <div class="conversation-avatar" style="background:${color};position:relative">
+            ${initials}
+            ${unread > 0 ? `<span style="position:absolute;top:-3px;right:-3px;background:var(--danger);color:white;font-size:0.6rem;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg-primary)">${unread > 9 ? "9+" : unread}</span>` : ""}
+          </div>
+          <div class="conversation-info" style="flex:1;min-width:0">
+            <div class="conversation-name">${name}</div>
+            <div class="conversation-preview">${preview}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+            <div class="conversation-time">${time}</div>
+            ${unread > 0 ? `<span style="background:var(--primary-purple);border-radius:10px;color:white;font-size:0.65rem;font-weight:700;padding:1px 6px">${unread}</span>` : ""}
+          </div>
         </div>
       </div>`;
-    })
-    .join("");
+      })
+      .join("")}
+    </div>`;
+
+  updateDeleteButton();
+}
+
+function updateDeleteButton() {
+  const checked = document.querySelectorAll(".conv-select-cb:checked");
+  const btn = document.getElementById("convsDeleteBtn");
+  const count = document.getElementById("selectedCount");
+  if (!btn || !count) return;
+  const n = checked.length;
+  btn.disabled = n === 0;
+  count.textContent = n > 0 ? "Delete (" + n + ")" : "Delete";
+}
+
+function toggleSelectAll(checked) {
+  document
+    .querySelectorAll(".conv-select-cb")
+    .forEach((cb) => (cb.checked = checked));
+  updateDeleteButton();
+}
+
+async function deleteSelectedConversations() {
+  const checked = document.querySelectorAll(".conv-select-cb:checked");
+  const ids = Array.from(checked).map((cb) => cb.dataset.convId);
+  if (ids.length === 0) return;
+  if (
+    !confirm(
+      "Delete " +
+        ids.length +
+        " conversation(s) and all their messages? This cannot be undone.",
+    )
+  )
+    return;
+
+  try {
+    const token = getSessionToken();
+    const res = await client.mutation("messages:deleteConversations", {
+      conversationIds: ids,
+      token,
+    });
+    if (res && res.success) {
+      showMsgToast("🗑️ Deleted " + res.deleted + " conversation(s)", "info");
+      await loadConversations();
+    }
+  } catch (e) {
+    showMsgToast("❌ Failed to delete: " + e.message, "danger");
+  }
 }
 
 function filterConversations(query) {
