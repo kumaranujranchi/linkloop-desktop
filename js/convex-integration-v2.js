@@ -1514,9 +1514,18 @@ async function renderMessages(messages) {
       ${
         isSent && !isDeleted
           ? `
-        <div class="msg-actions" style="position:absolute;top:2px;right:2px;display:none">
-          <button class="msg-action-btn" onclick="event.stopPropagation();editChatMessage('${msg._id}')" title="Edit" style="background:none;border:none;cursor:pointer;padding:2px 4px;font-size:0.7rem;color:var(--text-tertiary);border-radius:4px">✏️</button>
-          <button class="msg-action-btn" onclick="event.stopPropagation();deleteChatMessage('${msg._id}')" title="Delete" style="background:none;border:none;cursor:pointer;padding:2px 4px;font-size:0.7rem;color:var(--text-tertiary);border-radius:4px">🗑️</button>
+        <div class="msg-three-dots" onclick="event.stopPropagation();toggleMsgMenu('${msg._id}')">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="msg-dropdown" id="msg-menu-${msg._id}">
+          <div class="msg-dropdown-item" onclick="event.stopPropagation();startEditMessage('${msg._id}','${escHtmlForAttr(msg.displayText)}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit message
+          </div>
+          <div class="msg-dropdown-item danger" onclick="event.stopPropagation();deleteChatMessage('${msg._id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Delete
+          </div>
         </div>
       `
           : ""
@@ -1573,6 +1582,7 @@ async function renderMessages(messages) {
 
 let sendInProgress = false;
 let handlersAttached = false;
+let editingMessageId = null;
 
 function bindSendHandlers() {
   if (handlersAttached) return;
@@ -1594,6 +1604,82 @@ function bindSendHandlers() {
   }
 }
 
+function escHtmlForAttr(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// Close message dropdowns on outside click
+document.addEventListener("click", function (e) {
+  if (
+    !e.target.closest(".msg-dropdown") &&
+    !e.target.closest(".msg-three-dots")
+  ) {
+    document
+      .querySelectorAll(".msg-dropdown.show")
+      .forEach((m) => m.classList.remove("show"));
+  }
+});
+
+function toggleMsgMenu(msgId) {
+  // Close all other menus
+  document.querySelectorAll(".msg-dropdown.show").forEach((m) => {
+    if (m.id !== "msg-menu-" + msgId) m.classList.remove("show");
+  });
+  const menu = document.getElementById("msg-menu-" + msgId);
+  if (menu) menu.classList.toggle("show");
+}
+
+function startEditMessage(msgId, currentText) {
+  // Close menu
+  document
+    .querySelectorAll(".msg-dropdown.show")
+    .forEach((m) => m.classList.remove("show"));
+
+  const input = document.getElementById("msgInput");
+  if (!input) return;
+
+  editingMessageId = msgId;
+  input.value = currentText;
+  input.focus();
+
+  // Show edit banner above input
+  const area = document.getElementById("msgSendArea");
+  let banner = document.getElementById("editBanner");
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.id = "editBanner";
+    banner.className = "chat-edit-banner";
+    area.parentNode.insertBefore(banner, area);
+  }
+  banner.innerHTML =
+    '<span>✏️ Editing message</span><button class="cancel-edit" onclick="cancelEditMessage()">Cancel</button>';
+  banner.style.display = "flex";
+
+  // Change send button text
+  const sendBtn = document.getElementById("msgSendBtn");
+  if (sendBtn)
+    sendBtn.innerHTML =
+      '<svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+}
+
+function cancelEditMessage() {
+  editingMessageId = null;
+  const input = document.getElementById("msgInput");
+  if (input) input.value = "";
+  const banner = document.getElementById("editBanner");
+  if (banner) banner.style.display = "none";
+  const sendBtn = document.getElementById("msgSendBtn");
+  if (sendBtn)
+    sendBtn.innerHTML =
+      '<svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polyline points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+}
+
 async function doSendMessage() {
   if (sendInProgress) return;
   const input = document.getElementById("msgInput");
@@ -1603,6 +1689,28 @@ async function doSendMessage() {
 
   sendInProgress = true;
   input.value = "";
+
+  // If editing an existing message
+  if (editingMessageId) {
+    try {
+      const token = getSessionToken();
+      await client.mutation("messages:editMessage", {
+        messageId: editingMessageId,
+        newText: text,
+        token,
+      });
+      cancelEditMessage();
+      await fetchAndRenderMessages();
+    } catch (e) {
+      showMsgToast("❌ Failed to edit: " + e.message, "danger");
+      input.value = text;
+    }
+    sendInProgress = false;
+    input.disabled = false;
+    input.focus();
+    return;
+  }
+
   input.disabled = true;
 
   // Optimistic UI: append bubble immediately

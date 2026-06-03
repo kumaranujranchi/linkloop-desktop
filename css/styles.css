@@ -1735,21 +1735,109 @@ textarea {
   border-bottom-right-radius: 4px;
 }
 
-.chat-bubble.sent:hover .msg-actions {
-  display: flex !important;
-  gap: 2px;
-}
-
-.chat-bubble.sent .msg-action-btn:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: white !important;
-}
-
 .chat-bubble.received {
   align-self: flex-start;
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border-bottom-left-radius: 4px;
+}
+
+/* Three dots menu */
+.chat-bubble.sent {
+  position: relative;
+}
+.chat-bubble.sent:hover .msg-three-dots {
+  display: flex !important;
+}
+
+.msg-three-dots {
+  display: none;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(2px);
+  z-index: 5;
+}
+.msg-three-dots span {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+}
+.msg-three-dots:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.msg-dropdown {
+  display: none;
+  position: absolute;
+  top: 28px;
+  right: 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  min-width: 150px;
+  padding: 6px;
+  overflow: hidden;
+}
+.msg-dropdown.show {
+  display: block;
+}
+
+.msg-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.1s;
+}
+.msg-dropdown-item:hover {
+  background: var(--bg-tertiary);
+}
+.msg-dropdown-item.danger {
+  color: var(--danger);
+}
+.msg-dropdown-item.danger:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+/* Inline edit indicator */
+.chat-edit-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-light);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.chat-edit-banner .cancel-edit {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.chat-edit-banner .cancel-edit:hover {
+  background: rgba(239, 68, 68, 0.08);
 }
 
 .chat-input-area {
