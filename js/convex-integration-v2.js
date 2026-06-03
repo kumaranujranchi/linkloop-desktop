@@ -1706,12 +1706,6 @@ async function deleteChatMessage(messageId) {
     showMsgToast("❌ Failed to delete message: " + e.message, "danger");
   }
 }
-  const t = document.createElement("div");
-  t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-primary);padding:10px 20px;border-radius:8px;font-size:0.85rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);color:var(--${type === "danger" ? "danger" : "text-primary"})`;
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
-}
 
 function startMessagePolling() {
   stopMessagePolling();
