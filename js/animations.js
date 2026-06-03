@@ -65,39 +65,71 @@
     const isLanding = document.querySelector('.hero') !== null;
     if (!isLanding) return;
 
+    // Helper to safely clean up styles after animation completes
+    function animateAndClean(selector, keyframes, options, classToRemove) {
+      const elements = document.querySelectorAll(selector);
+      if (!elements.length) return;
+
+      const anim = animate(selector, keyframes, options);
+      
+      // Clean up classes and inline styles once animation is completed
+      anim.finished.then(() => {
+        elements.forEach(el => {
+          if (classToRemove) el.classList.remove(classToRemove);
+          el.style.opacity = '';
+          el.style.transform = '';
+        });
+      }).catch(() => {
+        elements.forEach(el => {
+          if (classToRemove) el.classList.remove(classToRemove);
+          el.style.opacity = '';
+          el.style.transform = '';
+        });
+      });
+    }
+
     // --- A. HERO SECTION INTRO (Staggered Entry) ---
     // 1. Hero Badge
-    animate(".reveal-badge", { opacity: 1, y: 0 }, { 
+    animateAndClean(".reveal-badge", { opacity: 1, y: 0 }, { 
       duration: 0.6, 
       easing: [0.16, 1, 0.3, 1] 
-    });
+    }, "reveal-badge");
 
     // 2. Hero Title & Subtitle (staggered)
-    animate(".reveal-hero-text", { opacity: 1, y: 0 }, { 
+    animateAndClean(".reveal-hero-text", { opacity: 1, y: 0 }, { 
       delay: 0.15,
       duration: 0.7, 
       easing: [0.16, 1, 0.3, 1] 
-    });
+    }, "reveal-hero-text");
 
     // 3. Hero Actions (Buttons)
-    animate(".hero-actions", { opacity: [0, 1], y: [15, 0] }, { 
+    animateAndClean(".hero-actions", { opacity: [0, 1], y: [15, 0] }, { 
       delay: 0.3, 
       duration: 0.6, 
       easing: [0.16, 1, 0.3, 1] 
     });
 
     // 4. Hero Mockup
-    animate(".reveal-mockup", { opacity: 1, scale: 1, y: 0, rotate: 0 }, { 
+    animateAndClean(".reveal-mockup", { opacity: 1, scale: 1, y: 0, rotate: 0 }, { 
       delay: 0.45, 
       duration: 0.9, 
       easing: [0.16, 1, 0.3, 1] 
-    });
+    }, "reveal-mockup");
 
     // --- B. SCROLL REVEAL ANIMATIONS (Trigger when scrolled into view) ---
     inView(".reveal-on-scroll", ({ target }) => {
-      animate(target, { opacity: 1, y: 0 }, { 
+      const anim = animate(target, { opacity: 1, y: 0 }, { 
         duration: 0.7, 
         easing: [0.16, 1, 0.3, 1] 
+      });
+      anim.finished.then(() => {
+        target.classList.remove('reveal-on-scroll');
+        target.style.opacity = '';
+        target.style.transform = '';
+      }).catch(() => {
+        target.classList.remove('reveal-on-scroll');
+        target.style.opacity = '';
+        target.style.transform = '';
       });
       // Return a cleanup function so it only runs once
       return () => {};
@@ -214,9 +246,16 @@
           targetPage.style.transform = 'translateY(12px)';
 
           // Run entry animation
-          animate(targetPage, { opacity: 1, y: 0 }, { 
+          const anim = animate(targetPage, { opacity: 1, y: 0 }, { 
             duration: 0.35, 
             easing: [0.16, 1, 0.3, 1] 
+          });
+          anim.finished.then(() => {
+            targetPage.style.opacity = '';
+            targetPage.style.transform = '';
+          }).catch(() => {
+            targetPage.style.opacity = '';
+            targetPage.style.transform = '';
           });
         }
       };
