@@ -120,64 +120,72 @@
       <nav class="sidebar-nav">
         <div class="sidebar-section">
           <div class="sidebar-section-label">Main</div>
-          <a class="nav-item active" data-page="dashboard" data-tooltip="Dashboard"
-            onclick="navigateTo('dashboard', this)">
+          <a class="nav-item active" data-page="dashboard" onclick="navigateTo('dashboard', this)">
             <span class="nav-icon"><i class="fa-solid fa-table-cells text-[17px]"></i></span>
-            Dashboard
+            <span class="nav-text">Dashboard</span>
+            <span class="nav-tooltip">Dashboard</span>
           </a>
-          <a class="nav-item" data-page="websites" data-tooltip="Websites" onclick="navigateTo('websites', this)">
+          <a class="nav-item" data-page="websites" onclick="navigateTo('websites', this)">
             <span class="nav-icon"><i class="fa-solid fa-globe text-[16px]"></i></span>
-            Websites
+            <span class="nav-text">Websites</span>
+            <span class="nav-tooltip">Websites</span>
           </a>
-          <a class="nav-item" data-page="marketplace" data-tooltip="Marketplace"
-            onclick="navigateTo('marketplace', this)">
+          <a class="nav-item" data-page="marketplace" onclick="navigateTo('marketplace', this)">
             <span class="nav-icon"><i class="fa-solid fa-store text-[16px]"></i></span>
-            Marketplace
+            <span class="nav-text">Marketplace</span>
             <span class="nav-badge">New</span>
+            <span class="nav-tooltip">Marketplace</span>
           </a>
         </div>
 
         <div class="sidebar-section">
           <div class="sidebar-section-label">Exchange</div>
-          <a class="nav-item" data-page="exchange-requests" data-tooltip="Exchange Requests" onclick="navigateTo('exchange-requests', this)">
+          <a class="nav-item" data-page="exchange-requests" onclick="navigateTo('exchange-requests', this)">
             <span class="nav-icon"><i class="fa-solid fa-arrow-right-arrow-left text-[16px]"></i></span>
-            Exchange Requests
+            <span class="nav-text">Exchange Requests</span>
             <span class="nav-badge warning" id="navBadgeExchanges" style="display:none">0</span>
+            <span class="nav-tooltip">Exchange Requests</span>
           </a>
-          <a class="nav-item" data-page="messages" data-tooltip="Messages" onclick="navigateTo('messages', this)">
+          <a class="nav-item" data-page="messages" onclick="navigateTo('messages', this)">
             <span class="nav-icon"><i class="fa-solid fa-message text-[16px]"></i></span>
-            Messages
+            <span class="nav-text">Messages</span>
             <span class="nav-badge" id="navBadgeMessages" style="display:none">0</span>
+            <span class="nav-tooltip">Messages</span>
           </a>
         </div>
 
         <div class="sidebar-section">
           <div class="sidebar-section-label">Monitor</div>
-          <a class="nav-item" data-page="backlink-monitor" data-tooltip="Backlink Monitor" onclick="navigateTo('backlink-monitor', this)">
+          <a class="nav-item" data-page="backlink-monitor" onclick="navigateTo('backlink-monitor', this)">
             <span class="nav-icon"><i class="fa-solid fa-triangle-exclamation text-[16px]"></i></span>
-            Backlink Monitor
+            <span class="nav-text">Backlink Monitor</span>
+            <span class="nav-tooltip">Backlink Monitor</span>
           </a>
-          <a class="nav-item" data-page="analytics" data-tooltip="Analytics" onclick="navigateTo('analytics', this)">
+          <a class="nav-item" data-page="analytics" onclick="navigateTo('analytics', this)">
             <span class="nav-icon"><i class="fa-solid fa-chart-bar text-[16px]"></i></span>
-            Analytics
+            <span class="nav-text">Analytics</span>
+            <span class="nav-tooltip">Analytics</span>
           </a>
         </div>
 
         <div class="sidebar-section">
           <div class="sidebar-section-label">Account</div>
-          <a class="nav-item" data-page="billing" data-tooltip="Billing" onclick="navigateTo('billing', this)">
+          <a class="nav-item" data-page="billing" onclick="navigateTo('billing', this)">
             <span class="nav-icon"><i class="fa-solid fa-credit-card text-[16px]"></i></span>
-            Billing
+            <span class="nav-text">Billing</span>
+            <span class="nav-tooltip">Billing</span>
           </a>
-          <a class="nav-item" data-page="settings" data-tooltip="Settings" onclick="navigateTo('settings', this)">
+          <a class="nav-item" data-page="settings" onclick="navigateTo('settings', this)">
             <span class="nav-icon"><i class="fa-solid fa-gear text-[16px]"></i></span>
-            Settings
+            <span class="nav-text">Settings</span>
+            <span class="nav-tooltip">Settings</span>
           </a>
-          <a class="nav-item" data-page="admin" data-tooltip="Admin" href="/admin"
+          <a class="nav-item" data-page="admin" href="/admin"
             onclick="window.location.href=(window.location.pathname.includes('.html')?'admin.html':'/admin')"
             id="sidebarAdminLink" style="display: none;">
             <span class="nav-icon"><i class="fa-solid fa-shield-halved text-[16px]"></i></span>
-            Admin
+            <span class="nav-text">Admin</span>
+            <span class="nav-tooltip">Admin</span>
           </a>
         </div>
       </nav>

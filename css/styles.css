@@ -329,13 +329,12 @@ textarea {
   visibility: hidden;
 }
 
-/* Collapsed: center icons, hide nav text */
+/* Collapsed: hide text, center icons */
 .sidebar.collapsed .nav-item {
   justify-content: center;
-  padding: 10px 8px;
-  overflow: hidden;
+  padding: 11px 0;
 }
-.sidebar.collapsed .nav-item *:not(.nav-icon):not(.nav-icon *) {
+.sidebar.collapsed .nav-text {
   display: none;
 }
 .sidebar.collapsed .nav-icon {
@@ -343,27 +342,28 @@ textarea {
 }
 
 /* Tooltip on hover when collapsed */
-.sidebar.collapsed .nav-item::after {
-  content: attr(data-tooltip);
+.sidebar.collapsed .nav-item:hover .nav-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+.nav-tooltip {
   position: absolute;
-  left: 110%;
+  left: calc(100% + 10px);
   top: 50%;
   transform: translateY(-50%);
-  background: var(--bg-sidebar-hover, #1e293b);
-  color: white;
-  padding: 6px 12px;
+  background: #1e293b;
+  color: #f1f5f9;
+  padding: 5px 12px;
   border-radius: 6px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 500;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.15s;
   pointer-events: none;
   z-index: 200;
-}
-.sidebar.collapsed .nav-item:hover::after {
-  opacity: 1;
-  visibility: visible;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .nav-item {
