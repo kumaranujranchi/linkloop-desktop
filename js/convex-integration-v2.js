@@ -828,7 +828,7 @@ const inFlightRequests = new Set(); // toWebsiteId → currently sending
 async function sendExchangeRequest(data, btnEl) {
   const uid = getUserId();
   if (!uid) {
-    showMsgToast("⚠️ Please login first to send exchange requests.", "warning");
+    showMsgToast("Please login first to send exchange requests.", "warning");
     return { success: false, error: "Please login first" };
   }
 
@@ -836,7 +836,7 @@ async function sendExchangeRequest(data, btnEl) {
 
   if (data.toUserId === uid) {
     showMsgToast(
-      "⚠️ You cannot send an exchange request to your own website.",
+      "You cannot send an exchange request to your own website.",
       "warning",
     );
     return { success: false, error: "Cannot send request to own website" };
@@ -886,7 +886,7 @@ async function sendExchangeRequest(data, btnEl) {
         // Mark as pending in our local cache too
         pendingRequests.set(targetWebsiteId, Date.now());
         showMsgToast(
-          "⚠️ You already have an active request with this website. Check your Exchange Requests panel.",
+          "You already have an active request with this website. Check your Exchange Requests panel.",
           "warning",
         );
         return {
@@ -918,7 +918,7 @@ async function sendExchangeRequest(data, btnEl) {
       });
       if (!mySites || mySites.length === 0) {
         showMsgToast(
-          "⚠️ You need to add at least one website before sending exchange requests.",
+          "You need to add at least one website before sending exchange requests.",
           "warning",
         );
         resetRequestButton(btnEl, targetWebsiteId);
@@ -928,7 +928,7 @@ async function sendExchangeRequest(data, btnEl) {
       data.fromWebsiteId = verified ? verified._id : mySites[0]._id;
     } catch (e) {
       showMsgToast(
-        "⚠️ Failed to load your websites. Please try again.",
+        "Failed to load your websites. Please try again.",
         "warning",
       );
       resetRequestButton(btnEl, targetWebsiteId);
@@ -958,13 +958,13 @@ async function sendExchangeRequest(data, btnEl) {
         REQUEST_COOLDOWN_MS,
       );
     }
-    showMsgToast("✅ Exchange request sent successfully!", "success");
+    showMsgToast("Exchange request sent successfully!", "success");
     return { success: true, id: result };
   } catch (e) {
     inFlightRequests.delete(targetWebsiteId);
     resetRequestButton(btnEl, targetWebsiteId);
     showMsgToast(
-      "❌ " + formatConvexError(e, "Failed to send exchange request"),
+      "Error: " + formatConvexError(e, "Failed to send exchange request"),
       "danger",
     );
     return {
@@ -1198,7 +1198,7 @@ async function loadConversations() {
     renderConversationsList(allConversations);
     return allConversations;
   } catch (e) {
-    console.log("💬 Conversations:", e.message);
+    console.log("Conversations:", e.message);
     // Hide loading, show empty
     const loading = document.getElementById("convsLoading");
     const empty = document.getElementById("convsEmpty");
@@ -1312,11 +1312,11 @@ async function deleteSelectedConversations() {
       token,
     });
     if (res && res.success) {
-      showMsgToast("🗑️ Deleted " + res.deleted + " conversation(s)", "info");
+      showMsgToast("Deleted " + res.deleted + " conversation(s)", "info");
       await loadConversations();
     }
   } catch (e) {
-    showMsgToast("❌ Failed to delete: " + e.message, "danger");
+    showMsgToast("Failed to delete: " + e.message, "danger");
   }
 }
 
@@ -1458,7 +1458,7 @@ async function renderMessages(messages) {
   if (!messages || messages.length === 0) {
     msgsEl.innerHTML = `
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-tertiary);gap:8px">
-        <div style="font-size:2.5rem">👋</div>
+        
         <div style="font-weight:600">Start the conversation!</div>
         <div style="font-size:0.85rem">Send a message to begin negotiating your link exchange.</div>
       </div>`;
@@ -1490,7 +1490,7 @@ async function renderMessages(messages) {
             publicKeyMap[msg.senderId],
           );
         } catch (e) {
-          displayText = "🔒 [Encrypted message — cannot decrypt]";
+          displayText = "[Encrypted message — cannot decrypt]";
         }
       }
       return { ...msg, displayText };
@@ -1556,20 +1556,18 @@ async function renderMessages(messages) {
         : "";
       const lockIcon =
         msg.encrypted && !isSent
-          ? ' <span title="End-to-end encrypted" style="font-size:0.7rem">🔒</span>'
+          ? ' <span title="Encrypted" style="font-size:0.6rem;opacity:0.7">Encrypted</span>'
           : "";
       const sentLock =
         msg.encrypted && isSent
-          ? ' <span title="End-to-end encrypted" style="font-size:0.7rem;opacity:0.5">🔒</span>'
+          ? ' <span title="Encrypted" style="font-size:0.6rem;opacity:0.5">Encrypted</span>'
           : "";
 
       const editedLabel = msg.edited
         ? ' <span style="font-size:0.6rem;color:var(--text-tertiary);font-style:italic">(edited)</span>'
         : "";
       const isDeleted = msg.deleted;
-      const deletedLabel = isDeleted
-        ? ' <span style="font-size:0.7rem;color:var(--text-tertiary)">🚫</span>'
-        : "";
+      const deletedLabel = isDeleted ? "" : "";
 
       let bubbleHtml = `${dateSep}<div class="chat-bubble ${isSent ? "sent" : "received"}" style="position:relative" data-msg-id="${msg._id}">
       ${msg.displayText}${editedLabel}${deletedLabel}
@@ -1601,7 +1599,7 @@ async function renderMessages(messages) {
       if (detectPhoneContact(msg.displayText)) {
         bubbleHtml += `
         <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
-          ⚠️ Be cautious when sharing your phone number or personal contact details. To avoid spam, scams, and unwanted solicitations, we recommend keeping communication within the platform whenever possible.
+          Be cautious when sharing your phone number or personal contact details. To avoid spam, scams, and unwanted solicitations, we recommend keeping communication within the platform whenever possible.
         </div>
       `;
       }
@@ -1609,7 +1607,7 @@ async function renderMessages(messages) {
       if (detectMoneyRequest(msg.displayText)) {
         bubbleHtml += `
         <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
-          ⚠️ Please avoid sending money without proper investigation and verification. Financial transactions with unknown parties may result in monetary loss. Always verify the legitimacy of the request before making any payment.
+          Please avoid sending money without proper investigation and verification. Financial transactions with unknown parties may result in monetary loss. Always verify the legitimacy of the request before making any payment.
         </div>
       `;
       }
@@ -1630,7 +1628,7 @@ async function renderMessages(messages) {
         if (triggerWarning) {
           bubbleHtml += `
           <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
-            ⚠️ This domain is not verified on our marketplace. Please avoid exchanging links with unverified domains, as their quality, ownership, and SEO metrics cannot be confirmed.
+            This domain is not verified on our marketplace. Please avoid exchanging links with unverified domains, as their quality, ownership, and SEO metrics cannot be confirmed.
           </div>
         `;
         }
@@ -1740,7 +1738,7 @@ function startEditMessage(msgId, currentText) {
     area.parentNode.insertBefore(banner, area);
   }
   banner.innerHTML =
-    '<span>✏️ Editing message</span><button class="cancel-edit" onclick="cancelEditMessage()">Cancel</button>';
+    '<span>Editing message</span><button class="cancel-edit" onclick="cancelEditMessage()">Cancel</button>';
   banner.style.display = "flex";
 
   // Change send button text
@@ -1784,7 +1782,7 @@ async function doSendMessage() {
       cancelEditMessage();
       await fetchAndRenderMessages();
     } catch (e) {
-      showMsgToast("❌ Failed to edit: " + e.message, "danger");
+      showMsgToast("Failed to edit: " + e.message, "danger");
       input.value = text;
     }
     sendInProgress = false;
@@ -1849,7 +1847,7 @@ async function doSendMessage() {
     const opt = document.getElementById("optimistic-msg");
     if (opt) opt.remove();
     // Show error toast
-    showMsgToast("❌ Failed to send. Please try again.", "danger");
+    showMsgToast("Failed to send. Please try again.", "danger");
   }
 
   input.disabled = false;
