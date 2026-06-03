@@ -2896,6 +2896,10 @@
               <svg style="width:11px;height:11px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
               Ban
             </button>
+            <button class="btn btn-danger btn-sm" style="background:var(--danger);border-color:var(--danger);opacity:0.8" onclick="confirmDeleteUser('${u._id}', '${escHtml(u.name)}')">
+              <svg style="width:11px;height:11px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Delete
+            </button>
           </div>
         </td>
       </tr>
@@ -2925,6 +2929,23 @@
             loadUsersPage();
           } else {
             showToast(res?.error || 'Failed to ban user', 'error');
+          }
+        },
+        'danger'
+      );
+    }
+
+    function confirmDeleteUser(userId, name) {
+      showConfirm(
+        'Delete User',
+        `Are you sure you want to <strong style="color:var(--danger)">permanently delete</strong> <strong>${escHtml(name)}</strong>? This will remove the user, their websites, messages, exchange requests, and all associated data. <strong style="color:var(--danger)">This action cannot be undone!</strong>`,
+        async () => {
+          const res = await window.LinkBuild.deleteAdminUser(userId);
+          if (res && res.success !== false) {
+            showToast(`✕ ${name} has been permanently deleted`, 'success');
+            loadUsersPage();
+          } else {
+            showToast(res?.error || 'Failed to delete user', 'error');
           }
         },
         'danger'
@@ -3519,14 +3540,14 @@
           const users = await client.query('users:listAll', { token, limit: 10000 });
           bulkUserCount = users.filter(u => u.email && u.email.includes('@')).length;
           countEl.textContent = bulkUserCount;
-        } catch(e) {
+        } catch (e) {
           countEl.textContent = '?';
         }
       }
     }
 
     // Auto-preview when typing in HTML body
-    document.addEventListener('input', function(e) {
+    document.addEventListener('input', function (e) {
       if (e.target && e.target.id === 'bulkHtmlBody') {
         updateBulkPreview();
       }
@@ -3571,7 +3592,7 @@
           showToast(result.error || 'Failed to send', 'error');
           status.textContent = '❌ Failed';
         }
-      } catch(e) {
+      } catch (e) {
         showToast('Error: ' + e.message, 'error');
         status.textContent = '❌ Error';
       } finally {

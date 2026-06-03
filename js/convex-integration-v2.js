@@ -11,12 +11,12 @@ function showCustomAlert(message, title = "Notification", type = "info") {
     // Create overlay
     const overlay = document.createElement("div");
     overlay.className = "custom-modal-overlay";
-    
+
     // Icon mapping
     const icons = {
       info: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
       warning: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
-      danger: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><octagon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+      danger: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><octagon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
     };
 
     overlay.innerHTML = `
@@ -54,17 +54,21 @@ function showCustomAlert(message, title = "Notification", type = "info") {
   });
 }
 
-function showCustomConfirm(message, title = "Confirm Action", type = "warning") {
+function showCustomConfirm(
+  message,
+  title = "Confirm Action",
+  type = "warning",
+) {
   return new Promise((resolve) => {
     // Create overlay
     const overlay = document.createElement("div");
     overlay.className = "custom-modal-overlay";
-    
+
     // Icon mapping
     const icons = {
       info: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
       warning: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
-      danger: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><octagon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+      danger: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><octagon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
     };
 
     overlay.innerHTML = `
@@ -118,11 +122,17 @@ let client;
 async function initClient() {
   // Use the global convex from the browser bundle (IIFE script tag)
   if (typeof convex === "undefined" || !convex.ConvexClient) {
-    console.error("Convex: Browser bundle not loaded. Make sure the convex script tag is present.");
+    console.error(
+      "Convex: Browser bundle not loaded. Make sure the convex script tag is present.",
+    );
     return;
   }
-  
-  client = new convex.ConvexClient(CONVEX_URL === "__CONVEX_URL__" || !CONVEX_URL ? DEFAULT_CONVEX_URL : CONVEX_URL);
+
+  client = new convex.ConvexClient(
+    CONVEX_URL === "__CONVEX_URL__" || !CONVEX_URL
+      ? DEFAULT_CONVEX_URL
+      : CONVEX_URL,
+  );
   init();
 }
 
@@ -152,7 +162,9 @@ function resetInactivityTimer() {
 function bindInactivityEvents() {
   if (activityEventsBound) return;
   const events = ["mousemove", "mousedown", "keydown", "touchstart", "scroll"];
-  events.forEach((eventName) => window.addEventListener(eventName, resetInactivityTimer, { passive: true }));
+  events.forEach((eventName) =>
+    window.addEventListener(eventName, resetInactivityTimer, { passive: true }),
+  );
   activityEventsBound = true;
 }
 
@@ -169,7 +181,11 @@ function stopInactivityWatcher() {
 async function logoutDueToInactivity() {
   if (!currentUser) return;
   stopInactivityWatcher();
-  await showCustomAlert("You have been logged out after 10 minutes of inactivity for security reasons.", "Session Expired", "warning");
+  await showCustomAlert(
+    "You have been logged out after 10 minutes of inactivity for security reasons.",
+    "Session Expired",
+    "warning",
+  );
   logout();
 }
 
@@ -177,8 +193,12 @@ function getUserId() {
   if (currentUser && currentUser.userId) return currentUser.userId;
   const stored = localStorage.getItem("linkbuild-user");
   if (stored) {
-    try { currentUser = JSON.parse(stored); return currentUser.userId; }
-    catch (e) { /* ignore */ }
+    try {
+      currentUser = JSON.parse(stored);
+      return currentUser.userId;
+    } catch (e) {
+      /* ignore */
+    }
   }
   return null;
 }
@@ -210,11 +230,11 @@ function clearUser() {
 // AUTH FUNCTIONS
 // =============================================
 function formatConvexError(e, defaultMsg) {
-  if (e && e.data && typeof e.data === 'string') {
+  if (e && e.data && typeof e.data === "string") {
     return e.data;
   }
   let msg = (e && e.message) || defaultMsg;
-  if (typeof msg === 'string' && msg.includes("ConvexError:")) {
+  if (typeof msg === "string" && msg.includes("ConvexError:")) {
     const parts = msg.split("ConvexError:");
     if (parts.length > 1) {
       return parts[1].trim();
@@ -225,17 +245,28 @@ function formatConvexError(e, defaultMsg) {
 
 async function signup(name, email, password) {
   if (!client) {
-    return { success: false, error: "Connection not ready. Please refresh the page and try again." };
+    return {
+      success: false,
+      error: "Connection not ready. Please refresh the page and try again.",
+    };
   }
   try {
-    const result = await client.mutation("users:signupWithPassword", { name, email, password });
+    const result = await client.mutation("users:signupWithPassword", {
+      name,
+      email,
+      password,
+    });
     if (result.token) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
-      
+
       // Redirect to dashboard/admin panel after signup when not already on it.
       const path = window.location.pathname;
-      const shouldRedirect = result.user.role === "admin" || (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin"));
+      const shouldRedirect =
+        result.user.role === "admin" ||
+        (!path.includes("dashboard") &&
+          !path.includes("dashboard.html") &&
+          !path.includes("admin"));
       if (shouldRedirect) {
         if (result.user.role === "admin") {
           console.log("Admin signed up. Redirecting to admin panel...");
@@ -243,8 +274,11 @@ async function signup(name, email, password) {
           console.log("User signed up. Redirecting to dashboard...");
         }
         // Close login modal before redirecting
-        const overlay = document.getElementById('authOverlay');
-        if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+        const overlay = document.getElementById("authOverlay");
+        if (overlay) {
+          overlay.classList.remove("active");
+          overlay.classList.add("hidden");
+        }
         window.location.href = getDashboardUrl(result.user.role);
       }
       return { success: true, user: result.user };
@@ -257,17 +291,27 @@ async function signup(name, email, password) {
 
 async function login(email, password) {
   if (!client) {
-    return { success: false, error: "Connection not ready. Please refresh the page and try again." };
+    return {
+      success: false,
+      error: "Connection not ready. Please refresh the page and try again.",
+    };
   }
   try {
-    const result = await client.mutation("users:loginWithPassword", { email, password });
+    const result = await client.mutation("users:loginWithPassword", {
+      email,
+      password,
+    });
     if (result.token) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
-      
+
       // Redirect to dashboard/admin panel after login when not already on it.
       const path = window.location.pathname;
-      const shouldRedirect = result.user.role === "admin" || (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin"));
+      const shouldRedirect =
+        result.user.role === "admin" ||
+        (!path.includes("dashboard") &&
+          !path.includes("dashboard.html") &&
+          !path.includes("admin"));
       if (shouldRedirect) {
         if (result.user.role === "admin") {
           console.log("Admin logged in. Redirecting to admin panel...");
@@ -275,8 +319,11 @@ async function login(email, password) {
           console.log("User logged in. Redirecting to dashboard...");
         }
         // Close login modal before redirecting
-        const overlay = document.getElementById('authOverlay');
-        if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+        const overlay = document.getElementById("authOverlay");
+        if (overlay) {
+          overlay.classList.remove("active");
+          overlay.classList.add("hidden");
+        }
         window.location.href = getDashboardUrl(result.user.role);
       }
       return { success: true, user: result.user };
@@ -289,33 +336,52 @@ async function login(email, password) {
 
 async function loginWithGoogle(credential) {
   if (!client) {
-    return { success: false, error: "Connection not ready. Please refresh the page and try again." };
+    return {
+      success: false,
+      error: "Connection not ready. Please refresh the page and try again.",
+    };
   }
   try {
-    const result = await client.mutation("users:loginWithGoogle", { credential });
+    const result = await client.mutation("users:loginWithGoogle", {
+      credential,
+    });
     if (result.token) {
       saveUser(result.user, result.token);
       updateAuthUI(result.user);
-      
+
       // Redirect to dashboard/admin panel after Google login when not already on it.
       const path = window.location.pathname;
-      const shouldRedirect = result.user.role === "admin" || (!path.includes("dashboard") && !path.includes("dashboard.html") && !path.includes("admin"));
+      const shouldRedirect =
+        result.user.role === "admin" ||
+        (!path.includes("dashboard") &&
+          !path.includes("dashboard.html") &&
+          !path.includes("admin"));
       if (shouldRedirect) {
         if (result.user.role === "admin") {
-          console.log("Admin logged in with Google. Redirecting to admin panel...");
+          console.log(
+            "Admin logged in with Google. Redirecting to admin panel...",
+          );
         } else {
-          console.log("User logged in with Google. Redirecting to dashboard...");
+          console.log(
+            "User logged in with Google. Redirecting to dashboard...",
+          );
         }
         // Close login modal before redirecting
-        const overlay = document.getElementById('authOverlay');
-        if (overlay) { overlay.classList.remove('active'); overlay.classList.add('hidden'); }
+        const overlay = document.getElementById("authOverlay");
+        if (overlay) {
+          overlay.classList.remove("active");
+          overlay.classList.add("hidden");
+        }
         window.location.href = getDashboardUrl(result.user.role);
       }
       return { success: true, user: result.user };
     }
     return { success: false, error: "Google authentication failed" };
   } catch (e) {
-    return { success: false, error: formatConvexError(e, "Google authentication failed") };
+    return {
+      success: false,
+      error: formatConvexError(e, "Google authentication failed"),
+    };
   }
 }
 
@@ -331,21 +397,21 @@ function getLandingUrl(params) {
   const base = window.location.origin;
   const isCleanUrl = !window.location.pathname.includes(".html");
   const loginParam = params ? "?auth=" + params : "";
-  
+
   if (isCleanUrl) {
-    return "/" + loginParam;                   // Vercel: /  or /?auth=login
+    return "/" + loginParam; // Vercel: /  or /?auth=login
   } else {
-    return "index.html" + loginParam;          // Local: index.html?auth=login
+    return "index.html" + loginParam; // Local: index.html?auth=login
   }
 }
 
 function getDashboardUrl(role) {
   const isCleanUrl = !window.location.pathname.includes(".html");
   const normalizedRole = role ? role.toString().toLowerCase() : "";
-  if (normalizedRole === 'admin') {
-    return isCleanUrl ? '/admin' : 'admin.html';
+  if (normalizedRole === "admin") {
+    return isCleanUrl ? "/admin" : "admin.html";
   }
-  return isCleanUrl ? '/dashboard' : 'dashboard.html';
+  return isCleanUrl ? "/dashboard" : "dashboard.html";
 }
 
 function handleLoggedOutRedirect() {
@@ -369,8 +435,20 @@ function updateAuthUI(user) {
   const landingHeroCta = document.getElementById("landingHeroCta");
 
   if (user) {
-    const initials = user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
-    const roleLabel = user.role === "free" ? "Free Plan" : user.role === "pro" ? "Pro Plan" : user.role === "admin" ? "Admin Plan" : "Agency Plan";
+    const initials = user.name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+    const roleLabel =
+      user.role === "free"
+        ? "Free Plan"
+        : user.role === "pro"
+          ? "Pro Plan"
+          : user.role === "admin"
+            ? "Admin Plan"
+            : "Agency Plan";
 
     if (footer) {
       footer.innerHTML = `
@@ -414,7 +492,10 @@ function updateAuthUI(user) {
     }
 
     if (dashboardSubtitle) {
-      dashboardSubtitle.innerHTML = "Welcome back, " + user.name.split(" ")[0] + ". Here's your link exchange overview.";
+      dashboardSubtitle.innerHTML =
+        "Welcome back, " +
+        user.name.split(" ")[0] +
+        ". Here's your link exchange overview.";
     }
 
     if (authModalClose) {
@@ -431,12 +512,12 @@ function updateAuthUI(user) {
 
     if (landingAuthBtn) {
       landingAuthBtn.textContent = "Dashboard";
-      landingAuthBtn.onclick = () => window.location.href = getDashboardUrl();
+      landingAuthBtn.onclick = () => (window.location.href = getDashboardUrl());
       landingAuthBtn.style.padding = "10px 24px";
     }
     if (landingHeroCta) {
       landingHeroCta.textContent = "Go to Dashboard";
-      landingHeroCta.onclick = () => window.location.href = getDashboardUrl();
+      landingHeroCta.onclick = () => (window.location.href = getDashboardUrl());
     }
   } else {
     // Logged out / Not logged in
@@ -471,7 +552,8 @@ function updateAuthUI(user) {
     }
 
     if (dashboardSubtitle) {
-      dashboardSubtitle.innerHTML = "Welcome to LinkBuild. Please log in to see your overview.";
+      dashboardSubtitle.innerHTML =
+        "Welcome to LinkBuild. Please log in to see your overview.";
     }
 
     if (authModalClose) {
@@ -487,12 +569,18 @@ function updateAuthUI(user) {
 
     if (landingAuthBtn) {
       landingAuthBtn.textContent = "Login";
-      landingAuthBtn.onclick = () => { showAuthScreen(); if (window.switchAuthTab) window.switchAuthTab("login"); };
+      landingAuthBtn.onclick = () => {
+        showAuthScreen();
+        if (window.switchAuthTab) window.switchAuthTab("login");
+      };
       landingAuthBtn.style.padding = "10px 24px";
     }
     if (landingHeroCta) {
       landingHeroCta.textContent = "Get Started - Free";
-      landingHeroCta.onclick = () => { showAuthScreen(); if (window.switchAuthTab) window.switchAuthTab("signup"); };
+      landingHeroCta.onclick = () => {
+        showAuthScreen();
+        if (window.switchAuthTab) window.switchAuthTab("signup");
+      };
     }
   }
 }
@@ -512,7 +600,7 @@ function showAuthScreen() {
   }
 
   // Backdrop click: close on landing page, not on dashboard
-  el._backdropHandler = function(e) {
+  el._backdropHandler = function (e) {
     if (e.target === el && !onDashboard) {
       hideAuthScreen();
     }
@@ -561,7 +649,9 @@ function isLoggedIn() {
 }
 
 function getCurrentUser() {
-  return currentUser || JSON.parse(localStorage.getItem("linkbuild-user") || "null");
+  return (
+    currentUser || JSON.parse(localStorage.getItem("linkbuild-user") || "null")
+  );
 }
 
 // =============================================
@@ -571,7 +661,9 @@ async function loadDashboardData() {
   try {
     const kpis = await client.query("analytics:dashboardKpis", {});
     if (kpis) updateKpiCards(kpis);
-    const activity = await client.query("analytics:exchangeActivity", { months: 6 });
+    const activity = await client.query("analytics:exchangeActivity", {
+      months: 6,
+    });
     if (activity) updateExchangeChart(activity);
     const backlinkStats = await client.query("backlinks:stats", {});
     if (backlinkStats) updateBacklinkStats(backlinkStats);
@@ -581,7 +673,9 @@ async function loadDashboardData() {
       updateAllSidebarBadges();
 
       // Load dashboard widgets
-      const convs = await client.query('messages:listConversations', { userId: uid });
+      const convs = await client.query("messages:listConversations", {
+        userId: uid,
+      });
       if (convs) {
         allConversations = convs;
         renderDashboardWidgets(convs);
@@ -617,10 +711,16 @@ async function addWebsite(data) {
   const uid = getUserId();
   if (!uid) return { success: false, error: "Please login first" };
   try {
-    const websiteId = await client.mutation("websites:add", { ...data, userId: uid });
+    const websiteId = await client.mutation("websites:add", {
+      ...data,
+      userId: uid,
+    });
     return { success: true, websiteId };
   } catch (e) {
-    return { success: false, error: formatConvexError(e, "Failed to add website") };
+    return {
+      success: false,
+      error: formatConvexError(e, "Failed to add website"),
+    };
   }
 }
 
@@ -629,11 +729,18 @@ async function addWebsite(data) {
 // =============================================
 async function loadMarketplace(filters = {}) {
   try {
-    const websites = await client.query("websites:list", { ...filters, limit: 50 });
+    const websites = await client.query("websites:list", {
+      ...filters,
+      limit: 50,
+    });
     updateMarketplaceTable(websites);
     // Update results count
-    const label = document.getElementById('marketplaceResultsLabel');
-    if (label) label.textContent = websites && websites.length ? `${websites.length} Results` : '0 Results';
+    const label = document.getElementById("marketplaceResultsLabel");
+    if (label)
+      label.textContent =
+        websites && websites.length
+          ? `${websites.length} Results`
+          : "0 Results";
     return websites;
   } catch (e) {
     console.log("🏪 Marketplace:", e.message);
@@ -646,39 +753,41 @@ function getMarketplaceFilters() {
   const filters = {};
 
   // Niche
-  const niche = document.getElementById('filterNiche')?.value;
+  const niche = document.getElementById("filterNiche")?.value;
   if (niche) filters.niche = niche;
 
   // Domain Authority range
-  const da = document.getElementById('filterDA')?.value;
+  const da = document.getElementById("filterDA")?.value;
   if (da) {
-    const [min, max] = da.split('-').map(Number);
+    const [min, max] = da.split("-").map(Number);
     if (!isNaN(min)) filters.minDA = min;
     if (!isNaN(max)) filters.maxDA = max;
   }
 
   // Traffic range
-  const traffic = document.getElementById('filterTraffic')?.value;
+  const traffic = document.getElementById("filterTraffic")?.value;
   if (traffic) {
-    const [min, max] = traffic.split('-').map(Number);
+    const [min, max] = traffic.split("-").map(Number);
     if (!isNaN(min)) filters.minTraffic = min;
     if (!isNaN(max)) filters.maxTraffic = max;
   }
 
   // Country
-  const country = document.getElementById('filterCountry')?.value;
+  const country = document.getElementById("filterCountry")?.value;
   if (country) filters.country = country;
 
   // Language
-  const language = document.getElementById('filterLanguage')?.value;
+  const language = document.getElementById("filterLanguage")?.value;
   if (language) filters.language = language;
 
   // Link type (dofollow / nofollow)
-  const linkType = document.getElementById('filterLinkType')?.value;
+  const linkType = document.getElementById("filterLinkType")?.value;
   if (linkType) filters.linkType = linkType;
 
   // Search query
-  const query = document.getElementById('marketplaceSearchInput')?.value?.trim();
+  const query = document
+    .getElementById("marketplaceSearchInput")
+    ?.value?.trim();
   if (query) filters.search = query;
 
   return filters;
@@ -706,31 +815,39 @@ async function loadExchangeRequests() {
     const kanban = await client.query("exchanges:listKanban", { userId: uid });
     if (kanban) updateKanbanBoard(kanban);
     return kanban;
-  } catch (e) { return null; }
+  } catch (e) {
+    return null;
+  }
 }
 
 // ==== EXCHANGE REQUEST DEDUP & COOLDOWN ====
 const REQUEST_COOLDOWN_MS = 30000; // 30 second cooldown per website
-const pendingRequests = new Map();   // toWebsiteId → timestamp (when request was sent)
-const inFlightRequests = new Set();  // toWebsiteId → currently sending
+const pendingRequests = new Map(); // toWebsiteId → timestamp (when request was sent)
+const inFlightRequests = new Set(); // toWebsiteId → currently sending
 
 async function sendExchangeRequest(data, btnEl) {
   const uid = getUserId();
   if (!uid) {
-    showMsgToast('⚠️ Please login first to send exchange requests.', 'warning');
+    showMsgToast("⚠️ Please login first to send exchange requests.", "warning");
     return { success: false, error: "Please login first" };
   }
 
   const targetWebsiteId = data.toWebsiteId;
 
   if (data.toUserId === uid) {
-    showMsgToast('⚠️ You cannot send an exchange request to your own website.', 'warning');
+    showMsgToast(
+      "⚠️ You cannot send an exchange request to your own website.",
+      "warning",
+    );
     return { success: false, error: "Cannot send request to own website" };
   }
 
   // === DEDUP: Prevent duplicate requests to same website ===
   if (inFlightRequests.has(targetWebsiteId)) {
-    showMsgToast('⏳ Request is already being sent to this website. Please wait.', 'warning');
+    showMsgToast(
+      "⏳ Request is already being sent to this website. Please wait.",
+      "warning",
+    );
     return { success: false, error: "Request already in flight" };
   }
 
@@ -738,8 +855,14 @@ async function sendExchangeRequest(data, btnEl) {
     const elapsed = Date.now() - pendingRequests.get(targetWebsiteId);
     if (elapsed < REQUEST_COOLDOWN_MS) {
       const remaining = Math.ceil((REQUEST_COOLDOWN_MS - elapsed) / 1000);
-      showMsgToast(`⏳ Request already sent to this website. Please wait ${remaining}s before retrying.`, 'warning');
-      return { success: false, error: "Duplicate request blocked — cooldown active" };
+      showMsgToast(
+        `⏳ Request already sent to this website. Please wait ${remaining}s before retrying.`,
+        "warning",
+      );
+      return {
+        success: false,
+        error: "Duplicate request blocked — cooldown active",
+      };
     }
     // Cooldown expired, allow retry
     pendingRequests.delete(targetWebsiteId);
@@ -747,81 +870,118 @@ async function sendExchangeRequest(data, btnEl) {
 
   // Also check server-side for existing pending requests to same website
   try {
-    const existing = await client.query("exchanges:listKanban", { userId: uid });
+    const existing = await client.query("exchanges:listKanban", {
+      userId: uid,
+    });
     if (existing) {
-      const allRequests = [...(existing.new || []), ...(existing.negotiating || []), ...(existing.accepted || [])];
-      const alreadySent = allRequests.find(r => r.toWebsiteId === targetWebsiteId);
+      const allRequests = [
+        ...(existing.new || []),
+        ...(existing.negotiating || []),
+        ...(existing.accepted || []),
+      ];
+      const alreadySent = allRequests.find(
+        (r) => r.toWebsiteId === targetWebsiteId,
+      );
       if (alreadySent) {
         // Mark as pending in our local cache too
         pendingRequests.set(targetWebsiteId, Date.now());
-        showMsgToast('⚠️ You already have an active request with this website. Check your Exchange Requests panel.', 'warning');
-        return { success: false, error: "Active request already exists for this website" };
+        showMsgToast(
+          "⚠️ You already have an active request with this website. Check your Exchange Requests panel.",
+          "warning",
+        );
+        return {
+          success: false,
+          error: "Active request already exists for this website",
+        };
       }
     }
-  } catch (e) { /* proceed even if check fails */ }
+  } catch (e) {
+    /* proceed even if check fails */
+  }
 
   // === BUTTON FEEDBACK: Mark as in-flight ===
   inFlightRequests.add(targetWebsiteId);
   if (btnEl) {
     btnEl.disabled = true;
-    btnEl.style.opacity = '0.7';
-    btnEl.style.cursor = 'not-allowed';
+    btnEl.style.opacity = "0.7";
+    btnEl.style.cursor = "not-allowed";
     const origHTML = btnEl.innerHTML;
-    btnEl.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px"><span class="spinner-mini"></span> Sending...</span>';
+    btnEl.innerHTML =
+      '<span style="display:inline-flex;align-items:center;gap:6px"><span class="spinner-mini"></span> Sending...</span>';
   }
 
   // Auto-detect user's website if not provided (e.g., from marketplace)
-  if (!data.fromWebsiteId || data.fromWebsiteId === '') {
+  if (!data.fromWebsiteId || data.fromWebsiteId === "") {
     try {
-      const mySites = await client.query("websites:listByOwner", { userId: uid });
+      const mySites = await client.query("websites:listByOwner", {
+        userId: uid,
+      });
       if (!mySites || mySites.length === 0) {
-        showMsgToast('⚠️ You need to add at least one website before sending exchange requests.', 'warning');
+        showMsgToast(
+          "⚠️ You need to add at least one website before sending exchange requests.",
+          "warning",
+        );
         resetRequestButton(btnEl, targetWebsiteId);
         return { success: false, error: "No websites found" };
       }
       const verified = mySites.find((s) => s.verified);
       data.fromWebsiteId = verified ? verified._id : mySites[0]._id;
     } catch (e) {
-      showMsgToast('⚠️ Failed to load your websites. Please try again.', 'warning');
+      showMsgToast(
+        "⚠️ Failed to load your websites. Please try again.",
+        "warning",
+      );
       resetRequestButton(btnEl, targetWebsiteId);
       return { success: false, error: "Failed to load websites" };
     }
   }
 
   try {
-    const result = await client.mutation("exchanges:send", { ...data, fromUserId: uid });
+    const result = await client.mutation("exchanges:send", {
+      ...data,
+      fromUserId: uid,
+    });
     // Mark as pending with timestamp for cooldown
     pendingRequests.set(targetWebsiteId, Date.now());
     inFlightRequests.delete(targetWebsiteId);
     // Button → success state
     if (btnEl) {
       btnEl.disabled = true;
-      btnEl.style.opacity = '1';
-      btnEl.style.cursor = 'not-allowed';
-      btnEl.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-      btnEl.style.border = '1px solid #10b981';
-      btnEl.innerHTML = '✓ Sent';
+      btnEl.style.opacity = "1";
+      btnEl.style.cursor = "not-allowed";
+      btnEl.style.background = "linear-gradient(135deg, #10b981, #059669)";
+      btnEl.style.border = "1px solid #10b981";
+      btnEl.innerHTML = "✓ Sent";
       // Re-enable after cooldown
-      setTimeout(() => resetRequestButton(btnEl, targetWebsiteId), REQUEST_COOLDOWN_MS);
+      setTimeout(
+        () => resetRequestButton(btnEl, targetWebsiteId),
+        REQUEST_COOLDOWN_MS,
+      );
     }
-    showMsgToast('✅ Exchange request sent successfully!', 'success');
+    showMsgToast("✅ Exchange request sent successfully!", "success");
     return { success: true, id: result };
   } catch (e) {
     inFlightRequests.delete(targetWebsiteId);
     resetRequestButton(btnEl, targetWebsiteId);
-    showMsgToast('❌ ' + formatConvexError(e, "Failed to send exchange request"), 'danger');
-    return { success: false, error: formatConvexError(e, "Failed to send exchange request") };
+    showMsgToast(
+      "❌ " + formatConvexError(e, "Failed to send exchange request"),
+      "danger",
+    );
+    return {
+      success: false,
+      error: formatConvexError(e, "Failed to send exchange request"),
+    };
   }
 }
 
 function resetRequestButton(btnEl, websiteId) {
   if (!btnEl) return;
   btnEl.disabled = false;
-  btnEl.style.opacity = '';
-  btnEl.style.cursor = '';
-  btnEl.style.background = '';
-  btnEl.style.border = '';
-  btnEl.innerHTML = 'Send Request';
+  btnEl.style.opacity = "";
+  btnEl.style.cursor = "";
+  btnEl.style.background = "";
+  btnEl.style.border = "";
+  btnEl.innerHTML = "Send Request";
   pendingRequests.delete(websiteId);
   inFlightRequests.delete(websiteId);
 }
@@ -832,59 +992,87 @@ function resetRequestButton(btnEl, websiteId) {
 
 // ========== E2E ENCRYPTION ==========
 // Hybrid encryption: ECDH key exchange + AES-GCM per-message encryption
-const CRYPTO_ALGORITHM = { name: 'ECDH', namedCurve: 'P-256' };
-const AES_ALGORITHM = { name: 'AES-GCM', length: 256 };
+const CRYPTO_ALGORITHM = { name: "ECDH", namedCurve: "P-256" };
+const AES_ALGORITHM = { name: "AES-GCM", length: 256 };
 
 async function getOrCreateKeyPair() {
   // Try to load existing key pair from localStorage
-  const stored = localStorage.getItem('linkbuild-crypto-keypair');
+  const stored = localStorage.getItem("linkbuild-crypto-keypair");
   if (stored) {
     try {
       const jwk = JSON.parse(stored);
-      return await crypto.subtle.importKey('jwk', jwk, CRYPTO_ALGORITHM, true, ['deriveBits']);
-    } catch (e) { /* ignore, regenerate */ }
+      return await crypto.subtle.importKey("jwk", jwk, CRYPTO_ALGORITHM, true, [
+        "deriveBits",
+      ]);
+    } catch (e) {
+      /* ignore, regenerate */
+    }
   }
   // Generate new key pair
-  const keyPair = await crypto.subtle.generateKey(CRYPTO_ALGORITHM, true, ['deriveBits']);
+  const keyPair = await crypto.subtle.generateKey(CRYPTO_ALGORITHM, true, [
+    "deriveBits",
+  ]);
   // Export and store private key
-  const jwk = await crypto.subtle.exportKey('jwk', keyPair.privateKey);
-  localStorage.setItem('linkbuild-crypto-keypair', JSON.stringify(jwk));
+  const jwk = await crypto.subtle.exportKey("jwk", keyPair.privateKey);
+  localStorage.setItem("linkbuild-crypto-keypair", JSON.stringify(jwk));
   // Upload public key to server
   await uploadPublicKey(keyPair.publicKey);
   return keyPair;
 }
 
 async function uploadPublicKey(publicKey) {
-  const jwk = await crypto.subtle.exportKey('jwk', publicKey);
+  const jwk = await crypto.subtle.exportKey("jwk", publicKey);
   const token = getSessionToken();
   if (!token || !client) return;
   try {
-    await client.mutation('users:storePublicKey', { publicKey: JSON.stringify(jwk), token });
-  } catch (e) { console.warn('Failed to upload public key:', e); }
+    await client.mutation("users:storePublicKey", {
+      publicKey: JSON.stringify(jwk),
+      token,
+    });
+  } catch (e) {
+    console.warn("Failed to upload public key:", e);
+  }
 }
 
 async function deriveSharedSecret(privateKey, otherPublicJwk) {
   const otherPublicKey = await crypto.subtle.importKey(
-    'jwk', JSON.parse(otherPublicJwk), CRYPTO_ALGORITHM, true, []
+    "jwk",
+    JSON.parse(otherPublicJwk),
+    CRYPTO_ALGORITHM,
+    true,
+    [],
   );
   const sharedBits = await crypto.subtle.deriveBits(
-    { name: 'ECDH', public: otherPublicKey },
+    { name: "ECDH", public: otherPublicKey },
     privateKey,
-    256
+    256,
   );
-  return await crypto.subtle.importKey('raw', sharedBits, AES_ALGORITHM, false, ['encrypt', 'decrypt']);
+  return await crypto.subtle.importKey(
+    "raw",
+    sharedBits,
+    AES_ALGORITHM,
+    false,
+    ["encrypt", "decrypt"],
+  );
 }
 
 async function encryptMessage(plaintext, otherPublicJwk) {
   const keyPair = await getOrCreateKeyPair();
-  const sharedKey = await deriveSharedSecret(keyPair.privateKey, otherPublicJwk);
+  const sharedKey = await deriveSharedSecret(
+    keyPair.privateKey,
+    otherPublicJwk,
+  );
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const encoded = new TextEncoder().encode(plaintext);
-  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, sharedKey, encoded);
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    sharedKey,
+    encoded,
+  );
   // Return as JSON with base64-encoded IV and ciphertext
   return JSON.stringify({
     iv: btoa(String.fromCharCode(...iv)),
-    data: btoa(String.fromCharCode(...new Uint8Array(ciphertext)))
+    data: btoa(String.fromCharCode(...new Uint8Array(ciphertext))),
   });
 }
 
@@ -892,44 +1080,60 @@ async function decryptMessage(encryptedJson, senderPublicJwk) {
   try {
     const { iv, data } = JSON.parse(encryptedJson);
     const keyPair = await getOrCreateKeyPair();
-    const sharedKey = await deriveSharedSecret(keyPair.privateKey, senderPublicJwk);
-    const ivBytes = Uint8Array.from(atob(iv), c => c.charCodeAt(0));
-    const cipherBytes = Uint8Array.from(atob(data), c => c.charCodeAt(0));
-    const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ivBytes }, sharedKey, cipherBytes);
+    const sharedKey = await deriveSharedSecret(
+      keyPair.privateKey,
+      senderPublicJwk,
+    );
+    const ivBytes = Uint8Array.from(atob(iv), (c) => c.charCodeAt(0));
+    const cipherBytes = Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
+    const plaintext = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: ivBytes },
+      sharedKey,
+      cipherBytes,
+    );
     return new TextDecoder().decode(plaintext);
   } catch (e) {
-    console.warn('Decryption failed:', e);
-    return '[Unable to decrypt this message]';
+    console.warn("Decryption failed:", e);
+    return "[Unable to decrypt this message]";
   }
 }
 
 // ========== FRAUD & SCAM DETECTION CONTROLS ==========
 const domainVerificationCache = {};
 
-const linkExchangeRequestRegex = /\b(backlink|guest\s?post|link\s?exchange|niche\s?edit|contextual\s?link|exchange\s?link|exchange\s?links|guest\s?blogging|link\s?insertion|insert\s?link|guest\s?posts|backlinks)\b/i;
+const linkExchangeRequestRegex =
+  /\b(backlink|guest\s?post|link\s?exchange|niche\s?edit|contextual\s?link|exchange\s?link|exchange\s?links|guest\s?blogging|link\s?insertion|insert\s?link|guest\s?posts|backlinks)\b/i;
 
 function detectPhoneContact(text) {
-  const phoneOrContactRegex = /\b(phone|whatsapp|whats\s?app|telegram|tele\s?gram|skype|discord|wechat|viber|signal|line\s?app|contact\s+details|contact\s+number|mobile\s+number|phone\s+number|external\s+contact|email|e-mail|my\s+number)\b/i;
+  const phoneOrContactRegex =
+    /\b(phone|whatsapp|whats\s?app|telegram|tele\s?gram|skype|discord|wechat|viber|signal|line\s?app|contact\s+details|contact\s+number|mobile\s+number|phone\s+number|external\s+contact|email|e-mail|my\s+number)\b/i;
   const emailRegex = /\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b/;
-  const phoneNumberPatternRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\b\d{7,15}\b/;
-  
-  return phoneOrContactRegex.test(text) || emailRegex.test(text) || phoneNumberPatternRegex.test(text);
+  const phoneNumberPatternRegex =
+    /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\b\d{7,15}\b/;
+
+  return (
+    phoneOrContactRegex.test(text) ||
+    emailRegex.test(text) ||
+    phoneNumberPatternRegex.test(text)
+  );
 }
 
 function detectMoneyRequest(text) {
-  const moneyRegex = /\b(payment|advance|transfer|bank\s?details|upi|paypal|pay\s?pal|crypto|cryptocurrency|bitcoin|btc|ethereum|eth|usdt|money\s+exchange|currency\s+exchange|send\s?money|send\s?payment|bank\s?transfer|wire\s+transfer|pay\s?me)\b/i;
+  const moneyRegex =
+    /\b(payment|advance|transfer|bank\s?details|upi|paypal|pay\s?pal|crypto|cryptocurrency|bitcoin|btc|ethereum|eth|usdt|money\s+exchange|currency\s+exchange|send\s?money|send\s?payment|bank\s?transfer|wire\s+transfer|pay\s?me)\b/i;
   return moneyRegex.test(text);
 }
 
 function extractDomains(text) {
-  const domainRegex = /\b(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9][-a-zA-Z0-9]{0,62}\.[a-zA-Z]{2,10})\b/gi;
+  const domainRegex =
+    /\b(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9][-a-zA-Z0-9]{0,62}\.[a-zA-Z]{2,10})\b/gi;
   const domains = [];
   let match;
   domainRegex.lastIndex = 0;
-  const cleanText = text.replace(/[\n\r]/g, ' ');
+  const cleanText = text.replace(/[\n\r]/g, " ");
   while ((match = domainRegex.exec(cleanText)) !== null) {
     let dom = match[1].toLowerCase();
-    dom = dom.split('/')[0].split('?')[0];
+    dom = dom.split("/")[0].split("?")[0];
     if (dom && !domains.includes(dom)) {
       domains.push(dom);
     }
@@ -946,78 +1150,99 @@ let allConversations = [];
 let msgPollingTimer = null;
 let lastMsgCount = 0;
 
-const AVATAR_COLORS = ['#6C4DF6','#10B981','#3B82F6','#F59E0B','#EF4444','#8B5CF6','#EC4899','#0F4C81'];
+const AVATAR_COLORS = [
+  "#6C4DF6",
+  "#10B981",
+  "#3B82F6",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#EC4899",
+  "#0F4C81",
+];
 function getAvatarColor(name) {
   if (!name) return AVATAR_COLORS[0];
   let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < name.length; i++)
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 function getInitials(name) {
-  if (!name) return '?';
-  return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  if (!name) return "?";
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 }
 function timeAgo(ts) {
-  if (!ts) return '';
+  if (!ts) return "";
   const diff = Date.now() - ts;
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'now';
-  if (mins < 60) return mins + 'm';
+  if (mins < 1) return "now";
+  if (mins < 60) return mins + "m";
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return hrs + 'h';
-  return Math.floor(hrs / 24) + 'd';
+  if (hrs < 24) return hrs + "h";
+  return Math.floor(hrs / 24) + "d";
 }
 
 async function loadConversations() {
   const uid = getUserId();
   if (!uid) return null;
   try {
-    const convs = await client.query('messages:listConversations', { userId: uid });
+    const convs = await client.query("messages:listConversations", {
+      userId: uid,
+    });
     allConversations = convs || [];
     renderConversationsList(allConversations);
     return allConversations;
   } catch (e) {
-    console.log('💬 Conversations:', e.message);
+    console.log("💬 Conversations:", e.message);
     // Hide loading, show empty
-    const loading = document.getElementById('convsLoading');
-    const empty = document.getElementById('convsEmpty');
-    if (loading) loading.style.display = 'none';
-    if (empty) empty.style.display = '';
+    const loading = document.getElementById("convsLoading");
+    const empty = document.getElementById("convsEmpty");
+    if (loading) loading.style.display = "none";
+    if (empty) empty.style.display = "";
     return null;
   }
 }
 
 function renderConversationsList(conversations) {
-  const inner = document.getElementById('convsListInner');
-  const loading = document.getElementById('convsLoading');
-  const empty = document.getElementById('convsEmpty');
+  const inner = document.getElementById("convsListInner");
+  const loading = document.getElementById("convsLoading");
+  const empty = document.getElementById("convsEmpty");
   if (!inner) return;
 
-  if (loading) loading.style.display = 'none';
+  if (loading) loading.style.display = "none";
 
   if (!conversations || conversations.length === 0) {
-    inner.innerHTML = '';
-    if (empty) empty.style.display = '';
+    inner.innerHTML = "";
+    if (empty) empty.style.display = "";
     return;
   }
-  if (empty) empty.style.display = 'none';
+  if (empty) empty.style.display = "none";
 
-  inner.innerHTML = conversations.map(conv => {
-    const name = conv.otherUser?.name || 'Unknown User';
-    const initials = getInitials(name);
-    const color = getAvatarColor(name);
-    const preview = conv.lastMessage ? conv.lastMessage.slice(0, 55) + (conv.lastMessage.length > 55 ? '...' : '') : 'No messages yet';
-    const time = timeAgo(conv.lastMessageAt);
-    const isActive = conv._id === currentConversationId;
-    const unread = conv.unreadCount || 0;
+  inner.innerHTML = conversations
+    .map((conv) => {
+      const name = conv.otherUser?.name || "Unknown User";
+      const initials = getInitials(name);
+      const color = getAvatarColor(name);
+      const preview = conv.lastMessage
+        ? conv.lastMessage.slice(0, 55) +
+          (conv.lastMessage.length > 55 ? "..." : "")
+        : "No messages yet";
+      const time = timeAgo(conv.lastMessageAt);
+      const isActive = conv._id === currentConversationId;
+      const unread = conv.unreadCount || 0;
 
-    return `
-      <div class="conversation-item${isActive ? ' active' : ''}" 
-           onclick="window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ''}', '${name.replace(/'/g, "\\'")}')"
+      return `
+      <div class="conversation-item${isActive ? " active" : ""}" 
+           onclick="window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ""}', '${name.replace(/'/g, "\\'")}')"
            style="cursor:pointer">
         <div class="conversation-avatar" style="background:${color};position:relative">
           ${initials}
-          ${unread > 0 ? `<span style="position:absolute;top:-3px;right:-3px;background:var(--danger);color:white;font-size:0.6rem;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg-primary)">${unread > 9 ? '9+' : unread}</span>` : ''}
+          ${unread > 0 ? `<span style="position:absolute;top:-3px;right:-3px;background:var(--danger);color:white;font-size:0.6rem;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg-primary)">${unread > 9 ? "9+" : unread}</span>` : ""}
         </div>
         <div class="conversation-info">
           <div class="conversation-name">${name}</div>
@@ -1025,10 +1250,11 @@ function renderConversationsList(conversations) {
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
           <div class="conversation-time">${time}</div>
-          ${unread > 0 ? `<span style="background:var(--primary-purple);border-radius:10px;color:white;font-size:0.65rem;font-weight:700;padding:1px 6px">${unread}</span>` : ''}
+          ${unread > 0 ? `<span style="background:var(--primary-purple);border-radius:10px;color:white;font-size:0.65rem;font-weight:700;padding:1px 6px">${unread}</span>` : ""}
         </div>
       </div>`;
-  }).join('');
+    })
+    .join("");
 }
 
 function filterConversations(query) {
@@ -1037,9 +1263,10 @@ function filterConversations(query) {
     return;
   }
   const q = query.toLowerCase();
-  const filtered = allConversations.filter(c =>
-    (c.otherUser?.name || '').toLowerCase().includes(q) ||
-    (c.lastMessage || '').toLowerCase().includes(q)
+  const filtered = allConversations.filter(
+    (c) =>
+      (c.otherUser?.name || "").toLowerCase().includes(q) ||
+      (c.lastMessage || "").toLowerCase().includes(q),
   );
   renderConversationsList(filtered);
 }
@@ -1054,44 +1281,58 @@ async function openConversation(conversationId, otherUserId, otherUserName) {
   // Update header
   const initials = getInitials(otherUserName);
   const color = getAvatarColor(otherUserName);
-  const avatarEl = document.getElementById('chatHeaderAvatar');
-  const nameEl = document.getElementById('chatHeaderName');
-  const subEl = document.getElementById('chatHeaderSub');
-  if (avatarEl) { avatarEl.textContent = initials; avatarEl.style.background = color; }
+  const avatarEl = document.getElementById("chatHeaderAvatar");
+  const nameEl = document.getElementById("chatHeaderName");
+  const subEl = document.getElementById("chatHeaderSub");
+  if (avatarEl) {
+    avatarEl.textContent = initials;
+    avatarEl.style.background = color;
+  }
   if (nameEl) nameEl.textContent = otherUserName;
-  if (subEl) subEl.textContent = 'Exchange Partner';
+  if (subEl) subEl.textContent = "Exchange Partner";
 
   // Show active chat, hide placeholder
-  document.getElementById('chatPlaceholder').style.display = 'none';
-  const activeEl = document.getElementById('chatActive');
-  if (activeEl) { activeEl.style.display = 'flex'; }
+  document.getElementById("chatPlaceholder").style.display = "none";
+  const activeEl = document.getElementById("chatActive");
+  if (activeEl) {
+    activeEl.style.display = "flex";
+  }
 
   // Show loading in messages
-  const msgsEl = document.getElementById('chatMessages');
-  if (msgsEl) msgsEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-tertiary);font-size:0.85rem">Loading messages...</div>';
+  const msgsEl = document.getElementById("chatMessages");
+  if (msgsEl)
+    msgsEl.innerHTML =
+      '<div style="text-align:center;padding:40px;color:var(--text-tertiary);font-size:0.85rem">Loading messages...</div>';
 
   // Highlight active conversation in list
-  document.querySelectorAll('.conversation-item').forEach(el => el.classList.remove('active'));
-  const convItems = document.querySelectorAll('#convsListInner .conversation-item');
-  convItems.forEach(el => {
-    if (el.getAttribute('onclick') && el.getAttribute('onclick').includes(conversationId)) {
-      el.classList.add('active');
+  document
+    .querySelectorAll(".conversation-item")
+    .forEach((el) => el.classList.remove("active"));
+  const convItems = document.querySelectorAll(
+    "#convsListInner .conversation-item",
+  );
+  convItems.forEach((el) => {
+    if (
+      el.getAttribute("onclick") &&
+      el.getAttribute("onclick").includes(conversationId)
+    ) {
+      el.classList.add("active");
     }
   });
 
   // Find conversation data
-  const conv = allConversations.find(c => c._id === conversationId);
+  const conv = allConversations.find((c) => c._id === conversationId);
   currentExchangeId = conv?.exchangeId || null;
   currentConversationExchange = null;
 
   // Load exchange details in panel if linked
   if (currentExchangeId) {
-    document.getElementById('chatViewExchangeBtn').style.display = '';
+    document.getElementById("chatViewExchangeBtn").style.display = "";
     loadExchangeDetails(currentExchangeId);
   } else {
-    document.getElementById('chatViewExchangeBtn').style.display = 'none';
-    document.getElementById('panelNoExchange').style.display = '';
-    document.getElementById('panelExchangeDetails').style.display = 'none';
+    document.getElementById("chatViewExchangeBtn").style.display = "none";
+    document.getElementById("panelNoExchange").style.display = "";
+    document.getElementById("panelExchangeDetails").style.display = "none";
   }
 
   // Fetch and render messages
@@ -1101,10 +1342,16 @@ async function openConversation(conversationId, otherUserId, otherUserName) {
   try {
     const token = getSessionToken();
     const uid = getUserId();
-    await client.mutation('messages:markRead', { conversationId, token, userId: uid });
+    await client.mutation("messages:markRead", {
+      conversationId,
+      token,
+      userId: uid,
+    });
     // Refresh conversation list to clear unread badge
     loadConversations();
-  } catch(e) { /* silent */ }
+  } catch (e) {
+    /* silent */
+  }
 
   // Start polling for new messages
   startMessagePolling();
@@ -1116,17 +1363,22 @@ async function openConversation(conversationId, otherUserId, otherUserName) {
 async function fetchAndRenderMessages() {
   if (!currentConversationId) return;
   try {
-    const msgs = await client.query('messages:listMessages', { conversationId: currentConversationId, limit: 100 });
+    const msgs = await client.query("messages:listMessages", {
+      conversationId: currentConversationId,
+      limit: 100,
+    });
     await renderMessages(msgs || []);
     lastMsgCount = (msgs || []).length;
-  } catch(e) {
-    const msgsEl = document.getElementById('chatMessages');
-    if (msgsEl) msgsEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-tertiary);font-size:0.85rem">Could not load messages.</div>';
+  } catch (e) {
+    const msgsEl = document.getElementById("chatMessages");
+    if (msgsEl)
+      msgsEl.innerHTML =
+        '<div style="text-align:center;padding:40px;color:var(--text-tertiary);font-size:0.85rem">Could not load messages.</div>';
   }
 }
 
 async function renderMessages(messages) {
-  const msgsEl = document.getElementById('chatMessages');
+  const msgsEl = document.getElementById("chatMessages");
   if (!msgsEl) return;
   const uid = getUserId();
 
@@ -1141,27 +1393,36 @@ async function renderMessages(messages) {
   }
 
   // Pre-fetch senders' public keys for decryption
-  const senderIds = [...new Set(messages.filter(m => m.encrypted).map(m => m.senderId))];
+  const senderIds = [
+    ...new Set(messages.filter((m) => m.encrypted).map((m) => m.senderId)),
+  ];
   const publicKeyMap = {};
   for (const sid of senderIds) {
     try {
-      const u = await client.query('users:getPublicKey', { userId: sid });
+      const u = await client.query("users:getPublicKey", { userId: sid });
       if (u && u.publicKey) publicKeyMap[sid] = u.publicKey;
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   let lastDate = null;
-  const decryptedTexts = await Promise.all(messages.map(async msg => {
-    let displayText = msg.text;
-    if (msg.encrypted && publicKeyMap[msg.senderId]) {
-      try {
-        displayText = await decryptMessage(msg.text, publicKeyMap[msg.senderId]);
-      } catch (e) {
-        displayText = '🔒 [Encrypted message — cannot decrypt]';
+  const decryptedTexts = await Promise.all(
+    messages.map(async (msg) => {
+      let displayText = msg.text;
+      if (msg.encrypted && publicKeyMap[msg.senderId]) {
+        try {
+          displayText = await decryptMessage(
+            msg.text,
+            publicKeyMap[msg.senderId],
+          );
+        } catch (e) {
+          displayText = "🔒 [Encrypted message — cannot decrypt]";
+        }
       }
-    }
-    return { ...msg, displayText };
-  }));
+      return { ...msg, displayText };
+    }),
+  );
 
   // Collect all domains mentioned in messages that look like link exchange requests
   const domainsToCheck = [];
@@ -1177,81 +1438,103 @@ async function renderMessages(messages) {
   }
 
   // Fetch domain verification status in parallel (caching results to avoid redundant calls)
-  await Promise.all(domainsToCheck.map(async (domain) => {
-    if (domainVerificationCache[domain] !== undefined) {
-      return;
-    }
-    try {
-      const website = await client.query('websites:getByDomain', { domain });
-      domainVerificationCache[domain] = website ? website.verified : false;
-    } catch (e) {
-      console.warn(`Failed to check verification for domain ${domain}:`, e);
-      domainVerificationCache[domain] = false;
-    }
-  }));
+  await Promise.all(
+    domainsToCheck.map(async (domain) => {
+      if (domainVerificationCache[domain] !== undefined) {
+        return;
+      }
+      try {
+        const website = await client.query("websites:getByDomain", { domain });
+        domainVerificationCache[domain] = website ? website.verified : false;
+      } catch (e) {
+        console.warn(`Failed to check verification for domain ${domain}:`, e);
+        domainVerificationCache[domain] = false;
+      }
+    }),
+  );
 
-  const html = decryptedTexts.map(msg => {
-    const isSent = msg.senderId === uid;
-    const msgDate = new Date(msg.createdAt).toLocaleDateString();
-    let dateSep = '';
-    if (msgDate !== lastDate) {
-      lastDate = msgDate;
-      const today = new Date().toLocaleDateString();
-      const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
-      const label = msgDate === today ? 'Today' : msgDate === yesterday ? 'Yesterday' : msgDate;
-      dateSep = `<div style="text-align:center;margin:12px 0;font-size:0.75rem;color:var(--text-tertiary)"><span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:10px">${label}</span></div>`;
-    }
-    const time = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const readTick = isSent ? (msg.read ? ' <span style="color:var(--primary-purple);font-size:0.7rem">✓✓</span>' : ' <span style="color:var(--text-tertiary);font-size:0.7rem">✓</span>') : '';
-    const lockIcon = msg.encrypted && !isSent ? ' <span title="End-to-end encrypted" style="font-size:0.7rem">🔒</span>' : '';
-    const sentLock = msg.encrypted && isSent ? ' <span title="End-to-end encrypted" style="font-size:0.7rem;opacity:0.5">🔒</span>' : '';
+  const html = decryptedTexts
+    .map((msg) => {
+      const isSent = msg.senderId === uid;
+      const msgDate = new Date(msg.createdAt).toLocaleDateString();
+      let dateSep = "";
+      if (msgDate !== lastDate) {
+        lastDate = msgDate;
+        const today = new Date().toLocaleDateString();
+        const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
+        const label =
+          msgDate === today
+            ? "Today"
+            : msgDate === yesterday
+              ? "Yesterday"
+              : msgDate;
+        dateSep = `<div style="text-align:center;margin:12px 0;font-size:0.75rem;color:var(--text-tertiary)"><span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:10px">${label}</span></div>`;
+      }
+      const time = new Date(msg.createdAt).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const readTick = isSent
+        ? msg.read
+          ? ' <span style="color:var(--primary-purple);font-size:0.7rem">✓✓</span>'
+          : ' <span style="color:var(--text-tertiary);font-size:0.7rem">✓</span>'
+        : "";
+      const lockIcon =
+        msg.encrypted && !isSent
+          ? ' <span title="End-to-end encrypted" style="font-size:0.7rem">🔒</span>'
+          : "";
+      const sentLock =
+        msg.encrypted && isSent
+          ? ' <span title="End-to-end encrypted" style="font-size:0.7rem;opacity:0.5">🔒</span>'
+          : "";
 
-    let bubbleHtml = `${dateSep}<div class="chat-bubble ${isSent ? 'sent' : 'received'}" style="position:relative">
+      let bubbleHtml = `${dateSep}<div class="chat-bubble ${isSent ? "sent" : "received"}" style="position:relative">
       ${msg.displayText}
       <span style="font-size:0.65rem;opacity:0.6;margin-left:8px;white-space:nowrap">${time}${readTick}${lockIcon}${sentLock}</span>
     </div>`;
 
-    // Warnings detection and rendering
-    if (detectPhoneContact(msg.displayText)) {
-      bubbleHtml += `
+      // Warnings detection and rendering
+      if (detectPhoneContact(msg.displayText)) {
+        bubbleHtml += `
         <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
           ⚠️ Be cautious when sharing your phone number or personal contact details. To avoid spam, scams, and unwanted solicitations, we recommend keeping communication within the platform whenever possible.
         </div>
       `;
-    }
+      }
 
-    if (detectMoneyRequest(msg.displayText)) {
-      bubbleHtml += `
+      if (detectMoneyRequest(msg.displayText)) {
+        bubbleHtml += `
         <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
           ⚠️ Please avoid sending money without proper investigation and verification. Financial transactions with unknown parties may result in monetary loss. Always verify the legitimacy of the request before making any payment.
         </div>
       `;
-    }
+      }
 
-    if (linkExchangeRequestRegex.test(msg.displayText)) {
-      const domains = extractDomains(msg.displayText);
-      let triggerWarning = false;
-      if (domains.length === 0) {
-        triggerWarning = true;
-      } else {
-        for (const domain of domains) {
-          if (domainVerificationCache[domain] === false) {
-            triggerWarning = true;
-            break;
+      if (linkExchangeRequestRegex.test(msg.displayText)) {
+        const domains = extractDomains(msg.displayText);
+        let triggerWarning = false;
+        if (domains.length === 0) {
+          triggerWarning = true;
+        } else {
+          for (const domain of domains) {
+            if (domainVerificationCache[domain] === false) {
+              triggerWarning = true;
+              break;
+            }
           }
         }
-      }
-      if (triggerWarning) {
-        bubbleHtml += `
+        if (triggerWarning) {
+          bubbleHtml += `
           <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
             ⚠️ This domain is not verified on our marketplace. Please avoid exchanging links with unverified domains, as their quality, ownership, and SEO metrics cannot be confirmed.
           </div>
         `;
+        }
       }
-    }
 
-    return bubbleHtml;
-  }).join('');
+      return bubbleHtml;
+    })
+    .join("");
 
   msgsEl.innerHTML = html;
   // Scroll to bottom
@@ -1265,15 +1548,15 @@ function bindSendHandlers() {
   if (handlersAttached) return;
   handlersAttached = true;
 
-  const sendBtn = document.getElementById('msgSendBtn');
-  const input = document.getElementById('msgInput');
+  const sendBtn = document.getElementById("msgSendBtn");
+  const input = document.getElementById("msgInput");
 
   if (sendBtn) {
-    sendBtn.addEventListener('click', doSendMessage);
+    sendBtn.addEventListener("click", doSendMessage);
   }
   if (input) {
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         doSendMessage();
       }
@@ -1283,24 +1566,28 @@ function bindSendHandlers() {
 
 async function doSendMessage() {
   if (sendInProgress) return;
-  const input = document.getElementById('msgInput');
+  const input = document.getElementById("msgInput");
   if (!input) return;
   const text = input.value.trim();
   if (!text || !currentConversationId || !currentReceiverId) return;
 
   sendInProgress = true;
-  input.value = '';
+  input.value = "";
   input.disabled = true;
 
   // Optimistic UI: append bubble immediately
-  const msgsEl = document.getElementById('chatMessages');
+  const msgsEl = document.getElementById("chatMessages");
   if (msgsEl) {
     // Remove empty state if present
-    if (msgsEl.querySelector('div[style*="height:100%"]')) msgsEl.innerHTML = '';
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const bubble = document.createElement('div');
-    bubble.className = 'chat-bubble sent';
-    bubble.id = 'optimistic-msg';
+    if (msgsEl.querySelector('div[style*="height:100%"]'))
+      msgsEl.innerHTML = "";
+    const time = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble sent";
+    bubble.id = "optimistic-msg";
     bubble.innerHTML = `${text} <span style="font-size:0.65rem;opacity:0.6;margin-left:8px">Sending...</span>`;
     msgsEl.appendChild(bubble);
     msgsEl.scrollTop = msgsEl.scrollHeight;
@@ -1313,13 +1600,17 @@ async function doSendMessage() {
     let encryptedText = text;
     let isEncrypted = false;
     try {
-      const receiverUser = await client.query('users:getPublicKey', { userId: currentReceiverId });
+      const receiverUser = await client.query("users:getPublicKey", {
+        userId: currentReceiverId,
+      });
       if (receiverUser && receiverUser.publicKey) {
         encryptedText = await encryptMessage(text, receiverUser.publicKey);
         isEncrypted = true;
       }
-    } catch (e) { console.warn('Encryption unavailable, sending plaintext:', e); }
-    await client.mutation('messages:send', {
+    } catch (e) {
+      console.warn("Encryption unavailable, sending plaintext:", e);
+    }
+    await client.mutation("messages:send", {
       conversationId: currentConversationId,
       receiverId: currentReceiverId,
       text: encryptedText,
@@ -1332,13 +1623,13 @@ async function doSendMessage() {
     await fetchAndRenderMessages();
     // Refresh conversations list
     await loadConversations();
-  } catch(e) {
-    console.error('Send failed:', e);
+  } catch (e) {
+    console.error("Send failed:", e);
     // Remove optimistic bubble
-    const opt = document.getElementById('optimistic-msg');
+    const opt = document.getElementById("optimistic-msg");
     if (opt) opt.remove();
     // Show error toast
-    showMsgToast('❌ Failed to send. Please try again.', 'danger');
+    showMsgToast("❌ Failed to send. Please try again.", "danger");
   }
 
   input.disabled = false;
@@ -1346,9 +1637,9 @@ async function doSendMessage() {
   sendInProgress = false;
 }
 
-function showMsgToast(msg, type = 'info') {
-  const t = document.createElement('div');
-  t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-primary);padding:10px 20px;border-radius:8px;font-size:0.85rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);color:var(--${type === 'danger' ? 'danger' : 'text-primary'})`;
+function showMsgToast(msg, type = "info") {
+  const t = document.createElement("div");
+  t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-primary);padding:10px 20px;border-radius:8px;font-size:0.85rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);color:var(--${type === "danger" ? "danger" : "text-primary"})`;
   t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 3000);
@@ -1359,7 +1650,10 @@ function startMessagePolling() {
   msgPollingTimer = setInterval(async () => {
     if (!currentConversationId) return;
     try {
-      const msgs = await client.query('messages:listMessages', { conversationId: currentConversationId, limit: 100 });
+      const msgs = await client.query("messages:listMessages", {
+        conversationId: currentConversationId,
+        limit: 100,
+      });
       if (msgs && msgs.length !== lastMsgCount) {
         lastMsgCount = msgs.length;
         renderMessages(msgs);
@@ -1368,88 +1662,106 @@ function startMessagePolling() {
         // Mark as read
         const token = getSessionToken();
         const uid = getUserId();
-        client.mutation('messages:markRead', { conversationId: currentConversationId, token, userId: uid }).catch(() => {});
+        client
+          .mutation("messages:markRead", {
+            conversationId: currentConversationId,
+            token,
+            userId: uid,
+          })
+          .catch(() => {});
       }
-    } catch(e) { /* silent */ }
+    } catch (e) {
+      /* silent */
+    }
   }, 2500);
 }
 
 function stopMessagePolling() {
-  if (msgPollingTimer) { clearInterval(msgPollingTimer); msgPollingTimer = null; }
+  if (msgPollingTimer) {
+    clearInterval(msgPollingTimer);
+    msgPollingTimer = null;
+  }
 }
 
 async function loadExchangeDetails(exchangeId) {
   try {
-    const ex = await client.query('exchanges:listByUser', { userId: getUserId() });
-    const found = (ex || []).find(e => e._id === exchangeId);
+    const ex = await client.query("exchanges:listByUser", {
+      userId: getUserId(),
+    });
+    const found = (ex || []).find((e) => e._id === exchangeId);
     if (!found) {
-      document.getElementById('panelNoExchange').style.display = '';
-      document.getElementById('panelExchangeDetails').style.display = 'none';
+      document.getElementById("panelNoExchange").style.display = "";
+      document.getElementById("panelExchangeDetails").style.display = "none";
       return;
     }
     currentConversationExchange = found;
     renderExchangePanel(found);
-  } catch(e) {
-    document.getElementById('panelNoExchange').style.display = '';
-    document.getElementById('panelExchangeDetails').style.display = 'none';
+  } catch (e) {
+    document.getElementById("panelNoExchange").style.display = "";
+    document.getElementById("panelExchangeDetails").style.display = "none";
   }
 }
 
 function renderExchangePanel(ex) {
-  document.getElementById('panelNoExchange').style.display = 'none';
-  document.getElementById('panelExchangeDetails').style.display = '';
+  document.getElementById("panelNoExchange").style.display = "none";
+  document.getElementById("panelExchangeDetails").style.display = "";
 
   const uid = getUserId();
   const isFromUser = ex.fromUserId === uid;
 
-  document.getElementById('panelFromDomain').textContent = isFromUser
-    ? (ex.fromWebsite?.domain || 'Your Website')
-    : (ex.toWebsite?.domain || 'Partner Website');
-  document.getElementById('panelFromStats').textContent = isFromUser
-    ? `DA ${ex.fromWebsite?.da || '?'}`
-    : `DA ${ex.toWebsite?.da || '?'}`;
-  document.getElementById('panelToDomain').textContent = isFromUser
-    ? (ex.toWebsite?.domain || 'Partner Website')
-    : (ex.fromWebsite?.domain || 'Your Website');
-  document.getElementById('panelToStats').textContent = isFromUser
-    ? `DA ${ex.toWebsite?.da || '?'}`
-    : `DA ${ex.fromWebsite?.da || '?'}`;
+  document.getElementById("panelFromDomain").textContent = isFromUser
+    ? ex.fromWebsite?.domain || "Your Website"
+    : ex.toWebsite?.domain || "Partner Website";
+  document.getElementById("panelFromStats").textContent = isFromUser
+    ? `DA ${ex.fromWebsite?.da || "?"}`
+    : `DA ${ex.toWebsite?.da || "?"}`;
+  document.getElementById("panelToDomain").textContent = isFromUser
+    ? ex.toWebsite?.domain || "Partner Website"
+    : ex.fromWebsite?.domain || "Your Website";
+  document.getElementById("panelToStats").textContent = isFromUser
+    ? `DA ${ex.toWebsite?.da || "?"}`
+    : `DA ${ex.fromWebsite?.da || "?"}`;
 
   const statusMap = {
-    new: { label: 'New Request', cls: 'badge-neutral' },
-    negotiating: { label: 'Negotiating', cls: 'badge-warning' },
-    accepted: { label: 'Accepted', cls: 'badge-success' },
-    completed: { label: 'Completed ✓', cls: 'badge-success' },
-    rejected: { label: 'Declined', cls: 'badge-danger' },
+    new: { label: "New Request", cls: "badge-neutral" },
+    negotiating: { label: "Negotiating", cls: "badge-warning" },
+    accepted: { label: "Accepted", cls: "badge-success" },
+    completed: { label: "Completed ✓", cls: "badge-success" },
+    rejected: { label: "Declined", cls: "badge-danger" },
   };
-  const statusInfo = statusMap[ex.status] || { label: ex.status, cls: 'badge-neutral' };
-  const badge = document.getElementById('panelStatusBadge');
+  const statusInfo = statusMap[ex.status] || {
+    label: ex.status,
+    cls: "badge-neutral",
+  };
+  const badge = document.getElementById("panelStatusBadge");
   badge.textContent = statusInfo.label;
   badge.className = `badge ${statusInfo.cls}`;
 
   // Show relevant deal action buttons based on status and user role
-  const acceptBtn = document.getElementById('panelAcceptBtn');
-  const completeBtn = document.getElementById('panelCompleteBtn');
-  const negotiateBtn = document.getElementById('panelNegotiateBtn');
-  const rejectBtn = document.getElementById('panelRejectBtn');
+  const acceptBtn = document.getElementById("panelAcceptBtn");
+  const completeBtn = document.getElementById("panelCompleteBtn");
+  const negotiateBtn = document.getElementById("panelNegotiateBtn");
+  const rejectBtn = document.getElementById("panelRejectBtn");
 
   // Hide all first
-  [acceptBtn, completeBtn, negotiateBtn, rejectBtn].forEach(b => { if(b) b.style.display = 'none'; });
+  [acceptBtn, completeBtn, negotiateBtn, rejectBtn].forEach((b) => {
+    if (b) b.style.display = "none";
+  });
 
-  if (ex.status === 'new') {
+  if (ex.status === "new") {
     // Receiver can accept/reject, sender can move to negotiating
     if (!isFromUser) {
-      if (acceptBtn) acceptBtn.style.display = '';
-      if (rejectBtn) rejectBtn.style.display = '';
+      if (acceptBtn) acceptBtn.style.display = "";
+      if (rejectBtn) rejectBtn.style.display = "";
     } else {
-      if (negotiateBtn) negotiateBtn.style.display = '';
+      if (negotiateBtn) negotiateBtn.style.display = "";
     }
-  } else if (ex.status === 'negotiating') {
-    if (acceptBtn) acceptBtn.style.display = '';
-    if (rejectBtn) rejectBtn.style.display = '';
-  } else if (ex.status === 'accepted') {
-    if (completeBtn) completeBtn.style.display = '';
-    if (rejectBtn) rejectBtn.style.display = '';
+  } else if (ex.status === "negotiating") {
+    if (acceptBtn) acceptBtn.style.display = "";
+    if (rejectBtn) rejectBtn.style.display = "";
+  } else if (ex.status === "accepted") {
+    if (completeBtn) completeBtn.style.display = "";
+    if (rejectBtn) rejectBtn.style.display = "";
   }
   // completed and rejected show no action buttons
 }
@@ -1457,17 +1769,22 @@ function renderExchangePanel(ex) {
 async function dealAction(newStatus) {
   if (!currentExchangeId) return;
   const confirmMap = {
-    accepted: 'Accept this link exchange deal?',
-    completed: 'Mark this exchange as completed? This will update both parties\' reputation.',
-    rejected: 'Decline this exchange request? This cannot be undone.',
-    negotiating: 'Move this exchange to Negotiating status?',
+    accepted: "Accept this link exchange deal?",
+    completed:
+      "Mark this exchange as completed? This will update both parties' reputation.",
+    rejected: "Decline this exchange request? This cannot be undone.",
+    negotiating: "Move this exchange to Negotiating status?",
   };
-  const confirmed = await showCustomConfirm(confirmMap[newStatus] || 'Confirm this action?', 'Confirm Action', 'warning');
+  const confirmed = await showCustomConfirm(
+    confirmMap[newStatus] || "Confirm this action?",
+    "Confirm Action",
+    "warning",
+  );
   if (!confirmed) return;
 
   try {
     const token = getSessionToken();
-    await client.mutation('exchanges:updateStatus', {
+    await client.mutation("exchanges:updateStatus", {
       exchangeId: currentExchangeId,
       status: newStatus,
       token,
@@ -1475,14 +1792,17 @@ async function dealAction(newStatus) {
     showMsgToast(`✅ Exchange status updated to "${newStatus}"`);
     // Send a system message in chat
     const systemMsgs = {
-      accepted: '🎉 Deal accepted! Both parties have agreed to the link exchange.',
-      completed: '✅ Exchange marked as complete! Please verify the backlink is live.',
-      rejected: '❌ Exchange has been declined.',
-      negotiating: '💬 Exchange moved to negotiating. Let\'s work out the details.',
+      accepted:
+        "🎉 Deal accepted! Both parties have agreed to the link exchange.",
+      completed:
+        "✅ Exchange marked as complete! Please verify the backlink is live.",
+      rejected: "❌ Exchange has been declined.",
+      negotiating:
+        "💬 Exchange moved to negotiating. Let's work out the details.",
     };
     if (systemMsgs[newStatus] && currentReceiverId) {
       const uid = getSessionToken();
-      await client.mutation('messages:send', {
+      await client.mutation("messages:send", {
         conversationId: currentConversationId,
         receiverId: currentReceiverId,
         text: systemMsgs[newStatus],
@@ -1494,46 +1814,57 @@ async function dealAction(newStatus) {
     // Reload exchange details
     await loadExchangeDetails(currentExchangeId);
     await fetchAndRenderMessages();
-  } catch(e) {
-    showMsgToast('❌ Failed to update status: ' + e.message, 'danger');
+  } catch (e) {
+    showMsgToast("❌ Failed to update status: " + e.message, "danger");
   }
 }
 
 function viewExchangeFromChat() {
-  navigateTo('exchange-requests');
+  navigateTo("exchange-requests");
 }
 
 // Opens conversation linked to a specific exchange from kanban cards
 async function openConversationForExchange(exchangeId, fromUserId, toUserId) {
-  if (!isLoggedIn()) { showAuthScreen(); return; }
+  if (!isLoggedIn()) {
+    showAuthScreen();
+    return;
+  }
   const uid = getUserId();
   const otherUserId = uid === fromUserId ? toUserId : fromUserId;
   // Initialize crypto key pair before opening conversation
   await getOrCreateKeyPair();
-  await startConversationWith(otherUserId, exchangeId, 'Exchange Partner');
+  await startConversationWith(otherUserId, exchangeId, "Exchange Partner");
 }
 
 async function startConversationWith(otherUserId, exchangeId, otherUserName) {
-  if (!isLoggedIn()) { showAuthScreen(); return; }
+  if (!isLoggedIn()) {
+    showAuthScreen();
+    return;
+  }
   // Initialize crypto key pair for E2E encryption
   await getOrCreateKeyPair();
   const uid = getUserId();
   const token = getSessionToken();
   try {
-    const convId = await client.mutation('messages:getOrCreateConversation', {
+    const convId = await client.mutation("messages:getOrCreateConversation", {
       otherUserId,
       exchangeId: exchangeId || undefined,
       userId: uid || undefined,
       token: token || undefined,
     });
-    navigateTo('messages');
+    navigateTo("messages");
     // Wait for nav, then open conversation
     setTimeout(async () => {
       await loadConversations();
-      if (convId) openConversation(convId, otherUserId, otherUserName || 'Partner');
+      if (convId)
+        openConversation(convId, otherUserId, otherUserName || "Partner");
     }, 300);
-  } catch(e) {
-    showCustomAlert('Failed to start conversation: ' + e.message, 'Error', 'danger');
+  } catch (e) {
+    showCustomAlert(
+      "Failed to start conversation: " + e.message,
+      "Error",
+      "danger",
+    );
   }
 }
 
@@ -1544,8 +1875,13 @@ async function loadNotifications() {
   const uid = getUserId();
   if (!uid) return null;
   try {
-    return await client.query("notifications:listByUser", { userId: uid, limit: 50 });
-  } catch (e) { return null; }
+    return await client.query("notifications:listByUser", {
+      userId: uid,
+      limit: 50,
+    });
+  } catch (e) {
+    return null;
+  }
 }
 
 async function loadAndRenderNotifications() {
@@ -1555,8 +1891,8 @@ async function loadAndRenderNotifications() {
 }
 
 // Toggle notification dropdown from header bell
-window.toggleNotificationDropdown = async function() {
-  let dropdown = document.getElementById('notificationDropdown');
+window.toggleNotificationDropdown = async function () {
+  let dropdown = document.getElementById("notificationDropdown");
   if (dropdown) {
     dropdown.remove();
     return;
@@ -1564,30 +1900,36 @@ window.toggleNotificationDropdown = async function() {
 
   const notifications = await loadNotifications();
   if (!notifications || notifications.length === 0) {
-    showMsgToast('No new notifications', 'info');
+    showMsgToast("No new notifications", "info");
     return;
   }
 
   // Create dropdown
-  dropdown = document.createElement('div');
-  dropdown.id = 'notificationDropdown';
-  dropdown.style.cssText = 'position:fixed;top:56px;right:120px;width:340px;max-height:400px;overflow-y:auto;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.3);z-index:9999;padding:8px';
+  dropdown = document.createElement("div");
+  dropdown.id = "notificationDropdown";
+  dropdown.style.cssText =
+    "position:fixed;top:56px;right:120px;width:340px;max-height:400px;overflow-y:auto;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.3);z-index:9999;padding:8px";
 
   dropdown.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px 12px;border-bottom:1px solid var(--border-light);margin-bottom:4px">
       <strong style="font-size:0.9rem">Notifications</strong>
       <span style="font-size:0.75rem;color:var(--text-tertiary)">${notifications.length} new</span>
     </div>
-    ${notifications.slice(0, 10).map(n => `
-      <div style="padding:10px 12px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;${n.read ? 'opacity:0.5' : ''}" 
+    ${notifications
+      .slice(0, 10)
+      .map(
+        (n) => `
+      <div style="padding:10px 12px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;${n.read ? "opacity:0.5" : ""}" 
            onclick="window.LinkBuild.markNotificationRead('${n._id}')">
-        <span style="font-size:1rem;flex-shrink:0">${n.read ? '🔔' : '🔴'}</span>
+        <span style="font-size:1rem;flex-shrink:0">${n.read ? "🔔" : "🔴"}</span>
         <div style="flex:1;min-width:0">
-          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary)">${n.title || 'Notification'}</div>
-          <div style="font-size:0.8rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.body || ''}</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary)">${n.title || "Notification"}</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.body || ""}</div>
         </div>
       </div>
-    `).join('')}
+    `,
+      )
+      .join("")}
   `;
 
   document.body.appendChild(dropdown);
@@ -1595,20 +1937,25 @@ window.toggleNotificationDropdown = async function() {
   // Close on outside click
   setTimeout(() => {
     const handler = (e) => {
-      if (!e.target.closest('#notificationDropdown') && !e.target.closest('.topbar-icon-btn')) {
+      if (
+        !e.target.closest("#notificationDropdown") &&
+        !e.target.closest(".topbar-icon-btn")
+      ) {
         dropdown?.remove();
-        document.removeEventListener('click', handler);
+        document.removeEventListener("click", handler);
       }
     };
-    document.addEventListener('click', handler);
+    document.addEventListener("click", handler);
   }, 100);
 };
 
 // Mark notification as read
-window.markNotificationRead = async function(notificationId) {
+window.markNotificationRead = async function (notificationId) {
   try {
     await client.mutation("notifications:markRead", { notificationId });
-  } catch(e) { /* ignore */ }
+  } catch (e) {
+    /* ignore */
+  }
 };
 
 // =============================================
@@ -1618,18 +1965,22 @@ async function loadBacklinks() {
   const uid = getUserId();
   if (!uid) return null;
   try {
-    const websites = await client.query("websites:listByOwner", { userId: uid });
+    const websites = await client.query("websites:listByOwner", {
+      userId: uid,
+    });
     if (!websites || websites.length === 0) return [];
     // Get backlinks for all user websites
     const allBacklinks = [];
     for (const site of websites) {
-      const bls = await client.query("backlinks:listByWebsite", { websiteId: site._id });
+      const bls = await client.query("backlinks:listByWebsite", {
+        websiteId: site._id,
+      });
       if (bls) allBacklinks.push(...bls);
     }
     renderBacklinkTable(allBacklinks);
     return allBacklinks;
   } catch (e) {
-    console.log('🔗 Backlinks:', e.message);
+    console.log("🔗 Backlinks:", e.message);
     renderBacklinkTable([]);
     return null;
   }
@@ -1646,12 +1997,30 @@ function updateKpiCards(kpis) {
     const changeEl = card.querySelector(".kpi-card-change");
     if (!valueEl) return;
     const map = {
-      "Total Websites": { value: kpis.totalWebsites, change: `${kpis.totalWebsites} registered` },
-      "Active Exchanges": { value: kpis.activeExchanges, change: `${kpis.activeExchanges} in progress` },
-      "Pending Requests": { value: kpis.pendingRequests, change: `${kpis.pendingRequests} awaiting action` },
-      "Verified Backlinks": { value: kpis.verifiedBacklinks, change: `${kpis.verifiedBacklinks} healthy` },
-      "Reputation Score": { value: kpis.reputationScore || 0, change: `${kpis.reputationScore || 0}/100` },
-      "Monthly Growth": { value: kpis.monthlyGrowth || 0, change: `${kpis.monthlyGrowth || 0}% this month` },
+      "Total Websites": {
+        value: kpis.totalWebsites,
+        change: `${kpis.totalWebsites} registered`,
+      },
+      "Active Exchanges": {
+        value: kpis.activeExchanges,
+        change: `${kpis.activeExchanges} in progress`,
+      },
+      "Pending Requests": {
+        value: kpis.pendingRequests,
+        change: `${kpis.pendingRequests} awaiting action`,
+      },
+      "Verified Backlinks": {
+        value: kpis.verifiedBacklinks,
+        change: `${kpis.verifiedBacklinks} healthy`,
+      },
+      "Reputation Score": {
+        value: kpis.reputationScore || 0,
+        change: `${kpis.reputationScore || 0}/100`,
+      },
+      "Monthly Growth": {
+        value: kpis.monthlyGrowth || 0,
+        change: `${kpis.monthlyGrowth || 0}% this month`,
+      },
     };
     if (map[label] !== undefined) {
       valueEl.textContent = Number(map[label].value).toLocaleString();
@@ -1677,8 +2046,14 @@ function updateBacklinkStats(stats) {
     const label = card.querySelector(".kpi-card-label")?.textContent?.trim();
     const valueEl = card.querySelector(".kpi-card-value");
     if (!valueEl) return;
-    const map = { "Active Backlinks": stats.active, "Lost Links": stats.lost, "Dofollow Links": stats.dofollow, "Nofollow Links": stats.nofollow };
-    if (map[label] !== undefined) valueEl.textContent = Number(map[label]).toLocaleString();
+    const map = {
+      "Active Backlinks": stats.active,
+      "Lost Links": stats.lost,
+      "Dofollow Links": stats.dofollow,
+      "Nofollow Links": stats.nofollow,
+    };
+    if (map[label] !== undefined)
+      valueEl.textContent = Number(map[label]).toLocaleString();
   });
 }
 
@@ -1686,63 +2061,88 @@ function updateNotificationBadge(count) {
   // Header bell badge
   const bell = document.getElementById("headerBellBadge");
   if (bell) {
-    bell.textContent = count > 99 ? '99+' : count;
-    bell.style.display = count > 0 ? 'flex' : 'none';
+    bell.textContent = count > 99 ? "99+" : count;
+    bell.style.display = count > 0 ? "flex" : "none";
   }
   // Also update old sidebar badge if it still exists
   const sidebarBadge = document.getElementById("navBadgeNotifications");
-  if (sidebarBadge) { sidebarBadge.textContent = count > 99 ? '99+' : count; sidebarBadge.style.display = count > 0 ? "" : "none"; }
+  if (sidebarBadge) {
+    sidebarBadge.textContent = count > 99 ? "99+" : count;
+    sidebarBadge.style.display = count > 0 ? "" : "none";
+  }
 }
 
 function updateExchangeBadge(count) {
   const badge = document.getElementById("navBadgeExchanges");
-  if (badge) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = count > 0 ? "" : "none"; }
+  if (badge) {
+    badge.textContent = count > 99 ? "99+" : count;
+    badge.style.display = count > 0 ? "" : "none";
+  }
 }
 
 function updateMessagesBadge(count) {
   const badge = document.getElementById("navBadgeMessages");
-  if (badge) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = count > 0 ? "" : "none"; }
+  if (badge) {
+    badge.textContent = count > 99 ? "99+" : count;
+    badge.style.display = count > 0 ? "" : "none";
+  }
 }
 
 function updateAllSidebarBadges() {
   const uid = getUserId();
   if (!uid) return;
   // Load notification count
-  client.query("notifications:unreadCount", { userId: uid }).then(count => {
-    if (count !== undefined) updateNotificationBadge(count);
-  }).catch(() => {});
+  client
+    .query("notifications:unreadCount", { userId: uid })
+    .then((count) => {
+      if (count !== undefined) updateNotificationBadge(count);
+    })
+    .catch(() => {});
   // Load exchange requests count (pending = new + negotiating)
-  client.query("exchanges:listKanban", { userId: uid }).then(kanban => {
-    if (kanban) {
-      const pending = (kanban.new?.length || 0) + (kanban.negotiating?.length || 0);
-      updateExchangeBadge(pending);
-    }
-  }).catch(() => {});
+  client
+    .query("exchanges:listKanban", { userId: uid })
+    .then((kanban) => {
+      if (kanban) {
+        const pending =
+          (kanban.new?.length || 0) + (kanban.negotiating?.length || 0);
+        updateExchangeBadge(pending);
+      }
+    })
+    .catch(() => {});
   // Load unread messages count (use conversations unread total)
-  client.query("messages:listConversations", { userId: uid }).then(convs => {
-    if (convs) {
-      const totalUnread = convs.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
-      updateMessagesBadge(totalUnread);
-    }
-  }).catch(() => {});
+  client
+    .query("messages:listConversations", { userId: uid })
+    .then((convs) => {
+      if (convs) {
+        const totalUnread = convs.reduce(
+          (sum, c) => sum + (c.unreadCount || 0),
+          0,
+        );
+        updateMessagesBadge(totalUnread);
+      }
+    })
+    .catch(() => {});
 }
 
 function updateKanbanBoard(kanban) {
   if (!kanban) return;
 
   const statusMap = {
-    new: { label: 'New', cls: 'badge-neutral' },
-    negotiating: { label: 'Negotiating', cls: 'badge-warning' },
-    accepted: { label: 'Accepted', cls: 'badge-success' },
-    completed: { label: '✓ Done', cls: 'badge-purple' },
-    rejected: { label: 'Declined', cls: 'badge-danger' },
+    new: { label: "New", cls: "badge-neutral" },
+    negotiating: { label: "Negotiating", cls: "badge-warning" },
+    accepted: { label: "Accepted", cls: "badge-success" },
+    completed: { label: "✓ Done", cls: "badge-purple" },
+    rejected: { label: "Declined", cls: "badge-danger" },
   };
 
-  const columns = ['new', 'negotiating', 'accepted', 'completed', 'rejected'];
+  const columns = ["new", "negotiating", "accepted", "completed", "rejected"];
 
-  columns.forEach(status => {
+  columns.forEach((status) => {
     const container = document.getElementById(`kanban-${status}`);
-    const countEl = document.querySelector(`#kanban-${status}`)?.closest('.kanban-column')?.querySelector('.kanban-column-count');
+    const countEl = document
+      .querySelector(`#kanban-${status}`)
+      ?.closest(".kanban-column")
+      ?.querySelector(".kanban-column-count");
     const items = kanban[status] || [];
 
     if (countEl) countEl.textContent = items.length;
@@ -1755,35 +2155,40 @@ function updateKanbanBoard(kanban) {
     }
 
     const uid = getUserId();
-    container.innerHTML = items.map(ex => {
-      const isFromUser = ex.fromUserId === uid;
-      const partnerDomain = isFromUser
-        ? (ex.toWebsite?.domain || 'Partner Website')
-        : (ex.fromWebsite?.domain || 'Partner Website');
-      const myDomain = isFromUser
-        ? (ex.fromWebsite?.domain || 'Your Website')
-        : (ex.toWebsite?.domain || 'Your Website');
-      const statusInfo = statusMap[ex.status] || { label: ex.status, cls: 'badge-neutral' };
-      const timeLabel = ex._creationTime
-        ? timeAgo(ex._creationTime)
-        : 'recently';
+    container.innerHTML = items
+      .map((ex) => {
+        const isFromUser = ex.fromUserId === uid;
+        const partnerDomain = isFromUser
+          ? ex.toWebsite?.domain || "Partner Website"
+          : ex.fromWebsite?.domain || "Partner Website";
+        const myDomain = isFromUser
+          ? ex.fromWebsite?.domain || "Your Website"
+          : ex.toWebsite?.domain || "Your Website";
+        const statusInfo = statusMap[ex.status] || {
+          label: ex.status,
+          cls: "badge-neutral",
+        };
+        const timeLabel = ex._creationTime
+          ? timeAgo(ex._creationTime)
+          : "recently";
 
-      return `
+        return `
         <div class="kanban-card" onclick="window.LinkBuild.openConversationForExchange('${ex._id}', '${ex.fromUserId}', '${ex.toUserId}')" style="cursor:pointer">
           <div class="kanban-card-domain">${myDomain}</div>
           <div class="kanban-card-partner">Partner: ${partnerDomain}</div>
-          <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "${ex.fromAnchorText || 'N/A'}"</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">Anchor: "${ex.fromAnchorText || "N/A"}"</div>
           <div class="kanban-card-meta">
             <span>${timeLabel}</span>
             <span class="badge ${statusInfo.cls}">${statusInfo.label}</span>
           </div>
         </div>`;
-    }).join('');
+      })
+      .join("");
   });
 }
 
 function renderNotificationsList(notifications) {
-  const container = document.getElementById('notificationsList');
+  const container = document.getElementById("notificationsList");
   if (!container) return;
 
   if (!notifications || notifications.length === 0) {
@@ -1797,25 +2202,70 @@ function renderNotificationsList(notifications) {
   }
 
   const iconMap = {
-    exchange_request: { bg: 'rgba(108,77,246,0.1)', color: 'var(--primary-purple)', svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>' },
-    exchange_new: { bg: 'rgba(108,77,246,0.1)', color: 'var(--primary-purple)', svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>' },
-    exchange_negotiating: { bg: 'var(--warning-light)', color: 'var(--warning)', svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' },
-    exchange_accepted: { bg: 'var(--success-light)', color: 'var(--success)', svg: '<polyline points="20 6 9 17 4 12"/>' },
-    exchange_completed: { bg: 'var(--success-light)', color: 'var(--success)', svg: '<polyline points="20 6 9 17 4 12"/>' },
-    exchange_rejected: { bg: 'var(--danger-light)', color: 'var(--danger)', svg: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>' },
-    new_message: { bg: 'var(--info-light)', color: 'var(--info)', svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' },
-    new_exchange: { bg: 'rgba(108,77,246,0.1)', color: 'var(--primary-purple)', svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>' },
-    backlink_alert: { bg: 'var(--warning-light)', color: 'var(--warning)', svg: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' },
-    link_removed: { bg: 'var(--danger-light)', color: 'var(--danger)', svg: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>' },
-    reputation: { bg: 'var(--success-light)', color: 'var(--success)', svg: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    exchange_request: {
+      bg: "rgba(108,77,246,0.1)",
+      color: "var(--primary-purple)",
+      svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>',
+    },
+    exchange_new: {
+      bg: "rgba(108,77,246,0.1)",
+      color: "var(--primary-purple)",
+      svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>',
+    },
+    exchange_negotiating: {
+      bg: "var(--warning-light)",
+      color: "var(--warning)",
+      svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    },
+    exchange_accepted: {
+      bg: "var(--success-light)",
+      color: "var(--success)",
+      svg: '<polyline points="20 6 9 17 4 12"/>',
+    },
+    exchange_completed: {
+      bg: "var(--success-light)",
+      color: "var(--success)",
+      svg: '<polyline points="20 6 9 17 4 12"/>',
+    },
+    exchange_rejected: {
+      bg: "var(--danger-light)",
+      color: "var(--danger)",
+      svg: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
+    },
+    new_message: {
+      bg: "var(--info-light)",
+      color: "var(--info)",
+      svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    },
+    new_exchange: {
+      bg: "rgba(108,77,246,0.1)",
+      color: "var(--primary-purple)",
+      svg: '<path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5"/>',
+    },
+    backlink_alert: {
+      bg: "var(--warning-light)",
+      color: "var(--warning)",
+      svg: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+    },
+    link_removed: {
+      bg: "var(--danger-light)",
+      color: "var(--danger)",
+      svg: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
+    },
+    reputation: {
+      bg: "var(--success-light)",
+      color: "var(--success)",
+      svg: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    },
   };
 
-  container.innerHTML = notifications.map(n => {
-    const icon = iconMap[n.type] || iconMap.new_message;
-    const isUnread = !n.read;
-    const timeLabel = timeAgo(n.createdAt);
-    return `
-      <div class="notification-item${isUnread ? ' unread' : ''}">
+  container.innerHTML = notifications
+    .map((n) => {
+      const icon = iconMap[n.type] || iconMap.new_message;
+      const isUnread = !n.read;
+      const timeLabel = timeAgo(n.createdAt);
+      return `
+      <div class="notification-item${isUnread ? " unread" : ""}">
         <div class="notification-icon" style="background:${icon.bg}">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${icon.color}" stroke-width="2">${icon.svg}</svg>
         </div>
@@ -1825,46 +2275,64 @@ function renderNotificationsList(notifications) {
           <div class="notification-time">${timeLabel}</div>
         </div>
       </div>`;
-  }).join('');
+    })
+    .join("");
 }
 
 function renderBacklinkTable(backlinks) {
-  const tbody = document.getElementById('backlinkTableBody');
+  const tbody = document.getElementById("backlinkTableBody");
   if (!tbody) return;
 
   if (!backlinks || backlinks.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-tertiary)">No backlinks monitored yet. Complete an exchange to start tracking.</td></tr>';
+    tbody.innerHTML =
+      '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-tertiary)">No backlinks monitored yet. Complete an exchange to start tracking.</td></tr>';
     return;
   }
 
-  const linkTypeMap = { dofollow: 'badge-info', nofollow: 'badge-neutral' };
-  const statusMap = { healthy: 'badge-success', needs_review: 'badge-warning', removed: 'badge-danger' };
-  const statusLabel = { healthy: 'Healthy', needs_review: 'Needs Review', removed: 'Removed' };
-  const healthClass = { healthy: 'good', needs_review: 'warning', removed: 'danger' };
+  const linkTypeMap = { dofollow: "badge-info", nofollow: "badge-neutral" };
+  const statusMap = {
+    healthy: "badge-success",
+    needs_review: "badge-warning",
+    removed: "badge-danger",
+  };
+  const statusLabel = {
+    healthy: "Healthy",
+    needs_review: "Needs Review",
+    removed: "Removed",
+  };
+  const healthClass = {
+    healthy: "good",
+    needs_review: "warning",
+    removed: "danger",
+  };
 
-  tbody.innerHTML = backlinks.map(b => {
-    const healthPct = b.healthScore || (b.status === 'healthy' ? 98 : b.status === 'needs_review' ? 65 : 12);
-    const lastChecked = b.lastChecked ? timeAgo(b.lastChecked) : 'Never';
-    return `
+  tbody.innerHTML = backlinks
+    .map((b) => {
+      const healthPct =
+        b.healthScore ||
+        (b.status === "healthy" ? 98 : b.status === "needs_review" ? 65 : 12);
+      const lastChecked = b.lastChecked ? timeAgo(b.lastChecked) : "Never";
+      return `
       <tr>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${b.sourceUrl || '—'}</td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${b.targetUrl || '—'}</td>
-        <td>${b.anchorText || '—'}</td>
-        <td><span class="badge ${linkTypeMap[b.linkType] || 'badge-neutral'}">${b.linkType || 'Unknown'}</span></td>
-        <td><span class="badge ${statusMap[b.status] || 'badge-neutral'}">${statusLabel[b.status] || b.status}</span></td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${b.sourceUrl || "—"}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${b.targetUrl || "—"}</td>
+        <td>${b.anchorText || "—"}</td>
+        <td><span class="badge ${linkTypeMap[b.linkType] || "badge-neutral"}">${b.linkType || "Unknown"}</span></td>
+        <td><span class="badge ${statusMap[b.status] || "badge-neutral"}">${statusLabel[b.status] || b.status}</span></td>
         <td>${lastChecked}</td>
         <td>
           <div class="health-score">
-            <div class="health-bar"><div class="health-bar-fill ${healthClass[b.status] || 'warning'}" style="width:${healthPct}%"></div></div>
+            <div class="health-bar"><div class="health-bar-fill ${healthClass[b.status] || "warning"}" style="width:${healthPct}%"></div></div>
             ${healthPct}%
           </div>
         </td>
       </tr>`;
-  }).join('');
+    })
+    .join("");
 }
 
 function renderDashboardWidgets(conversations) {
-  const container = document.getElementById('dashboardRecentMessages');
+  const container = document.getElementById("dashboardRecentMessages");
   if (!container) return;
 
   if (!conversations || conversations.length === 0) {
@@ -1877,14 +2345,18 @@ function renderDashboardWidgets(conversations) {
   }
 
   const recent = conversations.slice(0, 3);
-  container.innerHTML = recent.map(conv => {
-    const name = conv.otherUser?.name || 'Unknown User';
-    const initials = getInitials(name);
-    const color = getAvatarColor(name);
-    const preview = conv.lastMessage ? conv.lastMessage.slice(0, 55) + (conv.lastMessage.length > 55 ? '...' : '') : 'No messages yet';
-    const time = timeAgo(conv.lastMessageAt);
-    return `
-      <div class="conversation-item" onclick="navigateTo('messages'); setTimeout(() => window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ''}', '${name.replace(/'/g, "\\'")}'), 300)" style="cursor:pointer">
+  container.innerHTML = recent
+    .map((conv) => {
+      const name = conv.otherUser?.name || "Unknown User";
+      const initials = getInitials(name);
+      const color = getAvatarColor(name);
+      const preview = conv.lastMessage
+        ? conv.lastMessage.slice(0, 55) +
+          (conv.lastMessage.length > 55 ? "..." : "")
+        : "No messages yet";
+      const time = timeAgo(conv.lastMessageAt);
+      return `
+      <div class="conversation-item" onclick="navigateTo('messages'); setTimeout(() => window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ""}', '${name.replace(/'/g, "\\'")}'), 300)" style="cursor:pointer">
         <div class="conversation-avatar" style="background:${color}">${initials}</div>
         <div class="conversation-info">
           <div class="conversation-name">${name}</div>
@@ -1892,11 +2364,12 @@ function renderDashboardWidgets(conversations) {
         </div>
         <div class="conversation-time">${time}</div>
       </div>`;
-  }).join('');
+    })
+    .join("");
 }
 
 function renderDashboardOpportunities(websites) {
-  const container = document.getElementById('dashboardOpportunities');
+  const container = document.getElementById("dashboardOpportunities");
   if (!container) return;
 
   if (!websites || websites.length === 0) {
@@ -1909,18 +2382,27 @@ function renderDashboardOpportunities(websites) {
   }
 
   const recent = websites.slice(0, 3);
-  const badgeMap = [['badge-success', 'High Match'], ['badge-purple', 'New'], ['badge-warning', 'Trending']];
-  container.innerHTML = recent.map((w, i) => {
-    const [badgeCls, badgeLabel] = badgeMap[i] || ['badge-neutral', 'Available'];
-    return `
+  const badgeMap = [
+    ["badge-success", "High Match"],
+    ["badge-purple", "New"],
+    ["badge-warning", "Trending"],
+  ];
+  container.innerHTML = recent
+    .map((w, i) => {
+      const [badgeCls, badgeLabel] = badgeMap[i] || [
+        "badge-neutral",
+        "Available",
+      ];
+      return `
       <div style="padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
         <div>
           <div style="font-weight:600;font-size:0.9rem">${w.domain}</div>
-          <div style="font-size:0.8rem;color:var(--text-tertiary)">DA ${w.domainAuthority || '?'} · ${w.niche || 'Unknown'} · ${w.country || '?'}</div>
+          <div style="font-size:0.8rem;color:var(--text-tertiary)">DA ${w.domainAuthority || "?"} · ${w.niche || "Unknown"} · ${w.country || "?"}</div>
         </div>
         <span class="badge ${badgeCls}">${badgeLabel}</span>
       </div>`;
-  }).join('');
+    })
+    .join("");
 }
 
 function updateMarketplaceTable(websites) {
@@ -1931,31 +2413,36 @@ function updateMarketplaceTable(websites) {
   const paginationEl = document.getElementById("marketplacePaginationText");
   if (paginationEl) {
     const count = websites ? websites.length : 0;
-    paginationEl.textContent = count > 0 ? `Showing ${count} result${count !== 1 ? 's' : ''}` : 'No results';
+    paginationEl.textContent =
+      count > 0
+        ? `Showing ${count} result${count !== 1 ? "s" : ""}`
+        : "No results";
   }
 
   if (!websites || !websites.length) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites found. Try adjusting your search filters or check back later.</td></tr>';
+    tbody.innerHTML =
+      '<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites found. Try adjusting your search filters or check back later.</td></tr>';
     return;
   }
 
   const uid = getUserId();
-  tbody.innerHTML = websites.map(w => {
-    const listedByLabel = w.listedBy === 'agency' ? '🏢 Agency' : '👤 Owner';
-    const isOwnWebsite = w.ownerId === uid;
-    const actionCell = isOwnWebsite
-      ? `<span class="badge" style="font-size:0.75rem;padding:6px 12px;background:var(--gray-200);color:var(--text-secondary);border:1px solid var(--border-light);border-radius:var(--radius-sm)">Your Website</span>`
-      : `<div style="display:flex;gap:6px">
+  tbody.innerHTML = websites
+    .map((w) => {
+      const listedByLabel = w.listedBy === "agency" ? "🏢 Agency" : "👤 Owner";
+      const isOwnWebsite = w.ownerId === uid;
+      const actionCell = isOwnWebsite
+        ? `<span class="badge" style="font-size:0.75rem;padding:6px 12px;background:var(--gray-200);color:var(--text-secondary);border:1px solid var(--border-light);border-radius:var(--radius-sm)">Your Website</span>`
+        : `<div style="display:flex;gap:6px">
           <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.startConversationWith('${w.ownerId}', undefined, '${w.domain.replace(/'/g, "\\'")}')">💬 Message</button>
           <button class="btn btn-primary btn-sm" id="send-req-${w._id}" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'}, document.getElementById('send-req-${w._id}'))">Send Request</button>
         </div>`;
 
-    return `
+      return `
       <tr>
-        <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0,2).toUpperCase()}</div><strong>${w.domain}</strong>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ''}</div></td>
+        <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0, 2).toUpperCase()}</div><strong>${w.domain}</strong>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ""}</div></td>
         <td><span class="badge badge-info">${w.domainAuthority}</span></td>
-        <td><span class="badge ${w.spamScore > 20 ? 'badge-danger' : w.spamScore > 10 ? 'badge-warning' : 'badge-success'}">${w.spamScore || 0}%</span></td>
-        <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
+        <td><span class="badge ${w.spamScore > 20 ? "badge-danger" : w.spamScore > 10 ? "badge-warning" : "badge-success"}">${w.spamScore || 0}%</span></td>
+        <td>${(w.trafficEstimate / 1000).toFixed(0)}K/mo</td>
         <td>${w.niche}</td>
         <td>${w.country}</td>
         <td>${listedByLabel}</td>
@@ -1963,28 +2450,33 @@ function updateMarketplaceTable(websites) {
         <td>${w.referringDomains || 0}</td>
         <td>${actionCell}</td>
       </tr>`;
-  }).join("");
+    })
+    .join("");
 }
 
 function updateWebsitesTable(mySites) {
   const tbody = document.getElementById("myWebsitesTableBody");
   if (!tbody) return;
   if (!mySites || !mySites.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites yet. Click "Add Website" to get started.</td></tr>';
+    tbody.innerHTML =
+      '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites yet. Click "Add Website" to get started.</td></tr>';
     return;
   }
-  tbody.innerHTML = mySites.map(w => `
+  tbody.innerHTML = mySites
+    .map(
+      (w) => `
     <tr>
       <td><strong>${w.domain}</strong></td>
       <td><span class="badge badge-info">${w.domainAuthority}</span></td>
-      <td>${(w.trafficEstimate/1000).toFixed(0)}K/mo</td>
+      <td>${(w.trafficEstimate / 1000).toFixed(0)}K/mo</td>
       <td>${w.niche}</td>
       <td>${w.country}</td>
-      <td><span class="badge ${w.verified ? 'badge-success' : 'badge-warning'}">${w.verified ? '✓ Verified' : '⚠ Pending'}</span></td>
+      <td><span class="badge ${w.verified ? "badge-success" : "badge-warning"}">${w.verified ? "✓ Verified" : "⚠ Pending"}</span></td>
       <td>${w.referringDomains || 0}</td>
       <td>
-        ${w.verified
-          ? `<div class="action-dropdown" id="action-dd-${w._id}">
+        ${
+          w.verified
+            ? `<div class="action-dropdown" id="action-dd-${w._id}">
               <button class="btn btn-ghost btn-sm" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')">Manage ▾</button>
               <div class="action-dropdown-menu" id="action-menu-${w._id}">
                 <button class="action-dropdown-item" onclick="window.LinkBuild.editWebsite('${w._id}')">✏️ Edit</button>
@@ -1993,10 +2485,12 @@ function updateWebsitesTable(mySites) {
                 <button class="action-dropdown-item danger" onclick="window.LinkBuild.deleteWebsite('${w._id}')">🗑️ Delete</button>
               </div>
             </div>`
-          : `<button class="btn btn-primary btn-sm" onclick="window.LinkBuild.openVerifyModal('${w._id}')">🔐 Verify</button>`
+            : `<button class="btn btn-primary btn-sm" onclick="window.LinkBuild.openVerifyModal('${w._id}')">🔐 Verify</button>`
         }
       </td>
-    </tr>`).join("");
+    </tr>`,
+    )
+    .join("");
 }
 
 // =============================================
@@ -2004,7 +2498,9 @@ function updateWebsitesTable(mySites) {
 // =============================================
 async function getVerificationInfo(websiteId) {
   try {
-    const result = await client.query("websites:getVerificationInfo", { websiteId });
+    const result = await client.query("websites:getVerificationInfo", {
+      websiteId,
+    });
     return result;
   } catch (e) {
     console.error("Failed to get verification info:", e);
@@ -2012,7 +2508,12 @@ async function getVerificationInfo(websiteId) {
   }
 }
 
-async function checkAndVerifyWebsite(websiteId, domain, verificationCode, method) {
+async function checkAndVerifyWebsite(
+  websiteId,
+  domain,
+  verificationCode,
+  method,
+) {
   try {
     const result = await client.action("verification:checkAndVerify", {
       websiteId,
@@ -2023,7 +2524,10 @@ async function checkAndVerifyWebsite(websiteId, domain, verificationCode, method
     return result;
   } catch (e) {
     console.error("Verification check failed:", e);
-    return { success: false, message: "Verification check failed. Please try again." };
+    return {
+      success: false,
+      message: "Verification check failed. Please try again.",
+    };
   }
 }
 // SETTINGS PAGE POPULATION
@@ -2035,7 +2539,12 @@ function populateSettingsPage(user) {
   if (nameEl) nameEl.value = user.name || "";
   if (emailEl) emailEl.value = user.email || "";
   if (roleEl) {
-    const roleLabels = { free: "Free Plan", pro: "Pro Plan", agency: "Agency Plan", admin: "Administrator" };
+    const roleLabels = {
+      free: "Free Plan",
+      pro: "Pro Plan",
+      agency: "Agency Plan",
+      admin: "Administrator",
+    };
     roleEl.value = roleLabels[user.role] || user.role || "Free Plan";
   }
 }
@@ -2076,14 +2585,17 @@ async function init() {
         populateSettingsPage(user);
         console.log("🔌 Session restored securely from token:", user.name);
         // Redirect admin users to admin panel if on dashboard
-        if (onDashboard && user.role === 'admin') {
+        if (onDashboard && user.role === "admin") {
           console.log("🔌 Admin user detected, redirecting to admin panel...");
-          const isCleanUrl = !window.location.pathname.includes('.html');
-          window.location.replace(isCleanUrl ? '/admin' : 'admin.html');
+          const isCleanUrl = !window.location.pathname.includes(".html");
+          window.location.replace(isCleanUrl ? "/admin" : "admin.html");
           return;
         }
         // Only load dashboard data when confirmed logged in
-        if (onDashboard) { loadDashboardData().catch(() => {}); updateAllSidebarBadges(); }
+        if (onDashboard) {
+          loadDashboardData().catch(() => {});
+          updateAllSidebarBadges();
+        }
       } else {
         console.log("🔌 Session token expired or invalid.");
         clearUser();
@@ -2102,10 +2614,12 @@ async function init() {
           startInactivityWatcher();
           console.log("🔌 Session restored offline:", currentUser.name);
           // Redirect admin users to admin panel
-          if (onDashboard && currentUser.role === 'admin') {
-            console.log("🔌 Admin user (offline), redirecting to admin panel...");
-            const isCleanUrl = !window.location.pathname.includes('.html');
-            window.location.replace(isCleanUrl ? '/admin' : 'admin.html');
+          if (onDashboard && currentUser.role === "admin") {
+            console.log(
+              "🔌 Admin user (offline), redirecting to admin panel...",
+            );
+            const isCleanUrl = !window.location.pathname.includes(".html");
+            window.location.replace(isCleanUrl ? "/admin" : "admin.html");
             return;
           }
           if (onDashboard) loadDashboardData().catch(() => {});
@@ -2158,7 +2672,10 @@ async function updateAdminUserRole(userId, role) {
   try {
     return await client.mutation("users:updateRole", { token, userId, role });
   } catch (e) {
-    return { success: false, error: formatConvexError(e, "Failed to update role") };
+    return {
+      success: false,
+      error: formatConvexError(e, "Failed to update role"),
+    };
   }
 }
 
@@ -2168,7 +2685,23 @@ async function banAdminUser(userId) {
   try {
     return await client.mutation("users:banUser", { token, userId });
   } catch (e) {
-    return { success: false, error: formatConvexError(e, "Failed to ban user") };
+    return {
+      success: false,
+      error: formatConvexError(e, "Failed to ban user"),
+    };
+  }
+}
+
+async function deleteAdminUser(userId) {
+  const token = localStorage.getItem("linkbuild-token");
+  if (!token) return { success: false, error: "Not logged in" };
+  try {
+    return await client.mutation("users:deleteUser", { token, userId });
+  } catch (e) {
+    return {
+      success: false,
+      error: formatConvexError(e, "Failed to delete user"),
+    };
   }
 }
 
@@ -2187,9 +2720,16 @@ async function moderateAdminWebsite(websiteId, status) {
   const token = localStorage.getItem("linkbuild-token");
   if (!token) return { success: false, error: "Not logged in" };
   try {
-    return await client.mutation("websites:moderate", { token, websiteId, status });
+    return await client.mutation("websites:moderate", {
+      token,
+      websiteId,
+      status,
+    });
   } catch (e) {
-    return { success: false, error: formatConvexError(e, "Failed to moderate website") };
+    return {
+      success: false,
+      error: formatConvexError(e, "Failed to moderate website"),
+    };
   }
 }
 
@@ -2199,36 +2739,36 @@ async function moderateAdminWebsite(websiteId, status) {
 
 // Close all dropdowns and restore them to original containers (portal cleanup)
 function closeAllDropdownsAndRestore() {
-  document.querySelectorAll('.action-dropdown-menu.show').forEach(menu => {
-    menu.classList.remove('show');
+  document.querySelectorAll(".action-dropdown-menu.show").forEach((menu) => {
+    menu.classList.remove("show");
     // Move back to original container if it was portaled to body
-    const ddId = menu.id.replace('action-menu-', 'action-dd-');
+    const ddId = menu.id.replace("action-menu-", "action-dd-");
     const originalContainer = document.getElementById(ddId);
     if (originalContainer && menu.parentElement !== originalContainer) {
       originalContainer.appendChild(menu);
-      menu.style.position = '';
-      menu.style.top = '';
-      menu.style.left = '';
-      menu.style.zIndex = '';
+      menu.style.position = "";
+      menu.style.top = "";
+      menu.style.left = "";
+      menu.style.zIndex = "";
     }
   });
 }
 
 // Toggle the action dropdown menu (portal-based to avoid clipping from table-container overflow)
 function toggleActionDropdown(websiteId) {
-  const menu = document.getElementById('action-menu-' + websiteId);
+  const menu = document.getElementById("action-menu-" + websiteId);
   if (!menu) return;
 
-  const isCurrentlyOpen = menu.classList.contains('show');
+  const isCurrentlyOpen = menu.classList.contains("show");
 
   // Close ALL open dropdowns first
-  document.querySelectorAll('.action-dropdown-menu.show').forEach(m => {
-    m.classList.remove('show');
+  document.querySelectorAll(".action-dropdown-menu.show").forEach((m) => {
+    m.classList.remove("show");
   });
 
   if (isCurrentlyOpen) {
     // Was open, now closed — move back to original parent
-    const originalContainer = document.getElementById('action-dd-' + websiteId);
+    const originalContainer = document.getElementById("action-dd-" + websiteId);
     if (originalContainer && menu.parentElement !== originalContainer) {
       originalContainer.appendChild(menu);
     }
@@ -2239,22 +2779,25 @@ function toggleActionDropdown(websiteId) {
   const btn = document.querySelector(`#action-dd-${websiteId} .btn-ghost`);
   if (btn) {
     const btnRect = btn.getBoundingClientRect();
-    menu.style.position = 'fixed';
-    menu.style.top = (btnRect.bottom + 4) + 'px';
-    menu.style.left = (btnRect.right - 170) + 'px'; // 170px = min-width of dropdown
-    menu.style.zIndex = '9999';
+    menu.style.position = "fixed";
+    menu.style.top = btnRect.bottom + 4 + "px";
+    menu.style.left = btnRect.right - 170 + "px"; // 170px = min-width of dropdown
+    menu.style.zIndex = "9999";
     document.body.appendChild(menu);
   } else {
     // Fallback: just move to body
     document.body.appendChild(menu);
   }
 
-  menu.classList.add('show');
+  menu.classList.add("show");
 }
 
 // Close dropdowns when clicking outside (portal-aware)
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.action-dropdown') && !e.target.closest('.action-dropdown-menu')) {
+document.addEventListener("click", function (e) {
+  if (
+    !e.target.closest(".action-dropdown") &&
+    !e.target.closest(".action-dropdown-menu")
+  ) {
     closeAllDropdownsAndRestore();
   }
 });
@@ -2265,17 +2808,17 @@ async function editWebsite(websiteId) {
   closeAllDropdownsAndRestore();
 
   const mySites = await loadMyWebsites();
-  const site = mySites.find(s => s._id === websiteId);
+  const site = mySites.find((s) => s._id === websiteId);
   if (!site) {
-    alert('Website not found');
+    alert("Website not found");
     return;
   }
 
   // Build edit modal HTML
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.id = 'editWebsiteModal';
-  overlay.style.cssText = 'opacity:1;visibility:visible;z-index:1001;';
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay";
+  overlay.id = "editWebsiteModal";
+  overlay.style.cssText = "opacity:1;visibility:visible;z-index:1001;";
   overlay.innerHTML = `
     <div class="modal-box" style="max-width:520px;max-height:90vh;overflow-y:auto;">
       <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
@@ -2291,12 +2834,12 @@ async function editWebsite(websiteId) {
           <div>
             <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Niche</label>
             <select id="editNiche" class="input" style="width:100%;">
-              ${['Automotive','Blogging','Construction','E-commerce','Education','Energy','Entertainment','Fashion & Beauty','Finance','Food & Beverage','Government','Health & Wellness','Insurance','Legal','Manufacturing','Marketing','News & Media','Non-Profit','Real Estate','SaaS','SEO Tools','Sports','Tech','Telecommunications','Travel','Other'].map(n => `<option value="${n}" ${site.niche === n ? 'selected' : ''}>${n}</option>`).join('')}
+              ${["Automotive", "Blogging", "Construction", "E-commerce", "Education", "Energy", "Entertainment", "Fashion & Beauty", "Finance", "Food & Beverage", "Government", "Health & Wellness", "Insurance", "Legal", "Manufacturing", "Marketing", "News & Media", "Non-Profit", "Real Estate", "SaaS", "SEO Tools", "Sports", "Tech", "Telecommunications", "Travel", "Other"].map((n) => `<option value="${n}" ${site.niche === n ? "selected" : ""}>${n}</option>`).join("")}
             </select>
           </div>
           <div>
             <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Country</label>
-            <input type="text" id="editCountry" class="input" value="${site.country || ''}" style="width:100%;">
+            <input type="text" id="editCountry" class="input" value="${site.country || ""}" style="width:100%;">
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
@@ -2321,13 +2864,13 @@ async function editWebsite(websiteId) {
         </div>
         <div>
           <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Language</label>
-          <input type="text" id="editLanguage" class="input" value="${site.language || 'English'}" style="width:100%;">
+          <input type="text" id="editLanguage" class="input" value="${site.language || "English"}" style="width:100%;">
         </div>
         <div>
           <label style="font-size:0.85rem;font-weight:600;margin-bottom:6px;display:block;">Listed By</label>
           <select id="editListedBy" class="input" style="width:100%;">
-            <option value="owner" ${site.listedBy === 'owner' ? 'selected' : ''}>👤 Website Owner</option>
-            <option value="agency" ${site.listedBy === 'agency' ? 'selected' : ''}>🏢 Agency / Reseller</option>
+            <option value="owner" ${site.listedBy === "owner" ? "selected" : ""}>👤 Website Owner</option>
+            <option value="agency" ${site.listedBy === "agency" ? "selected" : ""}>🏢 Agency / Reseller</option>
           </select>
         </div>
         <div id="editWebsiteError" style="color:var(--danger);font-size:0.85rem;display:none;"></div>
@@ -2339,32 +2882,36 @@ async function editWebsite(websiteId) {
     </div>
   `;
   document.body.appendChild(overlay);
-  overlay.classList.add('active');
-  overlay.classList.remove('hidden');
+  overlay.classList.add("active");
+  overlay.classList.remove("hidden");
 }
 
 // Save edited website
 async function saveWebsiteEdit(websiteId) {
-  const btn = document.getElementById('saveEditBtn');
-  const errorEl = document.getElementById('editWebsiteError');
+  const btn = document.getElementById("saveEditBtn");
+  const errorEl = document.getElementById("editWebsiteError");
   btn.disabled = true;
-  btn.textContent = 'Saving...';
-  if (errorEl) errorEl.style.display = 'none';
+  btn.textContent = "Saving...";
+  if (errorEl) errorEl.style.display = "none";
 
   try {
-    const domain = document.getElementById('editDomain').value.trim();
-    const niche = document.getElementById('editNiche').value;
-    const country = document.getElementById('editCountry').value.trim();
-    const domainAuthority = parseInt(document.getElementById('editDA').value) || 0;
-    const spamScore = parseInt(document.getElementById('editSpamScore').value) || 0;
-    const trafficEstimate = parseInt(document.getElementById('editTraffic').value) || 0;
-    const referringDomains = parseInt(document.getElementById('editRefDomains').value) || 0;
-    const language = document.getElementById('editLanguage').value.trim();
-    const listedBy = document.getElementById('editListedBy')?.value || 'owner';
+    const domain = document.getElementById("editDomain").value.trim();
+    const niche = document.getElementById("editNiche").value;
+    const country = document.getElementById("editCountry").value.trim();
+    const domainAuthority =
+      parseInt(document.getElementById("editDA").value) || 0;
+    const spamScore =
+      parseInt(document.getElementById("editSpamScore").value) || 0;
+    const trafficEstimate =
+      parseInt(document.getElementById("editTraffic").value) || 0;
+    const referringDomains =
+      parseInt(document.getElementById("editRefDomains").value) || 0;
+    const language = document.getElementById("editLanguage").value.trim();
+    const listedBy = document.getElementById("editListedBy")?.value || "owner";
     const token = getSessionToken();
 
     if (!domain) {
-      throw new Error('Domain is required');
+      throw new Error("Domain is required");
     }
 
     await client.mutation("websites:update", {
@@ -2382,16 +2929,16 @@ async function saveWebsiteEdit(websiteId) {
     });
 
     // Close modal and refresh
-    document.getElementById('editWebsiteModal').remove();
+    document.getElementById("editWebsiteModal").remove();
     await refreshMyWebsites();
   } catch (err) {
     if (errorEl) {
-      errorEl.textContent = err.message || 'Failed to save changes';
-      errorEl.style.display = 'block';
+      errorEl.textContent = err.message || "Failed to save changes";
+      errorEl.style.display = "block";
     }
   } finally {
     btn.disabled = false;
-    btn.textContent = '💾 Save Changes';
+    btn.textContent = "💾 Save Changes";
   }
 }
 
@@ -2401,18 +2948,21 @@ async function deleteWebsite(websiteId) {
   closeAllDropdownsAndRestore();
 
   const confirmed = await showCustomConfirm(
-    'Are you sure you want to permanently delete this website? This will also remove all associated backlinks. This action cannot be undone.',
-    'Delete Website',
-    'danger'
+    "Are you sure you want to permanently delete this website? This will also remove all associated backlinks. This action cannot be undone.",
+    "Delete Website",
+    "danger",
   );
 
   if (!confirmed) return;
 
   try {
-    await client.mutation("websites:remove", { websiteId, token: getSessionToken() });
+    await client.mutation("websites:remove", {
+      websiteId,
+      token: getSessionToken(),
+    });
     await refreshMyWebsites();
   } catch (err) {
-    alert('Failed to delete website: ' + (err.message || 'Unknown error'));
+    alert("Failed to delete website: " + (err.message || "Unknown error"));
   }
 }
 
@@ -2422,18 +2972,21 @@ async function deactivateWebsite(websiteId) {
   closeAllDropdownsAndRestore();
 
   const confirmed = await showCustomConfirm(
-    'Deactivating this website will hide it from the marketplace and remove its verified status. You can re-add it later. Continue?',
-    'Deactivate Website',
-    'warning'
+    "Deactivating this website will hide it from the marketplace and remove its verified status. You can re-add it later. Continue?",
+    "Deactivate Website",
+    "warning",
   );
 
   if (!confirmed) return;
 
   try {
-    await client.mutation("websites:deactivate", { websiteId, token: getSessionToken() });
+    await client.mutation("websites:deactivate", {
+      websiteId,
+      token: getSessionToken(),
+    });
     await refreshMyWebsites();
   } catch (err) {
-    alert('Failed to deactivate website: ' + (err.message || 'Unknown error'));
+    alert("Failed to deactivate website: " + (err.message || "Unknown error"));
   }
 }
 
@@ -2449,12 +3002,27 @@ async function refreshMyWebsites() {
 window.LinkBuild = {
   client: null,
   getClient: () => client,
-  signup, login, loginWithGoogle, logout, isLoggedIn, getCurrentUser, getUserId,
-  loadDashboardData, loadMyWebsites, addWebsite, loadMarketplace,
-  loadExchangeRequests, sendExchangeRequest, loadNotifications,
-  loadAndRenderNotifications, loadBacklinks,
-  hideAuthScreen, showAuthScreen, populateSettingsPage,
-  getVerificationInfo, checkAndVerifyWebsite,
+  signup,
+  login,
+  loginWithGoogle,
+  logout,
+  isLoggedIn,
+  getCurrentUser,
+  getUserId,
+  loadDashboardData,
+  loadMyWebsites,
+  addWebsite,
+  loadMarketplace,
+  loadExchangeRequests,
+  sendExchangeRequest,
+  loadNotifications,
+  loadAndRenderNotifications,
+  loadBacklinks,
+  hideAuthScreen,
+  showAuthScreen,
+  populateSettingsPage,
+  getVerificationInfo,
+  checkAndVerifyWebsite,
   updateAllSidebarBadges,
   // Messaging
   loadConversations,
@@ -2466,11 +3034,22 @@ window.LinkBuild = {
   dealAction,
   viewExchangeFromChat,
   // Admin Panel
-  getAdminStats, getAdminUsers, updateAdminUserRole, banAdminUser, getPendingWebsites, moderateAdminWebsite,
+  getAdminStats,
+  getAdminUsers,
+  updateAdminUserRole,
+  banAdminUser,
+  deleteAdminUser,
+  getPendingWebsites,
+  moderateAdminWebsite,
   // Website Actions
-  toggleActionDropdown, editWebsite, saveWebsiteEdit, deleteWebsite, deactivateWebsite,
+  toggleActionDropdown,
+  editWebsite,
+  saveWebsiteEdit,
+  deleteWebsite,
+  deactivateWebsite,
   // Notifications
-  toggleNotificationDropdown, markNotificationRead,
+  toggleNotificationDropdown,
+  markNotificationRead,
 };
 
 if (document.readyState === "loading") {

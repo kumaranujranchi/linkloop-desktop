@@ -680,6 +680,82 @@ export const banUser = mutation({
   },
 });
 
+// Admin: permanently delete a user and all their associated data
+export const deleteUser = mutation({
+  args: {
+    token: v.string(),
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
+
+    const user = await ctx.db.get(args.userId);
+    if (!user) throw new ConvexError("User not found");
+
+    // Delete user's websites
+    const websites = await ctx.db
+      .query("websites")
+      .withIndex("by_owner", (q) => q.eq("ownerId", args.userId))
+      .collect();
+    for (const w of websites) {
+      // Delete backlinks for each website
+      const backlinks = await ctx.db
+        .query("backlinks")
+        .withIndex("by_website", (q) => q.eq("websiteId", w._id))
+        .collect();
+      for (const b of backlinks) await ctx.db.delete(b._id);
+      await ctx.db.delete(w._id);
+    }
+
+    // Delete user's sessions
+    const sessions = await ctx.db
+      .query("sessions")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+    for (const s of sessions) await ctx.db.delete(s._id);
+
+    // Delete user's exchange requests (sent)
+    const sentReqs = await ctx.db
+      .query("exchangeRequests")
+      .withIndex("by_from_user", (q) => q.eq("fromUserId", args.userId))
+      .collect();
+    for (const r of sentReqs) await ctx.db.delete(r._id);
+
+    // Delete user's exchange requests (received)
+    const receivedReqs = await ctx.db
+      .query("exchangeRequests")
+      .withIndex("by_to_user", (q) => q.eq("toUserId", args.userId))
+      .collect();
+    for (const r of receivedReqs) await ctx.db.delete(r._id);
+
+    // Delete messages sent by user
+    const sentMessages = await ctx.db
+      .query("messages")
+      .withIndex("by_sender", (q) => q.eq("senderId", args.userId))
+      .collect();
+    for (const m of sentMessages) await ctx.db.delete(m._id);
+
+    // Delete messages received by user
+    const receivedMessages = await ctx.db
+      .query("messages")
+      .withIndex("by_receiver", (q) => q.eq("receiverId", args.userId))
+      .collect();
+    for (const m of receivedMessages) await ctx.db.delete(m._id);
+
+    // Delete subscriptions
+    const subscriptions = await ctx.db
+      .query("subscriptions")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+    for (const s of subscriptions) await ctx.db.delete(s._id);
+
+    // Finally delete the user
+    await ctx.db.delete(args.userId);
+
+    return { success: true, deletedUser: user.name, deletedEmail: user.email };
+  },
+});
+
 // Store user's ECDH public key for E2E encryption
 export const storePublicKey = mutation({
   args: {
