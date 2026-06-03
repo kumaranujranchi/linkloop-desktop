@@ -254,6 +254,7 @@ textarea {
 .sidebar.collapsed {
   width: var(--sidebar-collapsed);
   min-width: var(--sidebar-collapsed);
+  overflow: visible;
 }
 
 .sidebar-logo {
