@@ -390,3 +390,92 @@ export const markAsDelivered = mutation({
     }
   },
 });
+
+// Edit a message (sender only, within reasonable time)
+export const editMessage = mutation({
+  args: {
+    messageId: v.id("messages"),
+    newText: v.string(),
+    token: v.optional(v.string()),
+    userId: v.optional(v.id("users")),
+  },
+  handler: async (ctx, args) => {
+    let userId = args.userId || null;
+
+    if (!userId && args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    }
+
+    if (!userId) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
+
+    if (!userId) throw new Error("Not authenticated");
+
+    const message = await ctx.db.get(args.messageId);
+    if (!message) throw new Error("Message not found");
+    if (message.senderId !== userId) throw new Error("You can only edit your own messages");
+    if (message.deleted) throw new Error("Cannot edit a deleted message");
+
+    // Allow editing within 24 hours
+    const now = Date.now();
+    if (now - message.createdAt > 24 * 60 * 60 * 1000) {
+      throw new Error("Cannot edit messages older than 24 hours");
+    }
+
+    await ctx.db.patch(args.messageId, {
+      text: args.newText,
+      edited: true,
+    });
+
+    return { success: true };
+  },
+});
+
+// Delete a message (sender only — soft delete)
+export const deleteMessage = mutation({
+  args: {
+    messageId: v.id("messages"),
+    token: v.optional(v.string()),
+    userId: v.optional(v.id("users")),
+  },
+  handler: async (ctx, args) => {
+    let userId = args.userId || null;
+
+    if (!userId && args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    }
+
+    if (!userId) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
+
+    if (!userId) throw new Error("Not authenticated");
+
+    const message = await ctx.db.get(args.messageId);
+    if (!message) throw new Error("Message not found");
+    if (message.senderId !== userId) throw new Error("You can only delete your own messages");
+
+    // Soft delete: replace text and mark deleted
+    await ctx.db.patch(args.messageId, {
+      text: "[This message was deleted]",
+      deleted: true,
+    });
+
+    return { success: true };
+  },
+});

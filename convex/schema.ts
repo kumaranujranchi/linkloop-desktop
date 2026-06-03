@@ -88,6 +88,8 @@ export default defineSchema({
     websiteRef: v.optional(v.id("websites")),
     read: v.boolean(),
     delivered: v.optional(v.boolean()),
+    edited: v.optional(v.boolean()),
+    deleted: v.optional(v.boolean()),
     createdAt: v.number(),
   })
     .index("by_exchange", ["exchangeId"])

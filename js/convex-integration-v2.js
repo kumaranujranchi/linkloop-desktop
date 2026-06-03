@@ -1500,9 +1500,27 @@ async function renderMessages(messages) {
           ? ' <span title="End-to-end encrypted" style="font-size:0.7rem;opacity:0.5">🔒</span>'
           : "";
 
-      let bubbleHtml = `${dateSep}<div class="chat-bubble ${isSent ? "sent" : "received"}" style="position:relative">
-      ${msg.displayText}
+      const editedLabel = msg.edited
+        ? ' <span style="font-size:0.6rem;color:var(--text-tertiary);font-style:italic">(edited)</span>'
+        : "";
+      const isDeleted = msg.deleted;
+      const deletedLabel = isDeleted
+        ? ' <span style="font-size:0.7rem;color:var(--text-tertiary)">🚫</span>'
+        : "";
+
+      let bubbleHtml = `${dateSep}<div class="chat-bubble ${isSent ? "sent" : "received"}" style="position:relative" data-msg-id="${msg._id}">
+      ${msg.displayText}${editedLabel}${deletedLabel}
       <span style="font-size:0.65rem;opacity:0.6;margin-left:8px;white-space:nowrap">${time}${readTick}${lockIcon}${sentLock}</span>
+      ${
+        isSent && !isDeleted
+          ? `
+        <div class="msg-actions" style="position:absolute;top:2px;right:2px;display:none">
+          <button class="msg-action-btn" onclick="event.stopPropagation();editChatMessage('${msg._id}')" title="Edit" style="background:none;border:none;cursor:pointer;padding:2px 4px;font-size:0.7rem;color:var(--text-tertiary);border-radius:4px">✏️</button>
+          <button class="msg-action-btn" onclick="event.stopPropagation();deleteChatMessage('${msg._id}')" title="Delete" style="background:none;border:none;cursor:pointer;padding:2px 4px;font-size:0.7rem;color:var(--text-tertiary);border-radius:4px">🗑️</button>
+        </div>
+      `
+          : ""
+      }
     </div>`;
 
       // Warnings detection and rendering
@@ -1650,6 +1668,44 @@ async function doSendMessage() {
 }
 
 function showMsgToast(msg, type = "info") {
+  const t = document.createElement("div");
+  t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-primary);padding:10px 20px;border-radius:8px;font-size:0.85rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);color:var(--${type === "danger" ? "danger" : "text-primary"})`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+async function editChatMessage(messageId) {
+  const currentText = prompt("Edit your message:");
+  if (!currentText || !currentText.trim()) return;
+
+  try {
+    const token = getSessionToken();
+    await client.mutation("messages:editMessage", {
+      messageId,
+      newText: currentText.trim(),
+      token,
+    });
+    await fetchAndRenderMessages();
+  } catch (e) {
+    showMsgToast("❌ Failed to edit message: " + e.message, "danger");
+  }
+}
+
+async function deleteChatMessage(messageId) {
+  if (!confirm("Delete this message?")) return;
+
+  try {
+    const token = getSessionToken();
+    await client.mutation("messages:deleteMessage", {
+      messageId,
+      token,
+    });
+    await fetchAndRenderMessages();
+  } catch (e) {
+    showMsgToast("❌ Failed to delete message: " + e.message, "danger");
+  }
+}
   const t = document.createElement("div");
   t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-primary);padding:10px 20px;border-radius:8px;font-size:0.85rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);color:var(--${type === "danger" ? "danger" : "text-primary"})`;
   t.textContent = msg;
