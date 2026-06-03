@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "convex dev",
-    "build": "node scripts/build.js",
+    "build": "npm run build:tailwind && node scripts/build.js",
+    "build:tailwind": "npx tailwindcss -i ./css/src/tailwind-input.css -o ./css/tailwind.css --minify",
+    "build:tailwind:watch": "npx tailwindcss -i ./css/src/tailwind-input.css -o ./css/tailwind.css --watch",
     "deploy": "CONVEX_DEPLOYMENT=prod:vibrant-marmot-366 convex deploy --typecheck=disable",
     "dashboard": "convex dashboard",
     "seed": "node scripts/seed.js",
@@ -18,7 +20,9 @@
     "nodemailer": "^8.0.10"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
     "@types/nodemailer": "^8.0.0",
+    "tailwindcss": "^4.3.0",
     "typescript": "^5.4.0"
   }
 }
