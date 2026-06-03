@@ -2710,35 +2710,124 @@ function updateMarketplaceTable(websites) {
         : "No results";
   }
 
+  // Update stats cards dynamically
+  const totalCountEl = document.getElementById("marketSitesTotalCount");
+  const avgDAEl = document.getElementById("marketSitesAvgDA");
+  const totalTrafficEl = document.getElementById("marketSitesTotalTraffic");
+
+  if (websites) {
+    const totalCount = websites.length;
+    if (totalCountEl) totalCountEl.textContent = totalCount;
+
+    if (avgDAEl) {
+      const avgDA = totalCount > 0 
+        ? Math.round(websites.reduce((sum, w) => sum + (w.domainAuthority || 0), 0) / totalCount)
+        : 0;
+      avgDAEl.textContent = avgDA;
+    }
+
+    if (totalTrafficEl) {
+      const totalTraffic = websites.reduce((sum, w) => sum + (w.trafficEstimate || 0), 0);
+      totalTrafficEl.textContent = formatTraffic(totalTraffic);
+    }
+  } else {
+    if (totalCountEl) totalCountEl.textContent = "0";
+    if (avgDAEl) avgDAEl.textContent = "0";
+    if (totalTrafficEl) totalTrafficEl.textContent = "0/mo";
+  }
+
   if (!websites || !websites.length) {
     tbody.innerHTML =
-      '<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites found. Try adjusting your search filters or check back later.</td></tr>';
+      '<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-tertiary)"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-magnifying-glass" style="font-size:1.5rem"></i><span>No websites found. Try adjusting your search filters or check back later.</span></div></td></tr>';
     return;
   }
 
   const uid = getUserId();
   tbody.innerHTML = websites
     .map((w) => {
-      const listedByLabel = w.listedBy === "agency" ? "🏢 Agency" : "👤 Owner";
       const isOwnWebsite = w.ownerId === uid;
+      const listedByLabel = w.listedBy === "agency" 
+        ? `<span class="badge" style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px;font-size:0.8rem;background:var(--bg-tertiary);color:var(--text-secondary);border:1px solid var(--border-light)"><i class="fa-solid fa-building" style="color:var(--text-tertiary)"></i> Agency</span>` 
+        : `<span class="badge" style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px;font-size:0.8rem;background:var(--bg-tertiary);color:var(--text-secondary);border:1px solid var(--border-light)"><i class="fa-solid fa-user" style="color:var(--text-tertiary)"></i> Owner</span>`;
+
       const actionCell = isOwnWebsite
-        ? `<span class="badge" style="font-size:0.75rem;padding:6px 12px;background:var(--gray-200);color:var(--text-secondary);border:1px solid var(--border-light);border-radius:var(--radius-sm)">Your Website</span>`
+        ? `<span class="badge" style="font-size:0.75rem;padding:6px 12px;background:var(--bg-tertiary);color:var(--text-tertiary);border:1px solid var(--border-light);border-radius:var(--radius-sm);display:inline-flex;align-items:center;gap:4px"><i class="fa-solid fa-user-check"></i> Your Website</span>`
         : `<div style="display:flex;gap:6px">
-          <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.startConversationWith('${w.ownerId}', undefined, '${w.domain.replace(/'/g, "\\'")}')">💬 Message</button>
-          <button class="btn btn-primary btn-sm" id="send-req-${w._id}" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'}, document.getElementById('send-req-${w._id}'))">Send Request</button>
-        </div>`;
+            <button class="btn btn-secondary btn-sm" style="display:inline-flex;align-items:center;gap:4px" onclick="window.LinkBuild.startConversationWith('${w.ownerId}', undefined, '${w.domain.replace(/'/g, "\\'")}')">
+              <i class="fa-solid fa-comments"></i> Message
+            </button>
+            <button class="btn btn-primary btn-sm" style="display:inline-flex;align-items:center;gap:4px" id="send-req-${w._id}" onclick="window.LinkBuild.sendExchangeRequest({toUserId:'${w.ownerId}',fromWebsiteId:'',toWebsiteId:'${w._id}',fromAnchorText:'guest post',fromTargetUrl:'https://example.com'}, document.getElementById('send-req-${w._id}'))">
+              <i class="fa-solid fa-paper-plane"></i> Send Request
+            </button>
+          </div>`;
+
+      const domainInitials = (w.domain || "").replace(/^(https?:\/\/)?(www\.)?/, "").slice(0, 2).toUpperCase();
 
       return `
       <tr>
-        <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0, 2).toUpperCase()}</div><strong>${w.domain}</strong><a href="https://${w.domain}" target="_blank" rel="noopener noreferrer" class="domain-external-link" onclick="event.stopPropagation()" title="Open ${w.domain}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ""}</div></td>
-        <td><span class="badge badge-info">${w.domainAuthority}</span></td>
-        <td><span class="badge ${w.spamScore > 20 ? "badge-danger" : w.spamScore > 10 ? "badge-warning" : "badge-success"}">${w.spamScore || 0}%</span></td>
-        <td>${(w.trafficEstimate / 1000).toFixed(0)}K/mo</td>
-        <td>${w.niche}</td>
-        <td>${w.country}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:34px;height:34px;border-radius:8px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;font-weight:700;flex-shrink:0">
+              ${domainInitials}
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <strong style="color:var(--text-primary);font-size:0.9rem">${w.domain}</strong>
+                <a href="https://${w.domain}" target="_blank" rel="noopener noreferrer" class="domain-external-link" onclick="event.stopPropagation()" title="Open ${w.domain}" style="display:inline-flex;align-items:center;color:var(--text-tertiary)">
+                  <i class="fa-solid fa-up-right-from-square" style="font-size:0.75rem"></i>
+                </a>
+              </div>
+              <div style="margin-top:2px;display:flex;gap:4px">
+                ${w.verified ? `<span class="badge badge-success" style="display:inline-flex;align-items:center;gap:3px;font-size:0.65rem;padding:2px 6px"><i class="fa-solid fa-circle-check"></i> Verified</span>` : ""}
+              </div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="badge badge-info" style="display:inline-flex;align-items:center;gap:4px;font-size:0.8rem;padding:4px 8px;border-radius:6px">
+            <i class="fa-solid fa-award"></i>
+            ${w.domainAuthority}
+          </span>
+        </td>
+        <td>
+          <span class="badge ${w.spamScore > 20 ? "badge-danger" : w.spamScore > 10 ? "badge-warning" : "badge-success"}" style="display:inline-flex;align-items:center;gap:4px;font-size:0.8rem;padding:4px 8px;border-radius:6px">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            ${w.spamScore || 0}%
+          </span>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px;font-weight:500;color:var(--text-primary)">
+            <i class="fa-solid fa-chart-simple" style="color:var(--success)"></i>
+            ${w.trafficEstimate ? formatTraffic(w.trafficEstimate) : "0/mo"}
+          </div>
+        </td>
+        <td>
+          <span class="badge" style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:rgba(108, 77, 246, 0.1);color:var(--primary-purple);border-radius:6px;font-size:0.8rem">
+            <i class="fa-solid fa-tag" style="opacity:0.8"></i>
+            ${w.niche}
+          </span>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px;color:var(--text-secondary)">
+            <i class="fa-solid fa-location-dot" style="color:var(--text-tertiary)"></i>
+            ${w.country || "Global"}
+          </div>
+        </td>
         <td>${listedByLabel}</td>
-        <td><div class="health-score"><div class="health-bar"><div class="health-bar-fill good" style="width:${w.exchangeSuccessRate || 85}%"></div></div>${w.exchangeSuccessRate || 85}%</div></td>
-        <td>${w.referringDomains || 0}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:500;color:var(--text-secondary)">
+            <div style="width:60px;height:6px;border-radius:3px;background:var(--border-light);overflow:hidden;flex-shrink:0">
+              <div style="height:100%;width:${w.exchangeSuccessRate || 85}%;background:linear-gradient(90deg, var(--primary-purple), var(--info))"></div>
+            </div>
+            <span>${w.exchangeSuccessRate || 85}%</span>
+          </div>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px;color:var(--text-primary);font-weight:500">
+            <i class="fa-solid fa-link" style="color:var(--text-tertiary);font-size:0.75rem"></i>
+            ${w.referringDomains || 0}
+          </div>
+        </td>
         <td>${actionCell}</td>
       </tr>`;
     })

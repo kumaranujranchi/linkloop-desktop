@@ -547,24 +547,69 @@
 
         <!-- ==================== MARKETPLACE ==================== -->
         <section class="page-section" id="page-marketplace">
-          <h1 class="page-title">Website Marketplace</h1>
-          <p class="page-subtitle">Discover websites for backlink opportunities. Find the perfect exchange partners.</p>
+          <!-- Marketplace Header -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+            <div>
+              <h1 class="page-title" style="margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-store" style="color:var(--primary-purple)"></i>
+                Website Marketplace
+              </h1>
+              <p class="page-subtitle" style="margin-bottom:0;">Discover websites for backlink opportunities. Find the perfect exchange partners.</p>
+            </div>
+          </div>
+
+          <!-- Marketplace Stats Cards -->
+          <div class="kpi-grid" style="margin-bottom: 20px;">
+            <!-- Available Sites Card -->
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Marketplace Sites</span>
+                <div class="kpi-card-icon purple">
+                  <i class="fa-solid fa-server"></i>
+                </div>
+              </div>
+              <div class="kpi-card-value" id="marketSitesTotalCount">—</div>
+              <div class="kpi-card-change">Active exchange options</div>
+            </div>
+            
+            <!-- Avg DA Card -->
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Average DA</span>
+                <div class="kpi-card-icon blue">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+              </div>
+              <div class="kpi-card-value" id="marketSitesAvgDA">—</div>
+              <div class="kpi-card-change">Domain Authority average</div>
+            </div>
+
+            <!-- Total Traffic Card -->
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Combined Traffic</span>
+                <div class="kpi-card-icon green">
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+              </div>
+              <div class="kpi-card-value" id="marketSitesTotalTraffic">—</div>
+              <div class="kpi-card-change">Monthly estimate</div>
+            </div>
+          </div>
 
           <!-- Search & Filters -->
           <div class="card" style="margin-bottom:20px">
-            <div class="card-body">
-              <div style="display:flex;gap:12px;margin-bottom:12px">
-                <div style="flex:1;position:relative">
-                  <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray-400)"
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                  </svg>
-                  <input class="input" type="text" id="marketplaceSearchInput"
-                    placeholder="Search by domain, niche, or keyword..." style="padding-left:36px"
+            <div class="card-body" style="padding:20px">
+              <div style="display:flex;gap:12px;margin-bottom:16px;align-items:center;flex-wrap:wrap">
+                <div class="topbar-search" style="flex:1; max-width:none">
+                  <i class="fa-solid fa-magnifying-glass" style="color:var(--text-tertiary)"></i>
+                  <input type="text" id="marketplaceSearchInput"
+                    placeholder="Search by domain, niche, or keyword..."
                     onkeydown="if(event.key==='Enter')searchMarketplace()">
                 </div>
-                <button class="btn btn-primary" onclick="searchMarketplace()">Search</button>
+                <button class="btn btn-primary" onclick="searchMarketplace()" style="display:inline-flex;align-items:center;gap:8px">
+                  <i class="fa-solid fa-magnifying-glass"></i> Search
+                </button>
               </div>
               <div class="filter-bar">
                 <select class="select" id="filterNiche" onchange="filterMarketplace()">
