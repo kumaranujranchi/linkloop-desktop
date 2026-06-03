@@ -4,15 +4,24 @@
  */
 
 (function() {
-  // 1. Enable CSS animations hook
-  document.documentElement.classList.add('js-enabled');
+  // 1. Enable CSS animations hook only if Motion is loaded (failsafe fallback)
+  if (typeof Motion !== 'undefined') {
+    document.documentElement.classList.add('js-enabled');
+  }
 
-  // Wait for resources to load
-  window.addEventListener('DOMContentLoaded', () => {
+  // Safe initialization wrapper
+  function init() {
     initSmoothScroll();
     initLandingAnimations();
     initDashboardTransitions();
-  });
+  }
+
+  // Trigger initialization immediately if DOM is already parsed
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
   /**
    * Initialize Lenis Smooth Inertial Scrolling
