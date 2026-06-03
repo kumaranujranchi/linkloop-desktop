@@ -1,7 +1,7 @@
 "use node";
 
 import { v } from "convex/values";
-import { internalAction } from "./_generated/server";
+import { action, internalAction } from "./_generated/server";
 import nodemailer from "nodemailer";
 
 // Initialize SMTP transporter using Hostinger SMTP details
@@ -244,5 +244,24 @@ export const sendExchangeRequestEmail = internalAction({
       "Review Request"
     );
     await sendMail(args.email, subject, html);
+  },
+});
+
+// Public action to trigger a test email (can be run via: npx convex run email:testEmail '{"email": "kumaranujranchi@gmail.com"}')
+export const testEmail = action({
+  args: { email: v.string() },
+  handler: async (ctx, args): Promise<{ success: boolean }> => {
+    const subject = "🧪 LinkBuild Test Email";
+    const bodyContent = `
+      <p>Hello Admin,</p>
+      <p>This is a successful test email from your LinkBuild Hostinger SMTP mail trigger system setup.</p>
+      <p>SMTP Host: <strong>smtp.hostinger.com</strong><br>
+      Port: <strong>465 (SSL/TLS)</strong><br>
+      Sender: <strong>support@linkbuild.store</strong></p>
+      <p>If you received this email, the SMTP setup and environment password configuration are fully correct!</p>
+    `;
+    const html = getEmailTemplate("SMTP Test Connection", bodyContent);
+    await sendMail(args.email, subject, html);
+    return { success: true };
   },
 });
