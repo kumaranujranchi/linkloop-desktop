@@ -51,7 +51,7 @@ async function sendVerificationReminder() {
   );
 
   const res = await transporter.sendMail({
-    from: '"Anuj Kumar" <support@linkbuild.store>',
+    from: '"LinkBuild Support" <support@linkbuild.store>',
     to: toEmail,
     subject,
     html,
@@ -77,7 +77,7 @@ async function sendWelcomeEmail() {
   );
 
   const res = await transporter.sendMail({
-    from: '"Anuj Kumar" <support@linkbuild.store>',
+    from: '"LinkBuild Support" <support@linkbuild.store>',
     to: toEmail,
     subject,
     html,
