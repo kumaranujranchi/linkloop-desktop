@@ -2789,8 +2789,8 @@ function updateWebsitesTable(mySites, isFiltering = false) {
   if (!tbody) return;
   if (!mySites || !mySites.length) {
     tbody.innerHTML = isFiltering
-      ? '<tr><td colspan="8" class="text-center py-12 text-gray-400 dark:text-gray-500"><div class="flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass text-xl"></i><span>No matching websites found.</span></div></td></tr>'
-      : '<tr><td colspan="8" class="text-center py-12 text-gray-400 dark:text-gray-500"><div class="flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-folder-open text-xl"></i><span>No websites yet. Click "Add Website" to get started.</span></div></td></tr>';
+      ? '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-magnifying-glass" style="font-size:1.5rem"></i><span>No matching websites found.</span></div></td></tr>'
+      : '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-folder-open" style="font-size:1.5rem"></i><span>No websites yet. Click "Add Website" to get started.</span></div></td></tr>';
     return;
   }
 
@@ -2800,85 +2800,85 @@ function updateWebsitesTable(mySites, isFiltering = false) {
         const dateStr = w._creationTime ? timeAgo(w._creationTime) : "recently";
         const trafficStr = w.trafficEstimate ? formatTraffic(w.trafficEstimate) : "0/mo";
         return `
-        <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition">
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="flex items-center">
-              <div class="flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400">
-                <i class="fa-solid fa-globe text-sm"></i>
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:34px;height:34px;border-radius:8px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-size:1.1rem;flex-shrink:0">
+                <i class="fa-solid fa-globe"></i>
               </div>
-              <div class="ml-3">
-                <div class="text-sm font-semibold text-gray-900 dark:text-white">${w.domain}</div>
-                <div class="text-xs text-gray-400 dark:text-gray-500">Added ${dateStr}</div>
+              <div>
+                <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem">${w.domain}</div>
+                <div style="font-size:0.75rem;color:var(--text-tertiary)">Added ${dateStr}</div>
               </div>
             </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <span class="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800">
-              <i class="fa-solid fa-award mr-1 text-blue-500"></i>
-              DA ${w.domainAuthority}
+          <td>
+            <span class="badge badge-info" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
+              <i class="fa-solid fa-award"></i>
+              ${w.domainAuthority}
             </span>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-            <div class="flex items-center gap-1.5 font-medium">
-              <i class="fa-solid fa-chart-simple text-emerald-500"></i>
-              <span>${trafficStr}</span>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;font-weight:500;color:var(--text-primary)">
+              <i class="fa-solid fa-chart-simple" style="color:var(--success)"></i>
+              ${trafficStr}
             </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
-              <i class="fa-solid fa-tag mr-1 text-purple-400"></i>
+          <td>
+            <span class="badge" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:rgba(108, 77, 246, 0.1);color:var(--primary-purple);border-radius:6px;font-size:0.8rem">
+              <i class="fa-solid fa-tag" style="opacity:0.8"></i>
               ${w.niche}
             </span>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-            <div class="flex items-center gap-1.5">
-              <i class="fa-solid fa-location-dot text-gray-400 dark:text-gray-500"></i>
-              <span>${w.country}</span>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;color:var(--text-secondary)">
+              <i class="fa-solid fa-location-dot" style="color:var(--text-tertiary)"></i>
+              ${w.country}
             </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td>
             ${
               w.verified
-                ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800">
-                    <i class="fa-solid fa-circle-check mr-1 text-green-500"></i>
+                ? `<span class="badge badge-success" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
+                    <i class="fa-solid fa-circle-check"></i>
                     Verified
                   </span>`
-                : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800">
-                    <i class="fa-solid fa-circle-exclamation mr-1 text-amber-500 animate-pulse"></i>
+                : `<span class="badge badge-warning" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
+                    <i class="fa-solid fa-circle-exclamation"></i>
                     Pending
                   </span>`
             }
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-            <div class="flex items-center gap-1.5 font-semibold">
-              <i class="fa-solid fa-link text-indigo-400"></i>
-              <span>${w.referringDomains || 0}</span>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;font-weight:600;color:var(--text-primary)">
+              <i class="fa-solid fa-link" style="color:var(--primary-purple);opacity:0.8"></i>
+              ${w.referringDomains || 0}
             </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <td style="text-align:right">
             ${
               w.verified
-                ? `<div class="action-dropdown inline-block" id="action-dd-${w._id}">
-                    <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')">
-                      <i class="fa-solid fa-ellipsis-vertical text-gray-400 mr-0.5"></i>
+                ? `<div class="action-dropdown" id="action-dd-${w._id}" style="display:inline-block">
+                    <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px">
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
                       Manage
                     </button>
                     <div class="action-dropdown-menu" id="action-menu-${w._id}">
                       <button class="action-dropdown-item" onclick="window.LinkBuild.editWebsite('${w._id}')">
-                        <i class="fa-solid fa-pen-to-square text-blue-500 mr-2"></i>Edit
+                        <i class="fa-solid fa-pen-to-square" style="color:var(--info);margin-right:8px"></i>Edit
                       </button>
                       <button class="action-dropdown-item warning" onclick="window.LinkBuild.deactivateWebsite('${w._id}')">
-                        <i class="fa-solid fa-circle-pause text-amber-500 mr-2"></i>Deactivate
+                        <i class="fa-solid fa-circle-pause" style="color:var(--warning);margin-right:8px"></i>Deactivate
                       </button>
                       <div class="action-dropdown-divider"></div>
                       <button class="action-dropdown-item danger" onclick="window.LinkBuild.deleteWebsite('${w._id}')">
-                        <i class="fa-solid fa-trash-can text-red-500 mr-2"></i>Delete
+                        <i class="fa-solid fa-trash-can" style="color:var(--danger);margin-right:8px"></i>Delete
                       </button>
                     </div>
                   </div>`
-                : `<button class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-xs font-semibold text-white transition shadow-sm cursor-pointer" onclick="window.LinkBuild.openVerifyModal('${w._id}')">
+                : `<button class="btn btn-primary btn-sm" onclick="window.LinkBuild.openVerifyModal('${w._id}')" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px">
                     <i class="fa-solid fa-shield-halved"></i>
-                    Verify Site
+                    Verify
                   </button>`
             }
           </td>
