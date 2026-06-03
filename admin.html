@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LinkBuild — Admin Panel | Platform Management</title>
-  <meta name="description" content="LinkBuild Admin Panel — Platform management, user moderation, website verification, analytics, and system controls for the backlink exchange marketplace.">
+  <meta name="description"
+    content="LinkBuild Admin Panel — Platform management, user moderation, website verification, analytics, and system controls for the backlink exchange marketplace.">
   <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236C4DF6%22 stroke-width=%222.5%22><path d=%22M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71%22/><path d=%22M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71%22/></svg>">
-  <meta name="description" content="LinkBuild Admin Panel — Platform management, user moderation, analytics and controls.">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236C4DF6%22 stroke-width=%222.5%22><path d=%22M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71%22/><path d=%22M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71%22/></svg>">
+  <meta name="description"
+    content="LinkBuild Admin Panel — Platform management, user moderation, analytics and controls.">
   <!-- Using Apple system fonts — no external font requests -->
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/dark-mode.css">
@@ -15,7 +19,7 @@
 
   <!-- Theme init: read from localStorage before render -->
   <script>
-    (function() {
+    (function () {
       var saved = localStorage.getItem('linkbuild-theme');
       if (saved === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -27,7 +31,7 @@
 
   <!-- Auth Guard: must be admin -->
   <script>
-    (function() {
+    (function () {
       const token = localStorage.getItem('linkbuild-token');
       const userRaw = localStorage.getItem('linkbuild-user');
       if (!token || !userRaw) {
@@ -39,7 +43,7 @@
         if (user.role !== 'admin') {
           window.location.replace('dashboard.html');
         }
-      } catch(e) {
+      } catch (e) {
         window.location.replace('index.html?auth=login');
       }
     })();
@@ -62,7 +66,8 @@
       --topbar-h: 64px;
     }
 
-    html, body {
+    html,
+    body {
       font-family: var(--font-sans);
       background: var(--bg-primary);
       color: var(--text-primary);
@@ -80,11 +85,13 @@
     .admin-sidebar {
       width: var(--sidebar-width);
       background: #0F172A;
-      border-right: 1px solid rgba(255,255,255,0.08);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
       position: fixed;
-      top: 0; left: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      bottom: 0;
       z-index: 100;
       overflow-y: auto;
       overflow-x: hidden;
@@ -95,18 +102,24 @@
       align-items: center;
       gap: 12px;
       padding: 20px 20px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .brand-icon {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       background: var(--primary-gradient);
       border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
 
-    .brand-icon svg { width: 22px; height: 22px; }
+    .brand-icon svg {
+      width: 22px;
+      height: 22px;
+    }
 
     .brand-text {
       display: flex;
@@ -126,7 +139,7 @@
       text-transform: uppercase;
       letter-spacing: 1.5px;
       color: #EF4444;
-      background: rgba(239,68,68,0.15);
+      background: rgba(239, 68, 68, 0.15);
       padding: 2px 6px;
       border-radius: 4px;
       margin-top: 2px;
@@ -177,27 +190,35 @@
     }
 
     .nav-item.active {
-      background: rgba(108,77,246,0.2);
+      background: rgba(108, 77, 246, 0.2);
       color: #FFFFFF;
     }
 
     .nav-item.active::before {
       content: '';
       position: absolute;
-      left: 0; top: 50%;
+      left: 0;
+      top: 50%;
       transform: translateY(-50%);
-      width: 3px; height: 18px;
+      width: 3px;
+      height: 18px;
       background: var(--primary-purple);
       border-radius: 0 3px 3px 0;
     }
 
     .nav-icon {
-      width: 18px; height: 18px;
-      display: flex; align-items: center; justify-content: center;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
 
-    .nav-icon svg { width: 18px; height: 18px; }
+    .nav-icon svg {
+      width: 18px;
+      height: 18px;
+    }
 
     .nav-badge {
       margin-left: auto;
@@ -211,12 +232,19 @@
       text-align: center;
     }
 
-    .nav-badge.orange { background: var(--warning); color: #000; }
-    .nav-badge.yellow { background: var(--warning); color: #000; }
+    .nav-badge.orange {
+      background: var(--warning);
+      color: #000;
+    }
+
+    .nav-badge.yellow {
+      background: var(--warning);
+      color: #000;
+    }
 
     .sidebar-footer {
       padding: 16px;
-      border-top: 1px solid rgba(255,255,255,0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .admin-user-card {
@@ -225,27 +253,48 @@
       gap: 10px;
       padding: 10px;
       border-radius: 8px;
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
       cursor: pointer;
       transition: background 0.15s ease;
     }
 
-    .admin-user-card:hover { background: rgba(255,255,255,0.08); }
+    .admin-user-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
 
     .admin-avatar {
-      width: 34px; height: 34px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       background: var(--primary-gradient);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: 700;
       font-size: 13px;
       color: white;
       flex-shrink: 0;
     }
 
-    .admin-user-info { flex: 1; min-width: 0; }
-    .admin-user-name { font-size: 13px; font-weight: 600; color: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .admin-user-role { font-size: 11px; color: #EF4444; font-weight: 600; }
+    .admin-user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .admin-user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFFFFF;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .admin-user-role {
+      font-size: 11px;
+      color: #EF4444;
+      font-weight: 600;
+    }
 
     /* ---- MAIN ---- */
     .admin-main {
@@ -266,7 +315,7 @@
       border-bottom: 1px solid var(--border-light);
       position: sticky;
       top: 0;
-      background: rgba(255,255,255,0.85);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(16px);
       z-index: 50;
     }
@@ -303,10 +352,14 @@
 
     .topbar-search:focus-within {
       border-color: var(--primary-purple);
-      box-shadow: 0 0 0 3px rgba(108,77,246,0.1);
+      box-shadow: 0 0 0 3px rgba(108, 77, 246, 0.1);
     }
 
-    .topbar-search svg { width: 15px; height: 15px; color: var(--gray-400); }
+    .topbar-search svg {
+      width: 15px;
+      height: 15px;
+      color: var(--gray-400);
+    }
 
     .topbar-search input {
       background: none;
@@ -318,14 +371,19 @@
       font-family: var(--font-sans);
     }
 
-    .topbar-search input::placeholder { color: var(--gray-400); }
+    .topbar-search input::placeholder {
+      color: var(--gray-400);
+    }
 
     .topbar-btn {
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
       background: var(--bg-secondary);
       border: 1px solid var(--border-light);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       transition: all 0.15s ease;
       color: var(--text-secondary);
@@ -336,7 +394,10 @@
       color: var(--text-primary);
     }
 
-    .topbar-btn svg { width: 16px; height: 16px; }
+    .topbar-btn svg {
+      width: 16px;
+      height: 16px;
+    }
 
     .btn-refresh-label {
       font-size: 12px;
@@ -348,11 +409,13 @@
       border: 1px solid var(--border-light);
       cursor: pointer;
       transition: all 0.15s ease;
-      display: flex; align-items: center; gap: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .btn-refresh-label:hover {
-      background: rgba(108,77,246,0.1);
+      background: rgba(108, 77, 246, 0.1);
       border-color: var(--primary-purple);
       color: var(--primary-purple);
     }
@@ -364,8 +427,13 @@
     }
 
     /* PAGE SECTIONS */
-    .admin-page { display: none; }
-    .admin-page.active { display: block; }
+    .admin-page {
+      display: none;
+    }
+
+    .admin-page.active {
+      display: block;
+    }
 
     /* ---- CARDS (light theme, matches user dashboard) ---- */
     .card {
@@ -377,7 +445,9 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .card:hover { border-color: var(--border-medium); }
+    .card:hover {
+      border-color: var(--border-medium);
+    }
 
     .card-header {
       display: flex;
@@ -421,20 +491,42 @@
     .kpi-card::after {
       content: '';
       position: absolute;
-      top: 0; right: 0;
-      width: 100px; height: 100px;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       opacity: 0.06;
       transform: translate(30%, -30%);
     }
 
-    .kpi-card.purple::after { background: var(--primary-purple); }
-    .kpi-card.blue::after { background: var(--info); }
-    .kpi-card.green::after { background: var(--success); }
-    .kpi-card.yellow::after { background: var(--warning); }
-    .kpi-card.red::after { background: var(--danger); }
-    .kpi-card.cyan::after { background: #06B6D4; }
-    .kpi-card.orange::after { background: #F97316; }
+    .kpi-card.purple::after {
+      background: var(--primary-purple);
+    }
+
+    .kpi-card.blue::after {
+      background: var(--info);
+    }
+
+    .kpi-card.green::after {
+      background: var(--success);
+    }
+
+    .kpi-card.yellow::after {
+      background: var(--warning);
+    }
+
+    .kpi-card.red::after {
+      background: var(--danger);
+    }
+
+    .kpi-card.cyan::after {
+      background: #06B6D4;
+    }
+
+    .kpi-card.orange::after {
+      background: #F97316;
+    }
 
     .kpi-card:hover {
       border-color: var(--border-medium);
@@ -443,20 +535,54 @@
     }
 
     .kpi-icon {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 14px;
     }
 
-    .kpi-icon svg { width: 20px; height: 20px; }
-    .kpi-icon.purple { background: rgba(108,77,246,0.1); color: var(--primary-purple); }
-    .kpi-icon.blue { background: var(--info-light); color: var(--info); }
-    .kpi-icon.green { background: var(--success-light); color: var(--success); }
-    .kpi-icon.yellow { background: var(--warning-light); color: var(--warning); }
-    .kpi-icon.red { background: var(--danger-light); color: var(--danger); }
-    .kpi-icon.cyan { background: rgba(6,182,212,0.15); color: #06B6D4; }
-    .kpi-icon.orange { background: rgba(249,115,22,0.15); color: #F97316; }
+    .kpi-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .kpi-icon.purple {
+      background: rgba(108, 77, 246, 0.1);
+      color: var(--primary-purple);
+    }
+
+    .kpi-icon.blue {
+      background: var(--info-light);
+      color: var(--info);
+    }
+
+    .kpi-icon.green {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .kpi-icon.yellow {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .kpi-icon.red {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .kpi-icon.cyan {
+      background: rgba(6, 182, 212, 0.15);
+      color: #06B6D4;
+    }
+
+    .kpi-icon.orange {
+      background: rgba(249, 115, 22, 0.15);
+      color: #F97316;
+    }
 
     .kpi-value {
       font-size: 28px;
@@ -481,9 +607,17 @@
       margin-top: 8px;
     }
 
-    .kpi-change.up { color: var(--success); }
-    .kpi-change.down { color: var(--danger); }
-    .kpi-change.neutral { color: var(--text-tertiary); }
+    .kpi-change.up {
+      color: var(--success);
+    }
+
+    .kpi-change.down {
+      color: var(--danger);
+    }
+
+    .kpi-change.neutral {
+      color: var(--text-tertiary);
+    }
 
     /* ---- CHARTS GRID ---- */
     .charts-grid {
@@ -493,7 +627,9 @@
       margin-bottom: 28px;
     }
 
-    .charts-grid .card-wide { grid-column: 1 / -1; }
+    .charts-grid .card-wide {
+      grid-column: 1 / -1;
+    }
 
     .chart-wrap {
       position: relative;
@@ -538,7 +674,9 @@
       vertical-align: middle;
     }
 
-    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
 
     .data-table tbody tr {
       transition: background 0.15s ease;
@@ -555,18 +693,29 @@
     }
 
     .td-avatar {
-      width: 30px; height: 30px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: var(--primary-gradient);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 11px;
       font-weight: 700;
       color: white;
       flex-shrink: 0;
     }
 
-    .td-name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
-    .td-email { font-size: 11px; color: var(--text-tertiary); }
+    .td-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
+    .td-email {
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
 
     /* ---- BADGES (match user dashboard badge system) ---- */
     .badge {
@@ -579,19 +728,65 @@
       font-weight: 600;
     }
 
-    .badge-free { background: var(--gray-100); color: var(--gray-600); }
-    .badge-pro { background: rgba(108,77,246,0.1); color: var(--primary-purple); }
-    .badge-agency { background: var(--info-light); color: var(--info); }
-    .badge-admin { background: var(--danger-light); color: var(--danger); }
+    .badge-free {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
 
-    .badge-active { background: var(--success-light); color: #065F46; }
-    .badge-pending { background: var(--warning-light); color: #92400E; }
-    .badge-rejected { background: var(--danger-light); color: #991B1B; }
-    .badge-suspended { background: rgba(249,115,22,0.15); color: #C2410C; }
-    .badge-new { background: var(--info-light); color: #1E40AF; }
-    .badge-negotiating { background: rgba(6,182,212,0.15); color: #0E7490; }
-    .badge-accepted { background: var(--success-light); color: #065F46; }
-    .badge-completed { background: rgba(108,77,246,0.1); color: var(--primary-purple); }
+    .badge-pro {
+      background: rgba(108, 77, 246, 0.1);
+      color: var(--primary-purple);
+    }
+
+    .badge-agency {
+      background: var(--info-light);
+      color: var(--info);
+    }
+
+    .badge-admin {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .badge-active {
+      background: var(--success-light);
+      color: #065F46;
+    }
+
+    .badge-pending {
+      background: var(--warning-light);
+      color: #92400E;
+    }
+
+    .badge-rejected {
+      background: var(--danger-light);
+      color: #991B1B;
+    }
+
+    .badge-suspended {
+      background: rgba(249, 115, 22, 0.15);
+      color: #C2410C;
+    }
+
+    .badge-new {
+      background: var(--info-light);
+      color: #1E40AF;
+    }
+
+    .badge-negotiating {
+      background: rgba(6, 182, 212, 0.15);
+      color: #0E7490;
+    }
+
+    .badge-accepted {
+      background: var(--success-light);
+      color: #065F46;
+    }
+
+    .badge-completed {
+      background: rgba(108, 77, 246, 0.1);
+      color: var(--primary-purple);
+    }
 
     /* ---- BUTTONS (match user dashboard buttons) ---- */
     .btn {
@@ -609,18 +804,21 @@
       text-decoration: none;
     }
 
-    .btn-sm { padding: 5px 10px; font-size: 11px; }
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 11px;
+    }
 
     .btn-primary {
       background: var(--primary-gradient);
       color: white;
-      box-shadow: 0 2px 8px rgba(108,77,246,0.25);
+      box-shadow: 0 2px 8px rgba(108, 77, 246, 0.25);
     }
 
     .btn-primary:hover {
       opacity: 0.9;
       transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(108,77,246,0.4);
+      box-shadow: 0 4px 16px rgba(108, 77, 246, 0.4);
     }
 
     .btn-ghost {
@@ -637,30 +835,32 @@
     .btn-success {
       background: var(--success-light);
       color: #065F46;
-      border: 1px solid rgba(16,185,129,0.3);
+      border: 1px solid rgba(16, 185, 129, 0.3);
     }
 
     .btn-success:hover {
-      background: rgba(16,185,129,0.2);
+      background: rgba(16, 185, 129, 0.2);
     }
 
     .btn-danger {
       background: var(--danger-light);
       color: #991B1B;
-      border: 1px solid rgba(239,68,68,0.3);
+      border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
     .btn-danger:hover {
-      background: rgba(239,68,68,0.2);
+      background: rgba(239, 68, 68, 0.2);
     }
 
     .btn-warn {
       background: var(--warning-light);
       color: #92400E;
-      border: 1px solid rgba(245,158,11,0.3);
+      border: 1px solid rgba(245, 158, 11, 0.3);
     }
 
-    .btn-warn:hover { background: rgba(245,158,11,0.2); }
+    .btn-warn:hover {
+      background: rgba(245, 158, 11, 0.2);
+    }
 
     /* ---- TABLE ACTIONS ---- */
     .table-actions {
@@ -717,7 +917,9 @@
       transition: border-color 0.15s ease;
     }
 
-    .filter-select:focus { border-color: var(--primary-purple); }
+    .filter-select:focus {
+      border-color: var(--primary-purple);
+    }
 
     .filter-input {
       background: var(--bg-secondary);
@@ -732,8 +934,13 @@
       width: 200px;
     }
 
-    .filter-input:focus { border-color: var(--primary-purple); }
-    .filter-input::placeholder { color: var(--gray-400); }
+    .filter-input:focus {
+      border-color: var(--primary-purple);
+    }
+
+    .filter-input::placeholder {
+      color: var(--gray-400);
+    }
 
     /* ---- ROLE SELECT in table ---- */
     .role-select {
@@ -748,7 +955,9 @@
       outline: none;
     }
 
-    .role-select:focus { border-color: var(--primary-purple); }
+    .role-select:focus {
+      border-color: var(--primary-purple);
+    }
 
     /* ---- STATS ROW ---- */
     .stats-row {
@@ -786,15 +995,20 @@
     }
 
     .loading-state .spinner {
-      width: 32px; height: 32px;
-      border: 3px solid rgba(108,77,246,0.2);
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(108, 77, 246, 0.2);
       border-top-color: var(--primary-purple);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 12px;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* ---- EMPTY ---- */
     .empty-state {
@@ -804,18 +1018,21 @@
     }
 
     .empty-state svg {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       margin-bottom: 12px;
       opacity: 0.4;
     }
 
-    .empty-state p { font-size: 13px; }
+    .empty-state p {
+      font-size: 13px;
+    }
 
     /* ---- MODAL ---- */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15,23,42,0.5);
+      background: rgba(15, 23, 42, 0.5);
       backdrop-filter: blur(4px);
       z-index: 1000;
       display: flex;
@@ -843,7 +1060,9 @@
       transition: transform 0.2s ease;
     }
 
-    .modal-overlay.active .modal { transform: scale(1); }
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
 
     .modal-header {
       display: flex;
@@ -852,23 +1071,37 @@
       margin-bottom: 20px;
     }
 
-    .modal-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
 
     .modal-close {
-      width: 28px; height: 28px;
+      width: 28px;
+      height: 28px;
       border-radius: 6px;
       background: var(--bg-tertiary);
       border: none;
       color: var(--text-secondary);
       cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 18px;
       transition: all 0.15s ease;
     }
 
-    .modal-close:hover { background: var(--danger-light); color: var(--danger); }
+    .modal-close:hover {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
 
-    .modal-body { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .modal-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
 
     .modal-footer {
       display: flex;
@@ -900,9 +1133,17 @@
       transform: translateY(0);
     }
 
-    #adminToast.success { background: linear-gradient(135deg, #10B981, #06B6D4); }
-    #adminToast.error { background: linear-gradient(135deg, #EF4444, #EC4899); }
-    #adminToast.warning { background: linear-gradient(135deg, #F59E0B, #F97316); }
+    #adminToast.success {
+      background: linear-gradient(135deg, #10B981, #06B6D4);
+    }
+
+    #adminToast.error {
+      background: linear-gradient(135deg, #EF4444, #EC4899);
+    }
+
+    #adminToast.warning {
+      background: linear-gradient(135deg, #F59E0B, #F97316);
+    }
 
     /* ---- REVENUE PLAN CARDS ---- */
     .plan-breakdown {
@@ -920,9 +1161,26 @@
       text-align: center;
     }
 
-    .plan-item-name { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
-    .plan-item-count { font-size: 24px; font-weight: 800; color: var(--text-primary); margin: 6px 0; }
-    .plan-item-rev { font-size: 12px; color: var(--success); font-weight: 600; }
+    .plan-item-name {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+    }
+
+    .plan-item-count {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 6px 0;
+    }
+
+    .plan-item-rev {
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 600;
+    }
 
     /* ---- WEBSITE MODERATION ---- */
     .website-card {
@@ -937,22 +1195,40 @@
       margin-bottom: 10px;
     }
 
-    .website-card:hover { border-color: var(--border-medium); background: var(--bg-secondary); }
+    .website-card:hover {
+      border-color: var(--border-medium);
+      background: var(--bg-secondary);
+    }
 
     .website-logo {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 10px;
       background: var(--primary-gradient);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: 800;
       font-size: 14px;
       color: white;
       flex-shrink: 0;
     }
 
-    .website-info { flex: 1; }
-    .website-domain { font-weight: 700; font-size: 14px; color: var(--text-primary); }
-    .website-meta { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
+    .website-info {
+      flex: 1;
+    }
+
+    .website-domain {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    .website-meta {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 3px;
+    }
 
     .website-metrics {
       display: flex;
@@ -960,9 +1236,22 @@
       margin-right: 16px;
     }
 
-    .metric-item { text-align: center; }
-    .metric-val { font-size: 16px; font-weight: 700; color: var(--text-primary); }
-    .metric-label { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .metric-item {
+      text-align: center;
+    }
+
+    .metric-val {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .metric-label {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
     /* ---- SETTINGS ---- */
     .settings-grid {
@@ -1012,7 +1301,9 @@
       transition: border-color 0.15s ease;
     }
 
-    .settings-input:focus { border-color: var(--primary-purple); }
+    .settings-input:focus {
+      border-color: var(--primary-purple);
+    }
 
     .toggle-row {
       display: flex;
@@ -1022,13 +1313,24 @@
       border-bottom: 1px solid var(--border-light);
     }
 
-    .toggle-row:last-child { border-bottom: none; }
+    .toggle-row:last-child {
+      border-bottom: none;
+    }
 
-    .toggle-label { font-size: 13px; font-weight: 500; color: var(--text-primary); }
-    .toggle-sub { font-size: 11px; color: var(--text-tertiary); }
+    .toggle-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .toggle-sub {
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
 
     .toggle {
-      width: 40px; height: 22px;
+      width: 40px;
+      height: 22px;
       border-radius: 11px;
       background: var(--border-medium);
       cursor: pointer;
@@ -1038,25 +1340,44 @@
       border: none;
     }
 
-    .toggle.on { background: var(--primary-purple); }
+    .toggle.on {
+      background: var(--primary-purple);
+    }
 
     .toggle::after {
       content: '';
       position: absolute;
-      width: 16px; height: 16px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: white;
-      top: 3px; left: 3px;
+      top: 3px;
+      left: 3px;
       transition: transform 0.15s ease;
     }
 
-    .toggle.on::after { transform: translateX(18px); }
+    .toggle.on::after {
+      transform: translateX(18px);
+    }
 
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gray-300);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gray-400);
+    }
 
     /* Logout dropdown */
     .logout-popup {
@@ -1065,15 +1386,17 @@
       left: 12px;
       right: 12px;
       background: #1E293B;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       padding: 8px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
       z-index: 200;
       display: none;
     }
 
-    .logout-popup.open { display: block; }
+    .logout-popup.open {
+      display: block;
+    }
 
     .logout-item {
       display: flex;
@@ -1087,16 +1410,27 @@
       transition: all 0.15s ease;
     }
 
-    .logout-item:hover { background: rgba(255,255,255,0.07); color: #FFFFFF; }
-    .logout-item.danger:hover { background: rgba(239,68,68,0.15); color: #F87171; }
-    .logout-item svg { width: 15px; height: 15px; }
+    .logout-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: #FFFFFF;
+    }
+
+    .logout-item.danger:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #F87171;
+    }
+
+    .logout-item svg {
+      width: 15px;
+      height: 15px;
+    }
 
     /* ============================================
        DARK MODE — Admin Panel Overrides
        (extends css/dark-mode.css)
     ============================================ */
     [data-theme="dark"] .admin-topbar {
-      background: rgba(10,10,15,0.85);
+      background: rgba(10, 10, 15, 0.85);
       border-bottom-color: var(--border-light);
     }
 
@@ -1109,15 +1443,15 @@
     }
 
     [data-theme="dark"] .modal-overlay {
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
     }
 
     [data-theme="dark"] .sidebar-brand {
-      border-bottom-color: rgba(255,255,255,0.08);
+      border-bottom-color: rgba(255, 255, 255, 0.08);
     }
 
     [data-theme="dark"] .sidebar-footer {
-      border-top-color: rgba(255,255,255,0.08);
+      border-top-color: rgba(255, 255, 255, 0.08);
     }
 
     [data-theme="dark"] ::-webkit-scrollbar-thumb {
@@ -1137,6 +1471,7 @@
       .admin-shell {
         grid-template-columns: 1fr;
       }
+
       .admin-sidebar {
         position: fixed;
         left: -280px;
@@ -1147,1048 +1482,1256 @@
         transition: left 0.3s ease;
         box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
       }
+
       .admin-sidebar.mobile-open {
         left: 0;
       }
+
       .admin-hamburger {
         display: flex !important;
       }
+
       .admin-top-hamburger {
         display: flex !important;
-      .admin-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-      .admin-content {
-        padding: 16px;
-      }
-      .admin-page-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-      .admin-tabs {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        gap: 0;
-      }
-      .admin-tab {
-        white-space: nowrap;
-        flex-shrink: 0;
-        padding: 10px 18px;
-        font-size: 0.85rem;
-      }
-    }
 
-    /* Tablet Portrait (≤768px) */
-    @media (max-width: 768px) {
-      .admin-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .admin-stat-card {
-        padding: 16px;
-      }
-      .admin-stat-value {
-        font-size: 1.5rem;
-      }
-      .admin-table-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        border-radius: 12px;
-      }
-      .admin-table {
-        min-width: 650px;
-        font-size: 0.8rem;
-      }
-      .admin-table th,
-      .admin-table td {
-        padding: 10px 12px;
-        white-space: nowrap;
-      }
-      .admin-filter-bar {
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .admin-filter-bar select,
-      .admin-filter-bar input {
-        flex: 1 1 45%;
-        min-width: 0;
-      }
-      .admin-action-btns {
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-      .admin-action-btns .btn {
-        flex: 1;
-        min-width: 0;
-        font-size: 0.75rem;
-        padding: 6px 10px;
-      }
-    }
-
-    /* Mobile (≤480px) */
-    @media (max-width: 480px) {
-      .admin-stats-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-      .admin-stat-card {
-        padding: 12px;
-        gap: 4px;
-      }
-      .admin-stat-value {
-        font-size: 1.3rem;
-      }
-      .admin-stat-label {
-        font-size: 0.7rem;
-      }
-      .admin-content {
-        padding: 10px;
-      }
-      .admin-page-title {
-        font-size: 1.2rem;
-      }
-      .admin-table {
-        min-width: 550px;
-        font-size: 0.72rem;
-      }
-      .admin-table th,
-      .admin-table td {
-        padding: 8px 10px;
-      }
-      .admin-modal-box {
-        width: 94% !important;
-        max-width: 94vw !important;
-        padding: 20px !important;
-        border-radius: 14px !important;
-      }
-      .admin-modal-box h2 {
-        font-size: 1.1rem;
-      }
-      .admin-form-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-      .btn {
-        min-height: 44px;
-      }
-      input, select, textarea {
-        font-size: 16px !important;
-      }
-    }
-
-    /* Touch device optimization */
-    @media (hover: none) and (pointer: coarse) {
-      .admin-tab,
-      .admin-nav-item,
-      .btn,
-      select,
-      button {
-        min-height: 44px;
-      }
-      .admin-action-btns .btn {
-        min-height: 40px;
-      }
-    }
-  </style>
-</head>
-<body>
-
-<div class="admin-shell">
-
-  <!-- ========== SIDEBAR ========== -->
-  <aside class="admin-sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-        </svg>
-      </div>
-      <div class="brand-text">
-        <div class="brand-name">LinkBuild</div>
-        <div class="brand-badge">Admin Panel</div>
-      </div>
-    </div>
-
-    <nav class="sidebar-nav">
-      <div class="nav-section">
-        <div class="nav-section-label">Overview</div>
-        <button class="nav-item active" onclick="adminNav('overview', this)" id="navOverview">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
-            </svg>
-          </span>
-          Dashboard
-        </button>
-      </div>
-
-      <div class="nav-section">
-        <div class="nav-section-label">Moderation</div>
-        <button class="nav-item" onclick="adminNav('users', this)">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
-          </span>
-          User Management
-          <span class="nav-badge" id="sidebarUserBadge" style="display:none">0</span>
-        </button>
-        <button class="nav-item" onclick="adminNav('websites', this)">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="2" y1="12" x2="22" y2="12"/>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-            </svg>
-          </span>
-          Website Moderation
-          <span class="nav-badge orange" id="sidebarPendingBadge" style="display:none">0</span>
-        </button>
-        <button class="nav-item" onclick="adminNav('active-websites', this)">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-              <path d="M2 12h20"/>
-            </svg>
-          </span>
-          Active Websites
-        </button>
-        <button class="nav-item" onclick="adminNav('exchanges', this)">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5M3 3l7.5 7.5"/>
-              <path d="M8 21H3v-5M16 21h5v-5"/><path d="M21 21l-7.5-7.5M3 21l7.5-7.5"/>
-            </svg>
-          </span>
-          Exchange Monitor
-        </button>
-        <button class="nav-item" onclick="adminNav('feedback', this)">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </span>
-          Feedback & Features
-          <span class="nav-badge" id="sidebarFeedbackBadge" style="display:none">0</span>
-        </button>
-      </div>
-
-      <div class="nav-section">
-        <div class="nav-section-label">Insights</div>
-        <button class="nav-item" onclick="adminNav('revenue', this)">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-          </span>
-          Revenue & Plans
-        </button>
-        <button class="nav-item" onclick="adminNav('analytics', this)">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
-              <line x1="6" y1="20" x2="6" y2="14"/>
-            </svg>
-          </span>
-          Analytics Charts
-        </button>
-      </div>
-
-      <div class="nav-section">
-        <div class="nav-section-label">System</div>
-        <button class="nav-item" onclick="adminNav('settings', this)">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
-              <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
-            </svg>
-          </span>
-          Platform Settings
-        </button>
-      </div>
-    </nav>
-
-    <div class="sidebar-footer" style="position:relative;">
-      <div class="logout-popup" id="logoutPopup">
-        <div class="logout-item" onclick="window.location.href='dashboard.html'">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-          User Dashboard
-        </div>
-        <div class="logout-item danger" onclick="adminLogout()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Sign Out
-        </div>
-      </div>
-      <div class="admin-user-card" onclick="document.getElementById('logoutPopup').classList.toggle('open')">
-        <div class="admin-avatar" id="sidebarAvatar">A</div>
-        <div class="admin-user-info">
-          <div class="admin-user-name" id="sidebarName">Admin</div>
-          <div class="admin-user-role">Super Admin</div>
-        </div>
-        <svg style="width:14px;height:14px;color:var(--text-tertiary);flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ========== MAIN ========== -->
-  <div class="admin-main">
-
-    <!-- TOPBAR -->
-    <div class="admin-topbar">
-      <div class="topbar-title" id="topbarTitle">
-        Dashboard <span id="topbarSubtitle">Platform Overview</span>
-      </div>
-      <div class="topbar-actions">
-        <div class="topbar-search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" placeholder="Search users, websites…" id="globalSearch" oninput="handleGlobalSearch(this.value)">
-        </div>
-        <button class="btn-refresh-label" onclick="refreshCurrentPage()" id="refreshBtn">
-          <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-          Refresh
-        </button>
-        <div class="topbar-btn" onclick="toggleTheme()" title="Toggle theme">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="admin-content">
-
-      <!-- Mobile hamburger — always visible on tablet/mobile -->
-      <button class="admin-hamburger admin-top-hamburger" onclick="var s=document.querySelector('.admin-sidebar');s.classList.toggle('mobile-open');var o=document.getElementById('adminMobileOverlay');o.classList.toggle('active',s.classList.contains('mobile-open'));o.style.display=s.classList.contains('mobile-open')?'block':'none'" title="Menu" style="display:none; background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:8px; font-size:1.2rem; cursor:pointer; padding:8px 12px; margin-bottom:12px; color:var(--text-primary); align-self:flex-start;">☰ Menu</button>
-
-      <!-- ====== PAGE: OVERVIEW ====== -->
-      <div class="admin-page active" id="page-overview">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>Platform Overview</h2>
-            <p>Real-time snapshot of your LinkBuild platform</p>
-          </div>
-          <div class="page-header-right">
-            <div style="font-size:11px;color:var(--text-tertiary);">Last updated: <span id="lastUpdated">—</span></div>
-          </div>
-        </div>
-
-        <!-- KPI CARDS -->
-        <div class="kpi-grid" id="kpiGrid">
-          <div class="kpi-card purple">
-            <div class="kpi-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div class="kpi-value" id="kpiTotalUsers">—</div>
-            <div class="kpi-label">Total Users</div>
-            <div class="kpi-change up" id="kpiNewUsers">
-              <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-              — new this month
-            </div>
-          </div>
-
-          <div class="kpi-card green">
-            <div class="kpi-icon green">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            </div>
-            <div class="kpi-value" id="kpiActiveWebsites">—</div>
-            <div class="kpi-label">Active Websites</div>
-            <div class="kpi-change neutral">Verified & Active</div>
-          </div>
-
-          <div class="kpi-card blue">
-            <div class="kpi-icon blue">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 3H3v5"/><path d="M21 3l-7.5 7.5M3 3l7.5 7.5"/><path d="M8 21H3v-5M16 21h5v-5"/><path d="M21 21l-7.5-7.5M3 21l7.5-7.5"/></svg>
-            </div>
-            <div class="kpi-value" id="kpiTotalExchanges">—</div>
-            <div class="kpi-label">Total Exchanges</div>
-            <div class="kpi-change up" id="kpiCompletedExchanges">— completed</div>
-          </div>
-
-          <div class="kpi-card yellow">
-            <div class="kpi-icon yellow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            </div>
-            <div class="kpi-value" id="kpiMRR">$—</div>
-            <div class="kpi-label">Monthly Revenue (MRR)</div>
-            <div class="kpi-change up" id="kpiPaidUsers">— paid users</div>
-          </div>
-
-          <div class="kpi-card orange">
-            <div class="kpi-icon orange">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            </div>
-            <div class="kpi-value" id="kpiSpamReports">—</div>
-            <div class="kpi-label">Spam / Suspended Sites</div>
-            <div class="kpi-change neutral">Requires review</div>
-          </div>
-
-          <div class="kpi-card cyan">
-            <div class="kpi-icon cyan">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            </div>
-            <div class="kpi-value" id="kpiPendingSites">—</div>
-            <div class="kpi-label">Pending Approvals</div>
-            <div class="kpi-change neutral">Awaiting review</div>
-          </div>
-
-          <div class="kpi-card red">
-            <div class="kpi-icon red">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            </div>
-            <div class="kpi-value" id="kpiFreeUsers">—</div>
-            <div class="kpi-label">Free Plan Users</div>
-            <div class="kpi-change neutral" id="kpiProUsers">— pro/agency</div>
-          </div>
-        </div>
-
-        <!-- RECENT ACTIVITY TABLE -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Recent Users</div>
-              <div class="card-subtitle">Latest registered accounts on the platform</div>
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="adminNav('users', document.querySelector('[onclick*=\"users\"]'))">View All</button>
-          </div>
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Role</th>
-                  <th>Reputation</th>
-                  <th>Exchanges</th>
-                  <th>Joined</th>
-                </tr>
-              </thead>
-              <tbody id="recentUsersBody">
-                <tr><td colspan="5"><div class="loading-state"><div class="spinner"></div>Loading users…</div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ====== PAGE: USER MANAGEMENT ====== -->
-      <div class="admin-page" id="page-users">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>User Management</h2>
-            <p>Manage roles, reputation, and access for all platform users</p>
-          </div>
-          <div class="page-header-right">
-            <button class="btn btn-ghost btn-sm" onclick="loadUsersPage()">
-              <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-              Refresh
-            </button>
-          </div>
-        </div>
-
-        <div class="filter-bar">
-          <input class="filter-input" type="text" placeholder="Search name or email…" id="userSearch" oninput="filterUsers(this.value)">
-          <select class="filter-select" id="roleFilter" onchange="filterUsers(document.getElementById('userSearch').value)">
-            <option value="">All Roles</option>
-            <option value="free">Free</option>
-            <option value="pro">Pro</option>
-            <option value="agency">Agency</option>
-            <option value="admin">Admin</option>
-          </select>
-          <span style="font-size:12px;color:var(--text-tertiary);margin-left:auto">Showing <strong id="userCount" style="color:var(--text-primary)">—</strong> users</span>
-        </div>
-
-        <div class="card" style="padding:0;overflow:hidden">
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Role</th>
-                  <th>Reputation</th>
-                  <th>Exchanges</th>
-                  <th>Joined</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="usersTableBody">
-                <tr><td colspan="6"><div class="loading-state"><div class="spinner"></div>Loading users…</div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ====== PAGE: WEBSITE MODERATION ====== -->
-      <div class="admin-page" id="page-websites">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>Website Moderation</h2>
-            <p>Review and approve pending website submissions</p>
-          </div>
-          <div class="page-header-right">
-            <button class="btn btn-ghost btn-sm" onclick="loadWebsitesPage()">
-              <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-              Refresh
-            </button>
-          </div>
-        </div>
-
-        <div id="websitesList">
-          <div class="loading-state"><div class="spinner"></div>Loading pending websites…</div>
-        </div>
-      </div>
-
-      <!-- ====== PAGE: ACTIVE WEBSITES ====== -->
-      <div class="admin-page" id="page-active-websites">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>Active Websites</h2>
-            <p>List of all active and verified websites on the platform</p>
-          </div>
-          <div class="page-header-right">
-            <button class="btn btn-ghost btn-sm" onclick="loadActiveWebsitesPage()">
-              <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-              Refresh
-            </button>
-          </div>
-        </div>
-
-        <div class="filter-bar">
-          <input class="filter-input" type="text" placeholder="Search domain or niche…" id="activeWebsiteSearch" oninput="filterActiveWebsites(this.value)">
-          <select class="filter-select" id="activeNicheFilter" onchange="filterActiveWebsites(document.getElementById('activeWebsiteSearch').value)">
-            <option value="">All Niches</option>
-            <option value="Automotive">Automotive</option><option value="Blogging">Blogging</option><option value="Construction">Construction</option><option value="E-commerce">E-commerce</option><option value="Education">Education</option><option value="Energy">Energy</option><option value="Entertainment">Entertainment</option><option value="Fashion & Beauty">Fashion & Beauty</option><option value="Finance">Finance</option><option value="Food & Beverage">Food & Beverage</option><option value="Government">Government</option><option value="Health & Wellness">Health & Wellness</option><option value="Insurance">Insurance</option><option value="Legal">Legal</option><option value="Manufacturing">Manufacturing</option><option value="Marketing">Marketing</option><option value="News & Media">News & Media</option><option value="Non-Profit">Non-Profit</option><option value="Real Estate">Real Estate</option><option value="SaaS">SaaS</option><option value="SEO Tools">SEO Tools</option><option value="Sports">Sports</option><option value="Tech">Tech</option><option value="Telecommunications">Telecommunications</option><option value="Travel">Travel</option><option value="Other">Other</option>
-          </select>
-          <span style="font-size:12px;color:var(--text-tertiary);margin-left:auto">Showing <strong id="activeWebsiteCount" style="color:var(--text-primary)">—</strong> active sites</span>
-        </div>
-
-        <div class="card" style="padding:0;overflow:hidden">
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Domain</th>
-                  <th>Niche</th>
-                  <th>Stats (DA / Traffic / RD)</th>
-                  <th>Country / Lang</th>
-                  <th>Owner</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="activeWebsitesTableBody">
-                <tr><td colspan="6"><div class="loading-state"><div class="spinner"></div>Loading websites…</div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ====== PAGE: EXCHANGE MONITOR ====== -->
-      <div class="admin-page" id="page-exchanges">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>Exchange Monitor</h2>
-            <p>Track all link exchange requests across the platform</p>
-          </div>
-          <div class="page-header-right">
-            <select class="filter-select" id="exchangeStatusFilter" onchange="renderExchanges()">
-              <option value="">All Statuses</option>
-              <option value="new">New</option>
-              <option value="negotiating">Negotiating</option>
-              <option value="accepted">Accepted</option>
-              <option value="completed">Completed</option>
-              <option value="rejected">Rejected</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Exchange Stats -->
-        <div class="stats-row" id="exchangeStatsRow">
-          <div class="stat-mini"><div class="stat-mini-val" id="exTotal">—</div><div class="stat-mini-label">Total</div></div>
-          <div class="stat-mini"><div class="stat-mini-val" style="color:var(--info)" id="exPending">—</div><div class="stat-mini-label">Pending</div></div>
-          <div class="stat-mini"><div class="stat-mini-val" style="color:var(--success)" id="exCompleted">—</div><div class="stat-mini-label">Completed</div></div>
-        </div>
-
-        <div class="card" style="padding:0;overflow:hidden">
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>Status</th>
-                  <th>Anchor Text</th>
-                  <th>Created</th>
-                </tr>
-              </thead>
-              <tbody id="exchangesBody">
-                <tr><td colspan="5"><div class="loading-state"><div class="spinner"></div>Loading exchanges…</div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ====== PAGE: FEEDBACK ====== -->
-      <div class="admin-page" id="page-feedback">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>Feedback & Features</h2>
-            <p>Review feature requests and feedback from users</p>
-          </div>
-          <div class="page-header-right">
-            <button class="btn btn-primary" onclick="renderFeedbacks()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Refresh</button>
-          </div>
-        </div>
-
-        <div class="card" style="padding:0;overflow:hidden">
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Note</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="feedbacksBody">
-                <tr><td colspan="5"><div class="loading-state"><div class="spinner"></div>Loading feedbacks…</div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ====== PAGE: REVENUE ====== -->
-      <div class="admin-page" id="page-revenue">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>Revenue & Plans</h2>
-            <p>Subscription breakdown and monthly recurring revenue</p>
-          </div>
-        </div>
-
-        <div class="kpi-grid">
-          <div class="kpi-card yellow">
-            <div class="kpi-icon yellow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            </div>
-            <div class="kpi-value" id="revMRR">$0</div>
-            <div class="kpi-label">Monthly Recurring Revenue</div>
-            <div class="kpi-change up">Active subscriptions</div>
-          </div>
-          <div class="kpi-card purple">
-            <div class="kpi-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div class="kpi-value" id="revTotal">0</div>
-            <div class="kpi-label">Total Subscribers</div>
-            <div class="kpi-change neutral">All active plans</div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-bottom:20px">
-          <div class="card-header">
-            <div class="card-title">Plan Breakdown</div>
-          </div>
-          <div class="plan-breakdown" id="planBreakdown">
-            <div class="plan-item">
-              <div class="plan-item-name">Free</div>
-              <div class="plan-item-count" id="planFree" style="color:var(--text-secondary)">—</div>
-              <div class="plan-item-rev">$0 / mo</div>
-            </div>
-            <div class="plan-item">
-              <div class="plan-item-name">Pro</div>
-              <div class="plan-item-count" id="planPro" style="color:var(--primary-purple)">—</div>
-              <div class="plan-item-rev" id="planProRev">$0 / mo</div>
-            </div>
-            <div class="plan-item">
-              <div class="plan-item-name">Agency</div>
-              <div class="plan-item-count" id="planAgency" style="color:var(--info)">—</div>
-              <div class="plan-item-rev" id="planAgencyRev">$0 / mo</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Revenue Chart</div>
-            <div class="card-subtitle">Estimated MRR by plan (static projection)</div>
-          </div>
-          <div class="chart-wrap">
-            <canvas id="revenueChart"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- ====== PAGE: ANALYTICS ====== -->
-      <div class="admin-page" id="page-analytics">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>Analytics Charts</h2>
-            <p>Platform growth, exchange activity, and user trends</p>
-          </div>
-        </div>
-
-        <div class="charts-grid">
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">User Growth</div>
-                <div class="card-subtitle">New signups per month by plan</div>
-              </div>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="userGrowthChart"></canvas>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Exchange Activity</div>
-                <div class="card-subtitle">Created vs completed over 6 months</div>
-              </div>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="exchangeActivityChart"></canvas>
-            </div>
-          </div>
-
-          <div class="card card-wide">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Role Distribution</div>
-                <div class="card-subtitle">Breakdown of user roles on the platform</div>
-              </div>
-            </div>
-            <div style="display:flex;gap:40px;align-items:center;padding-top:8px">
-              <div style="width:200px;height:200px;position:relative">
-                <canvas id="roleDistChart"></canvas>
-              </div>
-              <div id="roleDistLegend" style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ====== PAGE: SETTINGS ====== -->
-      <div class="admin-page" id="page-settings">
-        <div class="page-header">
-          <div class="page-header-left">
-            <h2>Platform Settings</h2>
-            <p>Configure platform behaviour, limits and feature flags</p>
-          </div>
-          <div class="page-header-right">
-            <button class="btn btn-primary btn-sm" onclick="saveSettings()">Save Changes</button>
-          </div>
-        </div>
-
-        <div class="settings-grid">
-          <div class="settings-section">
-            <h3>Plan Limits</h3>
-            <div class="settings-field">
-              <label>Free Plan — Max Websites</label>
-              <input class="settings-input" type="number" value="3" id="freeSites">
-            </div>
-            <div class="settings-field">
-              <label>Free Plan — Max Exchanges / Month</label>
-              <input class="settings-input" type="number" value="10" id="freeExchanges">
-            </div>
-            <div class="settings-field">
-              <label>Pro Plan — Max Websites</label>
-              <input class="settings-input" type="number" value="25" id="proSites">
-            </div>
-            <div class="settings-field">
-              <label>Pro Plan — Price ($/month)</label>
-              <input class="settings-input" type="number" value="49" id="proPrice">
-            </div>
-            <div class="settings-field">
-              <label>Agency Plan — Price ($/month)</label>
-              <input class="settings-input" type="number" value="199" id="agencyPrice">
-            </div>
-          </div>
-
-          <div class="settings-section">
-            <h3>Feature Flags</h3>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">Google Sign-In</div>
-                <div class="toggle-sub">Allow users to sign in with Google</div>
-              </div>
-              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">New User Registrations</div>
-                <div class="toggle-sub">Allow new account creation</div>
-              </div>
-              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">Marketplace Access</div>
-                <div class="toggle-sub">Enable public marketplace browsing</div>
-              </div>
-              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">Website Auto-Approval</div>
-                <div class="toggle-sub">Auto-approve websites without manual review</div>
-              </div>
-              <button class="toggle" onclick="this.classList.toggle('on')"></button>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">Maintenance Mode</div>
-                <div class="toggle-sub">Show maintenance page to regular users</div>
-              </div>
-              <button class="toggle" onclick="this.classList.toggle('on')" id="maintenanceToggle"></button>
-            </div>
-          </div>
-
-          <div class="settings-section">
-            <h3>Email & Notifications</h3>
-            <div class="settings-field">
-              <label>Admin Email</label>
-              <input class="settings-input" type="email" placeholder="admin@linkbuild.io" id="adminEmail">
-            </div>
-            <div class="settings-field">
-              <label>Support Email</label>
-              <input class="settings-input" type="email" placeholder="support@linkbuild.io" id="supportEmail">
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">New User Email</div>
-                <div class="toggle-sub">Send welcome email on signup</div>
-              </div>
-              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">Exchange Alerts</div>
-                <div class="toggle-sub">Notify admin on new exchanges</div>
-              </div>
-              <button class="toggle" onclick="this.classList.toggle('on')"></button>
-            </div>
-          </div>
-
-          <div class="settings-section">
-            <h3>Moderation Rules</h3>
-            <div class="settings-field">
-              <label>Min Domain Authority to Join</label>
-              <input class="settings-input" type="number" value="10" id="minDA">
-            </div>
-            <div class="settings-field">
-              <label>Max Spam Score Allowed (%)</label>
-              <input class="settings-input" type="number" value="30" id="maxSpam">
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">Require DNS Verification</div>
-                <div class="toggle-sub">Websites must verify ownership via DNS</div>
-              </div>
-              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label">Auto-ban on Low Reputation</div>
-                <div class="toggle-sub">Auto-restrict users below score 10</div>
-              </div>
-              <button class="toggle" onclick="this.classList.toggle('on')"></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /admin-content -->
-  </div><!-- /admin-main -->
-</div><!-- /admin-shell -->
-
-<!-- Mobile overlay for sidebar -->
-<div class="admin-mobile-overlay" id="adminMobileOverlay" onclick="document.querySelector('.admin-sidebar').classList.remove('mobile-open'); this.classList.remove('active')" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:299; backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);"></div>
-
-<!-- ====== CONFIRM MODAL ====== -->
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="confirmTitle">Confirm Action</div>
-      <button class="modal-close" onclick="closeConfirm()">&times;</button>
-    </div>
-    <div class="modal-body" id="confirmBody"></div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
-      <button class="btn btn-danger" id="confirmBtn" onclick="executeConfirm()">Confirm</button>
-    </div>
-  </div>
-</div>
-
-<!-- Toast -->
-<div id="adminToast"></div>
-
-<!-- ========== SCRIPT ========== -->
-<script>
-  /* ============================================
-     ADMIN PANEL — Logic
-  ============================================ */
-
-  let adminData = {
-    users: [],
-    pendingWebsites: [],
-    exchanges: [],
-    stats: null,
-    revenue: null,
-  };
-
-  let confirmCallback = null;
-  let allUsersRaw = [];
-  let charts = {};
-
-  // ---- INIT ----
-  window.addEventListener('load', () => {
-    // Set admin user info in sidebar
-    try {
-      const u = JSON.parse(localStorage.getItem('linkbuild-user') || '{}');
-      document.getElementById('sidebarName').textContent = u.name || 'Admin';
-      document.getElementById('sidebarAvatar').textContent = (u.name || 'A')[0].toUpperCase();
-    } catch(e) {}
-
-    // Wait for LinkBuild client to be ready
-    const waitForClient = setInterval(() => {
-      if (window.LinkBuild && window.LinkBuild.getClient && window.LinkBuild.getClient()) {
-        clearInterval(waitForClient);
-        loadOverviewPage();
-      }
-    }, 200);
-
-    // Fallback after 5s
-    setTimeout(() => {
-      clearInterval(waitForClient);
-      if (!window.LinkBuild || !window.LinkBuild.getClient || !window.LinkBuild.getClient()) {
-        showToast('Could not connect to server. Check your connection.', 'error');
-      }
-    }, 5000);
-  });
-
-  // ---- NAVIGATION ----
-  const pageTitles = {
-    overview: ['Dashboard', 'Platform Overview'],
-    users: ['User Management', 'Manage roles & access'],
-    websites: ['Website Moderation', 'Review pending submissions'],
-    'active-websites': ['Active Websites', 'List of all active & verified websites'],
-    exchanges: ['Exchange Monitor', 'Track all exchanges'],
-    revenue: ['Revenue & Plans', 'Subscription analytics'],
-    analytics: ['Analytics', 'Growth & activity charts'],
-    settings: ['Platform Settings', 'Configure platform']
-  };
-
-  function adminNav(page, el) {
-    // Update active nav
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    if (el) el.classList.add('active');
-
-    // Hide all pages
-    document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
-    const target = document.getElementById('page-' + page);
-    if (target) target.classList.add('active');
-
-    // Update topbar
-    const [title, sub] = pageTitles[page] || ['Admin', ''];
-    document.getElementById('topbarTitle').innerHTML = title + (sub ? ` <span>${sub}</span>` : '');
-
-    // Load page data
-    if (page === 'overview') loadOverviewPage();
-    else if (page === 'users') loadUsersPage();
-    else if (page === 'websites') loadWebsitesPage();
-    else if (page === 'active-websites') loadActiveWebsitesPage();
-    else if (page === 'exchanges') loadExchangesPage();
-    else if (page === 'revenue') loadRevenuePage();
-    else if (page === 'analytics') loadAnalyticsPage();
-  }
-
-  function refreshCurrentPage() {
-    const active = document.querySelector('.admin-page.active');
-    if (!active) return;
-    const page = active.id.replace('page-', '');
-    adminNav(page, null);
-  }
-
-  // ---- OVERVIEW ----
-  async function loadOverviewPage() {
-    document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
-
-    try {
-      const [stats, rev, pending] = await Promise.all([
-        window.LinkBuild.getAdminStats(),
-        getRevenue(),
-        window.LinkBuild.getPendingWebsites(),
-      ]);
-
-      if (stats) {
-        document.getElementById('kpiTotalUsers').textContent = stats.total;
-        document.getElementById('kpiNewUsers').innerHTML = `<svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg> ${stats.newThisMonth} new this month`;
-        document.getElementById('kpiActiveWebsites').textContent = stats.totalWebsites;
-        document.getElementById('kpiSpamReports').textContent = stats.spamReports;
-        document.getElementById('kpiFreeUsers').textContent = stats.byRole.free;
-        document.getElementById('kpiProUsers').textContent = `${stats.byRole.pro + stats.byRole.agency} pro/agency`;
-        document.getElementById('kpiMRR').textContent = '$' + stats.mrr.toLocaleString();
-        document.getElementById('kpiPaidUsers').textContent = `${stats.byRole.pro + stats.byRole.agency} paid users`;
-
-        // Update sidebar badges
-        const pendingCount = pending ? pending.length : 0;
-        document.getElementById('kpiPendingSites').textContent = pendingCount;
-        if (pendingCount > 0) {
-          document.getElementById('sidebarPendingBadge').textContent = pendingCount;
-          document.getElementById('sidebarPendingBadge').style.display = '';
+        .admin-stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+
+        .admin-content {
+          padding: 16px;
+        }
+
+        .admin-page-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+
+        .admin-tabs {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          gap: 0;
+        }
+
+        .admin-tab {
+          white-space: nowrap;
+          flex-shrink: 0;
+          padding: 10px 18px;
+          font-size: 0.85rem;
         }
       }
 
-      // Exchange stats (global)
-      const client = window.LinkBuild.getClient();
-      let exStats = null;
-      try { exStats = await client.query('exchanges:stats', {}); } catch(e) {}
+      /* Tablet Portrait (≤768px) */
+      @media (max-width: 768px) {
+        .admin-stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
 
-      if (exStats) {
-        document.getElementById('kpiTotalExchanges').textContent = exStats.total;
-        document.getElementById('kpiCompletedExchanges').textContent = `${exStats.completed} completed`;
-        document.getElementById('exTotal').textContent = exStats.total;
-        document.getElementById('exPending').textContent = exStats.pending;
-        document.getElementById('exCompleted').textContent = exStats.completed;
-        adminData.exchanges = exStats;
+        .admin-stat-card {
+          padding: 16px;
+        }
+
+        .admin-stat-value {
+          font-size: 1.5rem;
+        }
+
+        .admin-table-wrap {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          border-radius: 12px;
+        }
+
+        .admin-table {
+          min-width: 650px;
+          font-size: 0.8rem;
+        }
+
+        .admin-table th,
+        .admin-table td {
+          padding: 10px 12px;
+          white-space: nowrap;
+        }
+
+        .admin-filter-bar {
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .admin-filter-bar select,
+        .admin-filter-bar input {
+          flex: 1 1 45%;
+          min-width: 0;
+        }
+
+        .admin-action-btns {
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+
+        .admin-action-btns .btn {
+          flex: 1;
+          min-width: 0;
+          font-size: 0.75rem;
+          padding: 6px 10px;
+        }
       }
 
-      // Load recent users for overview table
-      const users = await window.LinkBuild.getAdminUsers(8);
-      allUsersRaw = users;
-      renderRecentUsersTable(users);
+      /* Mobile (≤480px) */
+      @media (max-width: 480px) {
+        .admin-stats-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+        }
 
-    } catch(e) {
-      console.error('Overview load error:', e);
-      showToast('Failed to load overview data', 'error');
-    }
-  }
+        .admin-stat-card {
+          padding: 12px;
+          gap: 4px;
+        }
 
-  function renderRecentUsersTable(users) {
-    const tbody = document.getElementById('recentUsersBody');
-    if (!users || !users.length) {
-      tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No users found</p></div></td></tr>`;
-      return;
+        .admin-stat-value {
+          font-size: 1.3rem;
+        }
+
+        .admin-stat-label {
+          font-size: 0.7rem;
+        }
+
+        .admin-content {
+          padding: 10px;
+        }
+
+        .admin-page-title {
+          font-size: 1.2rem;
+        }
+
+        .admin-table {
+          min-width: 550px;
+          font-size: 0.72rem;
+        }
+
+        .admin-table th,
+        .admin-table td {
+          padding: 8px 10px;
+        }
+
+        .admin-modal-box {
+          width: 94% !important;
+          max-width: 94vw !important;
+          padding: 20px !important;
+          border-radius: 14px !important;
+        }
+
+        .admin-modal-box h2 {
+          font-size: 1.1rem;
+        }
+
+        .admin-form-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .btn {
+          min-height: 44px;
+        }
+
+        input,
+        select,
+        textarea {
+          font-size: 16px !important;
+        }
+      }
+
+      /* Touch device optimization */
+      @media (hover: none) and (pointer: coarse) {
+
+        .admin-tab,
+        .admin-nav-item,
+        .btn,
+        select,
+        button {
+          min-height: 44px;
+        }
+
+        .admin-action-btns .btn {
+          min-height: 40px;
+        }
+      }
+  </style>
+</head>
+
+<body>
+
+  <div class="admin-shell">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">LinkBuild</div>
+          <div class="brand-badge">Admin Panel</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-label">Overview</div>
+          <button class="nav-item active" onclick="adminNav('overview', this)" id="navOverview">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+              </svg>
+            </span>
+            Dashboard
+          </button>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Moderation</div>
+          <button class="nav-item" onclick="adminNav('users', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </span>
+            User Management
+            <span class="nav-badge" id="sidebarUserBadge" style="display:none">0</span>
+          </button>
+          <button class="nav-item" onclick="adminNav('websites', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+            </span>
+            Website Moderation
+            <span class="nav-badge orange" id="sidebarPendingBadge" style="display:none">0</span>
+          </button>
+          <button class="nav-item" onclick="adminNav('active-websites', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                <path d="M2 12h20" />
+              </svg>
+            </span>
+            Active Websites
+          </button>
+          <button class="nav-item" onclick="adminNav('exchanges', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 3h5v5M8 3H3v5" />
+                <path d="M21 3l-7.5 7.5M3 3l7.5 7.5" />
+                <path d="M8 21H3v-5M16 21h5v-5" />
+                <path d="M21 21l-7.5-7.5M3 21l7.5-7.5" />
+              </svg>
+            </span>
+            Exchange Monitor
+          </button>
+          <button class="nav-item" onclick="adminNav('feedback', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </span>
+            Feedback & Features
+            <span class="nav-badge" id="sidebarFeedbackBadge" style="display:none">0</span>
+          </button>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Insights</div>
+          <button class="nav-item" onclick="adminNav('revenue', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+            </span>
+            Revenue & Plans
+          </button>
+          <button class="nav-item" onclick="adminNav('analytics', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+            </span>
+            Analytics Charts
+          </button>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">System</div>
+          <button class="nav-item" onclick="adminNav('settings', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
+                <path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
+              </svg>
+            </span>
+            Platform Settings
+          </button>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer" style="position:relative;">
+        <div class="logout-popup" id="logoutPopup">
+          <div class="logout-item" onclick="window.location.href='dashboard.html'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+            </svg>
+            User Dashboard
+          </div>
+          <div class="logout-item danger" onclick="adminLogout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Sign Out
+          </div>
+        </div>
+        <div class="admin-user-card" onclick="document.getElementById('logoutPopup').classList.toggle('open')">
+          <div class="admin-avatar" id="sidebarAvatar">A</div>
+          <div class="admin-user-info">
+            <div class="admin-user-name" id="sidebarName">Admin</div>
+            <div class="admin-user-role">Super Admin</div>
+          </div>
+          <svg style="width:14px;height:14px;color:var(--text-tertiary);flex-shrink:0" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========== MAIN ========== -->
+    <div class="admin-main">
+
+      <!-- TOPBAR -->
+      <div class="admin-topbar">
+        <div class="topbar-title" id="topbarTitle">
+          Dashboard <span id="topbarSubtitle">Platform Overview</span>
+        </div>
+        <div class="topbar-actions">
+          <div class="topbar-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" placeholder="Search users, websites…" id="globalSearch"
+              oninput="handleGlobalSearch(this.value)">
+          </div>
+          <button class="btn-refresh-label" onclick="refreshCurrentPage()" id="refreshBtn">
+            <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+            Refresh
+          </button>
+          <div class="topbar-btn" onclick="toggleTheme()" title="Toggle theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="admin-content">
+
+        <!-- Mobile hamburger — always visible on tablet/mobile -->
+        <button class="admin-hamburger admin-top-hamburger"
+          onclick="var s=document.querySelector('.admin-sidebar');s.classList.toggle('mobile-open');var o=document.getElementById('adminMobileOverlay');o.classList.toggle('active',s.classList.contains('mobile-open'));o.style.display=s.classList.contains('mobile-open')?'block':'none'"
+          title="Menu"
+          style="display:none; background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:8px; font-size:1.2rem; cursor:pointer; padding:8px 12px; margin-bottom:12px; color:var(--text-primary); align-self:flex-start;">☰
+          Menu</button>
+
+        <!-- ====== PAGE: OVERVIEW ====== -->
+        <div class="admin-page active" id="page-overview">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Platform Overview</h2>
+              <p>Real-time snapshot of your LinkBuild platform</p>
+            </div>
+            <div class="page-header-right">
+              <div style="font-size:11px;color:var(--text-tertiary);">Last updated: <span id="lastUpdated">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI CARDS -->
+          <div class="kpi-grid" id="kpiGrid">
+            <div class="kpi-card purple">
+              <div class="kpi-icon purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="kpiTotalUsers">—</div>
+              <div class="kpi-label">Total Users</div>
+              <div class="kpi-change up" id="kpiNewUsers">
+                <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15" />
+                </svg>
+                — new this month
+              </div>
+            </div>
+
+            <div class="kpi-card green">
+              <div class="kpi-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="kpiActiveWebsites">—</div>
+              <div class="kpi-label">Active Websites</div>
+              <div class="kpi-change neutral">Verified & Active</div>
+            </div>
+
+            <div class="kpi-card blue">
+              <div class="kpi-icon blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 3h5v5M8 3H3v5" />
+                  <path d="M21 3l-7.5 7.5M3 3l7.5 7.5" />
+                  <path d="M8 21H3v-5M16 21h5v-5" />
+                  <path d="M21 21l-7.5-7.5M3 21l7.5-7.5" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="kpiTotalExchanges">—</div>
+              <div class="kpi-label">Total Exchanges</div>
+              <div class="kpi-change up" id="kpiCompletedExchanges">— completed</div>
+            </div>
+
+            <div class="kpi-card yellow">
+              <div class="kpi-icon yellow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="kpiMRR">$—</div>
+              <div class="kpi-label">Monthly Revenue (MRR)</div>
+              <div class="kpi-change up" id="kpiPaidUsers">— paid users</div>
+            </div>
+
+            <div class="kpi-card orange">
+              <div class="kpi-icon orange">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                  <line x1="12" y1="9" x2="12" y2="13" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="kpiSpamReports">—</div>
+              <div class="kpi-label">Spam / Suspended Sites</div>
+              <div class="kpi-change neutral">Requires review</div>
+            </div>
+
+            <div class="kpi-card cyan">
+              <div class="kpi-icon cyan">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="kpiPendingSites">—</div>
+              <div class="kpi-label">Pending Approvals</div>
+              <div class="kpi-change neutral">Awaiting review</div>
+            </div>
+
+            <div class="kpi-card red">
+              <div class="kpi-icon red">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="kpiFreeUsers">—</div>
+              <div class="kpi-label">Free Plan Users</div>
+              <div class="kpi-change neutral" id="kpiProUsers">— pro/agency</div>
+            </div>
+          </div>
+
+          <!-- RECENT ACTIVITY TABLE -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Recent Users</div>
+                <div class="card-subtitle">Latest registered accounts on the platform</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="adminNav('users', document.querySelector('[onclick*=\"
+                users\"]'))">View All</button>
+            </div>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Reputation</th>
+                    <th>Exchanges</th>
+                    <th>Joined</th>
+                  </tr>
+                </thead>
+                <tbody id="recentUsersBody">
+                  <tr>
+                    <td colspan="5">
+                      <div class="loading-state">
+                        <div class="spinner"></div>Loading users…
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PAGE: USER MANAGEMENT ====== -->
+        <div class="admin-page" id="page-users">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>User Management</h2>
+              <p>Manage roles, reputation, and access for all platform users</p>
+            </div>
+            <div class="page-header-right">
+              <button class="btn btn-ghost btn-sm" onclick="loadUsersPage()">
+                <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <polyline points="23 4 23 10 17 10" />
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                </svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <div class="filter-bar">
+            <input class="filter-input" type="text" placeholder="Search name or email…" id="userSearch"
+              oninput="filterUsers(this.value)">
+            <select class="filter-select" id="roleFilter"
+              onchange="filterUsers(document.getElementById('userSearch').value)">
+              <option value="">All Roles</option>
+              <option value="free">Free</option>
+              <option value="pro">Pro</option>
+              <option value="agency">Agency</option>
+              <option value="admin">Admin</option>
+            </select>
+            <span style="font-size:12px;color:var(--text-tertiary);margin-left:auto">Showing <strong id="userCount"
+                style="color:var(--text-primary)">—</strong> users</span>
+          </div>
+
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Reputation</th>
+                    <th>Exchanges</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                  <tr>
+                    <td colspan="6">
+                      <div class="loading-state">
+                        <div class="spinner"></div>Loading users…
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PAGE: WEBSITE MODERATION ====== -->
+        <div class="admin-page" id="page-websites">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Website Moderation</h2>
+              <p>Review and approve pending website submissions</p>
+            </div>
+            <div class="page-header-right">
+              <button class="btn btn-ghost btn-sm" onclick="loadWebsitesPage()">
+                <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <polyline points="23 4 23 10 17 10" />
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                </svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <div id="websitesList">
+            <div class="loading-state">
+              <div class="spinner"></div>Loading pending websites…
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PAGE: ACTIVE WEBSITES ====== -->
+        <div class="admin-page" id="page-active-websites">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Active Websites</h2>
+              <p>List of all active and verified websites on the platform</p>
+            </div>
+            <div class="page-header-right">
+              <button class="btn btn-ghost btn-sm" onclick="loadActiveWebsitesPage()">
+                <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <polyline points="23 4 23 10 17 10" />
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                </svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <div class="filter-bar">
+            <input class="filter-input" type="text" placeholder="Search domain or niche…" id="activeWebsiteSearch"
+              oninput="filterActiveWebsites(this.value)">
+            <select class="filter-select" id="activeNicheFilter"
+              onchange="filterActiveWebsites(document.getElementById('activeWebsiteSearch').value)">
+              <option value="">All Niches</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Blogging">Blogging</option>
+              <option value="Construction">Construction</option>
+              <option value="E-commerce">E-commerce</option>
+              <option value="Education">Education</option>
+              <option value="Energy">Energy</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Fashion & Beauty">Fashion & Beauty</option>
+              <option value="Finance">Finance</option>
+              <option value="Food & Beverage">Food & Beverage</option>
+              <option value="Government">Government</option>
+              <option value="Health & Wellness">Health & Wellness</option>
+              <option value="Insurance">Insurance</option>
+              <option value="Legal">Legal</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Marketing">Marketing</option>
+              <option value="News & Media">News & Media</option>
+              <option value="Non-Profit">Non-Profit</option>
+              <option value="Real Estate">Real Estate</option>
+              <option value="SaaS">SaaS</option>
+              <option value="SEO Tools">SEO Tools</option>
+              <option value="Sports">Sports</option>
+              <option value="Tech">Tech</option>
+              <option value="Telecommunications">Telecommunications</option>
+              <option value="Travel">Travel</option>
+              <option value="Other">Other</option>
+            </select>
+            <span style="font-size:12px;color:var(--text-tertiary);margin-left:auto">Showing <strong
+                id="activeWebsiteCount" style="color:var(--text-primary)">—</strong> active sites</span>
+          </div>
+
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Domain</th>
+                    <th>Niche</th>
+                    <th>Stats (DA / Traffic / RD)</th>
+                    <th>Country / Lang</th>
+                    <th>Owner</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="activeWebsitesTableBody">
+                  <tr>
+                    <td colspan="6">
+                      <div class="loading-state">
+                        <div class="spinner"></div>Loading websites…
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PAGE: EXCHANGE MONITOR ====== -->
+        <div class="admin-page" id="page-exchanges">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Exchange Monitor</h2>
+              <p>Track all link exchange requests across the platform</p>
+            </div>
+            <div class="page-header-right">
+              <select class="filter-select" id="exchangeStatusFilter" onchange="renderExchanges()">
+                <option value="">All Statuses</option>
+                <option value="new">New</option>
+                <option value="negotiating">Negotiating</option>
+                <option value="accepted">Accepted</option>
+                <option value="completed">Completed</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Exchange Stats -->
+          <div class="stats-row" id="exchangeStatsRow">
+            <div class="stat-mini">
+              <div class="stat-mini-val" id="exTotal">—</div>
+              <div class="stat-mini-label">Total</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-val" style="color:var(--info)" id="exPending">—</div>
+              <div class="stat-mini-label">Pending</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-val" style="color:var(--success)" id="exCompleted">—</div>
+              <div class="stat-mini-label">Completed</div>
+            </div>
+          </div>
+
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Status</th>
+                    <th>Anchor Text</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody id="exchangesBody">
+                  <tr>
+                    <td colspan="5">
+                      <div class="loading-state">
+                        <div class="spinner"></div>Loading exchanges…
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PAGE: FEEDBACK ====== -->
+        <div class="admin-page" id="page-feedback">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Feedback & Features</h2>
+              <p>Review feature requests and feedback from users</p>
+            </div>
+            <div class="page-header-right">
+              <button class="btn btn-primary" onclick="renderFeedbacks()"><svg viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <polyline points="23 4 23 10 17 10" />
+                  <polyline points="1 20 1 14 7 14" />
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                </svg> Refresh</button>
+            </div>
+          </div>
+
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Note</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="feedbacksBody">
+                  <tr>
+                    <td colspan="5">
+                      <div class="loading-state">
+                        <div class="spinner"></div>Loading feedbacks…
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PAGE: REVENUE ====== -->
+        <div class="admin-page" id="page-revenue">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Revenue & Plans</h2>
+              <p>Subscription breakdown and monthly recurring revenue</p>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card yellow">
+              <div class="kpi-icon yellow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="revMRR">$0</div>
+              <div class="kpi-label">Monthly Recurring Revenue</div>
+              <div class="kpi-change up">Active subscriptions</div>
+            </div>
+            <div class="kpi-card purple">
+              <div class="kpi-icon purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <div class="kpi-value" id="revTotal">0</div>
+              <div class="kpi-label">Total Subscribers</div>
+              <div class="kpi-change neutral">All active plans</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-header">
+              <div class="card-title">Plan Breakdown</div>
+            </div>
+            <div class="plan-breakdown" id="planBreakdown">
+              <div class="plan-item">
+                <div class="plan-item-name">Free</div>
+                <div class="plan-item-count" id="planFree" style="color:var(--text-secondary)">—</div>
+                <div class="plan-item-rev">$0 / mo</div>
+              </div>
+              <div class="plan-item">
+                <div class="plan-item-name">Pro</div>
+                <div class="plan-item-count" id="planPro" style="color:var(--primary-purple)">—</div>
+                <div class="plan-item-rev" id="planProRev">$0 / mo</div>
+              </div>
+              <div class="plan-item">
+                <div class="plan-item-name">Agency</div>
+                <div class="plan-item-count" id="planAgency" style="color:var(--info)">—</div>
+                <div class="plan-item-rev" id="planAgencyRev">$0 / mo</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Revenue Chart</div>
+              <div class="card-subtitle">Estimated MRR by plan (static projection)</div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PAGE: ANALYTICS ====== -->
+        <div class="admin-page" id="page-analytics">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Analytics Charts</h2>
+              <p>Platform growth, exchange activity, and user trends</p>
+            </div>
+          </div>
+
+          <div class="charts-grid">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">User Growth</div>
+                  <div class="card-subtitle">New signups per month by plan</div>
+                </div>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="userGrowthChart"></canvas>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Exchange Activity</div>
+                  <div class="card-subtitle">Created vs completed over 6 months</div>
+                </div>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="exchangeActivityChart"></canvas>
+              </div>
+            </div>
+
+            <div class="card card-wide">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Role Distribution</div>
+                  <div class="card-subtitle">Breakdown of user roles on the platform</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:40px;align-items:center;padding-top:8px">
+                <div style="width:200px;height:200px;position:relative">
+                  <canvas id="roleDistChart"></canvas>
+                </div>
+                <div id="roleDistLegend" style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PAGE: SETTINGS ====== -->
+        <div class="admin-page" id="page-settings">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Platform Settings</h2>
+              <p>Configure platform behaviour, limits and feature flags</p>
+            </div>
+            <div class="page-header-right">
+              <button class="btn btn-primary btn-sm" onclick="saveSettings()">Save Changes</button>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <div class="settings-section">
+              <h3>Plan Limits</h3>
+              <div class="settings-field">
+                <label>Free Plan — Max Websites</label>
+                <input class="settings-input" type="number" value="3" id="freeSites">
+              </div>
+              <div class="settings-field">
+                <label>Free Plan — Max Exchanges / Month</label>
+                <input class="settings-input" type="number" value="10" id="freeExchanges">
+              </div>
+              <div class="settings-field">
+                <label>Pro Plan — Max Websites</label>
+                <input class="settings-input" type="number" value="25" id="proSites">
+              </div>
+              <div class="settings-field">
+                <label>Pro Plan — Price ($/month)</label>
+                <input class="settings-input" type="number" value="49" id="proPrice">
+              </div>
+              <div class="settings-field">
+                <label>Agency Plan — Price ($/month)</label>
+                <input class="settings-input" type="number" value="199" id="agencyPrice">
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h3>Feature Flags</h3>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Google Sign-In</div>
+                  <div class="toggle-sub">Allow users to sign in with Google</div>
+                </div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">New User Registrations</div>
+                  <div class="toggle-sub">Allow new account creation</div>
+                </div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Marketplace Access</div>
+                  <div class="toggle-sub">Enable public marketplace browsing</div>
+                </div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Website Auto-Approval</div>
+                  <div class="toggle-sub">Auto-approve websites without manual review</div>
+                </div>
+                <button class="toggle" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Maintenance Mode</div>
+                  <div class="toggle-sub">Show maintenance page to regular users</div>
+                </div>
+                <button class="toggle" onclick="this.classList.toggle('on')" id="maintenanceToggle"></button>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h3>Email & Notifications</h3>
+              <div class="settings-field">
+                <label>Admin Email</label>
+                <input class="settings-input" type="email" placeholder="admin@linkbuild.io" id="adminEmail">
+              </div>
+              <div class="settings-field">
+                <label>Support Email</label>
+                <input class="settings-input" type="email" placeholder="support@linkbuild.io" id="supportEmail">
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">New User Email</div>
+                  <div class="toggle-sub">Send welcome email on signup</div>
+                </div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Exchange Alerts</div>
+                  <div class="toggle-sub">Notify admin on new exchanges</div>
+                </div>
+                <button class="toggle" onclick="this.classList.toggle('on')"></button>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h3>Moderation Rules</h3>
+              <div class="settings-field">
+                <label>Min Domain Authority to Join</label>
+                <input class="settings-input" type="number" value="10" id="minDA">
+              </div>
+              <div class="settings-field">
+                <label>Max Spam Score Allowed (%)</label>
+                <input class="settings-input" type="number" value="30" id="maxSpam">
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Require DNS Verification</div>
+                  <div class="toggle-sub">Websites must verify ownership via DNS</div>
+                </div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label">Auto-ban on Low Reputation</div>
+                  <div class="toggle-sub">Auto-restrict users below score 10</div>
+                </div>
+                <button class="toggle" onclick="this.classList.toggle('on')"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /admin-content -->
+    </div><!-- /admin-main -->
+  </div><!-- /admin-shell -->
+
+  <!-- Mobile overlay for sidebar -->
+  <div class="admin-mobile-overlay" id="adminMobileOverlay"
+    onclick="document.querySelector('.admin-sidebar').classList.remove('mobile-open'); this.classList.remove('active')"
+    style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:299; backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);">
+  </div>
+
+  <!-- ====== CONFIRM MODAL ====== -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="confirmTitle">Confirm Action</div>
+        <button class="modal-close" onclick="closeConfirm()">&times;</button>
+      </div>
+      <div class="modal-body" id="confirmBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+        <button class="btn btn-danger" id="confirmBtn" onclick="executeConfirm()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="adminToast"></div>
+
+  <!-- ========== SCRIPT ========== -->
+  <script>
+    /* ============================================
+       ADMIN PANEL — Logic
+    ============================================ */
+
+    let adminData = {
+      users: [],
+      pendingWebsites: [],
+      exchanges: [],
+      stats: null,
+      revenue: null,
+    };
+
+    let confirmCallback = null;
+    let allUsersRaw = [];
+    let charts = {};
+
+    // ---- INIT ----
+    window.addEventListener('load', () => {
+      // Set admin user info in sidebar
+      try {
+        const u = JSON.parse(localStorage.getItem('linkbuild-user') || '{}');
+        document.getElementById('sidebarName').textContent = u.name || 'Admin';
+        document.getElementById('sidebarAvatar').textContent = (u.name || 'A')[0].toUpperCase();
+      } catch (e) { }
+
+      // Wait for LinkBuild client to be ready
+      const waitForClient = setInterval(() => {
+        if (window.LinkBuild && window.LinkBuild.getClient && window.LinkBuild.getClient()) {
+          clearInterval(waitForClient);
+          loadOverviewPage();
+        }
+      }, 200);
+
+      // Fallback after 5s
+      setTimeout(() => {
+        clearInterval(waitForClient);
+        if (!window.LinkBuild || !window.LinkBuild.getClient || !window.LinkBuild.getClient()) {
+          showToast('Could not connect to server. Check your connection.', 'error');
+        }
+      }, 5000);
+    });
+
+    // ---- NAVIGATION ----
+    const pageTitles = {
+      overview: ['Dashboard', 'Platform Overview'],
+      users: ['User Management', 'Manage roles & access'],
+      websites: ['Website Moderation', 'Review pending submissions'],
+      'active-websites': ['Active Websites', 'List of all active & verified websites'],
+      exchanges: ['Exchange Monitor', 'Track all exchanges'],
+      revenue: ['Revenue & Plans', 'Subscription analytics'],
+      analytics: ['Analytics', 'Growth & activity charts'],
+      settings: ['Platform Settings', 'Configure platform']
+    };
+
+    function adminNav(page, el) {
+      // Update active nav
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      // Hide all pages
+      document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById('page-' + page);
+      if (target) target.classList.add('active');
+
+      // Update topbar
+      const [title, sub] = pageTitles[page] || ['Admin', ''];
+      document.getElementById('topbarTitle').innerHTML = title + (sub ? ` <span>${sub}</span>` : '');
+
+      // Load page data
+      if (page === 'overview') loadOverviewPage();
+      else if (page === 'users') loadUsersPage();
+      else if (page === 'websites') loadWebsitesPage();
+      else if (page === 'active-websites') loadActiveWebsitesPage();
+      else if (page === 'exchanges') loadExchangesPage();
+      else if (page === 'revenue') loadRevenuePage();
+      else if (page === 'analytics') loadAnalyticsPage();
     }
-    tbody.innerHTML = users.slice(0, 8).map(u => `
+
+    function refreshCurrentPage() {
+      const active = document.querySelector('.admin-page.active');
+      if (!active) return;
+      const page = active.id.replace('page-', '');
+      adminNav(page, null);
+    }
+
+    // ---- OVERVIEW ----
+    async function loadOverviewPage() {
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+
+      try {
+        const [stats, rev, pending] = await Promise.all([
+          window.LinkBuild.getAdminStats(),
+          getRevenue(),
+          window.LinkBuild.getPendingWebsites(),
+        ]);
+
+        if (stats) {
+          document.getElementById('kpiTotalUsers').textContent = stats.total;
+          document.getElementById('kpiNewUsers').innerHTML = `<svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg> ${stats.newThisMonth} new this month`;
+          document.getElementById('kpiActiveWebsites').textContent = stats.totalWebsites;
+          document.getElementById('kpiSpamReports').textContent = stats.spamReports;
+          document.getElementById('kpiFreeUsers').textContent = stats.byRole.free;
+          document.getElementById('kpiProUsers').textContent = `${stats.byRole.pro + stats.byRole.agency} pro/agency`;
+          document.getElementById('kpiMRR').textContent = '$' + stats.mrr.toLocaleString();
+          document.getElementById('kpiPaidUsers').textContent = `${stats.byRole.pro + stats.byRole.agency} paid users`;
+
+          // Update sidebar badges
+          const pendingCount = pending ? pending.length : 0;
+          document.getElementById('kpiPendingSites').textContent = pendingCount;
+          if (pendingCount > 0) {
+            document.getElementById('sidebarPendingBadge').textContent = pendingCount;
+            document.getElementById('sidebarPendingBadge').style.display = '';
+          }
+        }
+
+        // Exchange stats (global)
+        const client = window.LinkBuild.getClient();
+        let exStats = null;
+        try { exStats = await client.query('exchanges:stats', {}); } catch (e) { }
+
+        if (exStats) {
+          document.getElementById('kpiTotalExchanges').textContent = exStats.total;
+          document.getElementById('kpiCompletedExchanges').textContent = `${exStats.completed} completed`;
+          document.getElementById('exTotal').textContent = exStats.total;
+          document.getElementById('exPending').textContent = exStats.pending;
+          document.getElementById('exCompleted').textContent = exStats.completed;
+          adminData.exchanges = exStats;
+        }
+
+        // Load recent users for overview table
+        const users = await window.LinkBuild.getAdminUsers(8);
+        allUsersRaw = users;
+        renderRecentUsersTable(users);
+
+      } catch (e) {
+        console.error('Overview load error:', e);
+        showToast('Failed to load overview data', 'error');
+      }
+    }
+
+    function renderRecentUsersTable(users) {
+      const tbody = document.getElementById('recentUsersBody');
+      if (!users || !users.length) {
+        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No users found</p></div></td></tr>`;
+        return;
+      }
+      tbody.innerHTML = users.slice(0, 8).map(u => `
       <tr>
         <td>
           <div class="td-user">
-            <div class="td-avatar">${(u.name||'?')[0].toUpperCase()}</div>
+            <div class="td-avatar">${(u.name || '?')[0].toUpperCase()}</div>
             <div>
               <div class="td-name">${escHtml(u.name)}</div>
               <div class="td-email">${escHtml(u.email)}</div>
@@ -2201,52 +2744,52 @@
         <td>${formatDate(u.createdAt)}</td>
       </tr>
     `).join('');
-  }
-
-  // ---- USERS PAGE ----
-  async function loadUsersPage() {
-    const tbody = document.getElementById('usersTableBody');
-    tbody.innerHTML = `<tr><td colspan="6"><div class="loading-state"><div class="spinner"></div>Loading users…</div></td></tr>`;
-
-    try {
-      const users = await window.LinkBuild.getAdminUsers(200);
-      allUsersRaw = users;
-      document.getElementById('userCount').textContent = users.length;
-      renderUsersTable(users);
-    } catch(e) {
-      tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>Failed to load users</p></div></td></tr>`;
-      showToast('Failed to load users', 'error');
     }
-  }
 
-  function filterUsers(q) {
-    const role = document.getElementById('roleFilter').value;
-    let filtered = allUsersRaw;
-    if (q) {
-      const lq = q.toLowerCase();
-      filtered = filtered.filter(u =>
-        (u.name || '').toLowerCase().includes(lq) ||
-        (u.email || '').toLowerCase().includes(lq)
-      );
-    }
-    if (role) {
-      filtered = filtered.filter(u => u.role === role);
-    }
-    document.getElementById('userCount').textContent = filtered.length;
-    renderUsersTable(filtered);
-  }
+    // ---- USERS PAGE ----
+    async function loadUsersPage() {
+      const tbody = document.getElementById('usersTableBody');
+      tbody.innerHTML = `<tr><td colspan="6"><div class="loading-state"><div class="spinner"></div>Loading users…</div></td></tr>`;
 
-  function renderUsersTable(users) {
-    const tbody = document.getElementById('usersTableBody');
-    if (!users || !users.length) {
-      tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No users match your filter</p></div></td></tr>`;
-      return;
+      try {
+        const users = await window.LinkBuild.getAdminUsers(200);
+        allUsersRaw = users;
+        document.getElementById('userCount').textContent = users.length;
+        renderUsersTable(users);
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>Failed to load users</p></div></td></tr>`;
+        showToast('Failed to load users', 'error');
+      }
     }
-    tbody.innerHTML = users.map(u => `
+
+    function filterUsers(q) {
+      const role = document.getElementById('roleFilter').value;
+      let filtered = allUsersRaw;
+      if (q) {
+        const lq = q.toLowerCase();
+        filtered = filtered.filter(u =>
+          (u.name || '').toLowerCase().includes(lq) ||
+          (u.email || '').toLowerCase().includes(lq)
+        );
+      }
+      if (role) {
+        filtered = filtered.filter(u => u.role === role);
+      }
+      document.getElementById('userCount').textContent = filtered.length;
+      renderUsersTable(filtered);
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('usersTableBody');
+      if (!users || !users.length) {
+        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No users match your filter</p></div></td></tr>`;
+        return;
+      }
+      tbody.innerHTML = users.map(u => `
       <tr>
         <td>
           <div class="td-user">
-            <div class="td-avatar">${(u.name||'?')[0].toUpperCase()}</div>
+            <div class="td-avatar">${(u.name || '?')[0].toUpperCase()}</div>
             <div>
               <div class="td-name">${escHtml(u.name)}</div>
               <div class="td-email">${escHtml(u.email)}</div>
@@ -2277,66 +2820,67 @@
         </td>
       </tr>
     `).join('');
-  }
-
-  async function changeUserRole(userId, newRole, userName) {
-    const res = await window.LinkBuild.updateAdminUserRole(userId, newRole);
-    if (res && res.success !== false) {
-      showToast(`✓ ${userName}'s role updated to ${newRole}`, 'success');
-      // Update local data
-      const u = allUsersRaw.find(u => u._id === userId);
-      if (u) u.role = newRole;
-    } else {
-      showToast(res?.error || 'Failed to update role', 'error');
     }
-  }
 
-  function confirmBanUser(userId, name) {
-    showConfirm(
-      'Ban User',
-      `Are you sure you want to ban <strong>${escHtml(name)}</strong>? This will reset their reputation to 0 and revoke their active sessions.`,
-      async () => {
-        const res = await window.LinkBuild.banAdminUser(userId);
-        if (res && res.success !== false) {
-          showToast(`✓ ${name} has been banned`, 'success');
-          loadUsersPage();
-        } else {
-          showToast(res?.error || 'Failed to ban user', 'error');
-        }
-      },
-      'danger'
-    );
-  }
+    async function changeUserRole(userId, newRole, userName) {
+      const res = await window.LinkBuild.updateAdminUserRole(userId, newRole);
+      if (res && res.success !== false) {
+        showToast(`✓ ${userName}'s role updated to ${newRole}`, 'success');
+        // Update local data
+        const u = allUsersRaw.find(u => u._id === userId);
+        if (u) u.role = newRole;
+      } else {
+        showToast(res?.error || 'Failed to update role', 'error');
+      }
+    }
 
-  // ---- WEBSITES PAGE ----
-  async function loadWebsitesPage() {
-    const container = document.getElementById('websitesList');
-    container.innerHTML = `<div class="loading-state"><div class="spinner"></div>Loading pending websites…</div>`;
+    function confirmBanUser(userId, name) {
+      showConfirm(
+        'Ban User',
+        `Are you sure you want to ban <strong>${escHtml(name)}</strong>? This will reset their reputation to 0 and revoke their active sessions.`,
+        async () => {
+          const res = await window.LinkBuild.banAdminUser(userId);
+          if (res && res.success !== false) {
+            showToast(`✓ ${name} has been banned`, 'success');
+            loadUsersPage();
+          } else {
+            showToast(res?.error || 'Failed to ban user', 'error');
+          }
+        },
+        'danger'
+      );
+    }
 
-    try {
-      const sites = await window.LinkBuild.getPendingWebsites();
-      adminData.pendingWebsites = sites;
+    // ---- WEBSITES PAGE ----
+    async function loadWebsitesPage() {
+      const container = document.getElementById('websitesList');
+      container.innerHTML = `<div class="loading-state"><div class="spinner"></div>Loading pending websites…</div>`;
 
-      if (!sites || !sites.length) {
-        container.innerHTML = `
+      try {
+        const sites = await window.LinkBuild.getPendingWebsites();
+        adminData.pendingWebsites = sites;
+
+        if (!sites || !sites.length) {
+          container.innerHTML = `
           <div class="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
             <p style="font-size:16px;font-weight:700;margin-bottom:4px;color:var(--text-primary)">All Clear!</p>
             <p>No pending websites require review.</p>
           </div>`;
-        return;
-      }
+          return;
+        }
 
-      // Update badge
-      document.getElementById('sidebarPendingBadge').textContent = sites.length;
-      document.getElementById('sidebarPendingBadge').style.display = '';
+        // Update badge
+        document.getElementById('sidebarPendingBadge').textContent = sites.length;
+        document.getElementById('sidebarPendingBadge').style.display = '';
 
-      container.innerHTML = sites.map(site => `
+        container.innerHTML = sites.map(site => `
         <div class="website-card" id="wsite-${site._id}">
-          <div class="website-logo">${(site.domain||'?')[0].toUpperCase()}</div>
+          <div class="website-logo">${(site.domain || '?')[0].toUpperCase()}</div>
           <div class="website-info">
             <div class="website-domain">${escHtml(site.domain)}</div>
             <div class="website-meta">Niche: ${escHtml(site.niche)} · Country: ${escHtml(site.country)} · Language: ${escHtml(site.language)} · Added: ${formatDate(site.createdAt)}</div>
+            <div class="website-meta" style="margin-top:3px;color:var(--primary-purple);font-weight:500">Added by: ${escHtml(site.addedByName) + (site.addedByEmail ? ' (' + escHtml(site.addedByEmail) + ')' : '')}</div>
           </div>
           <div class="website-metrics">
             <div class="metric-item">
@@ -2373,102 +2917,102 @@
         </div>
       `).join('');
 
-    } catch(e) {
-      container.innerHTML = `<div class="empty-state"><p>Failed to load pending websites</p></div>`;
-      showToast('Failed to load pending websites', 'error');
+      } catch (e) {
+        container.innerHTML = `<div class="empty-state"><p>Failed to load pending websites</p></div>`;
+        showToast('Failed to load pending websites', 'error');
+      }
     }
-  }
 
-  async function moderateSite(websiteId, status, domain) {
-    const labels = { active: 'Approve', suspended: 'Suspend', rejected: 'Reject' };
-    showConfirm(
-      `${labels[status]} Website`,
-      `Are you sure you want to <strong>${labels[status].toLowerCase()}</strong> <strong>${escHtml(domain)}</strong>?`,
-      async () => {
-        const res = await window.LinkBuild.moderateAdminWebsite(websiteId, status);
-        if (res && res.success !== false) {
-          showToast(`✓ ${domain} has been ${status}`, 'success');
-          // Remove card/row from DOM
-          const card = document.getElementById('wsite-' + websiteId);
-          if (card) { card.style.opacity = '0'; card.style.transform = 'translateX(-20px)'; setTimeout(() => card.remove(), 300); }
-          
-          // If on active-websites page, update local array and count
-          if (typeof allActiveWebsitesRaw !== 'undefined') {
-            allActiveWebsitesRaw = allActiveWebsitesRaw.filter(s => s._id !== websiteId);
-            const activeCountEl = document.getElementById('activeWebsiteCount');
-            if (activeCountEl) activeCountEl.textContent = allActiveWebsitesRaw.length;
-            
-            // Also sync dashboard KPI active websites number
-            const kpiActive = document.getElementById('kpiActiveWebsites');
-            if (kpiActive && kpiActive.textContent !== '—') {
-              const current = parseInt(kpiActive.textContent) || 0;
-              kpiActive.textContent = Math.max(0, current - 1);
+    async function moderateSite(websiteId, status, domain) {
+      const labels = { active: 'Approve', suspended: 'Suspend', rejected: 'Reject' };
+      showConfirm(
+        `${labels[status]} Website`,
+        `Are you sure you want to <strong>${labels[status].toLowerCase()}</strong> <strong>${escHtml(domain)}</strong>?`,
+        async () => {
+          const res = await window.LinkBuild.moderateAdminWebsite(websiteId, status);
+          if (res && res.success !== false) {
+            showToast(`✓ ${domain} has been ${status}`, 'success');
+            // Remove card/row from DOM
+            const card = document.getElementById('wsite-' + websiteId);
+            if (card) { card.style.opacity = '0'; card.style.transform = 'translateX(-20px)'; setTimeout(() => card.remove(), 300); }
+
+            // If on active-websites page, update local array and count
+            if (typeof allActiveWebsitesRaw !== 'undefined') {
+              allActiveWebsitesRaw = allActiveWebsitesRaw.filter(s => s._id !== websiteId);
+              const activeCountEl = document.getElementById('activeWebsiteCount');
+              if (activeCountEl) activeCountEl.textContent = allActiveWebsitesRaw.length;
+
+              // Also sync dashboard KPI active websites number
+              const kpiActive = document.getElementById('kpiActiveWebsites');
+              if (kpiActive && kpiActive.textContent !== '—') {
+                const current = parseInt(kpiActive.textContent) || 0;
+                kpiActive.textContent = Math.max(0, current - 1);
+              }
             }
+
+            // Update moderation badge if it was a pending site
+            adminData.pendingWebsites = adminData.pendingWebsites.filter(s => s._id !== websiteId);
+            const n = adminData.pendingWebsites.length;
+            if (n > 0) { document.getElementById('sidebarPendingBadge').textContent = n; }
+            else { document.getElementById('sidebarPendingBadge').style.display = 'none'; }
+            document.getElementById('kpiPendingSites').textContent = n;
+          } else {
+            showToast('Failed to update website status', 'error');
           }
-          
-          // Update moderation badge if it was a pending site
-          adminData.pendingWebsites = adminData.pendingWebsites.filter(s => s._id !== websiteId);
-          const n = adminData.pendingWebsites.length;
-          if (n > 0) { document.getElementById('sidebarPendingBadge').textContent = n; }
-          else { document.getElementById('sidebarPendingBadge').style.display = 'none'; }
-          document.getElementById('kpiPendingSites').textContent = n;
-        } else {
-          showToast('Failed to update website status', 'error');
-        }
-      },
-      status === 'active' ? 'success' : 'danger'
-    );
-  }
-
-  // ---- ACTIVE WEBSITES PAGE ----
-  let allActiveWebsitesRaw = [];
-
-  async function loadActiveWebsitesPage() {
-    const tbody = document.getElementById('activeWebsitesTableBody');
-    tbody.innerHTML = `<tr><td colspan="6"><div class="loading-state"><div class="spinner"></div>Loading websites…</div></td></tr>`;
-
-    try {
-      const client = window.LinkBuild.getClient();
-      const sites = await client.query("websites:list", { limit: 200 });
-      allActiveWebsitesRaw = sites;
-      document.getElementById('activeWebsiteCount').textContent = sites.length;
-      renderActiveWebsitesTable(sites);
-    } catch(e) {
-      tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>Failed to load websites</p></div></td></tr>`;
-      showToast('Failed to load websites: ' + e.message, 'error');
-    }
-  }
-
-  function filterActiveWebsites(q) {
-    const niche = document.getElementById('activeNicheFilter').value;
-    let filtered = allActiveWebsitesRaw;
-    if (q) {
-      const lq = q.toLowerCase();
-      filtered = filtered.filter(w =>
-        (w.domain || '').toLowerCase().includes(lq) ||
-        (w.niche || '').toLowerCase().includes(lq)
+        },
+        status === 'active' ? 'success' : 'danger'
       );
     }
-    if (niche) {
-      filtered = filtered.filter(w => w.niche === niche);
-    }
-    document.getElementById('activeWebsiteCount').textContent = filtered.length;
-    renderActiveWebsitesTable(filtered);
-  }
 
-  function renderActiveWebsitesTable(sites) {
-    const tbody = document.getElementById('activeWebsitesTableBody');
-    if (!sites || !sites.length) {
-      tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No active websites match your filter</p></div></td></tr>`;
-      return;
+    // ---- ACTIVE WEBSITES PAGE ----
+    let allActiveWebsitesRaw = [];
+
+    async function loadActiveWebsitesPage() {
+      const tbody = document.getElementById('activeWebsitesTableBody');
+      tbody.innerHTML = `<tr><td colspan="6"><div class="loading-state"><div class="spinner"></div>Loading websites…</div></td></tr>`;
+
+      try {
+        const client = window.LinkBuild.getClient();
+        const sites = await client.query("websites:list", { limit: 200 });
+        allActiveWebsitesRaw = sites;
+        document.getElementById('activeWebsiteCount').textContent = sites.length;
+        renderActiveWebsitesTable(sites);
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>Failed to load websites</p></div></td></tr>`;
+        showToast('Failed to load websites: ' + e.message, 'error');
+      }
     }
-    tbody.innerHTML = sites.map(w => {
-      const traffic = w.trafficEstimate >= 1000 ? (w.trafficEstimate / 1000).toFixed(0) + 'K/mo' : (w.trafficEstimate || 0) + '/mo';
-      return `
+
+    function filterActiveWebsites(q) {
+      const niche = document.getElementById('activeNicheFilter').value;
+      let filtered = allActiveWebsitesRaw;
+      if (q) {
+        const lq = q.toLowerCase();
+        filtered = filtered.filter(w =>
+          (w.domain || '').toLowerCase().includes(lq) ||
+          (w.niche || '').toLowerCase().includes(lq)
+        );
+      }
+      if (niche) {
+        filtered = filtered.filter(w => w.niche === niche);
+      }
+      document.getElementById('activeWebsiteCount').textContent = filtered.length;
+      renderActiveWebsitesTable(filtered);
+    }
+
+    function renderActiveWebsitesTable(sites) {
+      const tbody = document.getElementById('activeWebsitesTableBody');
+      if (!sites || !sites.length) {
+        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No active websites match your filter</p></div></td></tr>`;
+        return;
+      }
+      tbody.innerHTML = sites.map(w => {
+        const traffic = w.trafficEstimate >= 1000 ? (w.trafficEstimate / 1000).toFixed(0) + 'K/mo' : (w.trafficEstimate || 0) + '/mo';
+        return `
         <tr id="wsite-${w._id}">
           <td>
             <div style="display:flex;align-items:center;gap:8px">
-              <div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0,2).toUpperCase()}</div>
+              <div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0, 2).toUpperCase()}</div>
               <div>
                 <strong style="color:var(--text-primary);font-size:13px">${escHtml(w.domain)}</strong>
                 ${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem;margin-left:4px">✓ Verified</span>' : ''}
@@ -2494,25 +3038,25 @@
           </td>
         </tr>
       `;
-    }).join('');
-  }
+      }).join('');
+    }
 
-  // ---- EXCHANGES PAGE ----
-  async function loadExchangesPage() {
-    const tbody = document.getElementById('exchangesBody');
-    tbody.innerHTML = `<tr><td colspan="5"><div class="loading-state"><div class="spinner"></div>Loading exchanges…</div></td></tr>`;
+    // ---- EXCHANGES PAGE ----
+    async function loadExchangesPage() {
+      const tbody = document.getElementById('exchangesBody');
+      tbody.innerHTML = `<tr><td colspan="5"><div class="loading-state"><div class="spinner"></div>Loading exchanges…</div></td></tr>`;
 
-    try {
-      const client = window.LinkBuild.getClient();
-      const exStats = await client.query('exchanges:stats', {});
+      try {
+        const client = window.LinkBuild.getClient();
+        const exStats = await client.query('exchanges:stats', {});
 
-      document.getElementById('exTotal').textContent = exStats.total;
-      document.getElementById('exPending').textContent = exStats.pending;
-      document.getElementById('exCompleted').textContent = exStats.completed;
+        document.getElementById('exTotal').textContent = exStats.total;
+        document.getElementById('exPending').textContent = exStats.pending;
+        document.getElementById('exCompleted').textContent = exStats.completed;
 
-      // Since we don't have a listAll admin exchanges query, fetch using token-based approach
-      // We'll use the stats to display and ask user to filter via website/user pages
-      tbody.innerHTML = `
+        // Since we don't have a listAll admin exchanges query, fetch using token-based approach
+        // We'll use the stats to display and ask user to filter via website/user pages
+        tbody.innerHTML = `
         <tr>
           <td colspan="5" style="text-align:center;padding:40px">
             <div style="font-size:36px;font-weight:900;color:var(--primary-purple)">${exStats.total}</div>
@@ -2525,267 +3069,267 @@
             </div>
             <div style="margin-top:20px">
               <div style="height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;max-width:400px;margin:0 auto">
-                ${exStats.total > 0 ? `<div style="height:100%;width:${Math.round(exStats.completed/exStats.total*100)}%;background:linear-gradient(135deg, #10B981, #06B6D4);border-radius:4px"></div>` : ''}
+                ${exStats.total > 0 ? `<div style="height:100%;width:${Math.round(exStats.completed / exStats.total * 100)}%;background:linear-gradient(135deg, #10B981, #06B6D4);border-radius:4px"></div>` : ''}
               </div>
-              <div style="font-size:12px;color:var(--text-tertiary);margin-top:8px">${exStats.total > 0 ? Math.round(exStats.completed/exStats.total*100) : 0}% completion rate</div>
+              <div style="font-size:12px;color:var(--text-tertiary);margin-top:8px">${exStats.total > 0 ? Math.round(exStats.completed / exStats.total * 100) : 0}% completion rate</div>
             </div>
           </td>
         </tr>
       `;
-    } catch(e) {
-      tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>Failed to load exchange data</p></div></td></tr>`;
-    }
-  }
-
-  // ---- REVENUE PAGE ----
-  async function getRevenue() {
-    try {
-      const client = window.LinkBuild.getClient();
-      return await client.query('analytics:revenue', {});
-    } catch(e) { return null; }
-  }
-
-  async function loadRevenuePage() {
-    try {
-      const rev = await getRevenue();
-      if (rev) {
-        document.getElementById('revMRR').textContent = '$' + rev.mrr.toLocaleString();
-        document.getElementById('revTotal').textContent = rev.totalSubscribers;
-        document.getElementById('planFree').textContent = rev.byPlan.free;
-        document.getElementById('planPro').textContent = rev.byPlan.pro;
-        document.getElementById('planAgency').textContent = rev.byPlan.agency;
-        document.getElementById('planProRev').textContent = '$' + (rev.byPlan.pro * 49).toLocaleString() + ' / mo';
-        document.getElementById('planAgencyRev').textContent = '$' + (rev.byPlan.agency * 199).toLocaleString() + ' / mo';
-
-        // Revenue chart
-        renderRevenueChart(rev);
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>Failed to load exchange data</p></div></td></tr>`;
       }
-    } catch(e) {
-      showToast('Failed to load revenue data', 'error');
     }
-  }
 
-  function renderRevenueChart(rev) {
-    const ctx = document.getElementById('revenueChart');
-    if (!ctx) return;
-    if (charts.revenue) { charts.revenue.destroy(); }
-
-    charts.revenue = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Free', 'Pro', 'Agency'],
-        datasets: [{
-          label: 'Monthly Revenue ($)',
-          data: [0, rev.byPlan.pro * 49, rev.byPlan.agency * 199],
-          backgroundColor: [
-            'rgba(148,163,184,0.3)',
-            'rgba(124,58,237,0.6)',
-            'rgba(59,130,246,0.6)',
-          ],
-          borderColor: [
-            'rgba(148,163,184,0.8)',
-            'rgba(124,58,237,1)',
-            'rgba(59,130,246,1)',
-          ],
-          borderWidth: 1,
-          borderRadius: 8,
-        }]
-      },
-      options: chartOptions('Revenue by Plan')
-    });
-  }
-
-  // ---- ANALYTICS PAGE ----
-  async function loadAnalyticsPage() {
-    try {
-      const client = window.LinkBuild.getClient();
-      const [growth, activity] = await Promise.all([
-        client.query('analytics:userGrowth', { months: 6 }),
-        client.query('analytics:exchangeActivity', { months: 6 }),
-      ]);
-
-      const stats = await window.LinkBuild.getAdminStats();
-
-      renderUserGrowthChart(growth);
-      renderExchangeActivityChart(activity);
-      if (stats) renderRoleDistChart(stats.byRole);
-
-    } catch(e) {
-      showToast('Failed to load analytics', 'error');
+    // ---- REVENUE PAGE ----
+    async function getRevenue() {
+      try {
+        const client = window.LinkBuild.getClient();
+        return await client.query('analytics:revenue', {});
+      } catch (e) { return null; }
     }
-  }
 
-  function renderUserGrowthChart(data) {
-    const ctx = document.getElementById('userGrowthChart');
-    if (!ctx) return;
-    if (charts.userGrowth) charts.userGrowth.destroy();
-    charts.userGrowth = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: data.map(d => d.month),
-        datasets: [
-          { label: 'Free', data: data.map(d => d.free), borderColor: '#94A3B8', backgroundColor: 'rgba(148,163,184,0.1)', tension: 0.4, fill: true },
-          { label: 'Pro', data: data.map(d => d.pro), borderColor: '#A78BFA', backgroundColor: 'rgba(124,58,237,0.1)', tension: 0.4, fill: true },
-          { label: 'Agency', data: data.map(d => d.agency), borderColor: '#60A5FA', backgroundColor: 'rgba(59,130,246,0.1)', tension: 0.4, fill: true },
-        ]
-      },
-      options: chartOptions('Users')
-    });
-  }
+    async function loadRevenuePage() {
+      try {
+        const rev = await getRevenue();
+        if (rev) {
+          document.getElementById('revMRR').textContent = '$' + rev.mrr.toLocaleString();
+          document.getElementById('revTotal').textContent = rev.totalSubscribers;
+          document.getElementById('planFree').textContent = rev.byPlan.free;
+          document.getElementById('planPro').textContent = rev.byPlan.pro;
+          document.getElementById('planAgency').textContent = rev.byPlan.agency;
+          document.getElementById('planProRev').textContent = '$' + (rev.byPlan.pro * 49).toLocaleString() + ' / mo';
+          document.getElementById('planAgencyRev').textContent = '$' + (rev.byPlan.agency * 199).toLocaleString() + ' / mo';
 
-  function renderExchangeActivityChart(data) {
-    const ctx = document.getElementById('exchangeActivityChart');
-    if (!ctx) return;
-    if (charts.exchActivity) charts.exchActivity.destroy();
-    charts.exchActivity = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: data.map(d => d.month),
-        datasets: [
-          { label: 'Created', data: data.map(d => d.created), backgroundColor: 'rgba(59,130,246,0.6)', borderColor: '#3B82F6', borderWidth: 1, borderRadius: 6 },
-          { label: 'Completed', data: data.map(d => d.completed), backgroundColor: 'rgba(16,185,129,0.6)', borderColor: '#10B981', borderWidth: 1, borderRadius: 6 },
-        ]
-      },
-      options: chartOptions('Exchanges')
-    });
-  }
-
-  function renderRoleDistChart(byRole) {
-    const ctx = document.getElementById('roleDistChart');
-    if (!ctx) return;
-    if (charts.roleDist) charts.roleDist.destroy();
-
-    const total = byRole.free + byRole.pro + byRole.agency + byRole.admin;
-    const data = [byRole.free, byRole.pro, byRole.agency, byRole.admin];
-    const labels = ['Free', 'Pro', 'Agency', 'Admin'];
-    const colors = ['#94A3B8', '#A78BFA', '#60A5FA', '#F87171'];
-
-    charts.roleDist = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels,
-        datasets: [{ data, backgroundColor: colors.map(c => c + 'CC'), borderColor: colors, borderWidth: 2 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: true,
-        plugins: { legend: { display: false } },
-        cutout: '65%',
+          // Revenue chart
+          renderRevenueChart(rev);
+        }
+      } catch (e) {
+        showToast('Failed to load revenue data', 'error');
       }
-    });
+    }
 
-    // Legend
-    const legend = document.getElementById('roleDistLegend');
-    legend.innerHTML = labels.map((l, i) => `
+    function renderRevenueChart(rev) {
+      const ctx = document.getElementById('revenueChart');
+      if (!ctx) return;
+      if (charts.revenue) { charts.revenue.destroy(); }
+
+      charts.revenue = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Free', 'Pro', 'Agency'],
+          datasets: [{
+            label: 'Monthly Revenue ($)',
+            data: [0, rev.byPlan.pro * 49, rev.byPlan.agency * 199],
+            backgroundColor: [
+              'rgba(148,163,184,0.3)',
+              'rgba(124,58,237,0.6)',
+              'rgba(59,130,246,0.6)',
+            ],
+            borderColor: [
+              'rgba(148,163,184,0.8)',
+              'rgba(124,58,237,1)',
+              'rgba(59,130,246,1)',
+            ],
+            borderWidth: 1,
+            borderRadius: 8,
+          }]
+        },
+        options: chartOptions('Revenue by Plan')
+      });
+    }
+
+    // ---- ANALYTICS PAGE ----
+    async function loadAnalyticsPage() {
+      try {
+        const client = window.LinkBuild.getClient();
+        const [growth, activity] = await Promise.all([
+          client.query('analytics:userGrowth', { months: 6 }),
+          client.query('analytics:exchangeActivity', { months: 6 }),
+        ]);
+
+        const stats = await window.LinkBuild.getAdminStats();
+
+        renderUserGrowthChart(growth);
+        renderExchangeActivityChart(activity);
+        if (stats) renderRoleDistChart(stats.byRole);
+
+      } catch (e) {
+        showToast('Failed to load analytics', 'error');
+      }
+    }
+
+    function renderUserGrowthChart(data) {
+      const ctx = document.getElementById('userGrowthChart');
+      if (!ctx) return;
+      if (charts.userGrowth) charts.userGrowth.destroy();
+      charts.userGrowth = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.map(d => d.month),
+          datasets: [
+            { label: 'Free', data: data.map(d => d.free), borderColor: '#94A3B8', backgroundColor: 'rgba(148,163,184,0.1)', tension: 0.4, fill: true },
+            { label: 'Pro', data: data.map(d => d.pro), borderColor: '#A78BFA', backgroundColor: 'rgba(124,58,237,0.1)', tension: 0.4, fill: true },
+            { label: 'Agency', data: data.map(d => d.agency), borderColor: '#60A5FA', backgroundColor: 'rgba(59,130,246,0.1)', tension: 0.4, fill: true },
+          ]
+        },
+        options: chartOptions('Users')
+      });
+    }
+
+    function renderExchangeActivityChart(data) {
+      const ctx = document.getElementById('exchangeActivityChart');
+      if (!ctx) return;
+      if (charts.exchActivity) charts.exchActivity.destroy();
+      charts.exchActivity = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(d => d.month),
+          datasets: [
+            { label: 'Created', data: data.map(d => d.created), backgroundColor: 'rgba(59,130,246,0.6)', borderColor: '#3B82F6', borderWidth: 1, borderRadius: 6 },
+            { label: 'Completed', data: data.map(d => d.completed), backgroundColor: 'rgba(16,185,129,0.6)', borderColor: '#10B981', borderWidth: 1, borderRadius: 6 },
+          ]
+        },
+        options: chartOptions('Exchanges')
+      });
+    }
+
+    function renderRoleDistChart(byRole) {
+      const ctx = document.getElementById('roleDistChart');
+      if (!ctx) return;
+      if (charts.roleDist) charts.roleDist.destroy();
+
+      const total = byRole.free + byRole.pro + byRole.agency + byRole.admin;
+      const data = [byRole.free, byRole.pro, byRole.agency, byRole.admin];
+      const labels = ['Free', 'Pro', 'Agency', 'Admin'];
+      const colors = ['#94A3B8', '#A78BFA', '#60A5FA', '#F87171'];
+
+      charts.roleDist = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{ data, backgroundColor: colors.map(c => c + 'CC'), borderColor: colors, borderWidth: 2 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: true,
+          plugins: { legend: { display: false } },
+          cutout: '65%',
+        }
+      });
+
+      // Legend
+      const legend = document.getElementById('roleDistLegend');
+      legend.innerHTML = labels.map((l, i) => `
       <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg-tertiary);border-radius:8px;border:1px solid var(--border-light)">
         <div style="width:10px;height:10px;border-radius:50%;background:${colors[i]};flex-shrink:0"></div>
         <div>
           <div style="font-size:13px;font-weight:700">${data[i]}</div>
-          <div style="font-size:11px;color:var(--text-tertiary)">${l} (${total > 0 ? Math.round(data[i]/total*100) : 0}%)</div>
+          <div style="font-size:11px;color:var(--text-tertiary)">${l} (${total > 0 ? Math.round(data[i] / total * 100) : 0}%)</div>
         </div>
       </div>
     `).join('');
-  }
-
-  // ---- CHART OPTIONS ----
-  function chartOptions(yLabel) {
-    return {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { color: '#94A3B8', font: { family: 'Inter', size: 11 }, boxWidth: 12 } }
-      },
-      scales: {
-        x: { ticks: { color: '#475569', font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' }, border: { color: 'transparent' } },
-        y: { ticks: { color: '#475569', font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' }, border: { color: 'transparent' } }
-      }
-    };
-  }
-
-  // ---- SETTINGS ----
-  function saveSettings() {
-    showToast('Settings saved (local only — connect backend to persist)', 'success');
-  }
-
-  // ---- CONFIRM MODAL ----
-  function showConfirm(title, body, onConfirm, type = 'danger') {
-    document.getElementById('confirmTitle').textContent = title;
-    document.getElementById('confirmBody').innerHTML = body;
-    const btn = document.getElementById('confirmBtn');
-    btn.className = `btn btn-${type}`;
-    btn.textContent = 'Confirm';
-    confirmCallback = onConfirm;
-    document.getElementById('confirmModal').classList.add('active');
-  }
-
-  function closeConfirm() {
-    document.getElementById('confirmModal').classList.remove('active');
-    confirmCallback = null;
-  }
-
-  async function executeConfirm() {
-    if (confirmCallback) {
-      document.getElementById('confirmBtn').textContent = 'Processing…';
-      document.getElementById('confirmBtn').disabled = true;
-      try { await confirmCallback(); } catch(e) {}
-      document.getElementById('confirmBtn').disabled = false;
     }
-    closeConfirm();
-  }
 
-  // ---- TOAST ----
-  let toastTimer;
-  function showToast(msg, type = 'success') {
-    const el = document.getElementById('adminToast');
-    el.textContent = msg;
-    el.className = 'show ' + type;
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { el.className = ''; }, 3500);
-  }
+    // ---- CHART OPTIONS ----
+    function chartOptions(yLabel) {
+      return {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: '#94A3B8', font: { family: 'Inter', size: 11 }, boxWidth: 12 } }
+        },
+        scales: {
+          x: { ticks: { color: '#475569', font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' }, border: { color: 'transparent' } },
+          y: { ticks: { color: '#475569', font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' }, border: { color: 'transparent' } }
+        }
+      };
+    }
 
-  // ---- LOGOUT ----
-  function adminLogout() {
-    localStorage.removeItem('linkbuild-token');
-    localStorage.removeItem('linkbuild-user');
-    window.location.href = 'index.html?auth=login';
-  }
+    // ---- SETTINGS ----
+    function saveSettings() {
+      showToast('Settings saved (local only — connect backend to persist)', 'success');
+    }
 
-  // ---- GLOBAL SEARCH ----
-  function handleGlobalSearch(q) {
-    if (!q) return;
-    // Switch to users page and filter
-    adminNav('users', document.querySelector('[onclick*="\'users\'"]'));
-    document.getElementById('userSearch').value = q;
-    filterUsers(q);
-  }
+    // ---- CONFIRM MODAL ----
+    function showConfirm(title, body, onConfirm, type = 'danger') {
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmBody').innerHTML = body;
+      const btn = document.getElementById('confirmBtn');
+      btn.className = `btn btn-${type}`;
+      btn.textContent = 'Confirm';
+      confirmCallback = onConfirm;
+      document.getElementById('confirmModal').classList.add('active');
+    }
 
-  // ---- RENDER FEEDBACKS ----
-  async function renderFeedbacks() {
-    const tbody = document.getElementById('feedbacksBody');
-    const badge = document.getElementById('sidebarFeedbackBadge');
-    if (!tbody) return;
-    
-    tbody.innerHTML = '<tr><td colspan="5"><div class="loading-state"><div class="spinner"></div>Loading feedbacks…</div></td></tr>';
-    
-    try {
-      const feedbacks = await client.query('feedback:list');
-      
-      let newCount = 0;
-      let html = '';
-      
-      if (!feedbacks || feedbacks.length === 0) {
-        html = '<tr><td colspan="5"><div class="empty-state" style="padding:40px;text-align:center;color:var(--text-tertiary)">No feedback found.</div></td></tr>';
-      } else {
-        feedbacks.forEach(f => {
-          if (f.status === 'new') newCount++;
-          
-          const statusBadge = f.status === 'new' 
-            ? '<span class="badge badge-new">New</span>' 
-            : '<span class="badge badge-completed">Reviewed</span>';
-            
-          const actionBtn = f.status === 'new'
-            ? `<button class="btn btn-sm btn-primary" onclick="markFeedbackReviewed('${f._id}')">Mark Reviewed</button>`
-            : `<button class="btn btn-sm btn-ghost" disabled>Reviewed</button>`;
-            
-          html += `
+    function closeConfirm() {
+      document.getElementById('confirmModal').classList.remove('active');
+      confirmCallback = null;
+    }
+
+    async function executeConfirm() {
+      if (confirmCallback) {
+        document.getElementById('confirmBtn').textContent = 'Processing…';
+        document.getElementById('confirmBtn').disabled = true;
+        try { await confirmCallback(); } catch (e) { }
+        document.getElementById('confirmBtn').disabled = false;
+      }
+      closeConfirm();
+    }
+
+    // ---- TOAST ----
+    let toastTimer;
+    function showToast(msg, type = 'success') {
+      const el = document.getElementById('adminToast');
+      el.textContent = msg;
+      el.className = 'show ' + type;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { el.className = ''; }, 3500);
+    }
+
+    // ---- LOGOUT ----
+    function adminLogout() {
+      localStorage.removeItem('linkbuild-token');
+      localStorage.removeItem('linkbuild-user');
+      window.location.href = 'index.html?auth=login';
+    }
+
+    // ---- GLOBAL SEARCH ----
+    function handleGlobalSearch(q) {
+      if (!q) return;
+      // Switch to users page and filter
+      adminNav('users', document.querySelector('[onclick*="\'users\'"]'));
+      document.getElementById('userSearch').value = q;
+      filterUsers(q);
+    }
+
+    // ---- RENDER FEEDBACKS ----
+    async function renderFeedbacks() {
+      const tbody = document.getElementById('feedbacksBody');
+      const badge = document.getElementById('sidebarFeedbackBadge');
+      if (!tbody) return;
+
+      tbody.innerHTML = '<tr><td colspan="5"><div class="loading-state"><div class="spinner"></div>Loading feedbacks…</div></td></tr>';
+
+      try {
+        const feedbacks = await client.query('feedback:list');
+
+        let newCount = 0;
+        let html = '';
+
+        if (!feedbacks || feedbacks.length === 0) {
+          html = '<tr><td colspan="5"><div class="empty-state" style="padding:40px;text-align:center;color:var(--text-tertiary)">No feedback found.</div></td></tr>';
+        } else {
+          feedbacks.forEach(f => {
+            if (f.status === 'new') newCount++;
+
+            const statusBadge = f.status === 'new'
+              ? '<span class="badge badge-new">New</span>'
+              : '<span class="badge badge-completed">Reviewed</span>';
+
+            const actionBtn = f.status === 'new'
+              ? `<button class="btn btn-sm btn-primary" onclick="markFeedbackReviewed('${f._id}')">Mark Reviewed</button>`
+              : `<button class="btn btn-sm btn-ghost" disabled>Reviewed</button>`;
+
+            html += `
             <tr>
               <td>
                 <div class="td-user">
@@ -2801,91 +3345,92 @@
               <td>${actionBtn}</td>
             </tr>
           `;
-        });
-      }
-      
-      tbody.innerHTML = html;
-      
-      if (badge) {
-        if (newCount > 0) {
-          badge.textContent = newCount;
-          badge.style.display = 'block';
-        } else {
-          badge.style.display = 'none';
+          });
         }
+
+        tbody.innerHTML = html;
+
+        if (badge) {
+          if (newCount > 0) {
+            badge.textContent = newCount;
+            badge.style.display = 'block';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state" style="color:var(--danger)">Error loading feedbacks.</div></td></tr>';
       }
-    } catch(err) {
-      console.error(err);
-      tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state" style="color:var(--danger)">Error loading feedbacks.</div></td></tr>';
     }
-  }
 
-  window.markFeedbackReviewed = async function(id) {
-    try {
-      await client.mutation('feedback:markReviewed', { feedbackId: id });
-      showToast('Feedback marked as reviewed!');
-      renderFeedbacks();
-    } catch(err) {
-      console.error(err);
-      showToast('Failed to mark reviewed: ' + err.message, true);
+    window.markFeedbackReviewed = async function (id) {
+      try {
+        await client.mutation('feedback:markReviewed', { feedbackId: id });
+        showToast('Feedback marked as reviewed!');
+        renderFeedbacks();
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to mark reviewed: ' + err.message, true);
+      }
+    };
+
+    // ---- RENDER EXCHANGES ----
+    function renderExchanges() {
+      // Already rendered in loadExchangesPage (stats view)
     }
-  };
 
-  // ---- RENDER EXCHANGES ----
-  function renderExchanges() {
-    // Already rendered in loadExchangesPage (stats view)
-  }
+    // Hook into adminNav to load feedbacks when the tab is opened
+    const originalAdminNav = window.adminNav;
+    window.adminNav = function (pageId, btn) {
+      if (originalAdminNav) originalAdminNav(pageId, btn);
+      if (pageId === 'feedback') {
+        renderFeedbacks();
+      }
+    };
 
-  // Hook into adminNav to load feedbacks when the tab is opened
-  const originalAdminNav = window.adminNav;
-  window.adminNav = function(pageId, btn) {
-    if (originalAdminNav) originalAdminNav(pageId, btn);
-    if (pageId === 'feedback') {
-      renderFeedbacks();
+
+    // ---- UTILS ----
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
-  };
 
-
-  // ---- UTILS ----
-  function escHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-  }
-
-  function formatDate(ts) {
-    if (!ts) return '—';
-    return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  function formatTraffic(n) {
-    if (!n) return '0';
-    if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
-    if (n >= 1000) return (n/1000).toFixed(1) + 'K';
-    return n.toString();
-  }
-
-  function reputationColor(score) {
-    if (score >= 80) return 'var(--success)';
-    if (score >= 50) return 'var(--warning)';
-    if (score >= 20) return '#F97316';
-    return 'var(--danger)';
-  }
-
-  function toggleTheme() {
-    var html = document.documentElement;
-    var current = html.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('linkbuild-theme', next);
-  }
-
-  // Close logout popup on outside click
-  document.addEventListener('click', (e) => {
-    const popup = document.getElementById('logoutPopup');
-    if (popup && !popup.contains(e.target) && !e.target.closest('.admin-user-card')) {
-      popup.classList.remove('open');
+    function formatDate(ts) {
+      if (!ts) return '—';
+      return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
-  });
-</script>
+
+    function formatTraffic(n) {
+      if (!n) return '0';
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+      return n.toString();
+    }
+
+    function reputationColor(score) {
+      if (score >= 80) return 'var(--success)';
+      if (score >= 50) return 'var(--warning)';
+      if (score >= 20) return '#F97316';
+      return 'var(--danger)';
+    }
+
+    function toggleTheme() {
+      var html = document.documentElement;
+      var current = html.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('linkbuild-theme', next);
+    }
+
+    // Close logout popup on outside click
+    document.addEventListener('click', (e) => {
+      const popup = document.getElementById('logoutPopup');
+      if (popup && !popup.contains(e.target) && !e.target.closest('.admin-user-card')) {
+        popup.classList.remove('open');
+      }
+    });
+  </script>
 </body>
+
 </html>

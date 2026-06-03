@@ -385,7 +385,20 @@ export const listPending = query({
       .query("websites")
       .withIndex("by_status", (q) => q.eq("status", "pending"))
       .collect();
-    return pending;
+
+    // Fetch owner (user who added) info for each pending website
+    const withOwners = await Promise.all(
+      pending.map(async (site) => {
+        const owner = await ctx.db.get(site.ownerId);
+        return {
+          ...site,
+          addedByName: owner?.name || "Unknown",
+          addedByEmail: owner?.email || "",
+        };
+      })
+    );
+
+    return withOwners;
   },
 });
 
