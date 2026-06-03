@@ -1865,48 +1865,55 @@ textarea {
 .chat-bubble.sent {
   position: relative;
 }
-.chat-bubble.sent:hover .msg-three-dots {
+/* Show 3-dots on hover of bubble OR when dropdown is open */
+.chat-bubble.sent:hover .msg-three-dots,
+.chat-bubble.sent.dots-active .msg-three-dots,
+.chat-bubble.sent .msg-three-dots:hover {
   display: flex !important;
 }
 
 .msg-three-dots {
   display: none;
   position: absolute;
-  bottom: -2px;
-  right: -24px;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
   flex-direction: column;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 6px;
+  gap: 3px;
+  padding: 6px 8px;
+  border-radius: 8px;
   cursor: pointer;
   z-index: 5;
+  background: rgba(0, 0, 0, 0.15);
+}
+.msg-three-dots:hover {
+  background: rgba(0, 0, 0, 0.25);
 }
 .msg-three-dots span {
   display: block;
-  width: 3px;
-  height: 3px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: var(--text-tertiary);
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .msg-dropdown {
   display: none;
   position: absolute;
-  top: 100%;
+  bottom: 100%;
   right: 0;
   background: var(--bg-primary);
   border: 1px solid var(--border-light);
   border-radius: 14px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   z-index: 100;
-  min-width: 160px;
+  min-width: 170px;
   padding: 6px;
   overflow: hidden;
-  margin-top: 4px;
+  margin-bottom: 8px;
 }
-.msg-dropdown.show {
-  display: block;
-}
+.msg-dropdown.show { display: block; }
+.msg-dropdown:hover { display: block; }
 
 .msg-dropdown-item {
   display: flex;

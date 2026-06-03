@@ -1689,7 +1689,11 @@ document.addEventListener("click", function (e) {
   ) {
     document
       .querySelectorAll(".msg-dropdown.show")
-      .forEach((m) => m.classList.remove("show"));
+      .forEach((m) => {
+        m.classList.remove("show");
+        const parent = m.closest('.chat-bubble');
+        if (parent) parent.classList.remove('dots-active');
+      });
     document
       .querySelectorAll(".reaction-picker.show")
       .forEach((m) => m.classList.remove("show"));
@@ -1699,10 +1703,20 @@ document.addEventListener("click", function (e) {
 function toggleMsgMenu(msgId) {
   // Close all other menus
   document.querySelectorAll(".msg-dropdown.show").forEach((m) => {
-    if (m.id !== "msg-menu-" + msgId) m.classList.remove("show");
+    if (m.id !== "msg-menu-" + msgId) {
+      m.classList.remove("show");
+      // Remove active class from parent bubble
+      const parent = m.closest('.chat-bubble');
+      if (parent) parent.classList.remove('dots-active');
+    }
   });
   const menu = document.getElementById("msg-menu-" + msgId);
-  if (menu) menu.classList.toggle("show");
+  if (menu) {
+    menu.classList.toggle("show");
+    // Toggle active class on parent bubble to keep dots visible
+    const parent = menu.closest('.chat-bubble');
+    if (parent) parent.classList.toggle('dots-active');
+  }
 }
 
 function startEditMessage(msgId, currentText) {
