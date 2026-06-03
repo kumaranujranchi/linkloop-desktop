@@ -1687,13 +1687,11 @@ document.addEventListener("click", function (e) {
     !e.target.closest(".reaction-picker") &&
     !e.target.closest(".reaction-add-btn")
   ) {
-    document
-      .querySelectorAll(".msg-dropdown.show")
-      .forEach((m) => {
-        m.classList.remove("show");
-        const parent = m.closest('.chat-bubble');
-        if (parent) parent.classList.remove('dots-active');
-      });
+    document.querySelectorAll(".msg-dropdown.show").forEach((m) => {
+      m.classList.remove("show");
+      const parent = m.closest(".chat-bubble");
+      if (parent) parent.classList.remove("dots-active");
+    });
     document
       .querySelectorAll(".reaction-picker.show")
       .forEach((m) => m.classList.remove("show"));
@@ -1706,16 +1704,16 @@ function toggleMsgMenu(msgId) {
     if (m.id !== "msg-menu-" + msgId) {
       m.classList.remove("show");
       // Remove active class from parent bubble
-      const parent = m.closest('.chat-bubble');
-      if (parent) parent.classList.remove('dots-active');
+      const parent = m.closest(".chat-bubble");
+      if (parent) parent.classList.remove("dots-active");
     }
   });
   const menu = document.getElementById("msg-menu-" + msgId);
   if (menu) {
     menu.classList.toggle("show");
     // Toggle active class on parent bubble to keep dots visible
-    const parent = menu.closest('.chat-bubble');
-    if (parent) parent.classList.toggle('dots-active');
+    const parent = menu.closest(".chat-bubble");
+    if (parent) parent.classList.toggle("dots-active");
   }
 }
 
@@ -2733,7 +2731,7 @@ function updateMarketplaceTable(websites) {
 
       return `
       <tr>
-        <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0, 2).toUpperCase()}</div><strong>${w.domain}</strong>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ""}</div></td>
+        <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.7rem">${w.domain.slice(0, 2).toUpperCase()}</div><strong>${w.domain}</strong><a href="https://${w.domain}" target="_blank" rel="noopener noreferrer" class="domain-external-link" onclick="event.stopPropagation()" title="Open ${w.domain}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${w.verified ? '<span class="badge badge-success" style="font-size:0.65rem">✓ Verified</span>' : ""}</div></td>
         <td><span class="badge badge-info">${w.domainAuthority}</span></td>
         <td><span class="badge ${w.spamScore > 20 ? "badge-danger" : w.spamScore > 10 ? "badge-warning" : "badge-success"}">${w.spamScore || 0}%</span></td>
         <td>${(w.trafficEstimate / 1000).toFixed(0)}K/mo</td>
