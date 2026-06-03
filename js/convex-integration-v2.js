@@ -1530,7 +1530,9 @@ async function renderMessages(messages) {
       `
           : ""
       }
-    </div>`;
+    </div>
+    ${buildReactionsHtml(msg, uid)}
+    `;
 
       // Warnings detection and rendering
       if (detectPhoneContact(msg.displayText)) {
@@ -1614,14 +1616,19 @@ function escHtmlForAttr(str) {
     .replace(/>/g, "&gt;");
 }
 
-// Close message dropdowns on outside click
+// Close message dropdowns and reaction pickers on outside click
 document.addEventListener("click", function (e) {
   if (
     !e.target.closest(".msg-dropdown") &&
-    !e.target.closest(".msg-three-dots")
+    !e.target.closest(".msg-three-dots") &&
+    !e.target.closest(".reaction-picker") &&
+    !e.target.closest(".reaction-add-btn")
   ) {
     document
       .querySelectorAll(".msg-dropdown.show")
+      .forEach((m) => m.classList.remove("show"));
+    document
+      .querySelectorAll(".reaction-picker.show")
       .forEach((m) => m.classList.remove("show"));
   }
 });
@@ -1775,29 +1782,69 @@ async function doSendMessage() {
   sendInProgress = false;
 }
 
+// ---- REACTIONS ----
+const REACTION_EMOJIS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
+
+function buildReactionsHtml(msg, uid) {
+  const reactions = msg.reactions || [];
+  if (reactions.length === 0 && !uid) return "";
+
+  // Group by emoji and count
+  const counts = {};
+  const userReacted = {};
+  for (const r of reactions) {
+    if (!counts[r.emoji]) counts[r.emoji] = { count: 0, users: [] };
+    counts[r.emoji].count++;
+    counts[r.emoji].users.push(r.userId);
+    if (r.userId === uid) userReacted[r.emoji] = true;
+  }
+
+  let html = '<div class="msg-reactions-bar">';
+
+  // Show existing reactions as pills
+  const sortedEmojis = Object.keys(counts).sort(
+    (a, b) => counts[b].count - counts[a].count,
+  );
+  for (const emoji of sortedEmojis) {
+    const active = userReacted[emoji] ? " active" : "";
+    html += `<span class="reaction-pill${active}" onclick="toggleReaction('${msg._id}', '${emoji}')">${emoji} ${counts[emoji].count}</span>`;
+  }
+
+  // Add reaction button (+)
+  if (!msg.deleted) {
+    html += `<span class="reaction-add-btn" onclick="event.stopPropagation();this.parentElement.querySelector('.reaction-picker').classList.toggle('show')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      <div class="reaction-picker">
+        ${REACTION_EMOJIS.map((e) => `<span class="reaction-option" onclick="event.stopPropagation();toggleReaction('${msg._id}', '${e}')">${e}</span>`).join("")}
+      </div>
+    </span>`;
+  }
+
+  html += "</div>";
+  return html;
+}
+
+async function toggleReaction(messageId, emoji) {
+  try {
+    const token = getSessionToken();
+    await client.mutation("messages:toggleReaction", {
+      messageId,
+      emoji,
+      token,
+    });
+    await fetchAndRenderMessages();
+  } catch (e) {
+    console.error("Reaction failed:", e);
+  }
+}
+// ---- END REACTIONS ----
+
 function showMsgToast(msg, type = "info") {
   const t = document.createElement("div");
   t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-primary);padding:10px 20px;border-radius:8px;font-size:0.85rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);color:var(--${type === "danger" ? "danger" : "text-primary"})`;
   t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 3000);
-}
-
-async function editChatMessage(messageId) {
-  const currentText = prompt("Edit your message:");
-  if (!currentText || !currentText.trim()) return;
-
-  try {
-    const token = getSessionToken();
-    await client.mutation("messages:editMessage", {
-      messageId,
-      newText: currentText.trim(),
-      token,
-    });
-    await fetchAndRenderMessages();
-  } catch (e) {
-    showMsgToast("❌ Failed to edit message: " + e.message, "danger");
-  }
 }
 
 async function deleteChatMessage(messageId) {

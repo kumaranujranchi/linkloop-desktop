@@ -90,6 +90,10 @@ export default defineSchema({
     delivered: v.optional(v.boolean()),
     edited: v.optional(v.boolean()),
     deleted: v.optional(v.boolean()),
+    reactions: v.optional(v.array(v.object({
+      userId: v.id("users"),
+      emoji: v.string(),
+    }))),
     createdAt: v.number(),
   })
     .index("by_exchange", ["exchangeId"])

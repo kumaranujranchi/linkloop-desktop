@@ -479,3 +479,54 @@ export const deleteMessage = mutation({
     return { success: true };
   },
 });
+
+// Toggle a reaction on a message (add if not present, remove if already present)
+export const toggleReaction = mutation({
+  args: {
+    messageId: v.id("messages"),
+    emoji: v.string(),
+    token: v.optional(v.string()),
+    userId: v.optional(v.id("users")),
+  },
+  handler: async (ctx, args) => {
+    let userId = args.userId || null;
+
+    if (!userId && args.token) {
+      userId = await getUserIdFromToken(ctx.db, args.token);
+    }
+
+    if (!userId) {
+      const identity = await ctx.auth.getUserIdentity();
+      if (identity) {
+        const user = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", identity.email!))
+          .first();
+        if (user) userId = user._id;
+      }
+    }
+
+    if (!userId) throw new Error("Not authenticated");
+
+    const message = await ctx.db.get(args.messageId);
+    if (!message) throw new Error("Message not found");
+
+    const currentReactions = message.reactions || [];
+    const existingIdx = currentReactions.findIndex(
+      (r) => r.userId === userId && r.emoji === args.emoji
+    );
+
+    let newReactions;
+    if (existingIdx >= 0) {
+      // Remove the reaction
+      newReactions = currentReactions.filter((_, i) => i !== existingIdx);
+    } else {
+      // Add the reaction (remove same user's other reactions first? No, support multiple)
+      newReactions = [...currentReactions, { userId, emoji: args.emoji }];
+    }
+
+    await ctx.db.patch(args.messageId, { reactions: newReactions });
+
+    return { success: true, reactions: newReactions };
+  },
+});
