@@ -179,7 +179,8 @@ export const stats = query({
 function generateVerificationCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let code = "";
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < 20; i++) {
+    if (i > 0 && i % 5 === 0) code += "-";
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return `linkbuild-verify=${code}`;

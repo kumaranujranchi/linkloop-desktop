@@ -101,7 +101,7 @@ function getEmailTemplate(title, bodyContent, ctaUrl, ctaText) {
 }
 
 async function sendVerificationReminder() {
-  const code = "linkbuild-verify=TEST-123456";
+  const code = "linkbuild-verify=Lx8qKm3pR7tN9fB2wV4cJ6hY";
   const subject = `Please verify your website: shadcnspace.com`;
   const body = `
     <p style="font-size:17px">Hello ${toName},</p>
