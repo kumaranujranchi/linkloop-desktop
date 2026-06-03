@@ -2281,42 +2281,40 @@ async function loadBacklinks() {
 // =============================================
 function updateKpiCards(kpis) {
   if (!kpis) return;
-  document.querySelectorAll(".kpi-card").forEach((card) => {
-    const label = card.querySelector(".kpi-card-label")?.textContent?.trim();
-    const valueEl = card.querySelector(".kpi-card-value");
-    const changeEl = card.querySelector(".kpi-card-change");
-    if (!valueEl) return;
-    const map = {
-      "Total Websites": {
-        value: kpis.totalWebsites,
-        change: `${kpis.totalWebsites} registered`,
-      },
-      "Active Exchanges": {
-        value: kpis.activeExchanges,
-        change: `${kpis.activeExchanges} in progress`,
-      },
-      "Pending Requests": {
-        value: kpis.pendingRequests,
-        change: `${kpis.pendingRequests} awaiting action`,
-      },
-      "Verified Backlinks": {
-        value: kpis.verifiedBacklinks,
-        change: `${kpis.verifiedBacklinks} healthy`,
-      },
-      "Reputation Score": {
-        value: kpis.reputationScore || 0,
-        change: `${kpis.reputationScore || 0}/100`,
-      },
-      "Monthly Growth": {
-        value: kpis.monthlyGrowth || 0,
-        change: `${kpis.monthlyGrowth || 0}% this month`,
-      },
-    };
-    if (map[label] !== undefined) {
-      valueEl.textContent = Number(map[label].value).toLocaleString();
-      if (changeEl) changeEl.textContent = map[label].change;
-    }
-  });
+  const setVal = (id, val, change) => {
+    const el = document.getElementById(id);
+    if (el)
+      el.textContent =
+        val !== undefined && val !== null ? Number(val).toLocaleString() : "—";
+    const changeEl = document.getElementById(id + "Change");
+    if (changeEl) changeEl.textContent = change || "";
+  };
+  setVal("kpiWebsites", kpis.totalWebsites, `${kpis.totalWebsites} registered`);
+  setVal(
+    "kpiExchanges",
+    kpis.activeExchanges,
+    `${kpis.activeExchanges} in progress`,
+  );
+  setVal(
+    "kpiPending",
+    kpis.pendingRequests,
+    `${kpis.pendingRequests} awaiting action`,
+  );
+  setVal(
+    "kpiBacklinks",
+    kpis.verifiedBacklinks,
+    `${kpis.verifiedBacklinks} healthy`,
+  );
+  setVal(
+    "kpiReputation",
+    kpis.reputationScore,
+    `${kpis.reputationScore || 0}/100`,
+  );
+  setVal(
+    "kpiGrowth",
+    kpis.monthlyGrowth,
+    `${kpis.monthlyGrowth || 0}% this month`,
+  );
 }
 
 function updateExchangeChart(activity) {
