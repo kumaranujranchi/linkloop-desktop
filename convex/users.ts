@@ -390,6 +390,16 @@ export const signupWithEmail = mutation({
       createdAt: now,
     });
 
+    // Send welcome email
+    try {
+      await ctx.scheduler.runAfter(0, internal.email.sendWelcomeEmail, {
+        email: args.email,
+        name: args.name,
+      });
+    } catch (e) {
+      console.warn('Failed to schedule welcome email', e);
+    }
+
     return { userId, isNew: true };
   },
 });
@@ -593,6 +603,16 @@ export const loginWithGoogle = mutation({
         currentPeriodEnd: Date.now() + 30 * 24 * 60 * 60 * 1000,
         createdAt: Date.now(),
       });
+
+      // Send welcome email for new signups
+      try {
+        await ctx.scheduler.runAfter(0, internal.email.sendWelcomeEmail, {
+          email: emailNormalized,
+          name,
+        });
+      } catch (e) {
+        console.warn('Failed to schedule welcome email', e);
+      }
     } else if (avatarUrl && user.avatarUrl !== avatarUrl) {
       // Update avatar if changed
       await ctx.db.patch(user._id, { avatarUrl });
