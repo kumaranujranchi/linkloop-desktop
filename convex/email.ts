@@ -1,7 +1,8 @@
 "use node";
 
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 import { action, internalAction } from "./_generated/server";
+import { getUserIdFromToken } from "./auth_helpers";
 import nodemailer from "nodemailer";
 
 // Initialize SMTP transporter using Hostinger SMTP details
@@ -739,5 +740,64 @@ export const sampleSendWelcomeEmail = action({
     const html = getEmailTemplate("Welcome to LinkBuild 🚀", bodyContent, "https://linkbuild.store/dashboard", "Go to Dashboard");
     await sendMail(args.email, subject, html);
     return { success: true };
+  },
+});
+
+// ========== ADMIN HELPERS ==========
+
+async function verifyAdminToken(db: any, token: string) {
+  const userId = await getUserIdFromToken(db, token);
+  if (!userId) throw new ConvexError("Not authenticated");
+  const user = await db.get(userId);
+  if (!user || user.role !== "admin") {
+    throw new ConvexError("Unauthorized access to admin APIs");
+  }
+  return user;
+}
+
+// ========== BULK EMAIL ==========
+
+// Admin: send a bulk email to all platform users
+export const sendBulkEmail = action({
+  args: {
+    token: v.string(),
+    subject: v.string(),
+    htmlBody: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
+
+    // Fetch all users with valid emails
+    const allUsers = await ctx.db.query("users").collect();
+    const validUsers = allUsers.filter(u => u.email && u.email.includes('@'));
+
+    if (validUsers.length === 0) {
+      return { success: false, error: "No users with valid emails found", sent: 0 };
+    }
+
+    let sentCount = 0;
+    let failedCount = 0;
+
+    // Send to each user individually
+    for (const user of validUsers) {
+      try {
+        // Personalize: replace {{name}} with user's name
+        const personalHtml = args.htmlBody.replace(/\{\{name\}\}/g, user.name || 'User');
+        const personalSubject = args.subject.replace(/\{\{name\}\}/g, user.name || 'User');
+
+        await sendMail(user.email, personalSubject, personalHtml);
+        sentCount++;
+      } catch (e) {
+        console.error(`Failed to send bulk email to ${user.email}:`, e);
+        failedCount++;
+      }
+    }
+
+    return {
+      success: true,
+      sent: sentCount,
+      failed: failedCount,
+      total: validUsers.length,
+    };
   },
 });

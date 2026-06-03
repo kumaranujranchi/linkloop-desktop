@@ -1780,6 +1780,15 @@
 
         <div class="nav-section">
           <div class="nav-section-label">System</div>
+          <button class="nav-item" onclick="adminNav('bulk-email', this)">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </span>
+            Bulk Email
+          </button>
           <button class="nav-item" onclick="adminNav('settings', this)">
             <span class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2421,6 +2430,75 @@
           </div>
         </div>
 
+        <!-- ====== PAGE: BULK EMAIL ====== -->
+        <div class="admin-page" id="page-bulk-email">
+          <div class="page-header">
+            <div class="page-header-left">
+              <h2>Bulk Email</h2>
+              <p>Send an email to all registered platform users</p>
+            </div>
+            <div class="page-header-right">
+              <button class="topbar-btn" onclick="loadBulkEmailPage()" title="Refresh">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10" />
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="card" style="max-width:800px">
+            <div class="card-header">
+              <div class="card-title">Compose Message</div>
+              <div class="card-subtitle">Recipients: <span id="bulkUserCount">—</span> users</div>
+            </div>
+            <div style="padding:24px">
+              <div style="margin-bottom:16px">
+                <label
+                  style="display:block;font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px">Subject</label>
+                <input type="text" id="bulkSubject" placeholder="Enter email subject..."
+                  style="width:100%;padding:10px 14px;border:1px solid var(--border-light);border-radius:8px;background:var(--bg-secondary);color:var(--text-primary);font-size:14px;font-family:var(--font-sans);box-sizing:border-box">
+              </div>
+              <div style="margin-bottom:16px">
+                <label
+                  style="display:block;font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px">Email
+                  Body (HTML)</label>
+                <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px">
+                  Use <code style="background:var(--bg-tertiary);padding:2px 6px;border-radius:4px">{{name}}</code> to
+                  insert each user's name. Paste your full HTML email code below.
+                </div>
+                <textarea id="bulkHtmlBody" rows="16"
+                  placeholder='Paste your HTML email here... e.g. &lt;h1&gt;Hello {{name}}!&lt;/h1&gt;&lt;p&gt;Your message...&lt;/p&gt;'
+                  style="width:100%;padding:14px;border:1px solid var(--border-light);border-radius:8px;background:var(--bg-secondary);color:var(--text-primary);font-size:13px;font-family:'SF Mono','Consolas',monospace;resize:vertical;box-sizing:border-box"></textarea>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <button id="bulkSendBtn" class="btn btn-primary" onclick="sendBulkEmail()">
+                  <svg style="width:14px;height:14px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  Send to All Users
+                </button>
+                <button class="btn btn-ghost"
+                  onclick="document.getElementById('bulkSubject').value='';document.getElementById('bulkHtmlBody').value='';showToast('Form cleared','success')">Clear</button>
+                <span id="bulkStatus" style="font-size:13px;color:var(--text-secondary);margin-left:8px"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="max-width:800px;margin-top:16px">
+            <div class="card-header">
+              <div class="card-title">Preview</div>
+              <div class="card-subtitle">How the email will look (using <code>{{name}}</code> replaced with a sample
+                user)</div>
+            </div>
+            <div id="bulkPreview" style="padding:24px;font-size:13px;color:var(--text-tertiary)">
+              <p>Enter HTML content above and click outside the textarea to see a preview.</p>
+            </div>
+          </div>
+        </div>
+
         <!-- ====== PAGE: SETTINGS ====== -->
         <div class="admin-page" id="page-settings">
           <div class="page-header">
@@ -2632,6 +2710,7 @@
       exchanges: ['Exchange Monitor', 'Track all exchanges'],
       revenue: ['Revenue & Plans', 'Subscription analytics'],
       analytics: ['Analytics', 'Growth & activity charts'],
+      'bulk-email': ['Bulk Email', 'Send email to all users'],
       settings: ['Platform Settings', 'Configure platform']
     };
 
@@ -2657,6 +2736,7 @@
       else if (page === 'exchanges') loadExchangesPage();
       else if (page === 'revenue') loadRevenuePage();
       else if (page === 'analytics') loadAnalyticsPage();
+      else if (page === 'bulk-email') loadBulkEmailPage();
     }
 
     function refreshCurrentPage() {
@@ -3425,6 +3505,79 @@
       if (score >= 50) return 'var(--warning)';
       if (score >= 20) return '#F97316';
       return 'var(--danger)';
+    }
+
+    // ---- BULK EMAIL ----
+    let bulkUserCount = 0;
+
+    async function loadBulkEmailPage() {
+      const countEl = document.getElementById('bulkUserCount');
+      if (countEl) {
+        try {
+          const token = localStorage.getItem('linkbuild-token');
+          const client = window.LinkBuild.getClient();
+          const users = await client.query('users:listAll', { token, limit: 10000 });
+          bulkUserCount = users.filter(u => u.email && u.email.includes('@')).length;
+          countEl.textContent = bulkUserCount;
+        } catch(e) {
+          countEl.textContent = '?';
+        }
+      }
+    }
+
+    // Auto-preview when typing in HTML body
+    document.addEventListener('input', function(e) {
+      if (e.target && e.target.id === 'bulkHtmlBody') {
+        updateBulkPreview();
+      }
+    });
+
+    function updateBulkPreview() {
+      const preview = document.getElementById('bulkPreview');
+      const html = document.getElementById('bulkHtmlBody').value;
+      if (!html.trim()) {
+        preview.innerHTML = '<p style="color:var(--text-tertiary);margin:0">Enter HTML content above to see a preview.</p>';
+        return;
+      }
+      // Replace {{name}} with a sample for preview
+      const sample = html.replace(/\{\{name\}\}/g, '<strong style="color:var(--primary-purple)">Sample User</strong>');
+      preview.innerHTML = sample;
+    }
+
+    async function sendBulkEmail() {
+      const subject = document.getElementById('bulkSubject').value.trim();
+      const htmlBody = document.getElementById('bulkHtmlBody').value.trim();
+
+      if (!subject) { showToast('Please enter a subject', 'error'); return; }
+      if (!htmlBody) { showToast('Please enter email HTML body', 'error'); return; }
+
+      const btn = document.getElementById('bulkSendBtn');
+      const status = document.getElementById('bulkStatus');
+      btn.disabled = true;
+      btn.textContent = '⏳ Sending...';
+      status.textContent = '';
+
+      try {
+        const token = localStorage.getItem('linkbuild-token');
+        if (!token) { showToast('Not authenticated', 'error'); btn.disabled = false; btn.innerHTML = '<svg style="width:14px;height:14px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Send to All Users'; return; }
+
+        const client = window.LinkBuild.getClient();
+        const result = await client.action('email:sendBulkEmail', { token, subject, htmlBody });
+
+        if (result.success) {
+          showToast(`✓ Sent to ${result.sent} users${result.failed > 0 ? ` (${result.failed} failed)` : ''}`, 'success');
+          status.textContent = `✅ Sent: ${result.sent} / ${result.total} | Failed: ${result.failed}`;
+        } else {
+          showToast(result.error || 'Failed to send', 'error');
+          status.textContent = '❌ Failed';
+        }
+      } catch(e) {
+        showToast('Error: ' + e.message, 'error');
+        status.textContent = '❌ Error';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<svg style="width:14px;height:14px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Send to All Users';
+      }
     }
 
     function toggleTheme() {
