@@ -10,6 +10,7 @@
     "deploy": "CONVEX_DEPLOYMENT=prod:vibrant-marmot-366 convex deploy --typecheck=disable",
     "dashboard": "convex dashboard",
     "seed": "node scripts/seed.js",
+    "send-samples": "node scripts/send_sample_emails.js",
     "vercel-build": "node scripts/build.js"
   },
   "dependencies": {
