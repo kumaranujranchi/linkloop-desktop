@@ -694,12 +694,15 @@ async function loadDashboardData() {
 // =============================================
 // WEBSITES
 // =============================================
+let cachedMyWebsites = [];
+
 async function loadMyWebsites() {
   const uid = getUserId();
   if (!uid) return [];
   try {
     const sites = await client.query("websites:listByOwner", { userId: uid });
-    updateWebsitesTable(sites);
+    cachedMyWebsites = sites || [];
+    updateWebsitesTable(cachedMyWebsites);
     return sites;
   } catch (e) {
     console.log("📋 Websites:", e.message);
@@ -2742,41 +2745,145 @@ function updateMarketplaceTable(websites) {
     .join("");
 }
 
-function updateWebsitesTable(mySites) {
+function formatTraffic(traffic) {
+  if (!traffic) return "0/mo";
+  if (traffic >= 1000000) return (traffic / 1000000).toFixed(1) + "M/mo";
+  if (traffic >= 1000) return (traffic / 1000).toFixed(0) + "K/mo";
+  return traffic + "/mo";
+}
+
+function filterMyWebsites(query) {
+  if (!query || !query.trim()) {
+    updateWebsitesTable(cachedMyWebsites, true);
+    return;
+  }
+  const q = query.toLowerCase().trim();
+  const filtered = cachedMyWebsites.filter(
+    (w) =>
+      w.domain.toLowerCase().includes(q) ||
+      w.niche.toLowerCase().includes(q) ||
+      w.country.toLowerCase().includes(q)
+  );
+  updateWebsitesTable(filtered, true);
+}
+
+function updateWebsitesTable(mySites, isFiltering = false) {
+  // Update stats if we are not filtering the view
+  if (!isFiltering) {
+    const totalEl = document.getElementById("mySitesTotalCount");
+    const avgDAEl = document.getElementById("mySitesAvgDA");
+    const trafficEl = document.getElementById("mySitesTotalTraffic");
+    
+    if (totalEl) totalEl.textContent = mySites ? mySites.length : 0;
+    if (avgDAEl) {
+      const avg = mySites && mySites.length ? Math.round(mySites.reduce((sum, s) => sum + (s.domainAuthority || 0), 0) / mySites.length) : 0;
+      avgDAEl.textContent = avg;
+    }
+    if (trafficEl) {
+      const totalTraffic = mySites ? mySites.reduce((sum, s) => sum + (s.trafficEstimate || 0), 0) : 0;
+      trafficEl.textContent = formatTraffic(totalTraffic);
+    }
+  }
+
   const tbody = document.getElementById("myWebsitesTableBody");
   if (!tbody) return;
   if (!mySites || !mySites.length) {
-    tbody.innerHTML =
-      '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">No websites yet. Click "Add Website" to get started.</td></tr>';
+    tbody.innerHTML = isFiltering
+      ? '<tr><td colspan="8" class="text-center py-12 text-gray-400 dark:text-gray-500"><div class="flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass text-xl"></i><span>No matching websites found.</span></div></td></tr>'
+      : '<tr><td colspan="8" class="text-center py-12 text-gray-400 dark:text-gray-500"><div class="flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-folder-open text-xl"></i><span>No websites yet. Click "Add Website" to get started.</span></div></td></tr>';
     return;
   }
+
   tbody.innerHTML = mySites
     .map(
-      (w) => `
-    <tr>
-      <td><strong>${w.domain}</strong></td>
-      <td><span class="badge badge-info">${w.domainAuthority}</span></td>
-      <td>${(w.trafficEstimate / 1000).toFixed(0)}K/mo</td>
-      <td>${w.niche}</td>
-      <td>${w.country}</td>
-      <td><span class="badge ${w.verified ? "badge-success" : "badge-warning"}">${w.verified ? "✓ Verified" : "⚠ Pending"}</span></td>
-      <td>${w.referringDomains || 0}</td>
-      <td>
-        ${
-          w.verified
-            ? `<div class="action-dropdown" id="action-dd-${w._id}">
-              <button class="btn btn-ghost btn-sm" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')">Manage ▾</button>
-              <div class="action-dropdown-menu" id="action-menu-${w._id}">
-                <button class="action-dropdown-item" onclick="window.LinkBuild.editWebsite('${w._id}')">✏️ Edit</button>
-                <button class="action-dropdown-item warning" onclick="window.LinkBuild.deactivateWebsite('${w._id}')">⏸️ Deactivate</button>
-                <div class="action-dropdown-divider"></div>
-                <button class="action-dropdown-item danger" onclick="window.LinkBuild.deleteWebsite('${w._id}')">🗑️ Delete</button>
+      (w) => {
+        const dateStr = w._creationTime ? timeAgo(w._creationTime) : "recently";
+        const trafficStr = w.trafficEstimate ? formatTraffic(w.trafficEstimate) : "0/mo";
+        return `
+        <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition">
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400">
+                <i class="fa-solid fa-globe text-sm"></i>
               </div>
-            </div>`
-            : `<button class="btn btn-primary btn-sm" onclick="window.LinkBuild.openVerifyModal('${w._id}')">🔐 Verify</button>`
-        }
-      </td>
-    </tr>`,
+              <div class="ml-3">
+                <div class="text-sm font-semibold text-gray-900 dark:text-white">${w.domain}</div>
+                <div class="text-xs text-gray-400 dark:text-gray-500">Added ${dateStr}</div>
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800">
+              <i class="fa-solid fa-award mr-1 text-blue-500"></i>
+              DA ${w.domainAuthority}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+            <div class="flex items-center gap-1.5 font-medium">
+              <i class="fa-solid fa-chart-simple text-emerald-500"></i>
+              <span>${trafficStr}</span>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+              <i class="fa-solid fa-tag mr-1 text-purple-400"></i>
+              ${w.niche}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+            <div class="flex items-center gap-1.5">
+              <i class="fa-solid fa-location-dot text-gray-400 dark:text-gray-500"></i>
+              <span>${w.country}</span>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            ${
+              w.verified
+                ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800">
+                    <i class="fa-solid fa-circle-check mr-1 text-green-500"></i>
+                    Verified
+                  </span>`
+                : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800">
+                    <i class="fa-solid fa-circle-exclamation mr-1 text-amber-500 animate-pulse"></i>
+                    Pending
+                  </span>`
+            }
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+            <div class="flex items-center gap-1.5 font-semibold">
+              <i class="fa-solid fa-link text-indigo-400"></i>
+              <span>${w.referringDomains || 0}</span>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            ${
+              w.verified
+                ? `<div class="action-dropdown inline-block" id="action-dd-${w._id}">
+                    <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')">
+                      <i class="fa-solid fa-ellipsis-vertical text-gray-400 mr-0.5"></i>
+                      Manage
+                    </button>
+                    <div class="action-dropdown-menu" id="action-menu-${w._id}">
+                      <button class="action-dropdown-item" onclick="window.LinkBuild.editWebsite('${w._id}')">
+                        <i class="fa-solid fa-pen-to-square text-blue-500 mr-2"></i>Edit
+                      </button>
+                      <button class="action-dropdown-item warning" onclick="window.LinkBuild.deactivateWebsite('${w._id}')">
+                        <i class="fa-solid fa-circle-pause text-amber-500 mr-2"></i>Deactivate
+                      </button>
+                      <div class="action-dropdown-divider"></div>
+                      <button class="action-dropdown-item danger" onclick="window.LinkBuild.deleteWebsite('${w._id}')">
+                        <i class="fa-solid fa-trash-can text-red-500 mr-2"></i>Delete
+                      </button>
+                    </div>
+                  </div>`
+                : `<button class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-xs font-semibold text-white transition shadow-sm cursor-pointer" onclick="window.LinkBuild.openVerifyModal('${w._id}')">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Verify Site
+                  </button>`
+            }
+          </td>
+        </tr>`;
+      }
     )
     .join("");
 }
@@ -3335,6 +3442,7 @@ window.LinkBuild = {
   saveWebsiteEdit,
   deleteWebsite,
   deactivateWebsite,
+  filterMyWebsites,
   // Notifications
   toggleNotificationDropdown,
   markNotificationRead,
