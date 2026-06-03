@@ -312,14 +312,12 @@
           <h1 class="page-title">Dashboard</h1>
           <p class="page-subtitle" id="dashboardSubtitle">Welcome back, Anuj. Here's your link exchange overview.</p>
 
-          <!-- KPI Cards - Tailwind -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            <div
-              class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Total Websites</span>
-                <div
-                  class="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Total Websites</span>
+                <div class="kpi-card-icon blue">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10" />
                     <line x1="2" y1="12" x2="22" y2="12" />
@@ -328,82 +326,77 @@
                   </svg>
                 </div>
               </div>
-              <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1" id="kpiWebsites">—</div>
-              <div class="text-xs text-gray-400" id="kpiWebsitesChange">Loading...</div>
+              <div class="kpi-card-value" id="kpiWebsites">—</div>
+              <div class="kpi-card-change" id="kpiWebsitesChange">Loading...</div>
             </div>
-            <div
-              class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Active Exchanges</span>
-                <div
-                  class="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Active Exchanges</span>
+                <div class="kpi-card-icon purple">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M16 3h5v5M8 3H3v5" />
                     <path d="M21 3l-7.5 7.5M3 3l7.5 7.5" />
                   </svg>
                 </div>
               </div>
-              <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1" id="kpiExchanges">—</div>
-              <div class="text-xs text-gray-400" id="kpiExchangesChange">Loading...</div>
+              <div class="kpi-card-value" id="kpiExchanges">—</div>
+              <div class="kpi-card-change" id="kpiExchangesChange">Loading...</div>
             </div>
-            <div
-              class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Pending Requests</span>
-                <div
-                  class="w-9 h-9 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Pending Requests</span>
+                <div class="kpi-card-icon orange">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10" />
                     <polyline points="12 6 12 12 16 14" />
                   </svg>
                 </div>
               </div>
-              <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1" id="kpiPending">—</div>
-              <div class="text-xs text-gray-400" id="kpiPendingChange">Loading...</div>
+              <div class="kpi-card-value" id="kpiPending">—</div>
+              <div class="kpi-card-change" id="kpiPendingChange">Loading...</div>
             </div>
-            <div
-              class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Verified Backlinks</span>
-                <div
-                  class="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Verified Backlinks</span>
+                <div class="kpi-card-icon green">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </div>
               </div>
-              <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1" id="kpiBacklinks">—</div>
-              <div class="text-xs text-gray-400" id="kpiBacklinksChange">Loading...</div>
+              <div class="kpi-card-value" id="kpiBacklinks">—</div>
+              <div class="kpi-card-change" id="kpiBacklinksChange">Loading...</div>
             </div>
-            <div
-              class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Reputation Score</span>
-                <div
-                  class="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Reputation Score</span>
+                <div class="kpi-card-icon purple">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polygon
                       points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                   </svg>
                 </div>
               </div>
-              <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1" id="kpiReputation">—</div>
-              <div class="text-xs text-gray-400" id="kpiReputationChange">Loading...</div>
+              <div class="kpi-card-value" id="kpiReputation">—</div>
+              <div class="kpi-card-change" id="kpiReputationChange">Loading...</div>
             </div>
-            <div
-              class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Monthly Growth</span>
-                <div
-                  class="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Monthly Growth</span>
+                <div class="kpi-card-icon green">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
                     <polyline points="17 6 23 6 23 12" />
                   </svg>
                 </div>
               </div>
-              <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1" id="kpiGrowth">—</div>
-              <div class="text-xs text-gray-400" id="kpiGrowthChange">Loading...</div>
+              <div class="kpi-card-value" id="kpiGrowth">—</div>
+              <div class="kpi-card-change" id="kpiGrowthChange">Loading...</div>
             </div>
           </div>
 

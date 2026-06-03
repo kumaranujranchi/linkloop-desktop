@@ -324,10 +324,13 @@ textarea {
 
 .sidebar.collapsed .sidebar-section-label,
 .sidebar.collapsed .sidebar-logo-text,
-.sidebar.collapsed .sidebar-user-info,
-.sidebar.collapsed .nav-badge {
+.sidebar.collapsed .sidebar-user-info {
   opacity: 0;
   visibility: hidden;
+}
+
+.sidebar.collapsed .nav-badge {
+  display: none;
 }
 
 /* Collapsed: hide text, center icons */
