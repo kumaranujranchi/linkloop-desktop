@@ -290,6 +290,19 @@ export const verify = mutation({
       verificationMethod: args.verificationMethod,
       lastCheckedAt: now,
     });
+
+    // Send email notification to owner
+    const website = await ctx.db.get(args.websiteId);
+    if (website) {
+      const owner = await ctx.db.get(website.ownerId);
+      if (owner && owner.email) {
+        await ctx.scheduler.runAfter(0, internal.email.sendWebsiteVerifiedEmail, {
+          email: owner.email,
+          name: owner.name,
+          domain: website.domain,
+        });
+      }
+    }
   },
 });
 
@@ -401,6 +414,16 @@ export const moderate = mutation({
         websiteId: args.websiteId,
         domain: website.domain,
       });
+
+      // Send email notification to owner
+      const owner = await ctx.db.get(website.ownerId);
+      if (owner && owner.email) {
+        await ctx.scheduler.runAfter(0, internal.email.sendWebsiteVerifiedEmail, {
+          email: owner.email,
+          name: owner.name,
+          domain: website.domain,
+        });
+      }
     }
 
     return { success: true };
@@ -548,7 +571,7 @@ export const deactivate = mutation({
     }
 
     await ctx.db.patch(args.websiteId, {
-      status: "inactive",
+      status: "suspended",
       verified: false,
     });
 

@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 import { getUserIdFromToken } from "./auth_helpers";
+import { internal } from "./_generated/api";
 
 
 // ========== QUERIES ==========
@@ -194,6 +195,19 @@ export const send = mutation({
       metadata: { exchangeId },
       createdAt: now,
     });
+
+    // Send email notification to recipient
+    const receiver = await ctx.db.get(args.toUserId);
+    const fromWebsite = await ctx.db.get(args.fromWebsiteId);
+    if (receiver && receiver.email && fromWebsite && toWebsite) {
+      await ctx.scheduler.runAfter(0, internal.email.sendExchangeRequestEmail, {
+        email: receiver.email,
+        receiverName: receiver.name,
+        senderName: user.name,
+        fromDomain: fromWebsite.domain,
+        toDomain: toWebsite.domain,
+      });
+    }
 
     return exchangeId;
   },

@@ -130,11 +130,11 @@ export const fetchAndUpdateMetrics = internalAction({
     websiteId: v.id("websites"),
     domain: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{ success: boolean; source: string }> => {
     const mozData = await fetchMozApi(args.domain);
 
     if (mozData) {
-      await ctx.runMutation(internal.moz.updateMetricsFromMoz, {
+      await ctx.runMutation((internal as any).moz.updateMetricsFromMoz, {
         websiteId: args.websiteId,
         domainAuthority: mozData.domain_authority ?? 1,
         spamScore: mozData.spam_score ?? 0,
@@ -145,7 +145,7 @@ export const fetchAndUpdateMetrics = internalAction({
 
     // Moz API failed or not configured — fall back to defaults
     console.log("📊 Moz API unavailable, using default metrics for", args.domain);
-    await ctx.runMutation(internal.moz.updateMetricsFromMoz, {
+    await ctx.runMutation((internal as any).moz.updateMetricsFromMoz, {
       websiteId: args.websiteId,
       domainAuthority: 1,
       spamScore: 0,
@@ -155,10 +155,21 @@ export const fetchAndUpdateMetrics = internalAction({
   },
 });
 
+// Internal query to get all verified websites for bulk refresh
+export const getAllVerifiedWebsites = internalQuery({
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("websites")
+      .withIndex("by_status", (q) => q.eq("status", "active"))
+      .filter((q) => q.eq(q.field("verified"), true))
+      .collect();
+  },
+});
+
 // Bulk refresh: fetch Moz metrics for ALL verified websites (admin use)
 export const bulkRefreshAllVerified = internalAction({
-  handler: async (ctx) => {
-    const websites = await ctx.runQuery(internal.moz.getAllVerifiedWebsites, {});
+  handler: async (ctx): Promise<{ success: number; failed: number; total: number }> => {
+    const websites = await ctx.runQuery((internal as any).moz.getAllVerifiedWebsites, {});
     console.log(`🔄 Bulk Moz refresh: ${websites.length} verified websites found`);
 
     let success = 0;
@@ -168,7 +179,7 @@ export const bulkRefreshAllVerified = internalAction({
       try {
         const mozData = await fetchMozApi(w.domain);
         if (mozData) {
-          await ctx.runMutation(internal.moz.updateMetricsFromMoz, {
+          await ctx.runMutation((internal as any).moz.updateMetricsFromMoz, {
             websiteId: w._id,
             domainAuthority: mozData.domain_authority ?? 1,
             spamScore: mozData.spam_score ?? 0,
@@ -193,21 +204,10 @@ export const bulkRefreshAllVerified = internalAction({
   },
 });
 
-// Internal query to get all verified websites for bulk refresh
-export const getAllVerifiedWebsites = internalQuery({
-  handler: async (ctx) => {
-    return await ctx.db
-      .query("websites")
-      .withIndex("by_status", (q) => q.eq("status", "active"))
-      .filter((q) => q.eq(q.field("verified"), true))
-      .collect();
-  },
-});
-
 // Public action to trigger bulk refresh (admin use: npx convex run moz:refreshAll)
 export const refreshAll = action({
-  handler: async (ctx) => {
-    const websites = await ctx.runQuery(internal.moz.getAllVerifiedWebsites, {});
+  handler: async (ctx): Promise<{ success: number; failed: number; total: number }> => {
+    const websites = await ctx.runQuery((internal as any).moz.getAllVerifiedWebsites, {});
     console.log(`🔄 Bulk Moz refresh: ${websites.length} verified websites found`);
 
     let success = 0;
@@ -217,7 +217,7 @@ export const refreshAll = action({
       try {
         const mozData = await fetchMozApi(w.domain);
         if (mozData) {
-          await ctx.runMutation(internal.moz.updateMetricsFromMoz, {
+          await ctx.runMutation((internal as any).moz.updateMetricsFromMoz, {
             websiteId: w._id,
             domainAuthority: mozData.domain_authority ?? 1,
             spamScore: mozData.spam_score ?? 0,

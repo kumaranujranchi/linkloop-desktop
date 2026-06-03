@@ -13,9 +13,11 @@
     "vercel-build": "node scripts/build.js"
   },
   "dependencies": {
-    "convex": "^1.17.0"
+    "convex": "^1.17.0",
+    "nodemailer": "^8.0.10"
   },
   "devDependencies": {
+    "@types/nodemailer": "^8.0.0",
     "typescript": "^5.4.0"
   }
 }

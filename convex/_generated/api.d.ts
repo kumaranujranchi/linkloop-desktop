@@ -11,6 +11,7 @@
 import type * as analytics from "../analytics.js";
 import type * as auth_helpers from "../auth_helpers.js";
 import type * as backlinks from "../backlinks.js";
+import type * as email from "../email.js";
 import type * as exchanges from "../exchanges.js";
 import type * as feedback from "../feedback.js";
 import type * as messages from "../messages.js";
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   analytics: typeof analytics;
   auth_helpers: typeof auth_helpers;
   backlinks: typeof backlinks;
+  email: typeof email;
   exchanges: typeof exchanges;
   feedback: typeof feedback;
   messages: typeof messages;

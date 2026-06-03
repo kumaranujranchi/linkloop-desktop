@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { getUserIdFromToken } from "./auth_helpers";
+import { internal } from "./_generated/api";
 
 // ========== QUERIES ==========
 
@@ -220,6 +221,17 @@ export const send = mutation({
       read: false,
       createdAt: now,
     });
+
+    // Send email notification to receiver
+    const receiver = await ctx.db.get(args.receiverId);
+    if (receiver && receiver.email) {
+      await ctx.scheduler.runAfter(0, internal.email.sendNewMessageEmail, {
+        email: receiver.email,
+        receiverName: receiver.name,
+        senderName: user.name,
+        messageText: args.encrypted ? "🔒 Encrypted message" : args.text,
+      });
+    }
 
     return messageId;
   },
