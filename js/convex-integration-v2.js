@@ -2576,7 +2576,7 @@ function renderBacklinkTable(backlinks) {
 
   if (!backlinks || backlinks.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-tertiary)">No backlinks monitored yet. Complete an exchange to start tracking.</td></tr>';
+      '<tr><td colspan="7" class="text-center py-12 text-slate-400 dark:text-slate-500"><div class="flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-link-slash text-2xl text-slate-300 dark:text-slate-700"></i><span>No backlinks monitored yet. Complete an exchange to start tracking.</span></div></td></tr>';
     return;
   }
 
@@ -2603,18 +2603,34 @@ function renderBacklinkTable(backlinks) {
         b.healthScore ||
         (b.status === "healthy" ? 98 : b.status === "needs_review" ? 65 : 12);
       const lastChecked = b.lastChecked ? timeAgo(b.lastChecked) : "Never";
+      
+      const displaySource = b.sourceUrl ? b.sourceUrl.replace(/^(https?:\/\/)?(www\.)?/, "") : "—";
+      const displayTarget = b.targetUrl ? b.targetUrl.replace(/^(https?:\/\/)?(www\.)?/, "") : "—";
+      
       return `
-      <tr>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${b.sourceUrl || "—"}</td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${b.targetUrl || "—"}</td>
-        <td>${b.anchorText || "—"}</td>
-        <td><span class="badge ${linkTypeMap[b.linkType] || "badge-neutral"}">${b.linkType || "Unknown"}</span></td>
-        <td><span class="badge ${statusMap[b.status] || "badge-neutral"}">${statusLabel[b.status] || b.status}</span></td>
-        <td>${lastChecked}</td>
-        <td>
-          <div class="health-score">
-            <div class="health-bar"><div class="health-bar-fill ${healthClass[b.status] || "warning"}" style="width:${healthPct}%"></div></div>
-            ${healthPct}%
+      <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 border-b border-slate-100 dark:border-slate-800/50 transition-colors">
+        <td class="px-6 py-4 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+          <a href="${b.sourceUrl}" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:text-primary-600 hover:underline inline-flex items-center gap-1 font-semibold text-sm">
+            ${displaySource}
+            <i class="fa-solid fa-up-right-from-square text-[10px] opacity-75"></i>
+          </a>
+        </td>
+        <td class="px-6 py-4 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+          <a href="${b.targetUrl}" target="_blank" rel="noopener noreferrer" class="text-slate-700 dark:text-slate-300 hover:text-primary-500 hover:underline inline-flex items-center gap-1 font-medium text-sm">
+            ${displayTarget}
+            <i class="fa-solid fa-up-right-from-square text-[10px] opacity-75"></i>
+          </a>
+        </td>
+        <td class="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">${b.anchorText || "—"}</td>
+        <td class="px-6 py-4"><span class="badge ${linkTypeMap[b.linkType] || "badge-neutral"}">${b.linkType || "Unknown"}</span></td>
+        <td class="px-6 py-4"><span class="badge ${statusMap[b.status] || "badge-neutral"}">${statusLabel[b.status] || b.status}</span></td>
+        <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">${lastChecked}</td>
+        <td class="px-6 py-4">
+          <div class="health-score flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <div class="health-bar w-[60px] h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div class="health-bar-fill h-full rounded-full ${healthClass[b.status] || "warning"}" style="width:${healthPct}%"></div>
+            </div>
+            <span>${healthPct}%</span>
           </div>
         </td>
       </tr>`;
@@ -3020,16 +3036,38 @@ function populateSettingsPage(user) {
   const nameEl = document.getElementById("settingsDisplayName");
   const emailEl = document.getElementById("settingsEmail");
   const roleEl = document.getElementById("settingsRole");
+  
+  const roleLabels = {
+    free: "Free Plan",
+    pro: "Pro Plan",
+    agency: "Agency Plan",
+    admin: "Administrator",
+  };
+
   if (nameEl) nameEl.value = user.name || "";
   if (emailEl) emailEl.value = user.email || "";
   if (roleEl) {
-    const roleLabels = {
-      free: "Free Plan",
-      pro: "Pro Plan",
-      agency: "Agency Plan",
-      admin: "Administrator",
-    };
     roleEl.value = roleLabels[user.role] || user.role || "Free Plan";
+  }
+
+  // Update new modern settings banner if present
+  const bannerAvatarEl = document.getElementById("settingsBannerAvatar");
+  const bannerNameEl = document.getElementById("settingsBannerName");
+  const bannerEmailEl = document.getElementById("settingsBannerEmail");
+  const bannerRoleEl = document.getElementById("settingsBannerRoleBadge");
+
+  if (bannerAvatarEl && user.name) {
+    bannerAvatarEl.textContent = user.name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  }
+  if (bannerNameEl) bannerNameEl.textContent = user.name || "User";
+  if (bannerEmailEl) bannerEmailEl.textContent = user.email || "";
+  if (bannerRoleEl) {
+    bannerRoleEl.textContent = roleLabels[user.role] || user.role || "Free Plan";
   }
 }
 
