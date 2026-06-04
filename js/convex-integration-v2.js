@@ -2960,15 +2960,25 @@ function updateWebsitesTable(mySites, isFiltering = false) {
           </td>
           <td>
             ${
-              w.verified
-                ? `<span class="badge badge-success" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
-                    <i class="fa-solid fa-circle-check"></i>
-                    Verified
+              w.status === "suspended"
+                ? `<span class="badge badge-danger" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
+                    <i class="fa-solid fa-ban"></i>
+                    Suspended
                   </span>`
-                : `<span class="badge badge-warning" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    Pending
-                  </span>`
+                : w.status === "rejected"
+                  ? `<span class="badge badge-danger" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
+                      <i class="fa-solid fa-circle-xmark"></i>
+                      Rejected
+                    </span>`
+                  : w.verified
+                    ? `<span class="badge badge-success" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Verified
+                      </span>`
+                    : `<span class="badge badge-warning" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:0.8rem">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        Pending
+                      </span>`
             }
           </td>
           <td>
@@ -2979,29 +2989,47 @@ function updateWebsitesTable(mySites, isFiltering = false) {
           </td>
           <td style="text-align:right">
             ${
-              w.verified
-                ? `<div class="action-dropdown" id="action-dd-${w._id}" style="display:inline-block">
-                    <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px">
-                      <i class="fa-solid fa-ellipsis-vertical"></i>
-                      Manage
-                    </button>
-                    <div class="action-dropdown-menu" id="action-menu-${w._id}">
-                      <button class="action-dropdown-item" onclick="window.LinkBuild.editWebsite('${w._id}')">
-                        <i class="fa-solid fa-pen-to-square" style="color:var(--info);margin-right:8px"></i>Edit
+              w.status === "suspended"
+                ? `<span style="color:var(--text-tertiary);font-size:0.8rem;font-style:italic">Contact support</span>`
+                : w.verified
+                  ? `<div class="action-dropdown" id="action-dd-${w._id}" style="display:inline-block">
+                      <button class="btn btn-secondary btn-sm" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                        Manage
                       </button>
-                      <button class="action-dropdown-item warning" onclick="window.LinkBuild.deactivateWebsite('${w._id}')">
-                        <i class="fa-solid fa-circle-pause" style="color:var(--warning);margin-right:8px"></i>Deactivate
+                      <div class="action-dropdown-menu" id="action-menu-${w._id}">
+                        <button class="action-dropdown-item" onclick="window.LinkBuild.editWebsite('${w._id}')">
+                          <i class="fa-solid fa-pen-to-square" style="color:var(--info);margin-right:8px"></i>Edit
+                        </button>
+                        <button class="action-dropdown-item warning" onclick="window.LinkBuild.deactivateWebsite('${w._id}')">
+                          <i class="fa-solid fa-circle-pause" style="color:var(--warning);margin-right:8px"></i>Deactivate
+                        </button>
+                        <div class="action-dropdown-divider"></div>
+                        <button class="action-dropdown-item danger" onclick="window.LinkBuild.deleteWebsite('${w._id}')">
+                          <i class="fa-solid fa-trash-can" style="color:var(--danger);margin-right:8px"></i>Delete
+                        </button>
+                      </div>
+                    </div>`
+                  : `<div style="display:inline-flex;align-items:center;gap:6px">
+                      <button class="btn btn-primary btn-sm" onclick="window.LinkBuild.openVerifyModal('${w._id}')" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        Verify
                       </button>
-                      <div class="action-dropdown-divider"></div>
-                      <button class="action-dropdown-item danger" onclick="window.LinkBuild.deleteWebsite('${w._id}')">
-                        <i class="fa-solid fa-trash-can" style="color:var(--danger);margin-right:8px"></i>Delete
-                      </button>
-                    </div>
-                  </div>`
-                : `<button class="btn btn-primary btn-sm" onclick="window.LinkBuild.openVerifyModal('${w._id}')" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    Verify
-                  </button>`
+                      <div class="action-dropdown" id="action-dd-${w._id}" style="display:inline-block">
+                        <button class="btn btn-ghost btn-sm" onclick="window.LinkBuild.toggleActionDropdown('${w._id}')" style="display:inline-flex;align-items:center;gap:4px;padding:6px 8px;border-radius:6px;color:var(--text-tertiary)" title="More options">
+                          <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div class="action-dropdown-menu" id="action-menu-${w._id}">
+                          <button class="action-dropdown-item" onclick="window.LinkBuild.editWebsite('${w._id}')">
+                            <i class="fa-solid fa-pen-to-square" style="color:var(--info);margin-right:8px"></i>Edit
+                          </button>
+                          <div class="action-dropdown-divider"></div>
+                          <button class="action-dropdown-item danger" onclick="window.LinkBuild.deleteWebsite('${w._id}')">
+                            <i class="fa-solid fa-trash-can" style="color:var(--danger);margin-right:8px"></i>Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>`
             }
           </td>
         </tr>`;
