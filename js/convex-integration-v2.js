@@ -1227,17 +1227,17 @@ function renderConversationsList(conversations) {
   if (empty) empty.style.display = "none";
 
   inner.innerHTML = `
-    <div class="convs-toolbar" id="convsToolbar">
-      <label class="convs-select-all" onclick="event.stopPropagation()">
-        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this.checked)">
+    <div class="flex items-center justify-between px-4 py-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 gap-2 shrink-0" id="convsToolbar">
+      <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 cursor-pointer select-none" onclick="event.stopPropagation()">
+        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this.checked)" class="rounded border-slate-300 dark:border-slate-700 text-primary-600 focus:ring-primary-500/20 w-3.5 h-3.5 accent-primary-500">
         <span>Select all</span>
       </label>
-      <button class="convs-delete-btn" id="convsDeleteBtn" onclick="deleteSelectedConversations()" disabled title="Delete selected">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <button class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 dark:hover:border-rose-900/50 disabled:opacity-40 disabled:hover:text-slate-600 dark:disabled:hover:text-slate-400 disabled:hover:border-slate-200 dark:disabled:hover:border-slate-800 transition-all cursor-pointer disabled:cursor-default" id="convsDeleteBtn" onclick="deleteSelectedConversations()" disabled title="Delete selected">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
         <span id="selectedCount">Delete</span>
       </button>
     </div>
-    <div class="convs-list-scroll">
+    <div class="convs-list-scroll flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/40">
     ${conversations
       .map((conv) => {
         const name = conv.otherUser?.name || "Unknown User";
@@ -1252,22 +1252,26 @@ function renderConversationsList(conversations) {
         const unread = conv.unreadCount || 0;
 
         return `
-      <div class="conversation-item${isActive ? " active" : ""}" data-conv-id="${conv._id}">
-        <label class="convs-checkbox" onclick="event.stopPropagation()">
-          <input type="checkbox" class="conv-select-cb" data-conv-id="${conv._id}" onchange="updateDeleteButton()">
+      <div class="conversation-item flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all border-l-4 ${
+        isActive
+          ? "bg-primary-500/5 dark:bg-primary-500/10 border-primary-500 active"
+          : "border-transparent"
+      }" data-conv-id="${conv._id}">
+        <label class="flex items-center shrink-0" onclick="event.stopPropagation()">
+          <input type="checkbox" class="conv-select-cb rounded border-slate-300 dark:border-slate-700 text-primary-600 focus:ring-primary-500/20 w-3.5 h-3.5 accent-primary-500" data-conv-id="${conv._id}" onchange="updateDeleteButton()">
         </label>
-        <div onclick="window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ""}', '${name.replace(/'/g, "\\'")}')" style="flex:1;display:flex;align-items:center;gap:10px;cursor:pointer;min-width:0">
-          <div class="conversation-avatar" style="background:${color};position:relative">
+        <div onclick="window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ""}', '${name.replace(/'/g, "\\'")}')" class="flex-1 flex items-center gap-3 cursor-pointer min-width-0">
+          <div class="w-10 h-10 rounded-full text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm relative" style="background:${color}">
             ${initials}
-            ${unread > 0 ? `<span style="position:absolute;top:-3px;right:-3px;background:var(--danger);color:white;font-size:0.6rem;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg-primary)">${unread > 9 ? "9+" : unread}</span>` : ""}
+            ${unread > 0 ? `<span class="absolute -top-1 -right-1 bg-rose-500 text-white font-bold rounded-full w-4 h-4 flex items-center justify-center border-2 border-white dark:border-slate-900 text-[8px]">${unread > 9 ? "9+" : unread}</span>` : ""}
           </div>
-          <div class="conversation-info" style="flex:1;min-width:0">
-            <div class="conversation-name">${name}</div>
-            <div class="conversation-preview">${preview}</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-sm text-slate-900 dark:text-white truncate">${name}</div>
+            <div class="text-xs text-slate-400 dark:text-slate-500 truncate mt-0.5">${preview}</div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-            <div class="conversation-time">${time}</div>
-            ${unread > 0 ? `<span style="background:var(--primary-purple);border-radius:10px;color:white;font-size:0.65rem;font-weight:700;padding:1px 6px">${unread}</span>` : ""}
+          <div class="flex flex-col items-end gap-1 shrink-0">
+            <div class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">${time}</div>
+            ${unread > 0 ? `<span class="bg-primary-500 text-white font-semibold rounded-full px-1.5 py-0.5 text-[9px] min-w-4 text-center mt-0.5">${unread}</span>` : ""}
           </div>
         </div>
       </div>`;
@@ -1460,10 +1464,12 @@ async function renderMessages(messages) {
 
   if (!messages || messages.length === 0) {
     msgsEl.innerHTML = `
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-tertiary);gap:8px">
-        
-        <div style="font-weight:600">Start the conversation!</div>
-        <div style="font-size:0.85rem">Send a message to begin negotiating your link exchange.</div>
+      <div class="flex flex-col items-center justify-center h-full text-slate-400 dark:text-slate-500 gap-3">
+        <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-2xl shadow-sm text-slate-300 dark:text-slate-700">
+          <i class="fa-solid fa-comments"></i>
+        </div>
+        <div class="font-bold text-sm text-slate-800 dark:text-slate-200">Start the conversation!</div>
+        <div class="text-xs max-w-[250px] text-center">Send a message to begin negotiating your link exchange.</div>
       </div>`;
     return;
   }
@@ -1544,7 +1550,7 @@ async function renderMessages(messages) {
             : msgDate === yesterday
               ? "Yesterday"
               : msgDate;
-        dateSep = `<div style="text-align:center;margin:12px 0;font-size:0.75rem;color:var(--text-tertiary)"><span style="background:var(--bg-tertiary);padding:3px 10px;border-radius:10px">${label}</span></div>`;
+        dateSep = `<div class="text-center my-4 text-xs text-slate-400 dark:text-slate-500 flex items-center justify-center"><span class="bg-slate-200/60 dark:bg-slate-800/80 px-3 py-1 rounded-full font-semibold text-[10px] uppercase tracking-wider">${label}</span></div>`;
       }
       const time = new Date(msg.createdAt).toLocaleTimeString([], {
         hour: "2-digit",
@@ -1552,65 +1558,73 @@ async function renderMessages(messages) {
       });
       const readTick = isSent
         ? msg.read
-          ? ' <span style="color:#3b82f6;font-size:0.7rem">✓✓</span>'
+          ? ' <span class="text-blue-500 text-[10px] ml-1 font-semibold select-none">✓✓</span>'
           : msg.delivered
-            ? ' <span style="color:var(--text-secondary);font-size:0.7rem">✓✓</span>'
-            : ' <span style="color:var(--text-tertiary);font-size:0.7rem">✓</span>'
+            ? ' <span class="text-slate-400 dark:text-slate-500 text-[10px] ml-1 font-semibold select-none">✓✓</span>'
+            : ' <span class="text-slate-350 dark:text-slate-600 text-[10px] ml-1 font-semibold select-none">✓</span>'
         : "";
       const lockIcon =
         msg.encrypted && !isSent
-          ? ' <span title="Encrypted" style="font-size:0.6rem;opacity:0.7">Encrypted</span>'
+          ? ' <span title="Encrypted" class="text-[9px] text-slate-400 dark:text-slate-500 ml-1.5 opacity-75 select-none"><i class="fa-solid fa-lock text-[8px] mr-0.5"></i>Encrypted</span>'
           : "";
       const sentLock =
         msg.encrypted && isSent
-          ? ' <span title="Encrypted" style="font-size:0.6rem;opacity:0.5">Encrypted</span>'
+          ? ' <span title="Encrypted" class="text-[9px] text-white/70 ml-1.5 opacity-75 select-none"><i class="fa-solid fa-lock text-[8px] mr-0.5"></i>Encrypted</span>'
           : "";
 
       const editedLabel = msg.edited
-        ? ' <span style="font-size:0.6rem;color:var(--text-tertiary);font-style:italic">(edited)</span>'
+        ? ' <span class="text-[10px] text-slate-450 dark:text-slate-500 italic ml-1 select-none">(edited)</span>'
         : "";
       const isDeleted = msg.deleted;
       const deletedLabel = isDeleted ? "" : "";
 
-      let bubbleHtml = `${dateSep}<div class="chat-bubble ${isSent ? "sent" : "received"}" style="position:relative" data-msg-id="${msg._id}">
-      ${msg.displayText}${editedLabel}${deletedLabel}
-      <span style="font-size:0.65rem;opacity:0.6;margin-left:8px;white-space:nowrap">${time}${readTick}${lockIcon}${sentLock}</span>
-      ${
-        isSent && !isDeleted
-          ? `
-        <div class="msg-three-dots" onclick="event.stopPropagation();toggleMsgMenu('${msg._id}')">
-          <span></span><span></span><span></span>
+      let bubbleHtml = `${dateSep}
+      <div class="flex flex-col ${isSent ? "items-end" : "items-start"} w-full group/msg gap-1">
+        <div class="chat-bubble ${isSent ? "sent bg-gradient-to-br from-primary-500 to-indigo-600 dark:from-primary-600 dark:to-indigo-700 text-white rounded-2xl rounded-br-xs font-medium ml-auto" : "received bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-2xl rounded-bl-xs mr-auto border border-slate-200/40 dark:border-slate-700/40"} max-w-[75%] px-4 py-2.5 text-[13px] leading-relaxed relative break-words shadow-xs" data-msg-id="${msg._id}">
+          <div class="${isSent && !isDeleted ? "pr-6" : ""} pb-3">${msg.displayText}${editedLabel}${deletedLabel}</div>
+          <span class="absolute bottom-1 right-2 text-[9px] opacity-60 ml-2 whitespace-nowrap select-none">${time}${readTick}${lockIcon}${sentLock}</span>
+          ${
+            isSent && !isDeleted
+              ? `
+            <button class="msg-three-dots absolute top-1.5 right-1.5 flex items-center justify-center w-6 h-6 rounded-lg bg-black/10 dark:bg-black/25 hover:bg-black/25 dark:hover:bg-black/35 text-white/95 cursor-pointer border-none p-0 outline-none z-10 transition-all" onclick="event.stopPropagation();toggleMsgMenu('${msg._id}')" title="Message options">
+              <i class="fa-solid fa-ellipsis text-xs"></i>
+            </button>
+            <div class="msg-dropdown absolute bottom-full right-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg z-50 w-36 p-1 mb-1" id="msg-menu-${msg._id}">
+              <div class="msg-dropdown-item flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg cursor-pointer transition-all" onclick="event.stopPropagation();startEditMessage('${msg._id}','${escHtmlForAttr(msg.displayText)}')">
+                <i class="fa-solid fa-pen text-[10px]"></i>
+                <span>Edit message</span>
+              </div>
+              <div class="msg-dropdown-item danger flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg cursor-pointer transition-all" onclick="event.stopPropagation();deleteChatMessage('${msg._id}')">
+                <i class="fa-solid fa-trash text-[10px]"></i>
+                <span>Delete</span>
+              </div>
+            </div>
+          `
+              : ""
+          }
         </div>
-        <div class="msg-dropdown" id="msg-menu-${msg._id}">
-          <div class="msg-dropdown-item" onclick="event.stopPropagation();startEditMessage('${msg._id}','${escHtmlForAttr(msg.displayText)}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            Edit message
-          </div>
-          <div class="msg-dropdown-item danger" onclick="event.stopPropagation();deleteChatMessage('${msg._id}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            Delete
-          </div>
-        </div>
-      `
-          : ""
-      }
-    </div>
-    ${buildReactionsHtml(msg, uid)}
-    `;
+        ${buildReactionsHtml(msg, uid)}
+      </div>`;
 
       // Warnings detection and rendering
       if (detectPhoneContact(msg.displayText)) {
         bubbleHtml += `
-        <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
-          Be cautious when sharing your phone number or personal contact details. To avoid spam, scams, and unwanted solicitations, we recommend keeping communication within the platform whenever possible.
+        <div class="chat-warning-banner bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3.5 text-xs text-amber-800 dark:text-amber-300 max-w-[550px] mx-auto my-3 flex items-start gap-3 shadow-xs">
+          <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5 text-sm shrink-0"></i>
+          <div class="leading-relaxed">
+            Be cautious when sharing your phone number or personal contact details. To avoid spam, scams, and unwanted solicitations, we recommend keeping communication within the platform whenever possible.
+          </div>
         </div>
       `;
       }
 
       if (detectMoneyRequest(msg.displayText)) {
         bubbleHtml += `
-        <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
-          Please avoid sending money without proper investigation and verification. Financial transactions with unknown parties may result in monetary loss. Always verify the legitimacy of the request before making any payment.
+        <div class="chat-warning-banner bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3.5 text-xs text-amber-800 dark:text-amber-300 max-w-[550px] mx-auto my-3 flex items-start gap-3 shadow-xs">
+          <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5 text-sm shrink-0"></i>
+          <div class="leading-relaxed">
+            Please avoid sending money without proper investigation and verification. Financial transactions with unknown parties may result in monetary loss. Always verify the legitimacy of the request before making any payment.
+          </div>
         </div>
       `;
       }
@@ -1630,8 +1644,11 @@ async function renderMessages(messages) {
         }
         if (triggerWarning) {
           bubbleHtml += `
-          <div class="chat-warning-banner" style="background:var(--warning-light); border: 1px solid var(--warning); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-primary); margin: 8px auto; width: calc(100% - 32px); max-width: 600px; text-align: left; box-shadow: var(--shadow-sm); line-height: 1.4;">
-            This domain is not verified on our marketplace. Please avoid exchanging links with unverified domains, as their quality, ownership, and SEO metrics cannot be confirmed.
+          <div class="chat-warning-banner bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3.5 text-xs text-amber-800 dark:text-amber-300 max-w-[550px] mx-auto my-3 flex items-start gap-3 shadow-xs">
+            <i class="fa-solid fa-circle-exclamation text-amber-500 mt-0.5 text-sm shrink-0"></i>
+            <div class="leading-relaxed">
+              This domain is not verified on our marketplace. Please avoid exchanging links with unverified domains, as their quality, ownership, and SEO metrics cannot be confirmed.
+            </div>
           </div>
         `;
         }
@@ -2663,13 +2680,13 @@ function renderDashboardWidgets(conversations) {
         : "No messages yet";
       const time = timeAgo(conv.lastMessageAt);
       return `
-      <div class="conversation-item" onclick="navigateTo('messages'); setTimeout(() => window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ""}', '${name.replace(/'/g, "\\'")}'), 300)" style="cursor:pointer">
-        <div class="conversation-avatar" style="background:${color}">${initials}</div>
-        <div class="conversation-info">
-          <div class="conversation-name">${name}</div>
-          <div class="conversation-preview">${preview}</div>
+      <div class="conversation-item flex items-center gap-3 p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/40 rounded-2xl cursor-pointer transition-all border border-slate-100 dark:border-slate-800/40 bg-white dark:bg-slate-900 shadow-xs" onclick="navigateTo('messages'); setTimeout(() => window.LinkBuild.openConversation('${conv._id}', '${conv.otherUser?._id || ""}', '${name.replace(/'/g, "\\'")}'), 300)">
+        <div class="w-10 h-10 rounded-full text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm" style="background:${color}">${initials}</div>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-sm text-slate-900 dark:text-white truncate">${name}</div>
+          <div class="text-xs text-slate-400 dark:text-slate-500 truncate mt-0.5">${preview}</div>
         </div>
-        <div class="conversation-time">${time}</div>
+        <div class="text-[10px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap self-start mt-1">${time}</div>
       </div>`;
     })
     .join("");
