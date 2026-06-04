@@ -95,9 +95,12 @@
 *,
 *::before,
 *::after {
+  box-sizing: border-box;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, figure, blockquote, dl, dd, fieldset {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 html {
@@ -1076,6 +1079,16 @@ textarea {
   border-bottom: 1px solid var(--border-light);
   color: var(--text-primary);
   white-space: nowrap;
+}
+
+.data-table th:first-child,
+.data-table td:first-child {
+  padding-left: 24px;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+  padding-right: 24px;
 }
 
 .data-table tbody tr {
@@ -2814,6 +2827,16 @@ html.force-mobile .btn {
     padding: 10px 12px;
     font-size: 0.8rem;
   }
+
+  .data-table th:first-child,
+  .data-table td:first-child {
+    padding-left: 16px;
+  }
+
+  .data-table th:last-child,
+  .data-table td:last-child {
+    padding-right: 16px;
+  }
 }
 
 /* =============================================
@@ -2996,6 +3019,16 @@ html.force-mobile .btn {
   .data-table td {
     padding: 10px 12px;
     white-space: nowrap;
+  }
+
+  .data-table th:first-child,
+  .data-table td:first-child {
+    padding-left: 16px;
+  }
+
+  .data-table th:last-child,
+  .data-table td:last-child {
+    padding-right: 16px;
   }
 
   /* Two column to single */
@@ -3262,6 +3295,16 @@ html.force-mobile .btn {
   .data-table th,
   .data-table td {
     padding: 8px 10px;
+  }
+
+  .data-table th:first-child,
+  .data-table td:first-child {
+    padding-left: 12px;
+  }
+
+  .data-table th:last-child,
+  .data-table td:last-child {
+    padding-right: 12px;
   }
 
   /* Billing */
