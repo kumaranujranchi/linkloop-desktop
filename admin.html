@@ -420,10 +420,16 @@
             </svg>
             Refresh
           </button>
-          <div class="w-9 h-9 flex items-center justify-center rounded-xl bg-white dark:bg-slate-905 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-850 transition-all cursor-pointer shadow-xs active:scale-98" onclick="toggleTheme()" title="Toggle theme">
-            <i class="fa-regular fa-sun text-sm dark:hidden"></i>
-            <i class="fa-regular fa-moon text-sm hidden dark:block"></i>
-          </div>
+          <button id="themeToggleBtn" class="w-9 h-9 flex items-center justify-center rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer shadow-xs active:scale-95" onclick="toggleTheme()" title="Toggle theme">
+            <!-- Sun icon (light mode) -->
+            <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <!-- Moon icon (dark mode) -->
+            <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -2199,13 +2205,30 @@
       }
     }
 
+    function updateThemeIcon(theme) {
+      var sun = document.getElementById('iconSun');
+      var moon = document.getElementById('iconMoon');
+      if (!sun || !moon) return;
+      if (theme === 'dark') {
+        sun.classList.add('hidden');
+        moon.classList.remove('hidden');
+      } else {
+        sun.classList.remove('hidden');
+        moon.classList.add('hidden');
+      }
+    }
+
     function toggleTheme() {
       var html = document.documentElement;
       var current = html.getAttribute('data-theme');
       var next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('linkbuild-theme', next);
+      updateThemeIcon(next);
     }
+
+    // Sync icon on page load
+    updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'light');
 
     // Close logout popup on outside click
     document.addEventListener('click', (e) => {
