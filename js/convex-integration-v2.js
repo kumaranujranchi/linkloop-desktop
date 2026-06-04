@@ -3260,7 +3260,7 @@ function toggleActionDropdown(websiteId) {
   }
 
   // Move menu to body (portal) to avoid clipping by table-container overflow
-  const btn = document.querySelector(`#action-dd-${websiteId} .btn-ghost`);
+  const btn = document.querySelector(`#action-dd-${websiteId} button`);
   if (btn) {
     const btnRect = btn.getBoundingClientRect();
     menu.style.position = "fixed";
