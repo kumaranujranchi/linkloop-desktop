@@ -2608,25 +2608,25 @@ function renderBacklinkTable(backlinks) {
       const displayTarget = b.targetUrl ? b.targetUrl.replace(/^(https?:\/\/)?(www\.)?/, "") : "—";
       
       return `
-      <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/10 border-b border-slate-100 dark:border-slate-800/50 transition-colors">
-        <td class="px-6 py-4 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+      <tr>
+        <td class="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
           <a href="${b.sourceUrl}" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:text-primary-600 hover:underline inline-flex items-center gap-1 font-semibold text-sm">
             ${displaySource}
             <i class="fa-solid fa-up-right-from-square text-[10px] opacity-75"></i>
           </a>
         </td>
-        <td class="px-6 py-4 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+        <td class="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
           <a href="${b.targetUrl}" target="_blank" rel="noopener noreferrer" class="text-slate-700 dark:text-slate-300 hover:text-primary-500 hover:underline inline-flex items-center gap-1 font-medium text-sm">
             ${displayTarget}
             <i class="fa-solid fa-up-right-from-square text-[10px] opacity-75"></i>
           </a>
         </td>
-        <td class="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">${b.anchorText || "—"}</td>
-        <td class="px-6 py-4"><span class="badge ${linkTypeMap[b.linkType] || "badge-neutral"}">${b.linkType || "Unknown"}</span></td>
-        <td class="px-6 py-4"><span class="badge ${statusMap[b.status] || "badge-neutral"}">${statusLabel[b.status] || b.status}</span></td>
-        <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">${lastChecked}</td>
-        <td class="px-6 py-4">
-          <div class="health-score flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
+        <td class="font-medium">${b.anchorText || "—"}</td>
+        <td><span class="badge ${linkTypeMap[b.linkType] || "badge-neutral"}">${b.linkType || "Unknown"}</span></td>
+        <td><span class="badge ${statusMap[b.status] || "badge-neutral"}">${statusLabel[b.status] || b.status}</span></td>
+        <td class="text-xs text-slate-500 dark:text-slate-400">${lastChecked}</td>
+        <td>
+          <div class="health-score flex items-center gap-2 text-xs font-bold">
             <div class="health-bar w-[60px] h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
               <div class="health-bar-fill h-full rounded-full ${healthClass[b.status] || "warning"}" style="width:${healthPct}%"></div>
             </div>

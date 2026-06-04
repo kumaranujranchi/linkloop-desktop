@@ -985,68 +985,74 @@
           </div>
 
           <!-- Metrics Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+          <div class="kpi-grid">
             <!-- Active Backlinks -->
-            <div class="kpi-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm hover:shadow transition-all duration-200 flex items-center justify-between gap-4">
-              <div class="space-y-1">
-                <span class="kpi-card-label text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Active Backlinks</span>
-                <div class="kpi-card-value text-2xl font-bold text-slate-900 dark:text-white">2,891</div>
-                <div class="kpi-card-change up text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                  <i class="fa-solid fa-arrow-up text-[10px]"></i> 23 this week
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Active Backlinks</span>
+                <div class="kpi-card-icon blue">
+                  <i class="fa-solid fa-link"></i>
                 </div>
               </div>
-              <div class="w-11 h-11 rounded-xl bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 flex items-center justify-center text-base flex-shrink-0">
-                <i class="fa-solid fa-link"></i>
+              <div class="kpi-card-value">2,891</div>
+              <div class="kpi-card-change up">
+                <i class="fa-solid fa-arrow-up text-[10px]"></i> 23 this week
               </div>
             </div>
 
             <!-- Lost Links -->
-            <div class="kpi-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm hover:shadow transition-all duration-200 flex items-center justify-between gap-4">
-              <div class="space-y-1">
-                <span class="kpi-card-label text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Lost Links</span>
-                <div class="kpi-card-value text-2xl font-bold text-rose-600 dark:text-rose-400">12</div>
-                <div class="kpi-card-change down text-xs font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1">
-                  <i class="fa-solid fa-arrow-down text-[10px]"></i> 3 this week
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Lost Links</span>
+                <div class="kpi-card-icon red">
+                  <i class="fa-solid fa-link-slash"></i>
                 </div>
               </div>
-              <div class="w-11 h-11 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 flex items-center justify-center text-base flex-shrink-0">
-                <i class="fa-solid fa-link-slash"></i>
+              <div class="kpi-card-value" style="color: var(--danger);">12</div>
+              <div class="kpi-card-change down">
+                <i class="fa-solid fa-arrow-down text-[10px]"></i> 3 this week
               </div>
             </div>
 
             <!-- Dofollow Links -->
-            <div class="kpi-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm hover:shadow transition-all duration-200 flex items-center justify-between gap-4">
-              <div class="space-y-1">
-                <span class="kpi-card-label text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Dofollow Links</span>
-                <div class="kpi-card-value text-2xl font-bold text-slate-900 dark:text-white">1,820</div>
-                <div class="text-xs text-slate-400 dark:text-slate-500 font-medium">63% of total</div>
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Dofollow Links</span>
+                <div class="kpi-card-icon green">
+                  <i class="fa-solid fa-circle-arrow-up"></i>
+                </div>
               </div>
-              <div class="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base flex-shrink-0">
-                <i class="fa-solid fa-circle-arrow-up"></i>
+              <div class="kpi-card-value">1,820</div>
+              <div class="kpi-card-change">
+                <span style="color: var(--text-tertiary);">63% of total</span>
               </div>
             </div>
 
             <!-- Nofollow Links -->
-            <div class="kpi-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm hover:shadow transition-all duration-200 flex items-center justify-between gap-4">
-              <div class="space-y-1">
-                <span class="kpi-card-label text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Nofollow Links</span>
-                <div class="kpi-card-value text-2xl font-bold text-slate-900 dark:text-white">1,071</div>
-                <div class="text-xs text-slate-400 dark:text-slate-500 font-medium">37% of total</div>
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Nofollow Links</span>
+                <div class="kpi-card-icon orange">
+                  <i class="fa-solid fa-circle-arrow-right"></i>
+                </div>
               </div>
-              <div class="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center text-base flex-shrink-0">
-                <i class="fa-solid fa-circle-arrow-right"></i>
+              <div class="kpi-card-value">1,071</div>
+              <div class="kpi-card-change">
+                <span style="color: var(--text-tertiary);">37% of total</span>
               </div>
             </div>
 
             <!-- Verification Rate -->
-            <div class="kpi-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm hover:shadow transition-all duration-200 flex items-center justify-between gap-4">
-              <div class="space-y-1">
-                <span class="kpi-card-label text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Verification Rate</span>
-                <div class="kpi-card-value text-2xl font-bold text-slate-900 dark:text-white">98.4<span class="text-sm font-semibold">%</span></div>
-                <div class="text-xs text-slate-400 dark:text-slate-500 font-medium">Last checked: Today</div>
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Verification Rate</span>
+                <div class="kpi-card-icon purple">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
               </div>
-              <div class="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-base flex-shrink-0">
-                <i class="fa-solid fa-circle-check"></i>
+              <div class="kpi-card-value">98.4%</div>
+              <div class="kpi-card-change">
+                <span style="color: var(--text-tertiary);">Last checked: Today</span>
               </div>
             </div>
           </div>
@@ -1085,20 +1091,20 @@
             </div>
 
             <!-- Table Container -->
-            <div class="overflow-x-auto w-full">
-              <table class="w-full text-left border-collapse">
+            <div class="table-container">
+              <table class="data-table">
                 <thead>
-                  <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/30 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                    <th class="px-6 py-4">Source URL</th>
-                    <th class="px-6 py-4">Target URL</th>
-                    <th class="px-6 py-4">Anchor Text</th>
-                    <th class="px-6 py-4">Type</th>
-                    <th class="px-6 py-4">Status</th>
-                    <th class="px-6 py-4">Last Checked</th>
-                    <th class="px-6 py-4">Health Score</th>
+                  <tr>
+                    <th>Source URL</th>
+                    <th>Target URL</th>
+                    <th>Anchor Text</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Last Checked</th>
+                    <th>Health Score</th>
                   </tr>
                 </thead>
-                <tbody id="backlinkTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-sm text-slate-700 dark:text-slate-300">
+                <tbody id="backlinkTableBody">
                   <tr>
                     <td colspan="7" class="text-center py-12 text-slate-400 dark:text-slate-500">
                       <div class="flex flex-col items-center justify-center gap-2">
