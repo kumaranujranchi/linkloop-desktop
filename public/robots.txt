@@ -1,5 +1,5 @@
 # LinkBuild Robots.txt
-# https://www.linkbuild.store/
+# https://linkbuild.store/
 
 # ====== All Crawlers (Default) ======
 User-agent: *
@@ -56,5 +56,7 @@ Disallow: /dashboard
 Disallow: /admin
 
 # ====== Sitemap ======
-Sitemap: https://www.linkbuild.store/sitemap.xml
-Sitemap: https://www.linkbuild.store/llms.txt
+Sitemap: https://linkbuild.store/sitemap.xml
+
+# ====== LLMs Info ======
+# https://linkbuild.store/llms.txt

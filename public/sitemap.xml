@@ -4,7 +4,7 @@
 
   <!-- ====== Primary Pages ====== -->
   <url>
-    <loc>https://www.linkbuild.store/</loc>
+    <loc>https://linkbuild.store/</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -12,56 +12,56 @@
 
   <!-- ====== Legal & Policy Pages ====== -->
   <url>
-    <loc>https://www.linkbuild.store/privacy-policy</loc>
+    <loc>https://linkbuild.store/privacy-policy</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://www.linkbuild.store/terms</loc>
+    <loc>https://linkbuild.store/terms</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://www.linkbuild.store/acceptable-use-policy</loc>
+    <loc>https://linkbuild.store/acceptable-use-policy</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://www.linkbuild.store/affiliate-terms</loc>
+    <loc>https://linkbuild.store/affiliate-terms</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://www.linkbuild.store/billing-policy</loc>
+    <loc>https://linkbuild.store/billing-policy</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://www.linkbuild.store/cookie-policy</loc>
+    <loc>https://linkbuild.store/cookie-policy</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://www.linkbuild.store/dmca-policy</loc>
+    <loc>https://linkbuild.store/dmca-policy</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://www.linkbuild.store/domain-verification-policy</loc>
+    <loc>https://linkbuild.store/domain-verification-policy</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>

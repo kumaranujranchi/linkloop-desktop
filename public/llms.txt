@@ -28,15 +28,15 @@ LinkBuild is a white-hat backlink exchange platform for SEO professionals. We he
 ## Pages
 
 ### Public Pages
-- [Homepage](https://www.linkbuild.store/): Landing page with product info, features, pricing, and FAQs
-- [Terms and Conditions](https://www.linkbuild.store/terms): Legal terms for using LinkBuild
-- [Privacy Policy](https://www.linkbuild.store/privacy-policy): How we handle user data (GDPR & CCPA compliant)
-- [Acceptable Use Policy](https://www.linkbuild.store/acceptable-use-policy): Platform rules and community standards
-- [Billing Policy](https://www.linkbuild.store/billing-policy): Subscription plans, payment, and refund policies
-- [Cookie Policy](https://www.linkbuild.store/cookie-policy): Cookie usage and tracking technologies
-- [DMCA Policy](https://www.linkbuild.store/dmca-policy): Copyright and intellectual property policy
-- [Domain Verification Policy](https://www.linkbuild.store/domain-verification-policy): Domain ownership verification methods
-- [Affiliate Program](https://www.linkbuild.store/affiliate-terms): Affiliate program details and commission structure
+- [Homepage](https://linkbuild.store/): Landing page with product info, features, pricing, and FAQs
+- [Terms and Conditions](https://linkbuild.store/terms): Legal terms for using LinkBuild
+- [Privacy Policy](https://linkbuild.store/privacy-policy): How we handle user data (GDPR & CCPA compliant)
+- [Acceptable Use Policy](https://linkbuild.store/acceptable-use-policy): Platform rules and community standards
+- [Billing Policy](https://linkbuild.store/billing-policy): Subscription plans, payment, and refund policies
+- [Cookie Policy](https://linkbuild.store/cookie-policy): Cookie usage and tracking technologies
+- [DMCA Policy](https://linkbuild.store/dmca-policy): Copyright and intellectual property policy
+- [Domain Verification Policy](https://linkbuild.store/domain-verification-policy): Domain ownership verification methods
+- [Affiliate Program](https://linkbuild.store/affiliate-terms): Affiliate program details and commission structure
 
 ### Private Pages (require login)
 - Dashboard: User dashboard for managing websites, exchanges, and backlinks
