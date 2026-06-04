@@ -3718,8 +3718,9 @@
         </form>
       </div>
     </div>
-    <!-- ========== SAFETY NOTICE MODAL ========== -->
-    <div class="modal-overlay hidden" id="safetyNoticeModal" style="z-index: 9999;">
+  </div>
+  <!-- ========== SAFETY NOTICE MODAL ========== -->
+  <div class="modal-overlay hidden" id="safetyNoticeModal" style="z-index: 9999;">
       <div class="modal-box"
         style="max-width: 500px; padding: 24px; text-align: left; background: var(--bg-secondary) !important;">
         <div class="modal-header"
@@ -3753,19 +3754,20 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-    <script src="js/liquid-ether.js?v=7"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="./node_modules/convex/dist/browser.bundle.js"></script>
-    <script src="js/convex-integration-v2.js"></script>
-    <script src="js/app.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="js/liquid-ether.js?v=7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="./node_modules/convex/dist/browser.bundle.js"></script>
+  <script src="js/convex-integration-v2.js"></script>
+  <script src="js/app.js"></script>
 
-    <!-- Smooth Scroll & Stunning Animations (Lenis & Motion One) -->
-    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@motionone/dom@10.16.2/dist/motion.min.js"></script>
-    <script src="js/animations.js"></script>
+  <!-- Smooth Scroll & Stunning Animations (Lenis & Motion One) -->
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@motionone/dom@10.16.2/dist/motion.min.js"></script>
+  <script src="js/animations.js"></script>
 
     <script>
       // FAQ Accordion Script
@@ -3920,11 +3922,11 @@
         if (essentialBtn) essentialBtn.addEventListener('click', function () { setConsent('essential'); });
       }
 
-      // Wait for DOM
+      // Wait for DOM, then show cookie banner with 2s delay (after promo popup settles)
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCookieBanner);
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(initCookieBanner, 2000); });
       } else {
-        initCookieBanner();
+        setTimeout(initCookieBanner, 2000);
       }
     </script>
 </body>
