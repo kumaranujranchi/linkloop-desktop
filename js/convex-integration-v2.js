@@ -1580,7 +1580,7 @@ async function renderMessages(messages) {
 
       let bubbleHtml = `${dateSep}
       <div class="flex flex-col ${isSent ? "items-end" : "items-start"} w-full group/msg gap-1">
-        <div class="chat-bubble ${isSent ? "sent bg-gradient-to-br from-primary-500 to-indigo-600 dark:from-primary-600 dark:to-indigo-700 text-white rounded-2xl rounded-br-xs font-medium ml-auto" : "received bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-2xl rounded-bl-xs mr-auto border border-slate-200/40 dark:border-slate-700/40"} max-w-[75%] px-4 py-2.5 text-[13px] leading-relaxed relative break-words shadow-xs" data-msg-id="${msg._id}">
+        <div class="chat-bubble ${isSent ? "sent bg-gradient-to-br from-primary-500 to-indigo-600 dark:from-primary-600 dark:to-indigo-700 text-white rounded-2xl rounded-br-xs font-medium ml-auto min-w-[110px]" : "received bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-2xl rounded-bl-xs mr-auto border border-slate-200/40 dark:border-slate-700/40 min-w-[85px]"} max-w-[75%] px-4 py-2.5 text-[13px] leading-relaxed relative break-words shadow-xs" data-msg-id="${msg._id}">
           <div class="${isSent && !isDeleted ? "pr-6" : ""} pb-3">${msg.displayText}${editedLabel}${deletedLabel}</div>
           <span class="absolute bottom-1 right-2 text-[9px] opacity-60 ml-2 whitespace-nowrap select-none">${time}${readTick}${lockIcon}${sentLock}</span>
           ${
