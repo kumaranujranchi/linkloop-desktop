@@ -40,6 +40,10 @@ cpIfExists(resolve(ROOT, "cookie-policy.html"), resolve(DIST, "cookie-policy.htm
 cpIfExists(resolve(ROOT, "dmca-policy.html"), resolve(DIST, "dmca-policy.html"));
 cpIfExists(resolve(ROOT, "domain-verification-policy.html"), resolve(DIST, "domain-verification-policy.html"));
 
+// Copy case study pages
+cpIfExists(resolve(ROOT, "case-studies.html"), resolve(DIST, "case-studies.html"));
+cpIfExists(resolve(ROOT, "case-study.html"), resolve(DIST, "case-study.html"));
+
 // Copy public files (sitemap.xml, robots.txt, llms.txt)
 cpIfExists(resolve(ROOT, "public/sitemap.xml"), resolve(DIST, "sitemap.xml"));
 cpIfExists(resolve(ROOT, "public/robots.txt"), resolve(DIST, "robots.txt"));
@@ -75,6 +79,8 @@ function updateConvexPaths(filePath) {
 updateConvexPaths(resolve(DIST, "index.html"));
 updateConvexPaths(resolve(DIST, "dashboard.html"));
 updateConvexPaths(resolve(DIST, "admin.html"));
+updateConvexPaths(resolve(DIST, "case-studies.html"));
+updateConvexPaths(resolve(DIST, "case-study.html"));
 
 // Inject Convex URL from Vercel environment if provided
 const convexUrl = process.env.CONVEX_URL;
