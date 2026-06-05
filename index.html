@@ -35,8 +35,9 @@
   <meta name="twitter:image" content="https://linkbuild.store/assets/og-image.png">
   <meta name="twitter:site" content="@linkbuild">
 
-  <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236C4DF6%22 stroke-width=%222.5%22><path d=%22M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71%22/><path d=%22M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71%22/></svg>">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/favicon.svg">
 
   <!-- Apple System Fonts (no external requests, GDPR-friendly) -->
 
@@ -2476,7 +2477,8 @@
       <a href="#faq"
         onclick="document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');">FAQ</a>
       <a href="case-studies.html"
-        onclick="document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');">Case Studies</a>
+        onclick="document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');">Case
+        Studies</a>
       <button class="btn btn-secondary btn-sm" id="landingAuthBtn"
         onclick="(function(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburgerBtn').classList.remove('active');var el=document.getElementById('authOverlay');if(el){el.classList.add('active');el.classList.remove('hidden')};if(window.LinkBuild&&window.LinkBuild.showAuthScreen)window.LinkBuild.showAuthScreen();if(window.switchAuthTab)window.switchAuthTab('login')})()">Login</button>
     </div>
@@ -3723,39 +3725,39 @@
   </div>
   <!-- ========== SAFETY NOTICE MODAL ========== -->
   <div class="modal-overlay hidden" id="safetyNoticeModal" style="z-index: 9999;">
-      <div class="modal-box"
-        style="max-width: 500px; padding: 24px; text-align: left; background: var(--bg-secondary) !important;">
-        <div class="modal-header"
-          style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; margin-bottom: 16px;">
-          <h2
-            style="font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #ffffff; margin: 0;">
-            ⚠️ Safety Notice
-          </h2>
-        </div>
-        <div class="modal-body"
-          style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6; display: flex; flex-direction: column; gap: 14px;">
-          <p style="margin: 0; font-weight: 600; color: #ffffff;">
-            LinkBuild is a backlink exchange marketplace only. All link exchange agreements, payments, and business
-            transactions take place directly between users and are not managed by LinkBuild.
-          </p>
-          <p style="margin: 0;">
-            Please verify website ownership, domain quality, and user authenticity before entering into any agreement.
-            Avoid sending money or exchanging links with unverified domains without proper investigation.
-          </p>
-          <p style="margin: 0; font-style: italic;">
-            For your safety, always exercise caution and perform your own due diligence before proceeding with any
-            transaction.
-          </p>
-        </div>
-        <div class="modal-footer"
-          style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: flex-end;">
-          <button class="btn btn-primary" id="safetyAgreeBtn" onclick="agreeToSafetyNotice()"
-            style="width: 100%; padding: 12px; font-size: 0.95rem;">
-            I Agree
-          </button>
-        </div>
+    <div class="modal-box"
+      style="max-width: 500px; padding: 24px; text-align: left; background: var(--bg-secondary) !important;">
+      <div class="modal-header"
+        style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; margin-bottom: 16px;">
+        <h2
+          style="font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #ffffff; margin: 0;">
+          ⚠️ Safety Notice
+        </h2>
+      </div>
+      <div class="modal-body"
+        style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6; display: flex; flex-direction: column; gap: 14px;">
+        <p style="margin: 0; font-weight: 600; color: #ffffff;">
+          LinkBuild is a backlink exchange marketplace only. All link exchange agreements, payments, and business
+          transactions take place directly between users and are not managed by LinkBuild.
+        </p>
+        <p style="margin: 0;">
+          Please verify website ownership, domain quality, and user authenticity before entering into any agreement.
+          Avoid sending money or exchanging links with unverified domains without proper investigation.
+        </p>
+        <p style="margin: 0; font-style: italic;">
+          For your safety, always exercise caution and perform your own due diligence before proceeding with any
+          transaction.
+        </p>
+      </div>
+      <div class="modal-footer"
+        style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: flex-end;">
+        <button class="btn btn-primary" id="safetyAgreeBtn" onclick="agreeToSafetyNotice()"
+          style="width: 100%; padding: 12px; font-size: 0.95rem;">
+          I Agree
+        </button>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Scripts -->
@@ -3771,166 +3773,166 @@
   <script src="https://cdn.jsdelivr.net/npm/@motionone/dom@10.16.2/dist/motion.min.js"></script>
   <script src="js/animations.js"></script>
 
-    <script>
-      // FAQ Accordion Script
-      document.querySelectorAll('.faq-question').forEach(q => {
-        q.addEventListener('click', () => {
-          const item = q.parentElement;
-          const isActive = item.classList.contains('active');
+  <script>
+    // FAQ Accordion Script
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const isActive = item.classList.contains('active');
 
-          // Close all other FAQ items
-          document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+        // Close all other FAQ items
+        document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
 
-          if (!isActive) {
-            item.classList.add('active');
-          }
-        });
+        if (!isActive) {
+          item.classList.add('active');
+        }
       });
+    });
 
-      // ===== PROMO POPUP =====
-      function closePromoPopup() {
-        var overlay = document.getElementById('promoOverlay');
-        if (overlay) {
-          overlay.classList.remove('active');
-          // Store in session so it doesn't show again in same session
-          sessionStorage.setItem('linkbuild-promo-closed', 'true');
+    // ===== PROMO POPUP =====
+    function closePromoPopup() {
+      var overlay = document.getElementById('promoOverlay');
+      if (overlay) {
+        overlay.classList.remove('active');
+        // Store in session so it doesn't show again in same session
+        sessionStorage.setItem('linkbuild-promo-closed', 'true');
+      }
+    }
+
+    function openAuthFromPromo() {
+      closePromoPopup();
+      // Small delay then open auth overlay
+      setTimeout(function () {
+        var authEl = document.getElementById('authOverlay');
+        if (authEl) {
+          authEl.classList.add('active');
+          authEl.classList.remove('hidden');
         }
-      }
+        if (window.LinkBuild && window.LinkBuild.showAuthScreen) {
+          window.LinkBuild.showAuthScreen();
+        }
+        if (window.switchAuthTab) window.switchAuthTab('signup');
+      }, 300);
+    }
 
-      function openAuthFromPromo() {
-        closePromoPopup();
-        // Small delay then open auth overlay
-        setTimeout(function () {
-          var authEl = document.getElementById('authOverlay');
-          if (authEl) {
-            authEl.classList.add('active');
-            authEl.classList.remove('hidden');
-          }
-          if (window.LinkBuild && window.LinkBuild.showAuthScreen) {
-            window.LinkBuild.showAuthScreen();
-          }
-          if (window.switchAuthTab) window.switchAuthTab('signup');
-        }, 300);
-      }
+    // Show promo only if it hasn't been closed in this session
+    var promoOverlay = document.getElementById('promoOverlay');
+    if (sessionStorage.getItem('linkbuild-promo-closed') === 'true') {
+      if (promoOverlay) promoOverlay.classList.remove('active');
+    } else {
+      if (promoOverlay) promoOverlay.classList.add('active');
+    }
 
-      // Show promo only if it hasn't been closed in this session
-      var promoOverlay = document.getElementById('promoOverlay');
-      if (sessionStorage.getItem('linkbuild-promo-closed') === 'true') {
-        if (promoOverlay) promoOverlay.classList.remove('active');
+    // ===== PASSWORD TOGGLE =====
+    function togglePassword(inputId, btn) {
+      var input = document.getElementById(inputId);
+      if (!input) return;
+      var isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      // Toggle eye icon
+      var svg = btn.querySelector('svg');
+      if (isPassword) {
+        // Show eye-off icon
+        svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+        btn.title = 'Hide password';
       } else {
-        if (promoOverlay) promoOverlay.classList.add('active');
+        // Show eye icon
+        svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        btn.title = 'Show password';
       }
+    }
 
-      // ===== PASSWORD TOGGLE =====
-      function togglePassword(inputId, btn) {
-        var input = document.getElementById(inputId);
-        if (!input) return;
-        var isPassword = input.type === 'password';
-        input.type = isPassword ? 'text' : 'password';
-        // Toggle eye icon
-        var svg = btn.querySelector('svg');
-        if (isPassword) {
-          // Show eye-off icon
-          svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
-          btn.title = 'Hide password';
-        } else {
-          // Show eye icon
-          svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-          btn.title = 'Show password';
-        }
-      }
+    // ===== LIQUID ETHER WEBGL (Three.js fluid simulation) =====
+    // Disabled on mobile (<768px) for performance & to prevent layout stretch
+    (function () {
+      if (window.innerWidth < 768) return;
+      var container = document.getElementById('liquidEtherContainer');
+      if (!container || typeof THREE === 'undefined' || typeof LiquidEther === 'undefined') return;
+      window._liquidEther = new LiquidEther(container, {
+        colors: ['#5227FF', '#FF9FFC', '#B497CF'],
+        resolution: window.innerWidth < 1024 ? 1.0 : 0.5,
+        mouseForce: window.innerWidth < 1024 ? 10 : 20,
+        cursorSize: window.innerWidth < 1024 ? 50 : 100,
+        autoDemo: true,
+        autoSpeed: 0.5,
+        autoIntensity: window.innerWidth < 1024 ? 1.0 : 2.2
+      });
+    })();
+  </script>
 
-      // ===== LIQUID ETHER WEBGL (Three.js fluid simulation) =====
-      // Disabled on mobile (<768px) for performance & to prevent layout stretch
-      (function () {
-        if (window.innerWidth < 768) return;
-        var container = document.getElementById('liquidEtherContainer');
-        if (!container || typeof THREE === 'undefined' || typeof LiquidEther === 'undefined') return;
-        window._liquidEther = new LiquidEther(container, {
-          colors: ['#5227FF', '#FF9FFC', '#B497CF'],
-          resolution: window.innerWidth < 1024 ? 1.0 : 0.5,
-          mouseForce: window.innerWidth < 1024 ? 10 : 20,
-          cursorSize: window.innerWidth < 1024 ? 50 : 100,
-          autoDemo: true,
-          autoSpeed: 0.5,
-          autoIntensity: window.innerWidth < 1024 ? 1.0 : 2.2
-        });
-      })();
-    </script>
-
-    <!-- ====== COOKIE CONSENT BANNER (GDPR Compliant) ====== -->
-    <div id="cookieConsentBanner"
-      style="position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(15,23,42,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);padding:20px 4%;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:none;opacity:0;">
-      <div
-        style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:flex-start;gap:14px;flex:1;min-width:280px;">
-          <span style="font-size:1.6rem;flex-shrink:0;">🍪</span>
-          <div>
-            <strong style="color:#fff;font-size:0.95rem;font-family:'Outfit',sans-serif;">We Value Your Privacy</strong>
-            <p style="color:#94a3b8;font-size:0.82rem;margin:4px 0 0;line-height:1.5;">We use cookies to enhance your
-              experience, analyze traffic, and personalize content. By clicking "Accept All", you consent to our use of
-              cookies. Read our <a href="cookie-policy" style="color:#818cf8;text-decoration:underline;">Cookie
-                Policy</a> for details.</p>
-          </div>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-          <button id="cookieEssentialBtn"
-            style="padding:10px 18px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#cbd5e1;border-radius:8px;font-size:0.85rem;font-weight:500;cursor:pointer;white-space:nowrap;font-family:inherit;">Essential
-            Only</button>
-          <button id="cookieAcceptBtn"
-            style="padding:10px 22px;border:none;background:linear-gradient(135deg,#7C3AED,#EC4899);color:#fff;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;box-shadow:0 4px 15px rgba(124,58,237,0.3);">Accept
-            All</button>
+  <!-- ====== COOKIE CONSENT BANNER (GDPR Compliant) ====== -->
+  <div id="cookieConsentBanner"
+    style="position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(15,23,42,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);padding:20px 4%;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:none;opacity:0;">
+    <div
+      style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:flex-start;gap:14px;flex:1;min-width:280px;">
+        <span style="font-size:1.6rem;flex-shrink:0;">🍪</span>
+        <div>
+          <strong style="color:#fff;font-size:0.95rem;font-family:'Outfit',sans-serif;">We Value Your Privacy</strong>
+          <p style="color:#94a3b8;font-size:0.82rem;margin:4px 0 0;line-height:1.5;">We use cookies to enhance your
+            experience, analyze traffic, and personalize content. By clicking "Accept All", you consent to our use of
+            cookies. Read our <a href="cookie-policy" style="color:#818cf8;text-decoration:underline;">Cookie
+              Policy</a> for details.</p>
         </div>
       </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button id="cookieEssentialBtn"
+          style="padding:10px 18px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#cbd5e1;border-radius:8px;font-size:0.85rem;font-weight:500;cursor:pointer;white-space:nowrap;font-family:inherit;">Essential
+          Only</button>
+        <button id="cookieAcceptBtn"
+          style="padding:10px 22px;border:none;background:linear-gradient(135deg,#7C3AED,#EC4899);color:#fff;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;box-shadow:0 4px 15px rgba(124,58,237,0.3);">Accept
+          All</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-      function initCookieBanner() {
-        var banner = document.getElementById('cookieConsentBanner');
-        if (!banner) {
-          console.warn('Cookie banner not found');
+  <script>
+    function initCookieBanner() {
+      var banner = document.getElementById('cookieConsentBanner');
+      if (!banner) {
+        console.warn('Cookie banner not found');
+        return;
+      }
+
+      try {
+        var consent = localStorage.getItem('linkbuild-cookie-consent');
+        if (consent) {
+          console.log('Cookie consent already set:', consent);
           return;
         }
+      } catch (e) {
+        console.warn('localStorage error:', e);
+      }
 
+      // Show banner
+      banner.style.opacity = '1';
+      banner.style.pointerEvents = 'auto';
+      banner.style.transform = 'translateY(0)';
+      console.log('Cookie banner shown');
+
+      function setConsent(level) {
         try {
-          var consent = localStorage.getItem('linkbuild-cookie-consent');
-          if (consent) {
-            console.log('Cookie consent already set:', consent);
-            return;
-          }
-        } catch (e) {
-          console.warn('localStorage error:', e);
-        }
-
-        // Show banner
-        banner.style.opacity = '1';
-        banner.style.pointerEvents = 'auto';
-        banner.style.transform = 'translateY(0)';
-        console.log('Cookie banner shown');
-
-        function setConsent(level) {
-          try {
-            localStorage.setItem('linkbuild-cookie-consent', JSON.stringify({ level: level, date: new Date().toISOString() }));
-          } catch (e) { }
-          banner.style.transform = 'translateY(100%)';
-          banner.style.opacity = '0';
-          banner.style.pointerEvents = 'none';
-          console.log('Consent set to:', level);
-        }
-
-        var acceptBtn = document.getElementById('cookieAcceptBtn');
-        var essentialBtn = document.getElementById('cookieEssentialBtn');
-        if (acceptBtn) acceptBtn.addEventListener('click', function () { setConsent('all'); });
-        if (essentialBtn) essentialBtn.addEventListener('click', function () { setConsent('essential'); });
+          localStorage.setItem('linkbuild-cookie-consent', JSON.stringify({ level: level, date: new Date().toISOString() }));
+        } catch (e) { }
+        banner.style.transform = 'translateY(100%)';
+        banner.style.opacity = '0';
+        banner.style.pointerEvents = 'none';
+        console.log('Consent set to:', level);
       }
 
-      // Wait for DOM, then show cookie banner with 2s delay (after promo popup settles)
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () { setTimeout(initCookieBanner, 2000); });
-      } else {
-        setTimeout(initCookieBanner, 2000);
-      }
-    </script>
+      var acceptBtn = document.getElementById('cookieAcceptBtn');
+      var essentialBtn = document.getElementById('cookieEssentialBtn');
+      if (acceptBtn) acceptBtn.addEventListener('click', function () { setConsent('all'); });
+      if (essentialBtn) essentialBtn.addEventListener('click', function () { setConsent('essential'); });
+    }
+
+    // Wait for DOM, then show cookie banner with 2s delay (after promo popup settles)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { setTimeout(initCookieBanner, 2000); });
+    } else {
+      setTimeout(initCookieBanner, 2000);
+    }
+  </script>
 </body>
 
 </html>

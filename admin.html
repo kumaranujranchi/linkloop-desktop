@@ -8,8 +8,9 @@
   <meta name="description"
     content="LinkBuild Admin Panel — Platform management, user moderation, website verification, analytics, and system controls for the backlink exchange marketplace.">
   <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236C4DF6%22 stroke-width=%222.5%22><path d=%22M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71%22/><path d=%22M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71%22/></svg>">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/favicon.svg">
   <meta name="description"
     content="LinkBuild Admin Panel — Platform management, user moderation, analytics and controls.">
   <!-- Using Apple system fonts — no external font requests -->
@@ -62,19 +63,24 @@
       width: 6px;
       height: 6px;
     }
+
     ::-webkit-scrollbar-track {
       background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
       background: #cbd5e1;
       border-radius: 4px;
     }
+
     [data-theme="dark"] ::-webkit-scrollbar-thumb {
       background: #334155;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: #94a3b8;
     }
+
     [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
       background: #475569;
     }
@@ -83,6 +89,7 @@
     .admin-page {
       display: none;
     }
+
     .admin-page.active {
       display: block;
     }
@@ -96,12 +103,15 @@
 
     /* Legacy animation */
     @keyframes spinner {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
+
     .spinner {
       width: 20px;
       height: 20px;
-      border: 2px solid rgba(108,77,246,0.1);
+      border: 2px solid rgba(108, 77, 246, 0.1);
       border-top-color: #6C4DF6;
       border-radius: 50%;
       animation: spinner 0.6s linear infinite;
@@ -123,10 +133,12 @@
       text-align: left;
       border-left: 3px solid transparent;
     }
+
     .nav-item:hover {
       background: rgba(255, 255, 255, 0.05);
       color: #fff;
     }
+
     .nav-item.active {
       background: rgba(108, 77, 246, 0.15);
       color: #fff;
@@ -143,13 +155,15 @@
       background: #1e293b;
       border: 1px solid #334155;
       border-radius: 12px;
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
       padding: 6px;
       z-index: 50;
     }
+
     .logout-popup.open {
       display: block;
     }
+
     .logout-item {
       display: flex;
       align-items: center;
@@ -168,9 +182,11 @@
       border: none;
       transition: background-color 0.2s;
     }
+
     [data-theme="dark"] .toggle {
       background: #334155;
     }
+
     .toggle::after {
       content: '';
       position: absolute;
@@ -182,9 +198,11 @@
       left: 2px;
       transition: transform 0.2s;
     }
+
     .toggle.on {
       background: #6c4df6;
     }
+
     .toggle.on::after {
       transform: translateX(20px);
     }
@@ -200,7 +218,7 @@
       border-radius: 12px;
       font-size: 13px;
       font-weight: 600;
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
       border: 1px solid #334155;
       transform: translateY(100px);
       opacity: 0;
@@ -208,15 +226,18 @@
       z-index: 9999;
       pointer-events: none;
     }
+
     #adminToast.show {
       transform: translateY(0);
       opacity: 1;
     }
+
     #adminToast.error {
       border-color: #ef4444;
       background: #7f1d1d;
       color: #fee2e2;
     }
+
     #adminToast.success {
       border-color: #10b981;
       background: #064e3b;
@@ -227,12 +248,15 @@
 
 <body>
 
-  <div class="admin-shell flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-250">
+  <div
+    class="admin-shell flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-250">
 
     <!-- ========== SIDEBAR ========== -->
-    <aside class="admin-sidebar w-[260px] bg-[#0B0F19] border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-40 overflow-y-auto transition-all duration-300">
+    <aside
+      class="admin-sidebar w-[260px] bg-[#0B0F19] border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-40 overflow-y-auto transition-all duration-300">
       <div class="sidebar-brand flex items-center gap-3 p-5 border-b border-slate-800/60 shrink-0">
-        <div class="brand-icon w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-500 to-indigo-600 flex items-center justify-center shrink-0">
+        <div
+          class="brand-icon w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-500 to-indigo-600 flex items-center justify-center shrink-0">
           <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
             stroke-linejoin="round" class="w-5.5 h-5.5">
             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
@@ -241,13 +265,16 @@
         </div>
         <div class="brand-text flex flex-col">
           <div class="brand-name font-extrabold text-base text-white leading-none">LinkBuild</div>
-          <div class="brand-badge text-[9px] font-bold uppercase tracking-wider text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded mt-1.5 w-fit">Admin Panel</div>
+          <div
+            class="brand-badge text-[9px] font-bold uppercase tracking-wider text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded mt-1.5 w-fit">
+            Admin Panel</div>
         </div>
       </div>
 
       <nav class="sidebar-nav flex-1 p-4 space-y-6">
         <div class="nav-section space-y-1">
-          <div class="nav-section-label text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 mb-2">Overview</div>
+          <div class="nav-section-label text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 mb-2">
+            Overview</div>
           <button class="nav-item active" onclick="adminNav('overview', this)" id="navOverview">
             <span class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
@@ -262,7 +289,8 @@
         </div>
 
         <div class="nav-section space-y-1">
-          <div class="nav-section-label text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 mb-2">Moderation</div>
+          <div class="nav-section-label text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 mb-2">
+            Moderation</div>
           <button class="nav-item" onclick="adminNav('users', this)">
             <span class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
@@ -273,7 +301,9 @@
               </svg>
             </span>
             User Management
-            <span class="nav-badge ml-auto bg-rose-500 text-white font-bold rounded-full px-1.5 py-0.5 text-[9px] min-w-4 text-center" id="sidebarUserBadge" style="display:none">0</span>
+            <span
+              class="nav-badge ml-auto bg-rose-500 text-white font-bold rounded-full px-1.5 py-0.5 text-[9px] min-w-4 text-center"
+              id="sidebarUserBadge" style="display:none">0</span>
           </button>
           <button class="nav-item" onclick="adminNav('websites', this)">
             <span class="nav-icon">
@@ -284,7 +314,9 @@
               </svg>
             </span>
             Website Moderation
-            <span class="nav-badge ml-auto bg-amber-500 text-slate-950 font-bold rounded-full px-1.5 py-0.5 text-[9px] min-w-4 text-center" id="sidebarPendingBadge" style="display:none">0</span>
+            <span
+              class="nav-badge ml-auto bg-amber-500 text-slate-950 font-bold rounded-full px-1.5 py-0.5 text-[9px] min-w-4 text-center"
+              id="sidebarPendingBadge" style="display:none">0</span>
           </button>
           <button class="nav-item" onclick="adminNav('active-websites', this)">
             <span class="nav-icon">
@@ -314,12 +346,15 @@
               </svg>
             </span>
             Feedback & Features
-            <span class="nav-badge ml-auto bg-primary-500 text-white font-bold rounded-full px-1.5 py-0.5 text-[9px] min-w-4 text-center" id="sidebarFeedbackBadge" style="display:none">0</span>
+            <span
+              class="nav-badge ml-auto bg-primary-500 text-white font-bold rounded-full px-1.5 py-0.5 text-[9px] min-w-4 text-center"
+              id="sidebarFeedbackBadge" style="display:none">0</span>
           </button>
         </div>
 
         <div class="nav-section space-y-1">
-          <div class="nav-section-label text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 mb-2">Insights</div>
+          <div class="nav-section-label text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 mb-2">
+            Insights</div>
           <button class="nav-item" onclick="adminNav('revenue', this)">
             <span class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
@@ -342,7 +377,8 @@
         </div>
 
         <div class="nav-section space-y-1">
-          <div class="nav-section-label text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 mb-2">System</div>
+          <div class="nav-section-label text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 mb-2">System
+          </div>
           <button class="nav-item" onclick="adminNav('bulk-email', this)">
             <span class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
@@ -355,11 +391,11 @@
           <button class="nav-item" onclick="adminNav('case-studies', this)">
             <span class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <line x1="16" y1="13" x2="8" y2="13"/>
-                <line x1="16" y1="17" x2="8" y2="17"/>
-                <polyline points="10 9 9 9 8 9"/>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
               </svg>
             </span>
             Case Studies
@@ -379,7 +415,9 @@
 
       <div class="sidebar-footer p-4 border-t border-slate-800/60 shrink-0 relative">
         <div class="logout-popup" id="logoutPopup">
-          <div class="logout-item flex items-center gap-2.5 p-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/40 rounded-lg cursor-pointer transition-all" onclick="window.location.href='dashboard.html'">
+          <div
+            class="logout-item flex items-center gap-2.5 p-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/40 rounded-lg cursor-pointer transition-all"
+            onclick="window.location.href='dashboard.html'">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5">
               <rect x="3" y="3" width="7" height="7" />
               <rect x="14" y="3" width="7" height="7" />
@@ -388,7 +426,9 @@
             </svg>
             User Dashboard
           </div>
-          <div class="logout-item danger flex items-center gap-2.5 p-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/10 rounded-lg cursor-pointer transition-all" onclick="adminLogout()">
+          <div
+            class="logout-item danger flex items-center gap-2.5 p-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/10 rounded-lg cursor-pointer transition-all"
+            onclick="adminLogout()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
               <polyline points="16 17 21 12 16 7" />
@@ -397,14 +437,18 @@
             Sign Out
           </div>
         </div>
-        <div class="admin-user-card flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-800/20 hover:bg-slate-800/50 border border-transparent hover:border-slate-800 cursor-pointer transition-all" onclick="document.getElementById('logoutPopup').classList.toggle('open')">
-          <div class="admin-avatar w-9 h-9 rounded-full bg-gradient-to-tr from-primary-500 to-indigo-600 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-sm" id="sidebarAvatar">A</div>
+        <div
+          class="admin-user-card flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-800/20 hover:bg-slate-800/50 border border-transparent hover:border-slate-800 cursor-pointer transition-all"
+          onclick="document.getElementById('logoutPopup').classList.toggle('open')">
+          <div
+            class="admin-avatar w-9 h-9 rounded-full bg-gradient-to-tr from-primary-500 to-indigo-600 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-sm"
+            id="sidebarAvatar">A</div>
           <div class="admin-user-info flex-1 min-w-0">
             <div class="admin-user-name font-bold text-xs text-white truncate" id="sidebarName">Admin</div>
             <div class="admin-user-role text-[10px] font-semibold text-rose-500">Super Admin</div>
           </div>
-          <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
+          <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </div>
@@ -415,16 +459,24 @@
     <div class="admin-main flex-1 flex flex-col min-h-screen ml-[260px] min-w-0">
 
       <!-- TOPBAR -->
-      <div class="admin-topbar sticky top-0 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 z-30 shrink-0">
-        <div class="topbar-title font-bold text-base text-slate-950 dark:text-white flex items-baseline gap-2" id="topbarTitle">
-          Dashboard <span id="topbarSubtitle" class="text-xs font-semibold text-slate-400 dark:text-slate-500">Platform Overview</span>
+      <div
+        class="admin-topbar sticky top-0 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 z-30 shrink-0">
+        <div class="topbar-title font-bold text-base text-slate-950 dark:text-white flex items-baseline gap-2"
+          id="topbarTitle">
+          Dashboard <span id="topbarSubtitle" class="text-xs font-semibold text-slate-400 dark:text-slate-500">Platform
+            Overview</span>
         </div>
         <div class="topbar-actions flex items-center gap-3">
-          <div class="relative flex items-center bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500/10 transition-all">
+          <div
+            class="relative flex items-center bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500/10 transition-all">
             <i class="fa-solid fa-magnifying-glass text-slate-400 dark:text-slate-500 text-xs mr-2"></i>
-            <input type="text" placeholder="Search users, websites…" id="globalSearch" class="bg-transparent border-none outline-none text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 w-44" oninput="handleGlobalSearch(this.value)">
+            <input type="text" placeholder="Search users, websites…" id="globalSearch"
+              class="bg-transparent border-none outline-none text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 w-44"
+              oninput="handleGlobalSearch(this.value)">
           </div>
-          <button class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer" onclick="refreshCurrentPage()" id="refreshBtn">
+          <button
+            class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer"
+            onclick="refreshCurrentPage()" id="refreshBtn">
             <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="23 4 23 10 17 10" />
               <polyline points="1 20 1 14 7 14" />
@@ -432,14 +484,26 @@
             </svg>
             Refresh
           </button>
-          <button id="themeToggleBtn" class="w-9 h-9 flex items-center justify-center rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer shadow-xs active:scale-95" onclick="toggleTheme()" title="Toggle theme">
+          <button id="themeToggleBtn"
+            class="w-9 h-9 flex items-center justify-center rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer shadow-xs active:scale-95"
+            onclick="toggleTheme()" title="Toggle theme">
             <!-- Sun icon (light mode) -->
-            <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
             </svg>
             <!-- Moon icon (dark mode) -->
-            <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
           </button>
         </div>
@@ -449,7 +513,8 @@
       <div class="admin-content flex-1 p-6 md:p-8 space-y-6 overflow-y-auto">
 
         <!-- Mobile hamburger — always visible on tablet/mobile -->
-        <button class="admin-hamburger admin-top-hamburger flex lg:hidden items-center justify-center p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer"
+        <button
+          class="admin-hamburger admin-top-hamburger flex lg:hidden items-center justify-center p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer"
           onclick="var s=document.querySelector('.admin-sidebar');s.classList.toggle('mobile-open');var o=document.getElementById('adminMobileOverlay');o.classList.toggle('active',s.classList.contains('mobile-open'));o.style.display=s.classList.contains('mobile-open')?'block':'none'"
           title="Menu">
           <i class="fa-solid fa-bars text-sm"></i>
@@ -470,10 +535,12 @@
 
           <!-- KPI CARDS -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="kpiGrid">
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Users</span>
-                <div class="w-8 h-8 rounded-lg bg-primary-500/10 text-primary-600 dark:text-primary-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-primary-500/10 text-primary-600 dark:text-primary-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
@@ -483,7 +550,8 @@
                 </div>
               </div>
               <div class="text-2xl font-bold text-slate-950 dark:text-white" id="kpiTotalUsers">—</div>
-              <div class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-2" id="kpiNewUsers">
+              <div class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-2"
+                id="kpiNewUsers">
                 <svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2.5">
                   <polyline points="18 15 12 9 6 15" />
@@ -492,10 +560,12 @@
               </div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Active Websites</span>
-                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
                     <circle cx="12" cy="12" r="10" />
                     <line x1="2" y1="12" x2="22" y2="12" />
@@ -508,10 +578,12 @@
               <div class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 mt-2">Verified & Active</div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Exchanges</span>
-                <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
                     <path d="M16 3h5v5M8 3H3v5" />
                     <path d="M21 3l-7.5 7.5M3 3l7.5 7.5" />
@@ -521,13 +593,16 @@
                 </div>
               </div>
               <div class="text-2xl font-bold text-slate-950 dark:text-white" id="kpiTotalExchanges">—</div>
-              <div class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 mt-2" id="kpiCompletedExchanges">— completed</div>
+              <div class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 mt-2"
+                id="kpiCompletedExchanges">— completed</div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Monthly Revenue (MRR)</span>
-                <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
                     <line x1="12" y1="1" x2="12" y2="23" />
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
@@ -535,15 +610,19 @@
                 </div>
               </div>
               <div class="text-2xl font-bold text-slate-950 dark:text-white" id="kpiMRR">$—</div>
-              <div class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 mt-2" id="kpiPaidUsers">— paid users</div>
+              <div class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 mt-2" id="kpiPaidUsers">—
+                paid users</div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Spam / Suspended Sites</span>
-                <div class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                    <path
+                      d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
                     <line x1="12" y1="9" x2="12" y2="13" />
                     <line x1="12" y1="17" x2="12.01" y2="17" />
                   </svg>
@@ -553,10 +632,12 @@
               <div class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 mt-2">Requires review</div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Pending Approvals</span>
-                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                   </svg>
@@ -566,10 +647,12 @@
               <div class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 mt-2">Awaiting review</div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Free Plan Users</span>
-                <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
@@ -577,34 +660,50 @@
                 </div>
               </div>
               <div class="text-2xl font-bold text-slate-950 dark:text-white" id="kpiFreeUsers">—</div>
-              <div class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 mt-2" id="kpiProUsers">— pro/agency</div>
+              <div class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 mt-2" id="kpiProUsers">—
+                pro/agency</div>
             </div>
           </div>
 
           <!-- RECENT ACTIVITY TABLE -->
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all mt-6">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all mt-6">
             <div class="flex items-center justify-between mb-4">
               <div>
                 <h3 class="font-bold text-sm text-slate-900 dark:text-white">Recent Users</h3>
-                <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Latest registered accounts on the platform</p>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Latest registered accounts on the platform
+                </p>
               </div>
-              <button class="px-3 py-1.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs shadow-xs active:scale-98 transition-all" onclick="adminNav('users', document.querySelector('[onclick*=\'users\']'))">View All</button>
+              <button
+                class="px-3 py-1.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs shadow-xs active:scale-98 transition-all"
+                onclick="adminNav('users', document.querySelector('[onclick*=\'users\']'))">View All</button>
             </div>
             <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
               <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
                 <thead class="bg-slate-50 dark:bg-slate-950/40">
                   <tr>
-                    <th class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">User</th>
-                    <th class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Role</th>
-                    <th class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Reputation</th>
-                    <th class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Exchanges</th>
-                    <th class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Joined</th>
+                    <th
+                      class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      User</th>
+                    <th
+                      class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Role</th>
+                    <th
+                      class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Reputation</th>
+                    <th
+                      class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Exchanges</th>
+                    <th
+                      class="text-left py-3 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Joined</th>
                   </tr>
                 </thead>
                 <tbody id="recentUsersBody" class="divide-y divide-slate-100 dark:divide-slate-800/40">
                   <tr>
                     <td colspan="5">
-                      <div class="flex flex-col items-center justify-center py-10 text-slate-400 dark:text-slate-500 gap-2">
+                      <div
+                        class="flex flex-col items-center justify-center py-10 text-slate-400 dark:text-slate-500 gap-2">
                         <div class="spinner"></div>
                         <span class="text-xs font-semibold">Loading users…</span>
                       </div>
@@ -621,10 +720,13 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">User Management</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Manage roles, reputation, and access for all platform users</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Manage roles, reputation, and access for all
+                platform users</p>
             </div>
             <div>
-              <button class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer" onclick="loadUsersPage()">
+              <button
+                class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer"
+                onclick="loadUsersPage()">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="23 4 23 10 17 10" />
                   <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
@@ -634,35 +736,55 @@
             </div>
           </div>
 
-          <div class="flex flex-col sm:flex-row items-center gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs mb-6">
-            <input class="w-full sm:w-72 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all" type="text" placeholder="Search name or email…" id="userSearch" oninput="filterUsers(this.value)">
-            <select class="w-full sm:w-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 transition-all cursor-pointer font-medium text-slate-600 dark:text-slate-300" id="roleFilter" onchange="filterUsers(document.getElementById('userSearch').value)">
+          <div
+            class="flex flex-col sm:flex-row items-center gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs mb-6">
+            <input
+              class="w-full sm:w-72 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all"
+              type="text" placeholder="Search name or email…" id="userSearch" oninput="filterUsers(this.value)">
+            <select
+              class="w-full sm:w-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 transition-all cursor-pointer font-medium text-slate-600 dark:text-slate-300"
+              id="roleFilter" onchange="filterUsers(document.getElementById('userSearch').value)">
               <option value="">All Roles</option>
               <option value="free">Free</option>
               <option value="pro">Pro</option>
               <option value="agency">Agency</option>
               <option value="admin">Admin</option>
             </select>
-            <span class="text-xs text-slate-500 dark:text-slate-400 sm:ml-auto">Showing <strong id="userCount" class="font-bold text-slate-800 dark:text-slate-200">—</strong> users</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400 sm:ml-auto">Showing <strong id="userCount"
+                class="font-bold text-slate-800 dark:text-slate-200">—</strong> users</span>
           </div>
 
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
                 <thead class="bg-slate-50 dark:bg-slate-950/40">
                   <tr>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">User</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Role</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Reputation</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Exchanges</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Joined</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Actions</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      User</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Role</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Reputation</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Exchanges</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Joined</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Actions</th>
                   </tr>
                 </thead>
                 <tbody id="usersTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/40">
                   <tr>
                     <td colspan="6">
-                      <div class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
+                      <div
+                        class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
                         <div class="spinner"></div>Loading users…
                       </div>
                     </td>
@@ -678,10 +800,13 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Website Moderation</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Review and approve pending website submissions</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Review and approve pending website submissions
+              </p>
             </div>
             <div>
-              <button class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer" onclick="loadWebsitesPage()">
+              <button
+                class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer"
+                onclick="loadWebsitesPage()">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="23 4 23 10 17 10" />
                   <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
@@ -692,7 +817,8 @@
           </div>
 
           <div id="websitesList" class="space-y-4">
-            <div class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
+            <div
+              class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
               <div class="spinner"></div>Loading pending websites…
             </div>
           </div>
@@ -703,10 +829,13 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Active Websites</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">List of all active and verified websites on the platform</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">List of all active and verified websites on the
+                platform</p>
             </div>
             <div>
-              <button class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer" onclick="loadActiveWebsitesPage()">
+              <button
+                class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer"
+                onclick="loadActiveWebsitesPage()">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="23 4 23 10 17 10" />
                   <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
@@ -716,9 +845,16 @@
             </div>
           </div>
 
-          <div class="flex flex-col sm:flex-row items-center gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs mb-6">
-            <input class="w-full sm:w-72 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all" type="text" placeholder="Search domain or niche…" id="activeWebsiteSearch" oninput="filterActiveWebsites(this.value)">
-            <select class="w-full sm:w-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 transition-all cursor-pointer font-medium text-slate-600 dark:text-slate-300" id="activeNicheFilter" onchange="filterActiveWebsites(document.getElementById('activeWebsiteSearch').value)">
+          <div
+            class="flex flex-col sm:flex-row items-center gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs mb-6">
+            <input
+              class="w-full sm:w-72 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all"
+              type="text" placeholder="Search domain or niche…" id="activeWebsiteSearch"
+              oninput="filterActiveWebsites(this.value)">
+            <select
+              class="w-full sm:w-44 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 transition-all cursor-pointer font-medium text-slate-600 dark:text-slate-300"
+              id="activeNicheFilter"
+              onchange="filterActiveWebsites(document.getElementById('activeWebsiteSearch').value)">
               <option value="">All Niches</option>
               <option value="Automotive">Automotive</option>
               <option value="Blogging">Blogging</option>
@@ -747,26 +883,41 @@
               <option value="Travel">Travel</option>
               <option value="Other">Other</option>
             </select>
-            <span class="text-xs text-slate-500 dark:text-slate-400 sm:ml-auto">Showing <strong id="activeWebsiteCount" class="font-bold text-slate-800 dark:text-slate-200">—</strong> active sites</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400 sm:ml-auto">Showing <strong id="activeWebsiteCount"
+                class="font-bold text-slate-800 dark:text-slate-200">—</strong> active sites</span>
           </div>
 
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
                 <thead class="bg-slate-50 dark:bg-slate-950/40">
                   <tr>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Domain</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Niche</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Stats (DA / Traffic / RD)</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Country / Lang</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Owner</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Actions</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Domain</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Niche</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Stats (DA / Traffic / RD)</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Country / Lang</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Owner</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Actions</th>
                   </tr>
                 </thead>
                 <tbody id="activeWebsitesTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/40">
                   <tr>
                     <td colspan="6">
-                      <div class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
+                      <div
+                        class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
                         <div class="spinner"></div>Loading websites…
                       </div>
                     </td>
@@ -782,10 +933,13 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Exchange Monitor</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Track all link exchange requests across the platform</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Track all link exchange requests across the
+                platform</p>
             </div>
             <div>
-              <select class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-700 dark:text-slate-300 outline-none focus:border-primary-500 transition-all cursor-pointer font-medium" id="exchangeStatusFilter" onchange="renderExchanges()">
+              <select
+                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-700 dark:text-slate-300 outline-none focus:border-primary-500 transition-all cursor-pointer font-medium"
+                id="exchangeStatusFilter" onchange="renderExchanges()">
                 <option value="">All Statuses</option>
                 <option value="new">New</option>
                 <option value="negotiating">Negotiating</option>
@@ -798,36 +952,51 @@
 
           <!-- Exchange Stats -->
           <div class="grid grid-cols-3 gap-4 mb-6" id="exchangeStatsRow">
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-center shadow-xs flex flex-col items-center justify-center">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-center shadow-xs flex flex-col items-center justify-center">
               <div class="text-xl font-extrabold text-slate-900 dark:text-white" id="exTotal">—</div>
               <div class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1.5">Total</div>
             </div>
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-center shadow-xs flex flex-col items-center justify-center">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-center shadow-xs flex flex-col items-center justify-center">
               <div class="text-xl font-extrabold text-blue-500" id="exPending">—</div>
               <div class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1.5">Pending</div>
             </div>
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-center shadow-xs flex flex-col items-center justify-center">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-center shadow-xs flex flex-col items-center justify-center">
               <div class="text-xl font-extrabold text-emerald-500" id="exCompleted">—</div>
               <div class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1.5">Completed</div>
             </div>
           </div>
 
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
                 <thead class="bg-slate-50 dark:bg-slate-950/40">
                   <tr>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">From</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">To</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Status</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Anchor Text</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Created</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      From</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      To</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Status</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Anchor Text</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Created</th>
                   </tr>
                 </thead>
                 <tbody id="exchangesBody" class="divide-y divide-slate-100 dark:divide-slate-800/40">
                   <tr>
                     <td colspan="5">
-                      <div class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
+                      <div
+                        class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
                         <div class="spinner"></div>Loading exchanges…
                       </div>
                     </td>
@@ -843,10 +1012,13 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Feedback & Features</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Review feature requests and feedback from users</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Review feature requests and feedback from users
+              </p>
             </div>
             <div>
-              <button class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer" onclick="renderFeedbacks()">
+              <button
+                class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer"
+                onclick="renderFeedbacks()">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="23 4 23 10 17 10" />
                   <polyline points="1 20 1 14 7 14" />
@@ -857,22 +1029,34 @@
             </div>
           </div>
 
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
                 <thead class="bg-slate-50 dark:bg-slate-950/40">
                   <tr>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">User</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Note</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Date</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Status</th>
-                    <th class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">Action</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      User</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Note</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Date</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Status</th>
+                    <th
+                      class="text-left py-3.5 px-4 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                      Action</th>
                   </tr>
                 </thead>
                 <tbody id="feedbacksBody" class="divide-y divide-slate-100 dark:divide-slate-800/40">
                   <tr>
                     <td colspan="5">
-                      <div class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
+                      <div
+                        class="flex items-center justify-center gap-2 py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
                         <div class="spinner"></div>Loading feedbacks…
                       </div>
                     </td>
@@ -888,15 +1072,18 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Revenue & Plans</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Subscription breakdown and monthly recurring revenue</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Subscription breakdown and monthly recurring
+                revenue</p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Monthly Recurring Revenue</span>
-                <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
                     <line x1="12" y1="1" x2="12" y2="23" />
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
@@ -904,13 +1091,16 @@
                 </div>
               </div>
               <div class="text-2xl font-bold text-slate-950 dark:text-white" id="revMRR">$0</div>
-              <div class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 mt-2">Active subscriptions</div>
+              <div class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 mt-2">Active subscriptions
+              </div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Subscribers</span>
-                <div class="w-8 h-8 rounded-lg bg-primary-500/10 text-primary-600 dark:text-primary-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-primary-500/10 text-primary-600 dark:text-primary-400 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
@@ -924,20 +1114,24 @@
             </div>
           </div>
 
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs mb-6">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs mb-6">
             <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-4">Plan Breakdown</h3>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="planBreakdown">
-              <div class="flex flex-col p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/40 rounded-xl">
+              <div
+                class="flex flex-col p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/40 rounded-xl">
                 <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Free</div>
                 <div class="text-xl font-bold text-slate-700 dark:text-slate-300 mt-1" id="planFree">—</div>
                 <div class="text-xs font-medium text-slate-400 mt-1">$0 / mo</div>
               </div>
-              <div class="flex flex-col p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/40 rounded-xl">
+              <div
+                class="flex flex-col p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/40 rounded-xl">
                 <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Pro</div>
                 <div class="text-xl font-bold text-primary-500 mt-1" id="planPro">—</div>
                 <div class="text-xs font-medium text-emerald-500 mt-1" id="planProRev">$0 / mo</div>
               </div>
-              <div class="flex flex-col p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/40 rounded-xl">
+              <div
+                class="flex flex-col p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/40 rounded-xl">
                 <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Agency</div>
                 <div class="text-xl font-bold text-blue-500 mt-1" id="planAgency">—</div>
                 <div class="text-xs font-medium text-emerald-500 mt-1" id="planAgencyRev">$0 / mo</div>
@@ -945,7 +1139,8 @@
             </div>
           </div>
 
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
             <div class="mb-4">
               <h3 class="font-bold text-sm text-slate-900 dark:text-white">Revenue Chart</h3>
               <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Estimated MRR by plan (static projection)</p>
@@ -961,12 +1156,14 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Analytics Charts</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Platform growth, exchange activity, and user trends</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Platform growth, exchange activity, and user
+                trends</p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
               <div class="mb-4">
                 <h3 class="font-bold text-sm text-slate-900 dark:text-white">User Growth</h3>
                 <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">New signups per month by plan</p>
@@ -976,7 +1173,8 @@
               </div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
               <div class="mb-4">
                 <h3 class="font-bold text-sm text-slate-900 dark:text-white">Exchange Activity</h3>
                 <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Created vs completed over 6 months</p>
@@ -986,7 +1184,8 @@
               </div>
             </div>
 
-            <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
+            <div
+              class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
               <div class="mb-4">
                 <h3 class="font-bold text-sm text-slate-900 dark:text-white">Role Distribution</h3>
                 <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Breakdown of user roles on the platform</p>
@@ -1006,10 +1205,13 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Bulk Email</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Send an email to all registered platform users</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Send an email to all registered platform users
+              </p>
             </div>
             <div>
-              <button class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer" onclick="loadBulkEmailPage()" title="Refresh">
+              <button
+                class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 shadow-xs active:scale-98 transition-all cursor-pointer"
+                onclick="loadBulkEmailPage()" title="Refresh">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="23 4 23 10 17 10" />
                   <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
@@ -1019,41 +1221,54 @@
             </div>
           </div>
 
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden max-w-[800px] mb-6">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden max-w-[800px] mb-6">
             <div class="border-b border-slate-100 dark:border-slate-800/80 p-5">
               <h3 class="font-bold text-sm text-slate-900 dark:text-white">Compose Message</h3>
-              <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Recipients: <span id="bulkUserCount" class="font-semibold text-slate-750 dark:text-slate-300">—</span> users</p>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Recipients: <span id="bulkUserCount"
+                  class="font-semibold text-slate-750 dark:text-slate-300">—</span> users</p>
             </div>
             <div class="p-6 space-y-4">
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Subject</label>
-                <input type="text" id="bulkSubject" placeholder="Enter email subject..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all">
+                <input type="text" id="bulkSubject" placeholder="Enter email subject..."
+                  class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all">
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Email Body (HTML)</label>
                 <div class="text-[11px] text-slate-400 dark:text-slate-500">
-                  Use <code class="bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded font-mono text-[10px] text-primary-500">{{name}}</code> to insert each user's name. Paste your full HTML email code below.
+                  Use <code
+                    class="bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded font-mono text-[10px] text-primary-500">{{name}}</code>
+                  to insert each user's name. Paste your full HTML email code below.
                 </div>
-                <textarea id="bulkHtmlBody" rows="12" placeholder='Paste your HTML email here... e.g. &lt;h1&gt;Hello {{name}}!&lt;/h1&gt;&lt;p&gt;Your message...&lt;/p&gt;' class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 font-mono resize-vertical min-h-[260px] transition-all"></textarea>
+                <textarea id="bulkHtmlBody" rows="12"
+                  placeholder='Paste your HTML email here... e.g. &lt;h1&gt;Hello {{name}}!&lt;/h1&gt;&lt;p&gt;Your message...&lt;/p&gt;'
+                  class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 font-mono resize-vertical min-h-[260px] transition-all"></textarea>
               </div>
               <div class="flex items-center gap-3 flex-wrap pt-2">
-                <button id="bulkSendBtn" class="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-xs active:scale-98 transition-all cursor-pointer" onclick="sendBulkEmail()">
+                <button id="bulkSendBtn"
+                  class="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-xs active:scale-98 transition-all cursor-pointer"
+                  onclick="sendBulkEmail()">
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                     <polyline points="22,6 12,13 2,6" />
                   </svg>
                   Send to All Users
                 </button>
-                <button class="px-4 py-2.5 text-xs font-semibold bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all cursor-pointer active:scale-98" onclick="document.getElementById('bulkSubject').value='';document.getElementById('bulkHtmlBody').value='';showToast('Form cleared','success')">Clear</button>
+                <button
+                  class="px-4 py-2.5 text-xs font-semibold bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all cursor-pointer active:scale-98"
+                  onclick="document.getElementById('bulkSubject').value='';document.getElementById('bulkHtmlBody').value='';showToast('Form cleared','success')">Clear</button>
                 <span id="bulkStatus" class="text-xs font-medium text-slate-500 dark:text-slate-400 ml-2"></span>
               </div>
             </div>
           </div>
 
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden max-w-[800px]">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden max-w-[800px]">
             <div class="border-b border-slate-100 dark:border-slate-800/80 p-5">
               <h3 class="font-bold text-sm text-slate-900 dark:text-white">Preview</h3>
-              <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">How the email will look (using <code>{{name}}</code> replaced with a sample user)</p>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">How the email will look (using
+                <code>{{name}}</code> replaced with a sample user)</p>
             </div>
             <div id="bulkPreview" class="p-6 text-xs text-slate-500 dark:text-slate-400 overflow-x-auto min-h-[100px]">
               <p>Enter HTML content above and click outside the textarea to see a preview.</p>
@@ -1066,12 +1281,16 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Case Studies</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Create and manage case studies shown on the public case studies page</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Create and manage case studies shown on the
+                public case studies page</p>
             </div>
             <div>
-              <button class="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-xs active:scale-98 transition-all cursor-pointer" onclick="showCaseStudyForm()">
+              <button
+                class="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-xs active:scale-98 transition-all cursor-pointer"
+                onclick="showCaseStudyForm()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-3.5 h-3.5">
-                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
                 </svg>
                 Add Case Study
               </button>
@@ -1079,78 +1298,118 @@
           </div>
 
           <!-- Case Study Form (hidden by default) -->
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs mb-6" id="caseStudyForm" style="display:none;">
-            <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-4" id="caseStudyFormTitle">New Case Study</h3>
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs mb-6"
+            id="caseStudyForm" style="display:none;">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-4" id="caseStudyFormTitle">New Case Study
+            </h3>
             <input type="hidden" id="caseStudyEditId">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Title *</label>
-                <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium" type="text" id="csTitle" placeholder="e.g. How Company X Grew Traffic 300%">
+                <input
+                  class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium"
+                  type="text" id="csTitle" placeholder="e.g. How Company X Grew Traffic 300%">
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Slug *</label>
-                <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium" type="text" id="csSlug" placeholder="e.g. company-x-traffic-growth">
+                <input
+                  class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium"
+                  type="text" id="csSlug" placeholder="e.g. company-x-traffic-growth">
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Category *</label>
-                <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium" type="text" id="csCategory" placeholder="e.g. SEO, E-commerce, SaaS">
+                <input
+                  class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium"
+                  type="text" id="csCategory" placeholder="e.g. SEO, E-commerce, SaaS">
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Image</label>
-                <input type="file" id="csImageFile" accept="image/*" onchange="previewCaseStudyImage(this)" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-500 file:text-white hover:file:bg-primary-600 file:cursor-pointer">
+                <input type="file" id="csImageFile" accept="image/*" onchange="previewCaseStudyImage(this)"
+                  class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-500 file:text-white hover:file:bg-primary-600 file:cursor-pointer">
                 <div id="csImagePreview" class="mt-2" style="display:none;">
-                  <img id="csImagePreviewImg" src="" alt="Preview" class="w-full max-h-40 object-cover rounded-xl border border-slate-200 dark:border-slate-800">
-                  <button type="button" onclick="removeCaseStudyImage()" class="mt-1 text-[10px] text-rose-500 hover:text-rose-600 font-semibold">✕ Remove image</button>
+                  <img id="csImagePreviewImg" src="" alt="Preview"
+                    class="w-full max-h-40 object-cover rounded-xl border border-slate-200 dark:border-slate-800">
+                  <button type="button" onclick="removeCaseStudyImage()"
+                    class="mt-1 text-[10px] text-rose-500 hover:text-rose-600 font-semibold">✕ Remove image</button>
                 </div>
                 <input type="hidden" id="csImageUrl">
-                <p class="text-[10px] text-slate-400 mt-1">Upload an image or paste a URL below (URL is used as fallback)</p>
+                <p class="text-[10px] text-slate-400 mt-1">Upload an image or paste a URL below (URL is used as
+                  fallback)</p>
               </div>
               <div class="space-y-1.5">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Or Image URL (optional fallback)</label>
-                <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium" type="text" id="csImageUrlFallback" placeholder="https://example.com/image.jpg">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Or Image URL (optional
+                  fallback)</label>
+                <input
+                  class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium"
+                  type="text" id="csImageUrlFallback" placeholder="https://example.com/image.jpg">
               </div>
             </div>
 
             <div class="space-y-1.5 mb-4">
               <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Description *</label>
-              <textarea class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium" rows="3" id="csDescription" placeholder="Short summary shown on the listing page cards..."></textarea>
+              <textarea
+                class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium"
+                rows="3" id="csDescription" placeholder="Short summary shown on the listing page cards..."></textarea>
             </div>
 
             <div class="space-y-1.5 mb-4">
               <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Content (HTML) *</label>
-              <textarea class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-mono" rows="8" id="csContent" placeholder="&lt;h2&gt;The Challenge&lt;/h2&gt;&#10;&lt;p&gt;Describe the problem...&lt;/p&gt;&#10;&lt;h2&gt;The Solution&lt;/h2&gt;&#10;&lt;p&gt;How LinkBuild helped...&lt;/p&gt;"></textarea>
+              <textarea
+                class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-mono"
+                rows="8" id="csContent"
+                placeholder="&lt;h2&gt;The Challenge&lt;/h2&gt;&#10;&lt;p&gt;Describe the problem...&lt;/p&gt;&#10;&lt;h2&gt;The Solution&lt;/h2&gt;&#10;&lt;p&gt;How LinkBuild helped...&lt;/p&gt;"></textarea>
             </div>
 
             <div class="flex items-center gap-6 mb-4">
               <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="csFeatured" class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-primary-500 focus:ring-primary-500">
+                <input type="checkbox" id="csFeatured"
+                  class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-primary-500 focus:ring-primary-500">
                 <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Featured</span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="csPublished" class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-primary-500 focus:ring-primary-500">
+                <input type="checkbox" id="csPublished"
+                  class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-primary-500 focus:ring-primary-500">
                 <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Published</span>
               </label>
             </div>
 
             <div class="flex items-center gap-2.5 pt-2">
-              <button class="px-4 py-2 text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-xs active:scale-98 transition-all cursor-pointer" onclick="saveCaseStudy()">Save</button>
-              <button class="px-4 py-2 text-xs font-semibold bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all cursor-pointer shadow-xs active:scale-98" onclick="hideCaseStudyForm()">Cancel</button>
+              <button
+                class="px-4 py-2 text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-xs active:scale-98 transition-all cursor-pointer"
+                onclick="saveCaseStudy()">Save</button>
+              <button
+                class="px-4 py-2 text-xs font-semibold bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all cursor-pointer shadow-xs active:scale-98"
+                onclick="hideCaseStudyForm()">Cancel</button>
             </div>
           </div>
 
           <!-- Case Studies Table -->
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-xs">
                 <thead>
                   <tr class="border-b border-slate-100 dark:border-slate-800/40 bg-slate-50/50 dark:bg-slate-800/20">
-                    <th class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">Title</th>
-                    <th class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">Category</th>
-                    <th class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">Status</th>
-                    <th class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">Featured</th>
-                    <th class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">Date</th>
-                    <th class="text-right font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">Actions</th>
+                    <th
+                      class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">
+                      Title</th>
+                    <th
+                      class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">
+                      Category</th>
+                    <th
+                      class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">
+                      Status</th>
+                    <th
+                      class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">
+                      Featured</th>
+                    <th
+                      class="text-left font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">
+                      Date</th>
+                    <th
+                      class="text-right font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider py-3 px-4">
+                      Actions</th>
                   </tr>
                 </thead>
                 <tbody id="caseStudiesTableBody">
@@ -1168,47 +1427,72 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">Platform Settings</h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Configure platform behaviour, limits and feature flags</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Configure platform behaviour, limits and
+                feature flags</p>
             </div>
             <div>
-              <button class="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-xs active:scale-98 transition-all cursor-pointer" onclick="saveSettings()">Save Changes</button>
+              <button
+                class="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-xs active:scale-98 transition-all cursor-pointer"
+                onclick="saveSettings()">Save Changes</button>
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col">
-              <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/40">Plan Limits</h3>
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col">
+              <h3
+                class="font-bold text-sm text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/40">
+                Plan Limits</h3>
               <div class="space-y-4">
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Free Plan — Max Websites</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="number" value="3" id="freeSites">
+                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Free Plan — Max
+                    Websites</label>
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="number" value="3" id="freeSites">
                 </div>
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Free Plan — Max Exchanges / Month</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="number" value="10" id="freeExchanges">
+                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Free Plan — Max
+                    Exchanges / Month</label>
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="number" value="10" id="freeExchanges">
                 </div>
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Pro Plan — Max Websites</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="number" value="25" id="proSites">
+                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Pro Plan — Max
+                    Websites</label>
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="number" value="25" id="proSites">
                 </div>
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Pro Plan — Price ($/month)</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="number" value="49" id="proPrice">
+                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Pro Plan — Price
+                    ($/month)</label>
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="number" value="49" id="proPrice">
                 </div>
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Agency Plan — Price ($/month)</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="number" value="199" id="agencyPrice">
+                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Agency Plan — Price
+                    ($/month)</label>
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="number" value="199" id="agencyPrice">
                 </div>
               </div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col">
-              <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/40">Feature Flags</h3>
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col">
+              <h3
+                class="font-bold text-sm text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/40">
+                Feature Flags</h3>
               <div class="divide-y divide-slate-100 dark:divide-slate-800/30">
                 <div class="flex items-center justify-between py-3.5">
                   <div>
                     <div class="text-xs font-semibold text-slate-900 dark:text-white">Google Sign-In</div>
-                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Allow users to sign in with Google</div>
+                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Allow users to sign in with
+                      Google</div>
                   </div>
                   <button class="toggle on" onclick="this.classList.toggle('on')"></button>
                 </div>
@@ -1222,50 +1506,62 @@
                 <div class="flex items-center justify-between py-3.5">
                   <div>
                     <div class="text-xs font-semibold text-slate-900 dark:text-white">Marketplace Access</div>
-                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Enable public marketplace browsing</div>
+                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Enable public marketplace
+                      browsing</div>
                   </div>
                   <button class="toggle on" onclick="this.classList.toggle('on')"></button>
                 </div>
                 <div class="flex items-center justify-between py-3.5">
                   <div>
                     <div class="text-xs font-semibold text-slate-900 dark:text-white">Website Auto-Approval</div>
-                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Auto-approve websites without manual review</div>
+                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Auto-approve websites without
+                      manual review</div>
                   </div>
                   <button class="toggle" onclick="this.classList.toggle('on')"></button>
                 </div>
                 <div class="flex items-center justify-between py-3.5">
                   <div>
                     <div class="text-xs font-semibold text-slate-900 dark:text-white">Maintenance Mode</div>
-                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Show maintenance page to regular users</div>
+                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Show maintenance page to regular
+                      users</div>
                   </div>
                   <button class="toggle" onclick="this.classList.toggle('on')" id="maintenanceToggle"></button>
                 </div>
               </div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col">
-              <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/40">Email & Notifications</h3>
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col">
+              <h3
+                class="font-bold text-sm text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/40">
+                Email & Notifications</h3>
               <div class="space-y-4">
                 <div class="space-y-1.5">
                   <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Admin Email</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="email" placeholder="admin@linkbuild.io" id="adminEmail">
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="email" placeholder="admin@linkbuild.io" id="adminEmail">
                 </div>
                 <div class="space-y-1.5">
                   <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Support Email</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="email" placeholder="support@linkbuild.io" id="supportEmail">
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="email" placeholder="support@linkbuild.io" id="supportEmail">
                 </div>
                 <div class="divide-y divide-slate-100 dark:divide-slate-800/30">
                   <div class="flex items-center justify-between py-3.5">
                     <div>
                       <div class="text-xs font-semibold text-slate-900 dark:text-white">New User Email</div>
-                      <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Send welcome email on signup</div>
+                      <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Send welcome email on signup
+                      </div>
                     </div>
                     <button class="toggle on" onclick="this.classList.toggle('on')"></button>
                   </div>
                   <div class="flex items-center justify-between py-3.5">
                     <div>
                       <div class="text-xs font-semibold text-slate-900 dark:text-white">Exchange Alerts</div>
-                      <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Notify admin on new exchanges</div>
+                      <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Notify admin on new exchanges
+                      </div>
                     </div>
                     <button class="toggle" onclick="this.classList.toggle('on')"></button>
                   </div>
@@ -1273,29 +1569,40 @@
               </div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col">
-              <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/40">Moderation Rules</h3>
+            <div
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col">
+              <h3
+                class="font-bold text-sm text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/40">
+                Moderation Rules</h3>
               <div class="space-y-4">
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Min Domain Authority to Join</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="number" value="10" id="minDA">
+                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Min Domain Authority to
+                    Join</label>
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="number" value="10" id="minDA">
                 </div>
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Max Spam Score Allowed (%)</label>
-                  <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium" type="number" value="30" id="maxSpam">
+                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Max Spam Score Allowed
+                    (%)</label>
+                  <input
+                    class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 placeholder-slate-400 dark:placeholder-slate-500 transition-all font-medium"
+                    type="number" value="30" id="maxSpam">
                 </div>
                 <div class="divide-y divide-slate-100 dark:divide-slate-800/30">
                   <div class="flex items-center justify-between py-3.5">
                     <div>
                       <div class="text-xs font-semibold text-slate-900 dark:text-white">Require DNS Verification</div>
-                      <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Websites must verify ownership via DNS</div>
+                      <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Websites must verify ownership
+                        via DNS</div>
                     </div>
                     <button class="toggle on" onclick="this.classList.toggle('on')"></button>
                   </div>
                   <div class="flex items-center justify-between py-3.5">
                     <div>
                       <div class="text-xs font-semibold text-slate-900 dark:text-white">Auto-ban on Low Reputation</div>
-                      <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Auto-restrict users below score 10</div>
+                      <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Auto-restrict users below score
+                        10</div>
                     </div>
                     <button class="toggle" onclick="this.classList.toggle('on')"></button>
                   </div>
@@ -1317,15 +1624,22 @@
 
   <!-- ====== CONFIRM MODAL ====== -->
   <div class="modal-overlay" id="confirmModal">
-    <div class="modal bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl max-w-md w-full">
+    <div
+      class="modal bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl max-w-md w-full">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/60">
         <div class="text-base font-bold text-slate-900 dark:text-white" id="confirmTitle">Confirm Action</div>
-        <button class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400 text-xl font-bold cursor-pointer transition-all" onclick="closeConfirm()">&times;</button>
+        <button
+          class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400 text-xl font-bold cursor-pointer transition-all"
+          onclick="closeConfirm()">&times;</button>
       </div>
       <div class="text-xs text-slate-600 dark:text-slate-400 my-4 leading-relaxed" id="confirmBody"></div>
       <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800/60">
-        <button class="px-3.5 py-2 text-xs font-semibold bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all cursor-pointer shadow-xs active:scale-98" onclick="closeConfirm()">Cancel</button>
-        <button class="px-3.5 py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer shadow-xs active:scale-98" id="confirmBtn" onclick="executeConfirm()">Confirm</button>
+        <button
+          class="px-3.5 py-2 text-xs font-semibold bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all cursor-pointer shadow-xs active:scale-98"
+          onclick="closeConfirm()">Cancel</button>
+        <button
+          class="px-3.5 py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer shadow-xs active:scale-98"
+          id="confirmBtn" onclick="executeConfirm()">Confirm</button>
       </div>
     </div>
   </div>
@@ -2318,7 +2632,7 @@
       const img = document.getElementById('csImagePreviewImg');
       if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           img.src = e.target.result;
           preview.style.display = 'block';
         };

@@ -10,8 +10,9 @@
   <meta name="keywords"
     content="backlink dashboard, link exchange manager, SEO dashboard, backlink monitoring, link building tool">
   <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236C4DF6%22 stroke-width=%222.5%22><path d=%22M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71%22/><path d=%22M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71%22/></svg>">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/favicon.svg">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -447,7 +448,8 @@
         <!-- ==================== WEBSITES ==================== -->
         <section class="page-section" id="page-websites">
           <!-- Websites Page Header -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+          <div
+            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
             <div>
               <h1 class="page-title" style="margin-bottom:4px; display:flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-globe" style="color:var(--primary-purple)"></i>
@@ -456,7 +458,8 @@
               <p class="page-subtitle" style="margin-bottom:0;">Manage your registered websites for link exchanges.</p>
             </div>
             <div style="display:flex; gap:12px;">
-              <button class="btn btn-primary" onclick="openAddWebsiteModal()" style="display:inline-flex; align-items:center; gap:8px;">
+              <button class="btn btn-primary" onclick="openAddWebsiteModal()"
+                style="display:inline-flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-plus"></i>
                 Add Website
               </button>
@@ -480,7 +483,7 @@
               <div class="kpi-card-value" id="mySitesTotalCount">—</div>
               <div class="kpi-card-change">Registered domains</div>
             </div>
-            
+
             <!-- Avg DA Card -->
             <div class="kpi-card">
               <div class="kpi-card-header">
@@ -511,7 +514,8 @@
             <div class="card-header" style="padding: 16px 20px;">
               <div class="topbar-search" style="max-width: 320px; width: 100%;">
                 <i class="fa-solid fa-magnifying-glass text-sm"></i>
-                <input type="text" id="mySitesSearchInput" placeholder="Filter websites..." oninput="window.LinkBuild.filterMyWebsites(this.value)">
+                <input type="text" id="mySitesSearchInput" placeholder="Filter websites..."
+                  oninput="window.LinkBuild.filterMyWebsites(this.value)">
               </div>
               <span style="font-size: 0.8rem; color: var(--text-tertiary);">Sorted by Newest</span>
             </div>
@@ -534,7 +538,8 @@
                   <tr>
                     <td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">
                       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
-                        <i class="fa-solid fa-circle-notch fa-spin text-2xl text-indigo-500" style="color:var(--primary-purple)"></i>
+                        <i class="fa-solid fa-circle-notch fa-spin text-2xl text-indigo-500"
+                          style="color:var(--primary-purple)"></i>
                         <span>Loading your websites...</span>
                       </div>
                     </td>
@@ -548,13 +553,15 @@
         <!-- ==================== MARKETPLACE ==================== -->
         <section class="page-section" id="page-marketplace">
           <!-- Marketplace Header -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+          <div
+            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
             <div>
               <h1 class="page-title" style="margin-bottom:4px; display:flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-store" style="color:var(--primary-purple)"></i>
                 Website Marketplace
               </h1>
-              <p class="page-subtitle" style="margin-bottom:0;">Discover websites for backlink opportunities. Find the perfect exchange partners.</p>
+              <p class="page-subtitle" style="margin-bottom:0;">Discover websites for backlink opportunities. Find the
+                perfect exchange partners.</p>
             </div>
           </div>
 
@@ -571,7 +578,7 @@
               <div class="kpi-card-value" id="marketSitesTotalCount">—</div>
               <div class="kpi-card-change">Active exchange options</div>
             </div>
-            
+
             <!-- Avg DA Card -->
             <div class="kpi-card">
               <div class="kpi-card-header">
@@ -603,11 +610,11 @@
               <div style="display:flex;gap:12px;margin-bottom:16px;align-items:center;flex-wrap:wrap">
                 <div class="topbar-search" style="flex:1; max-width:none">
                   <i class="fa-solid fa-magnifying-glass" style="color:var(--text-tertiary)"></i>
-                  <input type="text" id="marketplaceSearchInput"
-                    placeholder="Search by domain, niche, or keyword..."
+                  <input type="text" id="marketplaceSearchInput" placeholder="Search by domain, niche, or keyword..."
                     onkeydown="if(event.key==='Enter')searchMarketplace()">
                 </div>
-                <button class="btn btn-primary" onclick="searchMarketplace()" style="display:inline-flex;align-items:center;gap:8px">
+                <button class="btn btn-primary" onclick="searchMarketplace()"
+                  style="display:inline-flex;align-items:center;gap:8px">
                   <i class="fa-solid fa-magnifying-glass"></i> Search
                 </button>
               </div>
@@ -818,13 +825,17 @@
 
         <!-- ==================== MESSAGES ==================== -->
         <section class="page-section" id="page-messages">
-          <div class="messages-layout bg-slate-50 dark:bg-slate-950 flex border-t border-slate-200/50 dark:border-slate-800/50">
+          <div
+            class="messages-layout bg-slate-50 dark:bg-slate-950 flex border-t border-slate-200/50 dark:border-slate-800/50">
 
             <!-- ===== Conversations List ===== -->
-            <div class="conversations-list border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col overflow-hidden" id="conversationsList">
+            <div
+              class="conversations-list border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col overflow-hidden"
+              id="conversationsList">
               <div class="p-4 border-b border-slate-200 dark:border-slate-800 shrink-0">
                 <div class="relative flex items-center">
-                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
+                  <span
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
                     <i class="fa-solid fa-magnifying-glass text-sm"></i>
                   </span>
                   <input type="text" id="convSearchInput" placeholder="Search conversations..."
@@ -833,27 +844,36 @@
                 </div>
               </div>
               <div id="convsListInner" class="flex-1 flex flex-col overflow-hidden">
-                <div id="convsLoading" class="p-8 text-center text-slate-400 dark:text-slate-500 text-xs font-semibold flex flex-col items-center justify-center gap-2">
+                <div id="convsLoading"
+                  class="p-8 text-center text-slate-400 dark:text-slate-500 text-xs font-semibold flex flex-col items-center justify-center gap-2">
                   <i class="fa-solid fa-circle-notch fa-spin text-xl text-primary-500"></i>
                   <span>Loading conversations...</span>
                 </div>
               </div>
-              <div id="convsEmpty" style="display:none;" class="p-10 text-center flex flex-col items-center justify-center">
-                <div class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 flex items-center justify-center text-xl mb-4">
+              <div id="convsEmpty" style="display:none;"
+                class="p-10 text-center flex flex-col items-center justify-center">
+                <div
+                  class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 flex items-center justify-center text-xl mb-4">
                   <i class="fa-solid fa-message"></i>
                 </div>
                 <div class="font-bold text-sm text-slate-900 dark:text-white mb-1">No conversations yet</div>
-                <div class="text-xs text-slate-400 dark:text-slate-500 mb-5 max-w-[200px]">Start a conversation from the Marketplace or Exchange Requests</div>
-                <button class="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98" onclick="navigateTo('marketplace')">Browse Marketplace</button>
+                <div class="text-xs text-slate-400 dark:text-slate-500 mb-5 max-w-[200px]">Start a conversation from the
+                  Marketplace or Exchange Requests</div>
+                <button
+                  class="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98"
+                  onclick="navigateTo('marketplace')">Browse Marketplace</button>
               </div>
             </div>
 
             <!-- ===== Chat Area ===== -->
-            <div class="chat-area flex-1 flex flex-col overflow-hidden bg-slate-50/30 dark:bg-slate-950/10" id="chatArea">
+            <div class="chat-area flex-1 flex flex-col overflow-hidden bg-slate-50/30 dark:bg-slate-950/10"
+              id="chatArea">
 
               <!-- No conversation selected -->
-              <div id="chatPlaceholder" class="flex-1 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 gap-3">
-                <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-2xl shadow-sm text-slate-300 dark:text-slate-700">
+              <div id="chatPlaceholder"
+                class="flex-1 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 gap-3">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-2xl shadow-sm text-slate-300 dark:text-slate-700">
                   <i class="fa-solid fa-comments"></i>
                 </div>
                 <div class="font-bold text-sm text-slate-800 dark:text-slate-200">Select a conversation</div>
@@ -863,39 +883,55 @@
               <!-- Active Conversation -->
               <div id="chatActive" style="display:none;" class="flex-1 flex flex-col h-full">
 
-                <div class="chat-header px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-white dark:bg-slate-900 shrink-0" id="chatHeader">
+                <div
+                  class="chat-header px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-white dark:bg-slate-900 shrink-0"
+                  id="chatHeader">
                   <div class="flex items-center gap-3">
-                    <button class="mobile-back-btn hide-desktop mr-2 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 text-xs font-semibold transition-all active:scale-98 flex items-center gap-1" onclick="backToConversations()">
+                    <button
+                      class="mobile-back-btn hide-desktop mr-2 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 text-xs font-semibold transition-all active:scale-98 flex items-center gap-1"
+                      onclick="backToConversations()">
                       <i class="fa-solid fa-chevron-left text-[10px]"></i>
                       Back
                     </button>
-                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-primary-500 to-indigo-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm" id="chatHeaderAvatar">?</div>
+                    <div
+                      class="w-9 h-9 rounded-full bg-gradient-to-tr from-primary-500 to-indigo-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm"
+                      id="chatHeaderAvatar">?</div>
                     <div>
                       <div class="font-bold text-sm text-slate-950 dark:text-white" id="chatHeaderName">Partner</div>
-                      <div class="text-[10px] font-semibold text-slate-400 dark:text-slate-500" id="chatHeaderSub">Exchange Partner</div>
+                      <div class="text-[10px] font-semibold text-slate-400 dark:text-slate-500" id="chatHeaderSub">
+                        Exchange Partner</div>
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <button class="px-3.5 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-955 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center gap-1.5" id="chatViewExchangeBtn" style="display:none" onclick="window.LinkBuild.viewExchangeFromChat()">
+                    <button
+                      class="px-3.5 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-955 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center gap-1.5"
+                      id="chatViewExchangeBtn" style="display:none" onclick="window.LinkBuild.viewExchangeFromChat()">
                       <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                       Exchange
                     </button>
                   </div>
                 </div>
 
-                <div class="chat-messages flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50 dark:bg-slate-900/10" id="chatMessages">
+                <div class="chat-messages flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50 dark:bg-slate-900/10"
+                  id="chatMessages">
                   <!-- Messages rendered by JS -->
                 </div>
 
-                <div id="chatTypingIndicator" style="display:none;" class="px-6 py-2 text-[11px] text-slate-400 dark:text-slate-500 italic shrink-0"></div>
+                <div id="chatTypingIndicator" style="display:none;"
+                  class="px-6 py-2 text-[11px] text-slate-400 dark:text-slate-500 italic shrink-0"></div>
 
-                <div class="chat-input-area p-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-3 shrink-0">
-                  <button class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shrink-0" title="Attach" id="msgAttachBtn">
+                <div
+                  class="chat-input-area p-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-3 shrink-0">
+                  <button
+                    class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shrink-0"
+                    title="Attach" id="msgAttachBtn">
                     <i class="fa-solid fa-paperclip text-base"></i>
                   </button>
                   <input type="text" id="msgInput" placeholder="Type your message..." autocomplete="off"
                     class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-955 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 outline-none transition-all">
-                  <button class="p-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-sm hover:shadow transition-all shrink-0 active:scale-95 flex items-center justify-center" id="msgSendBtn" title="Send">
+                  <button
+                    class="p-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-sm hover:shadow transition-all shrink-0 active:scale-95 flex items-center justify-center"
+                    id="msgSendBtn" title="Send">
                     <i class="fa-solid fa-paper-plane text-xs"></i>
                   </button>
                 </div>
@@ -903,16 +939,23 @@
             </div>
 
             <!-- ===== Exchange Detail Panel ===== -->
-            <div class="chat-detail-panel border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col overflow-y-auto shrink-0" id="chatDetailPanel">
-              <h4 class="font-bold text-slate-950 dark:text-white mb-5 text-sm uppercase tracking-wider">Exchange Details</h4>
+            <div
+              class="chat-detail-panel border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col overflow-y-auto shrink-0"
+              id="chatDetailPanel">
+              <h4 class="font-bold text-slate-950 dark:text-white mb-5 text-sm uppercase tracking-wider">Exchange
+                Details</h4>
 
               <!-- No exchange linked -->
               <div id="panelNoExchange" class="text-center py-6 flex flex-col items-center justify-center">
-                <div class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-850 text-slate-400 dark:text-slate-500 flex items-center justify-center text-xl mb-4">
+                <div
+                  class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-850 text-slate-400 dark:text-slate-500 flex items-center justify-center text-xl mb-4">
                   <i class="fa-solid fa-handshake"></i>
                 </div>
-                <div class="text-xs text-slate-500 dark:text-slate-400 line-height-relaxed max-w-[200px] mb-4">No exchange request is linked to this conversation yet.</div>
-                <button class="w-full px-4 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5" onclick="navigateTo('marketplace')">
+                <div class="text-xs text-slate-500 dark:text-slate-400 line-height-relaxed max-w-[200px] mb-4">No
+                  exchange request is linked to this conversation yet.</div>
+                <button
+                  class="w-full px-4 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5"
+                  onclick="navigateTo('marketplace')">
                   <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
                   Find a Partner
                 </button>
@@ -921,9 +964,12 @@
               <!-- Exchange linked (shown by JS) -->
               <div id="panelExchangeDetails" style="display:none" class="space-y-5">
                 <!-- From Web Card -->
-                <div class="bg-slate-50 dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-4 shadow-sm hover:shadow transition-all">
-                  <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Your Website</div>
-                  <div class="color-primary-500 font-bold text-sm text-primary-500 dark:text-primary-400 truncate mb-1" id="panelFromDomain">—</div>
+                <div
+                  class="bg-slate-50 dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-4 shadow-sm hover:shadow transition-all">
+                  <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+                    Your Website</div>
+                  <div class="color-primary-500 font-bold text-sm text-primary-500 dark:text-primary-400 truncate mb-1"
+                    id="panelFromDomain">—</div>
                   <div class="text-[10px] font-semibold text-slate-500 dark:text-slate-400" id="panelFromStats">—</div>
                 </div>
 
@@ -932,40 +978,54 @@
                 </div>
 
                 <!-- To Web Card -->
-                <div class="bg-slate-50 dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-4 shadow-sm hover:shadow transition-all">
-                  <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Partner Website</div>
-                  <div class="color-primary-500 font-bold text-sm text-primary-500 dark:text-primary-400 truncate mb-1" id="panelToDomain">—</div>
+                <div
+                  class="bg-slate-50 dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-4 shadow-sm hover:shadow transition-all">
+                  <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+                    Partner Website</div>
+                  <div class="color-primary-500 font-bold text-sm text-primary-500 dark:text-primary-400 truncate mb-1"
+                    id="panelToDomain">—</div>
                   <div class="text-[10px] font-semibold text-slate-500 dark:text-slate-400" id="panelToStats">—</div>
                 </div>
 
                 <!-- Status -->
                 <div class="pt-2 border-t border-slate-100 dark:border-slate-800/60">
-                  <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Status</div>
+                  <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+                    Status</div>
                   <span class="badge" id="panelStatusBadge">—</span>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/60">
-                  <button class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5" id="panelAcceptBtn" style="display:none" onclick="window.LinkBuild.dealAction('accepted')">
+                  <button
+                    class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5"
+                    id="panelAcceptBtn" style="display:none" onclick="window.LinkBuild.dealAction('accepted')">
                     <i class="fa-solid fa-check text-[10px]"></i>
                     Accept Deal
                   </button>
-                  <button class="w-full py-2.5 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5" id="panelCompleteBtn" style="display:none" onclick="window.LinkBuild.dealAction('completed')">
+                  <button
+                    class="w-full py-2.5 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5"
+                    id="panelCompleteBtn" style="display:none" onclick="window.LinkBuild.dealAction('completed')">
                     <i class="fa-solid fa-trophy text-[10px]"></i>
                     Mark as Complete
                   </button>
-                  <button class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5" id="panelNegotiateBtn" style="display:none" onclick="window.LinkBuild.dealAction('negotiating')">
+                  <button
+                    class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5"
+                    id="panelNegotiateBtn" style="display:none" onclick="window.LinkBuild.dealAction('negotiating')">
                     <i class="fa-solid fa-comments text-[10px]"></i>
                     Move to Negotiating
                   </button>
-                  <button class="w-full py-2.5 border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 font-semibold rounded-xl text-xs transition-all active:scale-98 flex items-center justify-center gap-1.5" id="panelRejectBtn" style="display:none" onclick="window.LinkBuild.dealAction('rejected')">
+                  <button
+                    class="w-full py-2.5 border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 font-semibold rounded-xl text-xs transition-all active:scale-98 flex items-center justify-center gap-1.5"
+                    id="panelRejectBtn" style="display:none" onclick="window.LinkBuild.dealAction('rejected')">
                     <i class="fa-solid fa-xmark text-[10px]"></i>
                     Decline Request
                   </button>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100 dark:border-slate-800/60">
-                  <button class="w-full py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5" id="panelViewFullBtn" onclick="window.LinkBuild.viewExchangeFromChat()">
+                  <button
+                    class="w-full py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs transition-all shadow-sm active:scale-98 flex items-center justify-center gap-1.5"
+                    id="panelViewFullBtn" onclick="window.LinkBuild.viewExchangeFromChat()">
                     <span>View Full Request</span>
                     <i class="fa-solid fa-arrow-right text-[10px]"></i>
                   </button>
@@ -980,7 +1040,8 @@
         <section class="page-section" id="page-backlink-monitor">
           <div class="mb-8">
             <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Backlink Monitor</h1>
-            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Track the health and indexation status of all your backlinks in real-time.</p>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Track the health and indexation status of all
+              your backlinks in real-time.</p>
           </div>
 
           <!-- Metrics Grid -->
@@ -1057,22 +1118,27 @@
           </div>
 
           <!-- Backlink Table Card -->
-          <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-            
+          <div
+            class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+
             <!-- Table Header -->
-            <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50 dark:bg-slate-900/50">
+            <div
+              class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50 dark:bg-slate-900/50">
               <div class="flex items-center gap-3">
-                <div class="p-2.5 rounded-xl bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400">
+                <div
+                  class="p-2.5 rounded-xl bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400">
                   <i class="fa-solid fa-list-check text-lg"></i>
                 </div>
                 <div>
                   <h3 class="text-lg font-bold text-slate-950 dark:text-white">All Monitored Backlinks</h3>
-                  <p class="text-xs text-slate-500 dark:text-slate-400">Full audit log of active, broken, and verification status of link exchanges.</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Full audit log of active, broken, and
+                    verification status of link exchanges.</p>
                 </div>
               </div>
               <div class="flex items-center gap-3 w-full sm:w-auto">
                 <div class="relative w-full sm:w-44">
-                  <select class="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer">
+                  <select
+                    class="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer">
                     <option>All Status</option>
                     <option>Healthy</option>
                     <option>Needs Review</option>
@@ -1082,7 +1148,8 @@
                     <i class="fa-solid fa-chevron-down text-xs"></i>
                   </span>
                 </div>
-                <button class="px-4 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all duration-200 shadow-sm active:scale-98 flex items-center gap-2">
+                <button
+                  class="px-4 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all duration-200 shadow-sm active:scale-98 flex items-center gap-2">
                   <i class="fa-solid fa-file-export text-xs"></i>
                   Export
                 </button>
@@ -1299,18 +1366,26 @@
         <section class="page-section" id="page-settings">
           <div class="mb-8">
             <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Settings</h1>
-            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Manage your profile, company details, and account security preferences.</p>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Manage your profile, company details, and account
+              security preferences.</p>
           </div>
 
           <!-- Top Welcome Banner Card -->
-          <div class="mb-8 p-6 bg-gradient-to-r from-slate-900 via-slate-950 to-indigo-950 rounded-2xl shadow-md border border-slate-800 text-white relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div
+            class="mb-8 p-6 bg-gradient-to-r from-slate-900 via-slate-950 to-indigo-950 rounded-2xl shadow-md border border-slate-800 text-white relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <!-- Decorative circle backgrounds -->
-            <div class="absolute -right-16 -top-16 w-44 h-44 bg-primary-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -left-16 -bottom-16 w-44 h-44 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            
+            <div
+              class="absolute -right-16 -top-16 w-44 h-44 bg-primary-500/10 rounded-full blur-3xl pointer-events-none">
+            </div>
+            <div
+              class="absolute -left-16 -bottom-16 w-44 h-44 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none">
+            </div>
+
             <div class="flex items-center gap-5 relative z-10">
               <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-primary-400 to-indigo-400 p-0.5 shadow-inner">
-                <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xl font-bold tracking-wider text-white" id="settingsBannerAvatar">
+                <div
+                  class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xl font-bold tracking-wider text-white"
+                  id="settingsBannerAvatar">
                   AK
                 </div>
               </div>
@@ -1319,12 +1394,15 @@
                 <div class="flex flex-wrap items-center gap-2 mt-1.5 text-sm text-slate-300">
                   <span id="settingsBannerEmail" class="font-medium text-slate-400">anuj.esprit@gmail.com</span>
                   <span class="w-1 h-1 rounded-full bg-slate-600"></span>
-                  <span id="settingsBannerRoleBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-500/20 text-primary-300 border border-primary-500/30">Free Plan</span>
+                  <span id="settingsBannerRoleBadge"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-500/20 text-primary-300 border border-primary-500/30">Free
+                    Plan</span>
                 </div>
               </div>
             </div>
-            
-            <div class="bg-slate-900/40 backdrop-blur-md border border-white/5 rounded-xl p-4 flex items-center gap-3 relative z-10">
+
+            <div
+              class="bg-slate-900/40 backdrop-blur-md border border-white/5 rounded-xl p-4 flex items-center gap-3 relative z-10">
               <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
                 <i class="fa-solid fa-circle-check text-lg"></i>
               </div>
@@ -1336,18 +1414,22 @@
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl">
-            
+
             <!-- Column 1: Profile Settings Card -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-md">
+            <div
+              class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-md">
               <div>
                 <!-- Header -->
-                <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 bg-slate-50/50 dark:bg-slate-900/50">
-                  <div class="p-2.5 rounded-xl bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400">
+                <div
+                  class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 bg-slate-50/50 dark:bg-slate-900/50">
+                  <div
+                    class="p-2.5 rounded-xl bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400">
                     <i class="fa-solid fa-user-gear text-lg"></i>
                   </div>
                   <div>
                     <h3 class="text-lg font-bold text-slate-950 dark:text-white">Profile Details</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Your personal details and public information.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Your personal details and public information.
+                    </p>
                   </div>
                 </div>
 
@@ -1355,24 +1437,34 @@
                 <div class="p-6 space-y-5">
                   <!-- Display Name -->
                   <div>
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Display Name</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Display
+                      Name</label>
                     <div class="relative">
-                      <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
+                      <span
+                        class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
                         <i class="fa-solid fa-user text-sm"></i>
                       </span>
-                      <input type="text" id="settingsDisplayName" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm" placeholder="Your name">
+                      <input type="text" id="settingsDisplayName"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm"
+                        placeholder="Your name">
                     </div>
                   </div>
 
                   <!-- Email Address -->
                   <div>
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email
+                      Address</label>
                     <div class="relative">
-                      <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
+                      <span
+                        class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
                         <i class="fa-solid fa-envelope text-sm"></i>
                       </span>
-                      <input type="email" id="settingsEmail" class="w-full pl-10 pr-12 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 text-slate-500 dark:text-slate-400 cursor-not-allowed opacity-75 outline-none text-sm" placeholder="your@email.com" readonly>
-                      <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-slate-600" title="Email cannot be changed">
+                      <input type="email" id="settingsEmail"
+                        class="w-full pl-10 pr-12 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 text-slate-500 dark:text-slate-400 cursor-not-allowed opacity-75 outline-none text-sm"
+                        placeholder="your@email.com" readonly>
+                      <span
+                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-slate-600"
+                        title="Email cannot be changed">
                         <i class="fa-solid fa-lock text-xs"></i>
                       </span>
                     </div>
@@ -1380,13 +1472,19 @@
 
                   <!-- Subscription Plan/Role -->
                   <div>
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Subscription Plan</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Subscription
+                      Plan</label>
                     <div class="relative">
-                      <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
+                      <span
+                        class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
                         <i class="fa-solid fa-crown text-sm"></i>
                       </span>
-                      <input type="text" id="settingsRole" class="w-full pl-10 pr-12 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 text-slate-500 dark:text-slate-400 cursor-not-allowed opacity-75 outline-none text-sm" placeholder="-" readonly>
-                      <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-slate-600" title="Subscription managed via Billing">
+                      <input type="text" id="settingsRole"
+                        class="w-full pl-10 pr-12 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 text-slate-500 dark:text-slate-400 cursor-not-allowed opacity-75 outline-none text-sm"
+                        placeholder="-" readonly>
+                      <span
+                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-slate-600"
+                        title="Subscription managed via Billing">
                         <i class="fa-solid fa-lock text-xs"></i>
                       </span>
                     </div>
@@ -1394,20 +1492,27 @@
 
                   <!-- Company Name -->
                   <div>
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Company / Agency</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Company /
+                      Agency</label>
                     <div class="relative">
-                      <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
+                      <span
+                        class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
                         <i class="fa-solid fa-building text-sm"></i>
                       </span>
-                      <input type="text" id="settingsCompany" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm" placeholder="Your agency or company name">
+                      <input type="text" id="settingsCompany"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm"
+                        placeholder="Your agency or company name">
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- Footer Actions -->
-              <div class="px-6 py-4 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 flex justify-end">
-                <button class="w-full md:w-auto px-5 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl text-sm transition-all duration-200 shadow-sm hover:shadow active:scale-98 flex items-center justify-center gap-2" onclick="saveSettingsProfile()">
+              <div
+                class="px-6 py-4 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+                <button
+                  class="w-full md:w-auto px-5 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl text-sm transition-all duration-200 shadow-sm hover:shadow active:scale-98 flex items-center justify-center gap-2"
+                  onclick="saveSettingsProfile()">
                   <i class="fa-solid fa-floppy-disk text-sm"></i>
                   Save Changes
                 </button>
@@ -1415,10 +1520,12 @@
             </div>
 
             <!-- Column 2: Security & Password Card -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-md">
+            <div
+              class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-md">
               <div>
                 <!-- Header -->
-                <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 bg-slate-50/50 dark:bg-slate-900/50">
+                <div
+                  class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 bg-slate-50/50 dark:bg-slate-900/50">
                   <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400">
                     <i class="fa-solid fa-shield-halved text-lg"></i>
                   </div>
@@ -1432,34 +1539,46 @@
                 <div class="p-6 space-y-5">
                   <!-- Current Password -->
                   <div>
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Current Password</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Current
+                      Password</label>
                     <div class="relative">
-                      <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
+                      <span
+                        class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
                         <i class="fa-solid fa-key text-sm"></i>
                       </span>
-                      <input type="password" id="settingsCurrentPassword" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm" placeholder="Enter current password" autocomplete="current-password">
+                      <input type="password" id="settingsCurrentPassword"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm"
+                        placeholder="Enter current password" autocomplete="current-password">
                     </div>
                   </div>
 
                   <!-- New Password -->
                   <div>
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">New Password</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">New
+                      Password</label>
                     <div class="relative">
-                      <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
+                      <span
+                        class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
                         <i class="fa-solid fa-lock-open text-sm"></i>
                       </span>
-                      <input type="password" id="settingsNewPassword" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm" placeholder="Enter new password (min 6 chars)" autocomplete="new-password">
+                      <input type="password" id="settingsNewPassword"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm"
+                        placeholder="Enter new password (min 6 chars)" autocomplete="new-password">
                     </div>
                   </div>
 
                   <!-- Confirm Password -->
                   <div>
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Confirm New Password</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Confirm New
+                      Password</label>
                     <div class="relative">
-                      <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
+                      <span
+                        class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">
                         <i class="fa-solid fa-lock text-sm"></i>
                       </span>
-                      <input type="password" id="settingsConfirmPassword" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm" placeholder="Re-enter new password" autocomplete="new-password">
+                      <input type="password" id="settingsConfirmPassword"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-950/30 outline-none transition-all text-sm"
+                        placeholder="Re-enter new password" autocomplete="new-password">
                     </div>
                   </div>
 
@@ -1469,8 +1588,11 @@
               </div>
 
               <!-- Footer Actions -->
-              <div class="px-6 py-4 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 flex justify-end">
-                <button class="w-full md:w-auto px-5 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl text-sm transition-all duration-200 shadow-sm hover:shadow active:scale-98 flex items-center justify-center gap-2" onclick="handleChangePassword()">
+              <div
+                class="px-6 py-4 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+                <button
+                  class="w-full md:w-auto px-5 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl text-sm transition-all duration-200 shadow-sm hover:shadow active:scale-98 flex items-center justify-center gap-2"
+                  onclick="handleChangePassword()">
                   <i class="fa-solid fa-shield-halved text-sm"></i>
                   Update Password
                 </button>
