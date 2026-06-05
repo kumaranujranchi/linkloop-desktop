@@ -416,7 +416,9 @@ function getDashboardUrl(role) {
 
 function handleLoggedOutRedirect() {
   const path = window.location.pathname;
-  if (path.includes("dashboard") || path.includes("dashboard.html")) {
+  // Redirect to landing page from any authenticated page (dashboard or admin)
+  if (path.includes("dashboard") || path.includes("dashboard.html") ||
+      path.includes("admin") || path.includes("admin.html")) {
     window.location.href = getLandingUrl("login");
   } else {
     // On landing page: always keep the auth modal hidden by default.
