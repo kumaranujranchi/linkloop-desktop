@@ -209,6 +209,7 @@ export default defineSchema({
     description: v.string(),
     content: v.string(),              // HTML content
     imageUrl: v.optional(v.string()),
+    imageStorageId: v.optional(v.string()), // Convex storage ID for uploaded images
     category: v.string(),
     featured: v.boolean(),
     published: v.boolean(),

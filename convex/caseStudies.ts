@@ -21,6 +21,18 @@ export const getStorageUrl = query({
 
 // ========== QUERIES ==========
 
+// Helper: resolve imageStorageId to a fresh signed URL
+async function resolveImageUrl(ctx: any, doc: any) {
+  if (doc.imageStorageId) {
+    try {
+      doc.imageUrl = await ctx.storage.getUrl(doc.imageStorageId);
+    } catch (e) {
+      // Keep existing imageUrl if resolution fails
+    }
+  }
+  return doc;
+}
+
 // List all published case studies (public-facing)
 export const listPublished = query({
   args: {
@@ -39,7 +51,9 @@ export const listPublished = query({
       results = results.filter((cs) => cs.category === args.category);
     }
 
-    return results;
+    // Resolve image URLs from storage IDs
+    const resolved = await Promise.all(results.map((r) => resolveImageUrl(ctx, r)));
+    return resolved;
   },
 });
 
@@ -47,7 +61,8 @@ export const listPublished = query({
 export const listAll = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("caseStudies").order("desc").collect();
+    const results = await ctx.db.query("caseStudies").order("desc").collect();
+    return await Promise.all(results.map((r) => resolveImageUrl(ctx, r)));
   },
 });
 
@@ -55,10 +70,12 @@ export const listAll = query({
 export const getBySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const doc = await ctx.db
       .query("caseStudies")
       .withIndex("by_slug", (q) => q.eq("slug", args.slug))
       .first();
+    if (!doc) return null;
+    return await resolveImageUrl(ctx, doc);
   },
 });
 
@@ -66,12 +83,13 @@ export const getBySlug = query({
 export const listFeatured = query({
   args: { limit: v.optional(v.number()) },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const results = await ctx.db
       .query("caseStudies")
       .withIndex("by_published", (q) => q.eq("published", true))
       .filter((q) => q.eq(q.field("featured"), true))
       .order("desc")
       .take(args.limit || 6);
+    return await Promise.all(results.map((r) => resolveImageUrl(ctx, r)));
   },
 });
 
@@ -85,6 +103,7 @@ export const add = mutation({
     description: v.string(),
     content: v.string(),
     imageUrl: v.optional(v.string()),
+    imageStorageId: v.optional(v.string()),
     category: v.string(),
     featured: v.boolean(),
     published: v.boolean(),
@@ -97,6 +116,7 @@ export const add = mutation({
       description: args.description,
       content: args.content,
       imageUrl: args.imageUrl,
+      imageStorageId: args.imageStorageId,
       category: args.category,
       featured: args.featured,
       published: args.published,
@@ -115,6 +135,7 @@ export const update = mutation({
     description: v.optional(v.string()),
     content: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
+    imageStorageId: v.optional(v.string()),
     category: v.optional(v.string()),
     featured: v.optional(v.boolean()),
     published: v.optional(v.boolean()),

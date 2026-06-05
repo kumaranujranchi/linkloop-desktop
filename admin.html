@@ -2350,6 +2350,7 @@
 
       // Get image: uploaded file takes priority, then URL fallback, then existing hidden URL
       let imageUrl = document.getElementById('csImageUrl').value.trim();
+      let imageStorageId = null;
       const fileInput = document.getElementById('csImageFile');
       const fallbackUrl = document.getElementById('csImageUrlFallback').value.trim();
 
@@ -2364,6 +2365,7 @@
         const uploadResult = await window.LinkBuild.caseStudies.uploadImage(fileInput.files[0]);
         if (uploadResult.success) {
           imageUrl = uploadResult.url;
+          imageStorageId = uploadResult.storageId;
         } else {
           showToast('Image upload failed: ' + uploadResult.error + '. Using fallback URL if provided.', 'warning');
           if (fallbackUrl) imageUrl = fallbackUrl;
@@ -2377,14 +2379,16 @@
 
       try {
         let result;
+        const saveData = {
+          title, slug, description, content,
+          imageUrl: imageUrl || undefined,
+          imageStorageId: imageStorageId || undefined,
+          category, featured, published
+        };
         if (editId) {
-          result = await window.LinkBuild.caseStudies.update(editId, {
-            title, slug, description, content, imageUrl: imageUrl || undefined, category, featured, published
-          });
+          result = await window.LinkBuild.caseStudies.update(editId, saveData);
         } else {
-          result = await window.LinkBuild.caseStudies.add({
-            title, slug, description, content, imageUrl: imageUrl || undefined, category, featured, published
-          });
+          result = await window.LinkBuild.caseStudies.add(saveData);
         }
 
         if (result.success) {
