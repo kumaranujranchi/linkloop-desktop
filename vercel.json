@@ -14,6 +14,8 @@
     { "source": "/cookie-policy", "destination": "/cookie-policy.html" },
     { "source": "/dmca-policy", "destination": "/dmca-policy.html" },
     { "source": "/domain-verification-policy", "destination": "/domain-verification-policy.html" },
+    { "source": "/case-studies", "destination": "/case-studies.html" },
+    { "source": "/case-study", "destination": "/case-study.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
