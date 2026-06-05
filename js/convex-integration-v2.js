@@ -3568,6 +3568,84 @@ async function refreshMyWebsites() {
 // =============================================
 // GLOBAL API
 // =============================================
+// =============================================
+// CASE STUDIES API
+// =============================================
+const CaseStudies = {
+  async listPublished(category, limit) {
+    if (!client) return [];
+    try {
+      return await client.query("caseStudies:listPublished", {
+        category: category || undefined,
+        limit: limit || 50,
+      });
+    } catch (e) {
+      console.log("📚 Case studies:", e.message);
+      return [];
+    }
+  },
+
+  async listAll() {
+    if (!client) return [];
+    try {
+      return await client.query("caseStudies:listAll", {});
+    } catch (e) {
+      console.log("📚 Case studies (admin):", e.message);
+      return [];
+    }
+  },
+
+  async getBySlug(slug) {
+    if (!client) return null;
+    try {
+      return await client.query("caseStudies:getBySlug", { slug });
+    } catch (e) {
+      console.log("📚 Case study detail:", e.message);
+      return null;
+    }
+  },
+
+  async listFeatured(limit) {
+    if (!client) return [];
+    try {
+      return await client.query("caseStudies:listFeatured", { limit: limit || 6 });
+    } catch (e) {
+      console.log("📚 Featured case studies:", e.message);
+      return [];
+    }
+  },
+
+  async add(data) {
+    if (!client) return { success: false, error: "Not connected" };
+    try {
+      const id = await client.mutation("caseStudies:add", data);
+      return { success: true, id };
+    } catch (e) {
+      return { success: false, error: formatConvexError(e, "Failed to add case study") };
+    }
+  },
+
+  async update(id, data) {
+    if (!client) return { success: false, error: "Not connected" };
+    try {
+      await client.mutation("caseStudies:update", { id, ...data });
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: formatConvexError(e, "Failed to update case study") };
+    }
+  },
+
+  async remove(id) {
+    if (!client) return { success: false, error: "Not connected" };
+    try {
+      await client.mutation("caseStudies:remove", { id });
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: formatConvexError(e, "Failed to delete case study") };
+    }
+  },
+};
+
 window.LinkBuild = {
   client: null,
   getClient: () => client,
@@ -3620,6 +3698,8 @@ window.LinkBuild = {
   // Notifications
   toggleNotificationDropdown,
   markNotificationRead,
+  // Case Studies
+  caseStudies: CaseStudies,
 };
 
 if (document.readyState === "loading") {

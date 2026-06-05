@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Studies — LinkBuild | Real SEO Success Stories</title>
+  <meta name="description"
+    content="Read real case studies from LinkBuild users. See how SEO professionals grew their rankings, traffic, and revenue using our backlink exchange platform.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://linkbuild.store/case-studies">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236C4DF6%22 stroke-width=%222.5%22><path d=%22M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71%22/><path d=%22M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71%22/></svg>">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <script src="./node_modules/convex/dist/browser.bundle.js"></script>
+  <script src="js/convex-integration-v2.js"></script>
+
+  <style>
+    :root {
+      --bg-landing: #0b0f19;
+      --bg-card: rgba(30, 41, 59, 0.4);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --font-outfit: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      --font-jakarta: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      --primary-gradient: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-jakarta);
+      background-color: #080c16;
+      color: #cbd5e1;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--font-outfit); color: #ffffff; font-weight: 700; }
+
+    /* Navbar */
+    .landing-nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 80px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4%; background: rgba(11, 15, 25, 0.7);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color); z-index: 1000;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .landing-nav.scrolled {
+      background: rgba(11, 15, 25, 0.95);
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .landing-logo {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+
+    .landing-logo-icon {
+      width: 40px; height: 40px; background: var(--primary-gradient);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    }
+
+    .landing-logo-icon svg { width: 24px; height: 24px; stroke: white; }
+
+    .landing-logo-text {
+      font-size: 1.5rem; font-weight: 800; color: #ffffff;
+      font-family: var(--font-outfit); letter-spacing: -0.03em;
+    }
+
+    .landing-logo-text span {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; color: transparent;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+
+    .nav-links a {
+      font-size: 0.95rem; font-weight: 500; color: #94a3b8;
+      text-decoration: none; transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover { color: #e2e8f0; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; font-family: var(--font-jakarta); font-weight: 600;
+      border-radius: 12px; cursor: pointer; border: none; text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06); color: #e2e8f0;
+      padding: 10px 24px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); }
+
+    .btn-primary {
+      background: var(--primary-gradient); color: white;
+      padding: 12px 28px; font-size: 0.95rem;
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .btn-sm { padding: 8px 18px; font-size: 0.85rem; }
+
+    /* Page Content */
+    .page-container {
+      padding-top: 120px; padding-bottom: 80px;
+      max-width: 1200px; margin: 0 auto; padding-left: 4%; padding-right: 4%;
+    }
+
+    .page-header {
+      text-align: center; margin-bottom: 60px;
+    }
+
+    .page-header h1 {
+      font-size: 3rem; font-weight: 800; margin-bottom: 16px;
+      letter-spacing: -0.03em;
+    }
+
+    .page-header h1 span {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; color: transparent;
+    }
+
+    .page-header p {
+      font-size: 1.1rem; color: #94a3b8; max-width: 600px; margin: 0 auto;
+    }
+
+    /* Category Filter */
+    .category-filter {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; flex-wrap: wrap; margin-bottom: 48px;
+    }
+
+    .category-chip {
+      padding: 8px 20px; border-radius: 100px; font-size: 0.85rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.04); color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .category-chip:hover { background: rgba(255, 255, 255, 0.08); color: #e2e8f0; }
+
+    .category-chip.active {
+      background: var(--primary-gradient); color: white; border-color: transparent;
+    }
+
+    /* Case Study Cards Grid */
+    .case-studies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 28px;
+    }
+
+    .case-study-card {
+      background: rgba(30, 41, 59, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px; overflow: hidden;
+      transition: all 0.3s ease; cursor: pointer;
+      text-decoration: none; color: inherit; display: block;
+    }
+
+    .case-study-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(124, 58, 237, 0.3);
+      box-shadow: 0 20px 40px -15px rgba(124, 58, 237, 0.15);
+    }
+
+    .card-image {
+      width: 100%; height: 200px; object-fit: cover;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(236, 72, 153, 0.2));
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .card-image-placeholder {
+      font-size: 3rem; opacity: 0.3;
+    }
+
+    .card-body { padding: 24px; }
+
+    .card-category {
+      display: inline-block; padding: 4px 12px; border-radius: 100px;
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; margin-bottom: 12px;
+      background: rgba(124, 58, 237, 0.15); color: #a78bfa;
+    }
+
+    .card-title {
+      font-size: 1.25rem; font-weight: 700; margin-bottom: 10px;
+      color: #ffffff; line-height: 1.4;
+    }
+
+    .card-description {
+      font-size: 0.9rem; color: #94a3b8; line-height: 1.6;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-meta {
+      display: flex; align-items: center; gap: 16px; margin-top: 16px;
+      padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.8rem; color: #64748b;
+    }
+
+    /* Featured badge */
+    .featured-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: 100px; font-size: 0.7rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+      background: rgba(245, 158, 11, 0.15); color: #fbbf24;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 80px 20px;
+    }
+
+    .empty-state svg { width: 64px; height: 64px; opacity: 0.3; margin-bottom: 20px; }
+
+    .empty-state h3 { font-size: 1.3rem; margin-bottom: 8px; color: #94a3b8; }
+
+    .empty-state p { color: #64748b; font-size: 0.95rem; }
+
+    /* Loading spinner */
+    .loading-spinner {
+      display: flex; align-items: center; justify-content: center; padding: 60px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner {
+      width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #7C3AED; border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-header h1 { font-size: 2rem; }
+      .case-studies-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .landing-nav { padding: 0 5%; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== NAVBAR ===== -->
+  <nav class="landing-nav" id="landingNav">
+    <a href="index.html" class="landing-logo">
+      <div class="landing-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+      </div>
+      <span class="landing-logo-text">Link<span>Build</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#features">Features</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="case-studies.html" style="color: #a78bfa;">Case Studies</a>
+      <button class="btn btn-secondary btn-sm" onclick="window.location.href='index.html?auth=login'">Login</button>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE CONTENT ===== -->
+  <div class="page-container">
+    <div class="page-header">
+      <h1>Real <span>Success Stories</span></h1>
+      <p>See how SEO professionals and agencies use LinkBuild to grow their rankings, traffic, and revenue with white-hat backlink exchanges.</p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-filter" id="categoryFilter">
+      <button class="category-chip active" onclick="filterByCategory('all')" data-cat="all">All</button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Case Studies Grid -->
+    <div class="case-studies-grid" id="caseStudiesGrid" style="display: none;"></div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      <h3>No case studies yet</h3>
+      <p>Check back soon for success stories from our users.</p>
+    </div>
+  </div>
+
+  <script>
+    let allCaseStudies = [];
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('landingNav');
+      if (window.scrollY > 20) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+
+    // Category filter
+    function filterByCategory(cat) {
+      // Update active chip
+      document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+      const chip = document.querySelector(`.category-chip[data-cat="${cat}"]`);
+      if (chip) chip.classList.add('active');
+
+      // Filter and render
+      renderCaseStudies(cat);
+    }
+
+    // Render case study cards
+    function renderCaseStudies(category) {
+      const grid = document.getElementById('caseStudiesGrid');
+      const empty = document.getElementById('emptyState');
+
+      let filtered = allCaseStudies;
+      if (category && category !== 'all') {
+        filtered = allCaseStudies.filter(cs => cs.category === category);
+      }
+
+      if (filtered.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+
+      empty.style.display = 'none';
+      grid.style.display = 'grid';
+
+      grid.innerHTML = filtered.map(cs => {
+        const imageHtml = cs.imageUrl
+          ? `<img src="${escHtml(cs.imageUrl)}" alt="${escHtml(cs.title)}" class="card-image" loading="lazy">`
+          : `<div class="card-image"><span class="card-image-placeholder">📈</span></div>`;
+
+        const featuredBadge = cs.featured
+          ? '<span class="featured-badge">⭐ Featured</span>'
+          : '';
+
+        const date = cs.createdAt
+          ? new Date(cs.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+          : '';
+
+        return `
+          <a href="case-study.html?slug=${escHtml(cs.slug)}" class="case-study-card">
+            ${imageHtml}
+            <div class="card-body">
+              <span class="card-category">${escHtml(cs.category)}</span>
+              ${featuredBadge}
+              <h3 class="card-title">${escHtml(cs.title)}</h3>
+              <p class="card-description">${escHtml(cs.description)}</p>
+              <div class="card-meta">
+                <span>📅 ${date}</span>
+              </div>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    // Escape HTML
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // Build category filter chips
+    function buildCategoryFilter() {
+      const categories = [...new Set(allCaseStudies.map(cs => cs.category).filter(Boolean))];
+      const container = document.getElementById('categoryFilter');
+
+      container.innerHTML = '<button class="category-chip active" onclick="filterByCategory(\'all\')" data-cat="all">All</button>';
+
+      categories.forEach(cat => {
+        const chip = document.createElement('button');
+        chip.className = 'category-chip';
+        chip.setAttribute('data-cat', cat);
+        chip.textContent = cat;
+        chip.onclick = () => filterByCategory(cat);
+        container.appendChild(chip);
+      });
+    }
+
+    // Load case studies
+    async function loadCaseStudies() {
+      const spinner = document.getElementById('loadingSpinner');
+      spinner.style.display = 'flex';
+
+      // Wait for client
+      const waitForClient = () => new Promise((resolve) => {
+        if (window.LinkBuild && window.LinkBuild.getClient && window.LinkBuild.getClient()) {
+          resolve();
+          return;
+        }
+        const interval = setInterval(() => {
+          if (window.LinkBuild && window.LinkBuild.getClient && window.LinkBuild.getClient()) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 200);
+        setTimeout(() => { clearInterval(interval); resolve(); }, 5000);
+      });
+
+      await waitForClient();
+
+      try {
+        if (window.LinkBuild && window.LinkBuild.caseStudies) {
+          allCaseStudies = await window.LinkBuild.caseStudies.listPublished();
+        }
+      } catch (e) {
+        console.log('Could not load case studies:', e);
+      }
+
+      spinner.style.display = 'none';
+
+      if (allCaseStudies.length > 0) {
+        buildCategoryFilter();
+        renderCaseStudies('all');
+      } else {
+        document.getElementById('emptyState').style.display = 'block';
+      }
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', loadCaseStudies);
+  </script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study — LinkBuild</title>
+  <meta name="description" content="Read this LinkBuild case study to see real SEO results.">
+  <meta name="robots" content="index, follow">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236C4DF6%22 stroke-width=%222.5%22><path d=%22M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71%22/><path d=%22M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71%22/></svg>">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <script src="./node_modules/convex/dist/browser.bundle.js"></script>
+  <script src="js/convex-integration-v2.js"></script>
+
+  <style>
+    :root {
+      --bg-landing: #0b0f19;
+      --bg-card: rgba(30, 41, 59, 0.4);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --font-outfit: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      --font-jakarta: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      --primary-gradient: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-jakarta);
+      background-color: #080c16;
+      color: #cbd5e1;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--font-outfit); color: #ffffff; font-weight: 700; }
+
+    /* Navbar */
+    .landing-nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 80px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4%; background: rgba(11, 15, 25, 0.7);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color); z-index: 1000;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .landing-nav.scrolled {
+      background: rgba(11, 15, 25, 0.95);
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .landing-logo {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+
+    .landing-logo-icon {
+      width: 40px; height: 40px; background: var(--primary-gradient);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    }
+
+    .landing-logo-icon svg { width: 24px; height: 24px; stroke: white; }
+
+    .landing-logo-text {
+      font-size: 1.5rem; font-weight: 800; color: #ffffff;
+      font-family: var(--font-outfit); letter-spacing: -0.03em;
+    }
+
+    .landing-logo-text span {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; color: transparent;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+
+    .nav-links a {
+      font-size: 0.95rem; font-weight: 500; color: #94a3b8;
+      text-decoration: none; transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover { color: #e2e8f0; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; font-family: var(--font-jakarta); font-weight: 600;
+      border-radius: 12px; cursor: pointer; border: none; text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06); color: #e2e8f0;
+      padding: 10px 24px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); }
+
+    .btn-sm { padding: 8px 18px; font-size: 0.85rem; }
+
+    /* Page Content */
+    .page-container {
+      padding-top: 120px; padding-bottom: 80px;
+      max-width: 800px; margin: 0 auto; padding-left: 4%; padding-right: 4%;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #94a3b8; text-decoration: none; font-size: 0.9rem;
+      font-weight: 500; margin-bottom: 32px; transition: color 0.2s ease;
+    }
+
+    .back-link:hover { color: #e2e8f0; }
+
+    .article-header { margin-bottom: 40px; }
+
+    .article-category {
+      display: inline-block; padding: 4px 12px; border-radius: 100px;
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; margin-bottom: 16px;
+      background: rgba(124, 58, 237, 0.15); color: #a78bfa;
+    }
+
+    .article-title {
+      font-size: 2.5rem; font-weight: 800; margin-bottom: 16px;
+      line-height: 1.2; letter-spacing: -0.02em;
+    }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 16px; font-size: 0.85rem;
+      color: #64748b; padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .article-image {
+      width: 100%; max-height: 400px; object-fit: cover;
+      border-radius: 16px; margin-bottom: 40px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(236, 72, 153, 0.2));
+    }
+
+    .article-content {
+      font-size: 1.05rem; line-height: 1.9; color: #cbd5e1;
+    }
+
+    .article-content h2 {
+      font-size: 1.5rem; margin-top: 40px; margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .article-content h3 {
+      font-size: 1.2rem; margin-top: 28px; margin-bottom: 12px;
+      color: #e2e8f0;
+    }
+
+    .article-content p { margin-bottom: 16px; }
+
+    .article-content ul, .article-content ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+
+    .article-content li { margin-bottom: 8px; }
+
+    .article-content strong { color: #e2e8f0; }
+
+    .article-content blockquote {
+      border-left: 3px solid #7C3AED; padding: 16px 20px;
+      margin: 24px 0; background: rgba(124, 58, 237, 0.08);
+      border-radius: 0 12px 12px 0; font-style: italic;
+      color: #a78bfa;
+    }
+
+    /* Loading */
+    .loading-spinner {
+      display: flex; align-items: center; justify-content: center;
+      padding: 100px 20px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner {
+      width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #7C3AED; border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+
+    /* Not found */
+    .not-found {
+      text-align: center; padding: 100px 20px;
+    }
+
+    .not-found h2 { font-size: 1.5rem; margin-bottom: 12px; }
+    .not-found p { color: #64748b; margin-bottom: 24px; }
+
+    /* CTA Section */
+    .cta-section {
+      margin-top: 60px; padding: 40px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.1));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px; text-align: center;
+    }
+
+    .cta-section h3 { font-size: 1.3rem; margin-bottom: 12px; }
+    .cta-section p { color: #94a3b8; margin-bottom: 20px; font-size: 0.95rem; }
+
+    .btn-primary {
+      background: var(--primary-gradient); color: white;
+      padding: 12px 28px; font-size: 0.95rem;
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    @media (max-width: 768px) {
+      .article-title { font-size: 1.8rem; }
+      .nav-links { display: none; }
+      .landing-nav { padding: 0 5%; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== NAVBAR ===== -->
+  <nav class="landing-nav" id="landingNav">
+    <a href="index.html" class="landing-logo">
+      <div class="landing-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+      </div>
+      <span class="landing-logo-text">Link<span>Build</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="case-studies.html" style="color: #a78bfa;">Case Studies</a>
+      <button class="btn btn-secondary btn-sm" onclick="window.location.href='index.html?auth=login'">Login</button>
+    </div>
+  </nav>
+
+  <!-- ===== CONTENT ===== -->
+  <div class="page-container" id="pageContent">
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('landingNav');
+      if (window.scrollY > 20) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    async function loadCaseStudy() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+
+      if (!slug) {
+        document.getElementById('pageContent').innerHTML = `
+          <div class="not-found">
+            <h2>Case Study Not Found</h2>
+            <p>No case study slug was provided.</p>
+            <a href="case-studies.html" class="btn btn-secondary">← Back to Case Studies</a>
+          </div>
+        `;
+        return;
+      }
+
+      // Wait for client
+      await new Promise((resolve) => {
+        if (window.LinkBuild && window.LinkBuild.getClient && window.LinkBuild.getClient()) {
+          resolve();
+          return;
+        }
+        const interval = setInterval(() => {
+          if (window.LinkBuild && window.LinkBuild.getClient && window.LinkBuild.getClient()) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 200);
+        setTimeout(() => { clearInterval(interval); resolve(); }, 5000);
+      });
+
+      let caseStudy = null;
+      try {
+        if (window.LinkBuild && window.LinkBuild.caseStudies) {
+          caseStudy = await window.LinkBuild.caseStudies.getBySlug(slug);
+        }
+      } catch (e) {
+        console.log('Error loading case study:', e);
+      }
+
+      const container = document.getElementById('pageContent');
+
+      if (!caseStudy) {
+        container.innerHTML = `
+          <div class="not-found">
+            <h2>Case Study Not Found</h2>
+            <p>The case study you're looking for doesn't exist or has been removed.</p>
+            <a href="case-studies.html" class="btn btn-secondary">← Back to Case Studies</a>
+          </div>
+        `;
+        return;
+      }
+
+      // Update page title
+      document.title = `${caseStudy.title} — LinkBuild Case Study`;
+
+      const date = caseStudy.createdAt
+        ? new Date(caseStudy.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        : '';
+
+      const imageHtml = caseStudy.imageUrl
+        ? `<img src="${escHtml(caseStudy.imageUrl)}" alt="${escHtml(caseStudy.title)}" class="article-image">`
+        : '';
+
+      container.innerHTML = `
+        <a href="case-studies.html" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Back to Case Studies
+        </a>
+
+        <article>
+          <div class="article-header">
+            <span class="article-category">${escHtml(caseStudy.category)}</span>
+            <h1 class="article-title">${escHtml(caseStudy.title)}</h1>
+            <div class="article-meta">
+              <span>📅 ${date}</span>
+            </div>
+          </div>
+
+          ${imageHtml}
+
+          <div class="article-content">
+            ${caseStudy.content}
+          </div>
+        </article>
+
+        <div class="cta-section">
+          <h3>Ready to get similar results?</h3>
+          <p>Join LinkBuild and start growing your SEO with white-hat backlink exchanges.</p>
+          <a href="index.html?auth=signup" class="btn btn-primary">Get Started — Free</a>
+        </div>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCaseStudy);
+  </script>
+</body>
+</html>

@@ -202,6 +202,23 @@ export default defineSchema({
     .index("by_token", ["token"])
     .index("by_user", ["userId"]),
 
+  // ========== CASE STUDIES ==========
+  caseStudies: defineTable({
+    title: v.string(),
+    slug: v.string(),
+    description: v.string(),
+    content: v.string(),              // HTML content
+    imageUrl: v.optional(v.string()),
+    category: v.string(),
+    featured: v.boolean(),
+    published: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_published", ["published"])
+    .index("by_category", ["category"]),
+
   // ========== FEEDBACK & FEATURES ==========
   feedbacks: defineTable({
     name: v.string(),
