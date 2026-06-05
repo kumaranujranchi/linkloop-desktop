@@ -1097,8 +1097,18 @@
                 <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium" type="text" id="csCategory" placeholder="e.g. SEO, E-commerce, SaaS">
               </div>
               <div class="space-y-1.5">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Image URL</label>
-                <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium" type="text" id="csImageUrl" placeholder="https://example.com/image.jpg">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Image</label>
+                <input type="file" id="csImageFile" accept="image/*" onchange="previewCaseStudyImage(this)" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-500 file:text-white hover:file:bg-primary-600 file:cursor-pointer">
+                <div id="csImagePreview" class="mt-2" style="display:none;">
+                  <img id="csImagePreviewImg" src="" alt="Preview" class="w-full max-h-40 object-cover rounded-xl border border-slate-200 dark:border-slate-800">
+                  <button type="button" onclick="removeCaseStudyImage()" class="mt-1 text-[10px] text-rose-500 hover:text-rose-600 font-semibold">✕ Remove image</button>
+                </div>
+                <input type="hidden" id="csImageUrl">
+                <p class="text-[10px] text-slate-400 mt-1">Upload an image or paste a URL below (URL is used as fallback)</p>
+              </div>
+              <div class="space-y-1.5">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Or Image URL (optional fallback)</label>
+                <input class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/10 transition-all font-medium" type="text" id="csImageUrlFallback" placeholder="https://example.com/image.jpg">
               </div>
             </div>
 
@@ -2270,9 +2280,18 @@
         document.getElementById('csDescription').value = editData.description || '';
         document.getElementById('csContent').value = editData.content || '';
         document.getElementById('csImageUrl').value = editData.imageUrl || '';
+        document.getElementById('csImageUrlFallback').value = '';
         document.getElementById('csCategory').value = editData.category || '';
         document.getElementById('csFeatured').checked = editData.featured || false;
         document.getElementById('csPublished').checked = editData.published || false;
+        // Show existing image preview if there is one
+        if (editData.imageUrl) {
+          document.getElementById('csImagePreviewImg').src = editData.imageUrl;
+          document.getElementById('csImagePreview').style.display = 'block';
+        } else {
+          document.getElementById('csImagePreview').style.display = 'none';
+        }
+        document.getElementById('csImageFile').value = '';
       } else {
         titleEl.textContent = 'New Case Study';
         document.getElementById('caseStudyEditId').value = '';
@@ -2281,6 +2300,9 @@
         document.getElementById('csDescription').value = '';
         document.getElementById('csContent').value = '';
         document.getElementById('csImageUrl').value = '';
+        document.getElementById('csImageUrlFallback').value = '';
+        document.getElementById('csImageFile').value = '';
+        document.getElementById('csImagePreview').style.display = 'none';
         document.getElementById('csCategory').value = '';
         document.getElementById('csFeatured').checked = false;
         document.getElementById('csPublished').checked = false;
@@ -2289,6 +2311,27 @@
 
     function hideCaseStudyForm() {
       document.getElementById('caseStudyForm').style.display = 'none';
+    }
+
+    function previewCaseStudyImage(input) {
+      const preview = document.getElementById('csImagePreview');
+      const img = document.getElementById('csImagePreviewImg');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          img.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        preview.style.display = 'none';
+      }
+    }
+
+    function removeCaseStudyImage() {
+      document.getElementById('csImageFile').value = '';
+      document.getElementById('csImageUrl').value = '';
+      document.getElementById('csImagePreview').style.display = 'none';
     }
 
     function editCaseStudy(id) {
@@ -2301,14 +2344,33 @@
       const slug = document.getElementById('csSlug').value.trim().toLowerCase().replace(/\s+/g, '-');
       const description = document.getElementById('csDescription').value.trim();
       const content = document.getElementById('csContent').value.trim();
-      const imageUrl = document.getElementById('csImageUrl').value.trim();
       const category = document.getElementById('csCategory').value.trim();
       const featured = document.getElementById('csFeatured').checked;
       const published = document.getElementById('csPublished').checked;
 
+      // Get image: uploaded file takes priority, then URL fallback, then existing hidden URL
+      let imageUrl = document.getElementById('csImageUrl').value.trim();
+      const fileInput = document.getElementById('csImageFile');
+      const fallbackUrl = document.getElementById('csImageUrlFallback').value.trim();
+
       if (!title || !slug || !description || !content || !category) {
         showToast('Please fill in all required fields (Title, Slug, Description, Content, Category).', 'error');
         return;
+      }
+
+      // Upload image file if selected
+      if (fileInput.files && fileInput.files[0]) {
+        showToast('Uploading image...', 'info');
+        const uploadResult = await window.LinkBuild.caseStudies.uploadImage(fileInput.files[0]);
+        if (uploadResult.success) {
+          imageUrl = uploadResult.url;
+        } else {
+          showToast('Image upload failed: ' + uploadResult.error + '. Using fallback URL if provided.', 'warning');
+          if (fallbackUrl) imageUrl = fallbackUrl;
+        }
+      } else if (fallbackUrl && !imageUrl) {
+        // Use fallback URL if no uploaded file and no existing image
+        imageUrl = fallbackUrl;
       }
 
       const editId = document.getElementById('caseStudyEditId').value;

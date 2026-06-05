@@ -3644,6 +3644,40 @@ const CaseStudies = {
       return { success: false, error: formatConvexError(e, "Failed to delete case study") };
     }
   },
+
+  // Upload an image file to Convex storage, returns the public URL
+  async uploadImage(file) {
+    if (!client) return { success: false, error: "Not connected" };
+    try {
+      // Step 1: Get an upload URL from Convex
+      const uploadUrl = await client.mutation("caseStudies:generateUploadUrl", {});
+      if (!uploadUrl) return { success: false, error: "Failed to generate upload URL" };
+
+      // Step 2: POST the file to the upload URL
+      const result = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+
+      if (!result.ok) {
+        return { success: false, error: "Upload failed: " + result.statusText };
+      }
+
+      // Step 3: Get the storage ID from response
+      const { storageId } = await result.json();
+
+      // Step 4: Construct the public URL
+      const convexUrl = "__CONVEX_URL__" === "__CONVEX_URL__" || !"__CONVEX_URL__"
+        ? "https://vibrant-marmot-366.convex.cloud"
+        : "__CONVEX_URL__";
+      const imageUrl = `${convexUrl}/api/storage/${storageId}`;
+
+      return { success: true, url: imageUrl, storageId };
+    } catch (e) {
+      return { success: false, error: "Upload error: " + (e.message || "Unknown") };
+    }
+  },
 };
 
 window.LinkBuild = {

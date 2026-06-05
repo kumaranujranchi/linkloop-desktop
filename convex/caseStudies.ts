@@ -1,6 +1,16 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
+// ========== FILE UPLOAD ==========
+
+// Generate an upload URL for case study images
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.storage.generateUploadUrl();
+  },
+});
+
 // ========== QUERIES ==========
 
 // List all published case studies (public-facing)
