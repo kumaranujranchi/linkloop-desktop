@@ -11,6 +11,14 @@ export const generateUploadUrl = mutation({
   },
 });
 
+// Get a signed public URL for a stored image
+export const getStorageUrl = query({
+  args: { storageId: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.storage.getUrl(args.storageId);
+  },
+});
+
 // ========== QUERIES ==========
 
 // List all published case studies (public-facing)

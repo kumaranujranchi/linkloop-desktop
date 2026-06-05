@@ -3667,11 +3667,8 @@ const CaseStudies = {
       // Step 3: Get the storage ID from response
       const { storageId } = await result.json();
 
-      // Step 4: Construct the public URL
-      const convexUrl = "__CONVEX_URL__" === "__CONVEX_URL__" || !"__CONVEX_URL__"
-        ? "https://vibrant-marmot-366.convex.cloud"
-        : "__CONVEX_URL__";
-      const imageUrl = `${convexUrl}/api/storage/${storageId}`;
+      // Step 4: Get the proper signed URL via a query
+      const imageUrl = await client.query("caseStudies:getStorageUrl", { storageId });
 
       return { success: true, url: imageUrl, storageId };
     } catch (e) {
