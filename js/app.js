@@ -792,7 +792,7 @@ window.handleGoogleSignIn = async function() {
   // Real Google Sign-in flow (GIS One Tap / Popup)
   try {
     google.accounts.id.initialize({
-      client_id: "612411304763-5mjjndmg5q727p4j2865ukst9nv3otiu.apps.googleusercontent.com", // Google Client ID for LinkBuild
+      client_id: "71002754233-2hh2gf0bbjagl4v82h8lc47ch2jio9i3.apps.googleusercontent.com", // Google Client ID for LinkBuild
       callback: async (response) => {
         if (response && response.credential) {
           if (window.LinkBuild && typeof window.LinkBuild.loginWithGoogle === 'function') {
