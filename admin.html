@@ -264,6 +264,10 @@
       .admin-topbar .topbar-actions > div:first-child {
         display: none !important;
       }
+      /* Reduce padding of KPI cards on mobile to prevent overflow */
+      #kpiGrid > div {
+        padding: 1rem !important;
+      }
     }
   </style>
 </head>
@@ -558,7 +562,7 @@
           </div>
 
           <!-- KPI CARDS -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="kpiGrid">
+          <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4" id="kpiGrid">
             <div
               class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col relative overflow-hidden group/kpi">
               <div class="flex items-center justify-between mb-3">
