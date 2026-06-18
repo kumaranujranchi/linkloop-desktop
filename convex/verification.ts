@@ -101,6 +101,9 @@ export const verify = internalMutation({
     verificationMethod: v.union(v.literal("dns"), v.literal("metatag")),
   },
   handler: async (ctx, args) => {
+    const website = await ctx.db.get(args.websiteId);
+    if (!website) return;
+
     const now = Date.now();
     await ctx.db.patch(args.websiteId, {
       verified: true,
@@ -108,5 +111,15 @@ export const verify = internalMutation({
       verificationMethod: args.verificationMethod,
       lastCheckedAt: now,
     });
+
+    // Send email notification to owner
+    const owner = await ctx.db.get(website.ownerId);
+    if (owner && owner.email) {
+      await ctx.scheduler.runAfter(0, internal.email.sendWebsiteVerifiedEmail, {
+        email: owner.email,
+        name: owner.name,
+        domain: website.domain,
+      });
+    }
   },
 });

@@ -289,46 +289,6 @@ export const getVerificationInfo = query({
   },
 });
 
-// Verify a website (marks verified + records method used)
-// SECURITY: Requires a valid session token; verifies caller owns the website
-export const verify = mutation({
-  args: {
-    websiteId: v.id("websites"),
-    verificationMethod: v.union(v.literal("dns"), v.literal("metatag")),
-    token: v.string(),  // Session token — required
-  },
-  handler: async (ctx, args) => {
-    // Authenticate the caller
-    const userId = await getUserIdFromToken(ctx.db, args.token);
-    if (!userId) throw new ConvexError("Not authenticated");
-
-    // Verify the caller owns this website
-    const website = await ctx.db.get(args.websiteId);
-    if (!website) throw new ConvexError("Website not found");
-    if (website.ownerId !== userId) {
-      throw new ConvexError("Unauthorized: you do not own this website");
-    }
-
-    const now = Date.now();
-    await ctx.db.patch(args.websiteId, {
-      verified: true,
-      status: "active",
-      verificationMethod: args.verificationMethod,
-      lastCheckedAt: now,
-    });
-
-    // Send email notification to owner
-    const owner = await ctx.db.get(website.ownerId);
-    if (owner && owner.email) {
-      await ctx.scheduler.runAfter(0, internal.email.sendWebsiteVerifiedEmail, {
-        email: owner.email,
-        name: owner.name,
-        domain: website.domain,
-      });
-    }
-  },
-});
-
 // Update SEO metrics — requires admin token
 export const updateMetrics = mutation({
   args: {
