@@ -1001,8 +1001,9 @@ const CRYPTO_ALGORITHM = { name: "ECDH", namedCurve: "P-256" };
 const AES_ALGORITHM = { name: "AES-GCM", length: 256 };
 
 async function getOrCreateKeyPair() {
-  // Try to load existing key pair from localStorage
-  const stored = localStorage.getItem("linkbuild-crypto-keypair");
+  // Use sessionStorage (not localStorage) for private key — cleared on tab/browser close.
+  // This limits the window of exposure if XSS occurs, as the key won't persist across sessions.
+  const stored = sessionStorage.getItem("linkbuild-crypto-keypair");
   if (stored) {
     try {
       const jwk = JSON.parse(stored);
@@ -1017,9 +1018,9 @@ async function getOrCreateKeyPair() {
   const keyPair = await crypto.subtle.generateKey(CRYPTO_ALGORITHM, true, [
     "deriveBits",
   ]);
-  // Export and store private key
+  // Export and store private key in sessionStorage (clears on tab close)
   const jwk = await crypto.subtle.exportKey("jwk", keyPair.privateKey);
-  localStorage.setItem("linkbuild-crypto-keypair", JSON.stringify(jwk));
+  sessionStorage.setItem("linkbuild-crypto-keypair", JSON.stringify(jwk));
   // Upload public key to server
   await uploadPublicKey(keyPair.publicKey);
   return keyPair;

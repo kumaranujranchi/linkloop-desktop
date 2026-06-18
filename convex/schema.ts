@@ -202,6 +202,15 @@ export default defineSchema({
     .index("by_token", ["token"])
     .index("by_user", ["userId"]),
 
+  // ========== LOGIN ATTEMPTS (rate limiting) ==========
+  loginAttempts: defineTable({
+    email: v.string(),         // normalized email (lowercase)
+    createdAt: v.number(),     // timestamp of the attempt
+    success: v.boolean(),      // was it a successful login?
+  })
+    .index("by_email", ["email"])
+    .index("by_email_time", ["email", "createdAt"]),
+
   // ========== CASE STUDIES ==========
   caseStudies: defineTable({
     title: v.string(),

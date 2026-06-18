@@ -109,7 +109,7 @@ export const getById = query({
 
     return {
       ...website,
-      owner: owner ? { name: owner.name, email: owner.email, reputationScore: owner.reputationScore } : null,
+      owner: owner ? { name: owner.name, reputationScore: owner.reputationScore } : null,
       reviews,
       backlinks,
       reviewCount: reviews.length,
@@ -178,10 +178,12 @@ export const stats = query({
 
 function generateVerificationCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  // Use crypto.getRandomValues() for cryptographically secure randomness
+  const randomBytes = crypto.getRandomValues(new Uint8Array(20));
   let code = "";
   for (let i = 0; i < 20; i++) {
     if (i > 0 && i % 5 === 0) code += "-";
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
+    code += chars.charAt(randomBytes[i] % chars.length);
   }
   return `linkbuild-verify=${code}`;
 }
@@ -288,12 +290,25 @@ export const getVerificationInfo = query({
 });
 
 // Verify a website (marks verified + records method used)
+// SECURITY: Requires a valid session token; verifies caller owns the website
 export const verify = mutation({
   args: {
     websiteId: v.id("websites"),
     verificationMethod: v.union(v.literal("dns"), v.literal("metatag")),
+    token: v.string(),  // Session token — required
   },
   handler: async (ctx, args) => {
+    // Authenticate the caller
+    const userId = await getUserIdFromToken(ctx.db, args.token);
+    if (!userId) throw new ConvexError("Not authenticated");
+
+    // Verify the caller owns this website
+    const website = await ctx.db.get(args.websiteId);
+    if (!website) throw new ConvexError("Website not found");
+    if (website.ownerId !== userId) {
+      throw new ConvexError("Unauthorized: you do not own this website");
+    }
+
     const now = Date.now();
     await ctx.db.patch(args.websiteId, {
       verified: true,
@@ -303,23 +318,21 @@ export const verify = mutation({
     });
 
     // Send email notification to owner
-    const website = await ctx.db.get(args.websiteId);
-    if (website) {
-      const owner = await ctx.db.get(website.ownerId);
-      if (owner && owner.email) {
-        await ctx.scheduler.runAfter(0, internal.email.sendWebsiteVerifiedEmail, {
-          email: owner.email,
-          name: owner.name,
-          domain: website.domain,
-        });
-      }
+    const owner = await ctx.db.get(website.ownerId);
+    if (owner && owner.email) {
+      await ctx.scheduler.runAfter(0, internal.email.sendWebsiteVerifiedEmail, {
+        email: owner.email,
+        name: owner.name,
+        domain: website.domain,
+      });
     }
   },
 });
 
-// Update SEO metrics
+// Update SEO metrics — requires admin token
 export const updateMetrics = mutation({
   args: {
+    token: v.string(),
     websiteId: v.id("websites"),
     domainAuthority: v.number(),
     spamScore: v.number(),
@@ -327,31 +340,37 @@ export const updateMetrics = mutation({
     referringDomains: v.number(),
   },
   handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
     const now = Date.now();
     await ctx.db.patch(args.websiteId, {
       domainAuthority: args.domainAuthority,
       spamScore: args.spamScore,
       trafficEstimate: args.trafficEstimate,
       referringDomains: args.referringDomains,
-      metricsUpdatedAt: now, // "Updated" timestamp
+      metricsUpdatedAt: now,
     });
   },
 });
 
-// Mark as checked (backlink verification)
+// Mark as checked (backlink verification) — requires admin token
 export const markChecked = mutation({
-  args: { websiteId: v.id("websites") },
+  args: {
+    token: v.string(),
+    websiteId: v.id("websites"),
+  },
   handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
     await ctx.db.patch(args.websiteId, {
-      lastCheckedAt: Date.now(), // "Checked" timestamp
+      lastCheckedAt: Date.now(),
     });
   },
 });
 
-// Clear demo/seed websites by known domains
+// Clear demo/seed websites by known domains — requires admin token
 export const clearSeedData = mutation({
-  args: {},
-  handler: async (ctx) => {
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    await verifyAdminToken(ctx.db, args.token);
     const seedDomains = [
       "seomastery.com",
       "contentforge.io",

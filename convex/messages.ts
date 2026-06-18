@@ -41,7 +41,7 @@ export const listConversations = query({
         return {
           ...conv,
           otherUser: otherUser
-            ? { _id: otherUser._id, name: otherUser.name, email: otherUser.email }
+            ? { _id: otherUser._id, name: otherUser.name }
             : null,
           lastSenderName: lastSender?.name || "Unknown",
           unreadCount: convUnread.length,

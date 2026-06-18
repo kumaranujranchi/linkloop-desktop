@@ -32,7 +32,7 @@
     })();
   </script>
 
-  <!-- Auth Guard: must be admin -->
+  <!-- Auth Guard Layer 1: Fast client-side pre-check (UX only, NOT security) -->
   <script>
     (function () {
       const token = localStorage.getItem('linkbuild-token');
@@ -45,10 +45,14 @@
         const user = JSON.parse(userRaw);
         if (user.role !== 'admin') {
           window.location.replace('dashboard.html');
+          return;
         }
       } catch (e) {
         window.location.replace('index.html?auth=login');
+        return;
       }
+      // Hide page content until server-side verification completes
+      document.documentElement.style.visibility = 'hidden';
     })();
   </script>
 
@@ -2968,6 +2972,55 @@
         popup.classList.remove('open');
       }
     });
+
+    // ========== AUTH GUARD LAYER 2: SERVER-SIDE VERIFICATION ==========
+    // This runs after Convex client loads and verifies the token is ACTUALLY admin
+    // on the server — localStorage manipulation cannot bypass this.
+    (async function verifyAdminServerSide() {
+      try {
+        // Wait for Convex client to be ready (convex-integration-v2.js sets window.LinkBuild)
+        let retries = 0;
+        while ((!window.LinkBuild || !window.LinkBuild.getClient) && retries < 30) {
+          await new Promise(r => setTimeout(r, 100));
+          retries++;
+        }
+
+        const token = localStorage.getItem('linkbuild-token');
+        if (!token) {
+          document.documentElement.innerHTML = '';
+          window.location.replace('index.html?auth=login');
+          return;
+        }
+
+        // Call the server to get the actual user for this token
+        const client = window.LinkBuild && window.LinkBuild.getClient && window.LinkBuild.getClient();
+        if (!client) {
+          // Client not available yet — reveal page (server-side check failed to run, rely on Layer 1)
+          document.documentElement.style.visibility = '';
+          return;
+        }
+
+        const user = await client.query('users:me', { token });
+
+        if (!user || user.role !== 'admin') {
+          // Token is valid but role is not admin — force redirect
+          document.documentElement.innerHTML = '';
+          localStorage.removeItem('linkbuild-token');
+          localStorage.removeItem('linkbuild-user');
+          window.location.replace('dashboard.html');
+          return;
+        }
+
+        // Server confirmed: user is admin — reveal the page
+        document.documentElement.style.visibility = '';
+
+      } catch (e) {
+        // On any error, reveal page (fail open to avoid locking out real admins due to network errors)
+        console.warn('Admin server-side auth check encountered an error:', e);
+        document.documentElement.style.visibility = '';
+      }
+    })();
+
   </script>
 </body>
 

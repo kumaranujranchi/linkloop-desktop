@@ -586,6 +586,26 @@ window.initDashboardCharts = initDashboardCharts;
 window.initAnalyticsCharts = initAnalyticsCharts;
 
 // =============================================
+// SAFE MESSAGE HELPER — prevents XSS via innerHTML
+// =============================================
+/**
+ * Sets a status/error message safely using textContent (never innerHTML).
+ * @param {HTMLElement|string} elOrId - element or element ID
+ * @param {string} text - the message text (will be HTML-escaped)
+ * @param {'info'|'success'|'danger'} [type='info'] - color theme
+ */
+function setMsg(elOrId, text, type = 'info') {
+  const el = typeof elOrId === 'string' ? document.getElementById(elOrId) : elOrId;
+  if (!el) return;
+  el.textContent = ''; // clear first
+  const span = document.createElement('span');
+  const colorMap = { info: 'var(--text-secondary)', success: 'var(--success)', danger: 'var(--danger)' };
+  span.style.color = colorMap[type] || colorMap.info;
+  span.textContent = text; // safe: no HTML parsing
+  el.appendChild(span);
+}
+
+// =============================================
 // AUTH HANDLING
 // =============================================
 window.handleLogin = async function(e) {
@@ -593,11 +613,11 @@ window.handleLogin = async function(e) {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
   const msgEl = document.getElementById("authMessage");
-  if (!email || !password) { msgEl.innerHTML = '<span style="color:var(--danger)">Please enter your email and password</span>'; return; }
+  if (!email || !password) { setMsg(msgEl, 'Please enter your email and password', 'danger'); return; }
 
   const btnEl = e.target.querySelector('button[type="submit"]');
   if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Logging in...'; }
-  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Logging in...</span>';
+  setMsg(msgEl, 'Logging in...', 'info');
 
   try {
     let result;
@@ -649,7 +669,7 @@ window.handleLogin = async function(e) {
 
     if (result && result.success) {
       closeModal();
-      msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
+      setMsg(msgEl, '✓ Login successful! Redirecting...', 'success');
       document.getElementById("loginForm").reset();
 
       const userRole = (result.user && result.user.role || "").toString().toLowerCase();
@@ -672,11 +692,11 @@ window.handleLogin = async function(e) {
       // Only if that didn't happen (e.g. login returned but no redirect), we redirect here.
     } else {
       if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
-      msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || 'Login failed') + '</span>';
+      setMsg(msgEl, result.error || 'Login failed', 'danger');
     }
   } catch (err) {
     if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Login'; }
-    msgEl.innerHTML = '<span style="color:var(--danger)">' + (err.message || 'Connection error. Please try again.') + '</span>';
+    setMsg(msgEl, err.message || 'Connection error. Please try again.', 'danger');
   }
 };
 
@@ -686,19 +706,16 @@ window.handleSignup = async function(e) {
   const email = document.getElementById("signupEmail").value.trim();
   const password = document.getElementById("signupPassword").value;
   const msgEl = document.getElementById("authMessage");
-  if (!name || !email || !password) { msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in all fields</span>'; return; }
+  if (!name || !email || !password) { setMsg(msgEl, 'Please fill in all fields', 'danger'); return; }
 
   const btnEl = e.target.querySelector('button[type="submit"]');
   if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Creating...'; }
-  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Creating account...</span>';
+  setMsg(msgEl, 'Creating account...', 'info');
   
   const result = await window.LinkBuild.signup(name, email, password);
   if (result.success) {
-    msgEl.innerHTML = '<span style="color:var(--success)">✓ Account created! Redirecting...</span>';
+    setMsg(msgEl, '✓ Account created! Redirecting...', 'success');
     document.getElementById("signupForm").reset();
-    // redirect is handled inside window.LinkBuild.signup() based on page context:
-    // - on landing page → redirects to dashboard.html
-    // - on dashboard page → just closes overlay
     const onDashboard = window.location.pathname.includes("dashboard");
     if (onDashboard) {
       window.LinkBuild.hideAuthScreen();
@@ -706,7 +723,7 @@ window.handleSignup = async function(e) {
     }
   } else {
     if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Create Account'; }
-    msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Signup failed") + '</span>';
+    setMsg(msgEl, result.error || 'Signup failed', 'danger');
   }
 };
 
@@ -715,7 +732,7 @@ window.switchAuthTab = function(tab) {
   const signupForm = document.getElementById("signupForm");
   const title = document.getElementById("authTitle");
   const msg = document.getElementById("authMessage");
-  if (msg) msg.innerHTML = '';
+  if (msg) msg.textContent = '';
   if (tab === "signup") {
     loginForm.style.display = "none";
     signupForm.style.display = "flex";
@@ -729,11 +746,11 @@ window.switchAuthTab = function(tab) {
 
 window.handleGoogleSignIn = async function() {
   const msgEl = document.getElementById("authMessage");
-  if (msgEl) msgEl.innerHTML = '<span style="color:var(--text-secondary)">Signing in with Google...</span>';
+  if (msgEl) setMsg(msgEl, 'Signing in with Google...', 'info');
 
   const processAuthResult = async (result) => {
     if (result && result.success) {
-      if (msgEl) msgEl.innerHTML = '<span style="color:var(--success)">✓ Login successful! Redirecting...</span>';
+      if (msgEl) setMsg(msgEl, '✓ Login successful! Redirecting...', 'success');
       
       const onDashboard = window.location.pathname.includes("dashboard");
       if (onDashboard) {
@@ -755,37 +772,13 @@ window.handleGoogleSignIn = async function() {
           errorMsg = parts[1].trim();
         }
       }
-      if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger)">' + errorMsg + '</span>';
+      if (msgEl) setMsg(msgEl, errorMsg, 'danger');
     }
   };
 
-  // Check if running locally via file:// or if Google SDK is blocked/not loaded
-  if (window.location.protocol === 'file:' || typeof google === 'undefined' || !google.accounts) {
-    console.log("🛠️ Local file protocol or Google SDK missing: using developer mock login flow.");
-    setTimeout(async () => {
-      if (window.LinkBuild && typeof window.LinkBuild.loginWithGoogle === 'function') {
-        const result = await window.LinkBuild.loginWithGoogle("mock-google-credential-anuj");
-        await processAuthResult(result);
-      } else {
-        try {
-          const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/mutation', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ path: 'users:loginWithGoogle', args: { credential: "mock-google-credential-anuj" } })
-          });
-          const data = await res.json();
-          if (data.status === 'success' && data.value && data.value.token) {
-            localStorage.setItem('linkbuild-token', data.value.token);
-            localStorage.setItem('linkbuild-user', JSON.stringify(data.value.user));
-            await processAuthResult({ success: true, user: data.value.user });
-          } else {
-            await processAuthResult({ success: false, error: data.errorMessage || 'Mock Google login failed' });
-          }
-        } catch (err) {
-          await processAuthResult({ success: false, error: err.message });
-        }
-      }
-    }, 800);
+  // Check if running locally or Google SDK is not loaded
+  if (typeof google === 'undefined' || !google.accounts) {
+    if (msgEl) setMsg(msgEl, 'Google Sign-In is not available in this environment. Please use email/password login.', 'danger');
     return;
   }
 
@@ -828,7 +821,7 @@ window.handleGoogleSignIn = async function() {
       }
     });
   } catch (err) {
-    if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger)">Google Sign-In failed to initialize: ' + err.message + '</span>';
+    if (msgEl) setMsg(msgEl, 'Google Sign-In failed to initialize: ' + err.message, 'danger');
   }
 };
 
@@ -929,7 +922,7 @@ window.closeAddWebsiteModal = function() {
 window.handleAddWebsite = async function(e) {
   e.preventDefault();
   const msgEl = document.getElementById("wsMessage");
-  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Adding website...</span>';
+  setMsg(msgEl, 'Adding website...', 'info');
 
   const data = {
     domain: document.getElementById("wsDomain").value.trim(),
@@ -937,8 +930,6 @@ window.handleAddWebsite = async function(e) {
     country: document.getElementById("wsCountry").value,
     language: document.getElementById("wsLanguage").value,
     listedBy: document.getElementById("wsListedBy").value || "owner",
-    // DA, Spam Score, Traffic & Referring Domains will be auto-fetched
-    // from Moz API after verification — use placeholder defaults
     domainAuthority: 0,
     spamScore: 0,
     trafficEstimate: 0,
@@ -946,16 +937,16 @@ window.handleAddWebsite = async function(e) {
   };
 
   if (!data.domain || !data.niche || !data.country) {
-    msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in Domain, Niche, and Country</span>';
+    setMsg(msgEl, 'Please fill in Domain, Niche, and Country', 'danger');
     return;
   }
 
   const result = await window.LinkBuild.addWebsite(data);
   if (result.success) {
-    msgEl.innerHTML = '<span style="color:var(--success)">✅ Website added successfully!</span>';
+    setMsg(msgEl, '✅ Website added successfully!', 'success');
     setTimeout(() => { closeAddWebsiteModal(); window.LinkBuild.loadMyWebsites(); }, 800);
   } else {
-    msgEl.innerHTML = '<span style="color:var(--danger)">' + (result.error || "Failed to add website") + '</span>';
+    setMsg(msgEl, result.error || 'Failed to add website', 'danger');
   }
 };
 
@@ -975,7 +966,7 @@ window.LinkBuild.openVerifyModal = async function(websiteId) {
 
   currentVerifyWebsiteId = websiteId;
   currentVerifyMethod = "dns";
-  document.getElementById("verifyMessage").innerHTML = "";
+  document.getElementById("verifyMessage").textContent = "";
   document.getElementById("verifyCheckBtn").disabled = false;
   document.getElementById("verifyCheckBtn").textContent = "🔍 Check Verification";
 
@@ -1027,7 +1018,7 @@ window.switchVerifyTab = function(method) {
     metaPanel.style.display = "block";
     dnsPanel.style.display = "none";
   }
-  document.getElementById("verifyMessage").innerHTML = "";
+  document.getElementById("verifyMessage").textContent = "";
 };
 
 window.handleVerifyWebsite = async function() {
@@ -1037,7 +1028,7 @@ window.handleVerifyWebsite = async function() {
   const btn = document.getElementById("verifyCheckBtn");
   btn.disabled = true;
   btn.textContent = "⏳ Checking...";
-  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Checking verification, please wait...</span>';
+  setMsg(msgEl, 'Checking verification, please wait...', 'info');
   msgEl.style.background = "var(--bg-tertiary)";
 
   const domain = document.getElementById("verifyDomainName").textContent;
@@ -1052,22 +1043,22 @@ window.handleVerifyWebsite = async function() {
     );
 
     if (result.success) {
-      msgEl.innerHTML = `<span style="color:var(--success)">${result.message}</span>`;
+      setMsg(msgEl, result.message, 'success');
       msgEl.style.background = "rgba(34,197,94,0.1)";
       btn.textContent = "✅ Verified!";
-      // Reload websites table after short delay
       setTimeout(() => {
         closeVerifyWebsiteModal();
         window.LinkBuild.loadMyWebsites();
       }, 1500);
     } else {
-      msgEl.innerHTML = `<span style="color:var(--danger);white-space:pre-line">${result.message}</span>`;
+      setMsg(msgEl, result.message, 'danger');
+      msgEl.style.whiteSpace = 'pre-line';
       msgEl.style.background = "rgba(239,68,68,0.1)";
       btn.disabled = false;
       btn.textContent = "🔄 Try Again";
     }
   } catch (e) {
-    msgEl.innerHTML = `<span style="color:var(--danger)">Verification check failed. Please try again.</span>`;
+    setMsg(msgEl, 'Verification check failed. Please try again.', 'danger');
     msgEl.style.background = "rgba(239,68,68,0.1)";
     btn.disabled = false;
     btn.textContent = "🔍 Check Verification";
@@ -1126,26 +1117,26 @@ window.handleChangePassword = async function() {
   const msgEl = document.getElementById('passwordChangeMsg');
 
   if (!currentPw || !newPw || !confirmPw) {
-    msgEl.innerHTML = '<span style="color:var(--danger)">Please fill in all fields</span>';
+    setMsg(msgEl, 'Please fill in all fields', 'danger');
     return;
   }
   if (newPw !== confirmPw) {
-    msgEl.innerHTML = '<span style="color:var(--danger)">New passwords do not match</span>';
+    setMsg(msgEl, 'New passwords do not match', 'danger');
     return;
   }
   if (newPw.length < 6) {
-    msgEl.innerHTML = '<span style="color:var(--danger)">Password must be at least 6 characters</span>';
+    setMsg(msgEl, 'Password must be at least 6 characters', 'danger');
     return;
   }
 
   const user = JSON.parse(localStorage.getItem('linkbuild-user') || '{}');
   const email = user.email;
   if (!email) {
-    msgEl.innerHTML = '<span style="color:var(--danger)">Not logged in. Please log in again.</span>';
+    setMsg(msgEl, 'Not logged in. Please log in again.', 'danger');
     return;
   }
 
-  msgEl.innerHTML = '<span style="color:var(--text-secondary)">Updating password...</span>';
+  setMsg(msgEl, 'Updating password...', 'info');
 
   try {
     const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/mutation', {
@@ -1158,7 +1149,7 @@ window.handleChangePassword = async function() {
     });
     const data = await res.json();
     if (data.status === 'success' && data.value && data.value.success) {
-      msgEl.innerHTML = '<span style="color:var(--success)">✓ Password changed successfully!</span>';
+      setMsg(msgEl, '✓ Password changed successfully!', 'success');
       document.getElementById('settingsCurrentPassword').value = '';
       document.getElementById('settingsNewPassword').value = '';
       document.getElementById('settingsConfirmPassword').value = '';
@@ -1170,10 +1161,10 @@ window.handleChangePassword = async function() {
           errorMsg = parts[1].trim();
         }
       }
-      msgEl.innerHTML = '<span style="color:var(--danger)">' + errorMsg + '</span>';
+      setMsg(msgEl, errorMsg, 'danger');
     }
   } catch (e) {
-    msgEl.innerHTML = '<span style="color:var(--danger)">Connection error. Please try again.</span>';
+    setMsg(msgEl, 'Connection error. Please try again.', 'danger');
   }
 };
 

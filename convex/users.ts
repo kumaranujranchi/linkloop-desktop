@@ -1,7 +1,10 @@
 import { v, ConvexError } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { query, mutation, action, internalMutation } from "./_generated/server";
 import { getUserIdFromToken, generateSalt, hashPassword, createSession } from "./auth_helpers";
 import { internal } from "./_generated/api";
+
+// Google OAuth Client ID — must match the one configured in Google Cloud Console
+const GOOGLE_CLIENT_ID = "71002754233-2hh2gf0bbjagl4v82h8lc47ch2jio9i3.apps.googleusercontent.com";
 
 // ========== QUERIES ==========
 
@@ -136,13 +139,23 @@ export const adminStats = query({
 // ========== PASSWORD AUTH ==========
 
 // Repair old user accounts that are missing schema fields
+// SECURITY: Requires valid admin token — prevents password reset and role escalation by non-admins
 export const repairUser = mutation({
   args: {
+    token: v.string(),  // Admin session token — required
     email: v.string(),
     password: v.optional(v.string()),
     role: v.optional(v.union(v.literal("free"), v.literal("pro"), v.literal("agency"), v.literal("admin"))),
   },
   handler: async (ctx, args) => {
+    // Verify caller is an admin
+    const adminUserId = await getUserIdFromToken(ctx.db, args.token);
+    if (!adminUserId) throw new ConvexError("Not authenticated");
+    const adminUser = await ctx.db.get(adminUserId);
+    if (!adminUser || adminUser.role !== "admin") {
+      throw new ConvexError("Unauthorized: admin access required");
+    }
+
     const user = await ctx.db
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", args.email.trim().toLowerCase()))
@@ -169,6 +182,7 @@ export const repairUser = mutation({
   },
 });
 
+
 // Sign up with email + name + password
 export const signupWithPassword = mutation({
   args: {
@@ -179,6 +193,29 @@ export const signupWithPassword = mutation({
   handler: async (ctx, args) => {
     try {
     const emailNormalized = args.email.trim().toLowerCase();
+
+    // ===== RATE LIMITING (VULN-07) =====
+    // Allow max 5 signup/login attempts per email within a 15-minute window
+    const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+    const MAX_SIGNUPS = 5;
+    const windowStart = Date.now() - WINDOW_MS;
+
+    const recentAttempts = await ctx.db
+      .query("loginAttempts")
+      .withIndex("by_email_time", (q) =>
+        q.eq("email", emailNormalized).gt("createdAt", windowStart)
+      )
+      .collect();
+
+    if (recentAttempts.length >= MAX_SIGNUPS) {
+      throw new ConvexError(
+        "Too many signup or login attempts. Please wait 15 minutes before trying again."
+      );
+    }
+    // Record this signup attempt
+    await ctx.db.insert("loginAttempts", { email: emailNormalized, createdAt: Date.now(), success: false });
+    // ===== END RATE LIMITING =====
+
     const existing = await ctx.db
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", emailNormalized))
@@ -238,6 +275,16 @@ export const signupWithPassword = mutation({
       console.warn('Failed to schedule welcome email', e);
     }
 
+    // Success — record and clear old attempts
+    await ctx.db.insert("loginAttempts", { email: emailNormalized, createdAt: Date.now(), success: true });
+    const allAttempts = await ctx.db
+      .query("loginAttempts")
+      .withIndex("by_email", (q) => q.eq("email", emailNormalized))
+      .collect();
+    for (const attempt of allAttempts) {
+      await ctx.db.delete(attempt._id);
+    }
+
     return {
       token: session.token,
       user: {
@@ -263,12 +310,36 @@ export const loginWithPassword = mutation({
   handler: async (ctx, args) => {
     try {
       const emailNormalized = args.email.trim().toLowerCase();
+
+      // ===== RATE LIMITING =====
+      // Allow max 5 failed login attempts per email within a 15-minute window
+      const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+      const MAX_FAILURES = 5;
+      const windowStart = Date.now() - WINDOW_MS;
+
+      const recentAttempts = await ctx.db
+        .query("loginAttempts")
+        .withIndex("by_email_time", (q) =>
+          q.eq("email", emailNormalized).gt("createdAt", windowStart)
+        )
+        .collect();
+
+      const failedCount = recentAttempts.filter((a) => !a.success).length;
+      if (failedCount >= MAX_FAILURES) {
+        throw new ConvexError(
+          "Too many failed login attempts. Please wait 15 minutes before trying again."
+        );
+      }
+      // ===== END RATE LIMITING =====
+
       const user = await ctx.db
         .query("users")
         .withIndex("by_email", (q) => q.eq("email", emailNormalized))
         .first();
 
       if (!user) {
+        // Record failed attempt (use generic email to avoid user enumeration)
+        await ctx.db.insert("loginAttempts", { email: emailNormalized, createdAt: Date.now(), success: false });
         throw new ConvexError("Invalid email or password");
       }
 
@@ -278,7 +349,16 @@ export const loginWithPassword = mutation({
 
       const computedHash = await hashPassword(args.password, user.passwordSalt);
       if (computedHash !== user.passwordHash) {
+        // Record failed attempt
+        await ctx.db.insert("loginAttempts", { email: emailNormalized, createdAt: Date.now(), success: false });
         throw new ConvexError("Invalid email or password");
+      }
+
+      // Success — record and clear old failed attempts
+      await ctx.db.insert("loginAttempts", { email: emailNormalized, createdAt: Date.now(), success: true });
+      // Clean up old failed attempts for this email to keep table size small
+      for (const attempt of recentAttempts.filter((a) => !a.success)) {
+        await ctx.db.delete(attempt._id);
       }
 
       const session = await createSession(ctx.db, user._id);
@@ -404,28 +484,14 @@ export const signupWithEmail = mutation({
   },
 });
 
-// Login with email
+// Login with email (LEGACY & DEPRECATED - Disabled for security)
+// SECURITY: Removed to prevent unauthenticated access to user details by email
 export const loginWithEmail = mutation({
   args: {
     email: v.string(),
   },
-  handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", args.email))
-      .first();
-
-    if (!user) {
-      return { error: "User not found. Please sign up first." };
-    }
-
-    return {
-      userId: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      reputationScore: user.reputationScore,
-    };
+  handler: async () => {
+    throw new ConvexError("This legacy login method is disabled for security reasons.");
   },
 });
 
@@ -526,63 +592,26 @@ export const upgradePlan = mutation({
   },
 });
 
-// Helper to decode JWT token in Convex environment
-function decodeJwt(token: string) {
-  const parts = token.split(".");
-  if (parts.length !== 3) {
-    throw new ConvexError("Invalid JWT token");
-  }
-  const payload = parts[1];
-  const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
-  const decoded = atob(base64);
-  return JSON.parse(decoded);
-}
-
-// Login/signup using Google ID token
-export const loginWithGoogle = mutation({
+// Internal mutation: upsert Google user and create session (called only from loginWithGoogle action)
+export const upsertGoogleUser = internalMutation({
   args: {
-    credential: v.string(),
+    email: v.string(),
+    name: v.string(),
+    avatarUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    let email = "";
-    let name = "";
-    let avatarUrl: string | undefined = undefined;
+    const emailNormalized = args.email.trim().toLowerCase();
 
-    if (args.credential.startsWith("mock-google-credential-")) {
-      // Mock user for testing
-      email = "anuj.esprit@gmail.com";
-      name = "Anuj Kumar";
-      avatarUrl = "https://lh3.googleusercontent.com/a/default-user-google=s96-c";
-    } else {
-      // Decode real Google ID Token
-      try {
-        const payload = decodeJwt(args.credential);
-        email = payload.email;
-        name = payload.name || email.split("@")[0];
-        avatarUrl = payload.picture;
-      } catch (e) {
-        throw new ConvexError("Invalid Google credential format");
-      }
-    }
-
-    if (!email) {
-      throw new ConvexError("Google credential does not contain email");
-    }
-
-    const emailNormalized = email.trim().toLowerCase();
-
-    // Check if user already exists
     let user = await ctx.db
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", emailNormalized))
       .first();
 
     if (!user) {
-      // Create user
       const userId = await ctx.db.insert("users", {
-        name,
+        name: args.name,
         email: emailNormalized,
-        avatarUrl,
+        avatarUrl: args.avatarUrl,
         role: "free",
         reputationScore: 95,
         completedExchanges: 0,
@@ -591,10 +620,9 @@ export const loginWithGoogle = mutation({
         createdAt: Date.now(),
       });
       user = await ctx.db.get(userId);
-      
-      // Initialize free subscription
+
       await ctx.db.insert("subscriptions", {
-        userId,
+        userId: userId,
         plan: "free",
         status: "active",
         websitesLimit: 3,
@@ -604,28 +632,22 @@ export const loginWithGoogle = mutation({
         createdAt: Date.now(),
       });
 
-      // Send welcome email for new signups
       try {
         await ctx.scheduler.runAfter(0, internal.email.sendWelcomeEmail, {
           email: emailNormalized,
-          name,
+          name: args.name,
         });
       } catch (e) {
-        console.warn('Failed to schedule welcome email', e);
+        console.warn("Failed to schedule welcome email", e);
       }
-    } else if (avatarUrl && user.avatarUrl !== avatarUrl) {
-      // Update avatar if changed
-      await ctx.db.patch(user._id, { avatarUrl });
-      user.avatarUrl = avatarUrl;
+    } else if (args.avatarUrl && user.avatarUrl !== args.avatarUrl) {
+      await ctx.db.patch(user._id, { avatarUrl: args.avatarUrl });
+      user = await ctx.db.get(user._id);
     }
 
-    if (!user) {
-      throw new ConvexError("Authentication failed");
-    }
+    if (!user) throw new ConvexError("Authentication failed");
 
-    // Create session
     const session = await createSession(ctx.db, user._id);
-
     return {
       token: session.token,
       user: {
@@ -633,8 +655,74 @@ export const loginWithGoogle = mutation({
         name: user.name,
         email: user.email,
         role: user.role,
-      }
+      },
     };
+  },
+});
+
+// Login/signup using Google ID token — verifies token signature via Google's tokeninfo API
+export const loginWithGoogle = action({
+  args: {
+    credential: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Verify the Google ID token using Google's tokeninfo endpoint
+    // This validates the signature, expiry, and audience.
+    let email = "";
+    let name = "";
+    let avatarUrl: string | undefined = undefined;
+
+    try {
+      const verifyRes = await fetch(
+        `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(args.credential)}`
+      );
+
+      if (!verifyRes.ok) {
+        throw new ConvexError("Google token verification failed");
+      }
+
+      const payload = await verifyRes.json() as {
+        aud?: string;
+        email?: string;
+        email_verified?: string;
+        name?: string;
+        picture?: string;
+        error_description?: string;
+      };
+
+      // Check for error in response
+      if (payload.error_description) {
+        throw new ConvexError("Invalid Google token: " + payload.error_description);
+      }
+
+      // Verify the token was issued for OUR app (prevent token substitution attacks)
+      if (payload.aud !== GOOGLE_CLIENT_ID) {
+        throw new ConvexError("Google token audience mismatch — possible token substitution attack");
+      }
+
+      // Verify email is confirmed by Google
+      if (payload.email_verified !== "true") {
+        throw new ConvexError("Google account email is not verified");
+      }
+
+      email = payload.email || "";
+      name = payload.name || email.split("@")[0];
+      avatarUrl = payload.picture;
+    } catch (e: any) {
+      if (e instanceof ConvexError) throw e;
+      throw new ConvexError("Google credential verification error");
+    }
+
+    if (!email) {
+      throw new ConvexError("Google credential does not contain email");
+    }
+
+    // Upsert user and create session via internal mutation
+    return await ctx.runMutation(internal.users.upsertGoogleUser, {
+      email,
+      name,
+      avatarUrl,
+    });
   },
 });
 

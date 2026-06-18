@@ -778,12 +778,22 @@ export const sendBulkEmail = action({
     let sentCount = 0;
     let failedCount = 0;
 
+    // HTML escape helper to prevent injection via user names
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
     // Send to each user individually
     for (const user of validUsers) {
       try {
-        // Personalize: replace {{name}} with user's name
-        const personalHtml = args.htmlBody.replace(/\{\{name\}\}/g, user.name || 'User');
-        const personalSubject = args.subject.replace(/\{\{name\}\}/g, user.name || 'User');
+        // Personalize: replace {{name}} with HTML-escaped user name
+        const safeName = escapeHtml(user.name || 'User');
+        const personalHtml = args.htmlBody.replace(/\{\{name\}\}/g, safeName);
+        const personalSubject = args.subject.replace(/\{\{name\}\}/g, safeName);
 
         await sendMail(user.email, personalSubject, personalHtml);
         sentCount++;
