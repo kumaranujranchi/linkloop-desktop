@@ -793,7 +793,7 @@ window.handleGoogleSignIn = async function() {
             await processAuthResult(result);
           } else {
             try {
-              const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/mutation', {
+              const res = await fetch('https://vibrant-marmot-366.convex.cloud/api/action', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ path: 'users:loginWithGoogle', args: { credential: response.credential } })

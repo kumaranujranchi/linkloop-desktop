@@ -342,7 +342,7 @@ async function loginWithGoogle(credential) {
     };
   }
   try {
-    const result = await client.mutation("users:loginWithGoogle", {
+    const result = await client.action("users:loginWithGoogle", {
       credential,
     });
     if (result.token) {
